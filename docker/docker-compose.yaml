@@ -1,0 +1,22 @@
+services:
+  ros2_edge_perception:
+    container_name: nautilus_camera_node
+    stdin_open: true
+    tty: true
+    # Fondamentale per il discovery di CycloneDDS sulla rete Nautilus
+    network_mode: host
+    ipc: host
+    # Privileged è consigliato per l'accesso a /dev/video* e per permettere a chrony di modificare l'orologio di sistema
+    privileged: true
+    environment:
+      - TERM=xterm-256color
+      - DISPLAY=${DISPLAY:-:0}
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - ROS_DOMAIN_ID=0 # Modifica in base al tuo setup di rete
+    volumes:
+      - ../ros2_ws:/ros2_ws
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - /dev:/dev # Permette a camera_ros di accedere a /dev/video0, /dev/video1 ecc.
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile

@@ -1,0 +1,4 @@
+[submodule "sensing-rigs-daemon"]
+	path = sensing-rigs-daemon
+	url = https://github.com/nautilus-unipd/sensing-rigs-daemon
+	branch = benchmark/high-fps

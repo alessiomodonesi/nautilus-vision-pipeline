@@ -1,0 +1,5 @@
+numpy
+opencv-python
+openvino
+openvino-dev
+ultralytics

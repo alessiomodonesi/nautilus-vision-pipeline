@@ -1,0 +1,25 @@
+# Ignora le cartelle degli ambienti virtuali
+benchmark/.venv_openvino/
+ros2_ws/src/nautilus_perception/enhancement/.venv_waternet/
+
+# Ignora l'immagine della SD card
+docker/clone_sd.img
+
+# Ignora le credenziali del Raspberry
+docker/pi_access.txt
+
+# Ignora le cartelle di build di ROS 2
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# Ignora i dati salvati dal nodo di salvataggio
+ros2_ws/data/
+
+# Ignora la cache di Python ovunque si trovi
+**/__pycache__/
+*.pyc
+
+# Ignora file di sistema macOS
+.DS_Store
+Icon?
