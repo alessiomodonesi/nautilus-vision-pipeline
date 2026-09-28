@@ -12,7 +12,7 @@ Obiettivo: un nodo in `nautilus_perception` che legge le immagini e ci applica l
 - [ ] Realizza il nodo che prende le immagini e le migliora (applica l'algoritmo in pratica).
 - [ ] Misurare FPS reali e delay entrata-uscita da questo nodo.
 
-## Fase 3 — Nodo di salvataggio
+## Fase 3 — Nodo di salvataggio (probably one to skip)
 
 Obiettivo: un nodo in `nautilus_camera` che legge le immagini (enhanced o no, a seconda della configurazione) e le salva in una cartella per uso futuro.
 
