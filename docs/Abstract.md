@@ -1,6 +1,6 @@
 # Integrazione, ottimizzazione e benchmark di una pipeline di visione edge in ROS 2 per un modulo stereoscopico subacqueo a camera stagna
 
-## Abstract
+## Integration, Optimization, and Benchmark of an Edge Vision Pipeline in ROS 2 for an Underwater Stereoscopic Watertight Module
 
 Il presente lavoro di tesi si inserisce nell'ambito del progetto Nautilus dell'Università degli Studi di Padova, finalizzato allo sviluppo di piattaforme per l'esplorazione e il monitoraggio dell'ambiente acquatico e della biodiversità marina. L'attività è incentrata sul modulo di visione stereoscopica subacquea alloggiato in una custodia stagna, destinata a essere installata sotto lo scafo dell'imbarcazione con orientamento verso il fondale per il rilevamento ottico e l'analisi dell'ambiente sommerso.
 
