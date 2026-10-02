@@ -27,6 +27,16 @@ RUN pip3 install --no-cache-dir --default-timeout=1000 --break-system-packages \
 COPY ./ros2_ws/src/nautilus_perception/enhancement/requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir --break-system-packages -r /tmp/requirements.txt
 
+# Copia la cartella src nel container per leggere i package.xml
+COPY ./ros2_ws/src /ros2_ws/src
+
+# Inizializza rosdep (se non già fatto dall'immagine base) e installa le dipendenze saltando torch
+RUN rosdep init || true \
+    && rosdep update \
+    && apt-get update \
+    && rosdep install --from-paths /ros2_ws/src --ignore-src -r -y --skip-keys="python3-torch" \
+    && rm -rf /var/lib/apt/lists/*
+
 # Configurazione automatica dell'ambiente e di CycloneDDS al login
 RUN echo "source /opt/ros/jazzy/setup.bash" >> /root/.bashrc
 RUN echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> /root/.bashrc
