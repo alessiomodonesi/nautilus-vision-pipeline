@@ -8,6 +8,7 @@ def generate_launch_description():
         executable='enhancement_node',
         name='enhancement_node',
         namespace='stereo/lx',
+        remappings=[('image_raw', 'camera/image_raw')],
         output='screen'
     )
     
@@ -17,6 +18,7 @@ def generate_launch_description():
         executable='enhancement_node',
         name='enhancement_node',
         namespace='stereo/rx',
+        remappings=[('image_raw', 'camera/image_raw')],
         output='screen'
     )
 
