@@ -1,7 +1,5 @@
 import cv2
 import numpy as np
-import os
-from utils import list_images, save_image
 
 def apply_CLAHE(image, clip_limit=2, tile_grid_size=(8, 8)):
     # Convert to LAB (luminance + color)
@@ -16,17 +14,6 @@ def apply_CLAHE(image, clip_limit=2, tile_grid_size=(8, 8)):
     result = cv2.cvtColor(lab_eq, cv2.COLOR_LAB2BGR)
     return result
 
-def process_contrast():
-    input_folder = os.path.join(os.getcwd(), "data", "processed")
-    output_folder = os.path.join(os.getcwd(), "data", "processed4")
-    os.makedirs(output_folder, exist_ok=True)
-
-    for path in list_images(input_folder):
-        img = cv2.imread(path)
-        enhanced = apply_CLAHE(img)
-        filename = os.path.basename(path)
-        save_image(os.path.join(output_folder, f"clahe_{filename}"), enhanced)
-
 def laplacian_sharpen(image, alpha=0.1):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     lap = cv2.Laplacian(gray, cv2.CV_64F, ksize=3)
@@ -35,6 +22,3 @@ def laplacian_sharpen(image, alpha=0.1):
 
     sharpened = cv2.addWeighted(image, 1.0, lap_colored, -alpha, 0)
     return sharpened
-
-if __name__ == "__main__":
-    process_contrast()

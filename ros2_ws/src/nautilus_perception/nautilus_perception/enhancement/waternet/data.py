@@ -8,7 +8,6 @@ def white_balance_transform(im_rgb):
     Requires HWC uint8 input
     Originally in SimplestColorBalance.m
     """
-    # This section basically reshapes into vectors per channel I think?
 
     # if RGB
     if len(im_rgb.shape) == 3:

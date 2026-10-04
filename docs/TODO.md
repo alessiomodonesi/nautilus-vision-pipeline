@@ -9,8 +9,8 @@
 
 Obiettivo: un nodo in `nautilus_perception` che legge le immagini e ci applica l'enhancement.
 
-- [ ] Realizza il nodo che prende le immagini e le migliora (applica l'algoritmo in pratica).
-- [ ] Misurare FPS reali e delay entrata-uscita da questo nodo.
+- [x] Realizza il nodo che prende le immagini e le migliora (applica l'algoritmo in pratica).
+- [x] Misurare FPS reali e delay entrata-uscita da questo nodo.
 
 ## Fase 3 — Nodo di salvataggio (probably one to skip)
 

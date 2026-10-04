@@ -1,6 +1,4 @@
 import cv2
-import os
-from utils import *
 
 # higher kernel for higher noise (it must be 3 < kernel < 7)
 def median_blur(kernel, image):
