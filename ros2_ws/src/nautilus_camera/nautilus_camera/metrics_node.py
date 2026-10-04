@@ -11,8 +11,8 @@ class MetricsNode(Node):
         super().__init__('metrics_node')
         
         # sottoscrizioni ai topic delle due fotocamere
-        self.left_sub = message_filters.Subscriber(self, Image, '/stereo/lx/image_raw')
-        self.right_sub = message_filters.Subscriber(self, Image, '/stereo/rx/image_raw')
+        self.left_sub = message_filters.Subscriber(self, Image, '/stereo/lx/camera/image_raw')
+        self.right_sub = message_filters.Subscriber(self, Image, '/stereo/rx/camera/image_raw')
         
         # filtro per sincronizzare i messaggi in base al timestamp
         # slop: tolleranza massima di skew temporale in secondi (es. 0.05 = 50 ms)
