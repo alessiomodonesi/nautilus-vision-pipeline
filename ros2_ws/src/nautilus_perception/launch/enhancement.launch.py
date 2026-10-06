@@ -1,6 +1,7 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 
+
 def generate_launch_description():
     # nodo per la camera lx
     lx_enhancement = Node(
@@ -26,3 +27,4 @@ def generate_launch_description():
         lx_enhancement,
         rx_enhancement
     ])
+    

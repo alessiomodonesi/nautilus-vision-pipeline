@@ -1,23 +1,29 @@
 import rclpy
+import time
+import os
+
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
-import time
-import os
 from ament_index_python.packages import get_package_share_directory
-
 from nautilus_perception.enhancement.main import WaternetEnhancer
+
 
 class EnhancementNode(Node):
     def __init__(self):
         super().__init__('enhancement_node')
+        
+        # dichiarazione del parametro ROS modulare ('auto', 'force_on', 'force_off')
+        self.declare_parameter('waternet_mode', 'auto')
+        waternet_mode_param = self.get_parameter('waternet_mode').get_parameter_value().string_value
         
         # recupero del percorso della cartella share definita nel setup.py
         pkg_share = get_package_share_directory('nautilus_perception')
         weights_file = os.path.join(pkg_share, 'enhancement', 'weights.pt')
         
         # inizializzazione della classe wrapper che contiene l'algoritmo
-        self.enhancer = WaternetEnhancer(weights_path=weights_file)
+        # passo il parametro stringa letto da ROS
+        self.enhancer = WaternetEnhancer(weights_path=weights_file, mode=waternet_mode_param)
         
         # utility per convertire i messaggi ROS in array NumPy per OpenCV
         self.bridge = CvBridge()

@@ -1,6 +1,7 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 
+
 def generate_launch_description():
     # parametri condivisi per 720p @ 5 FPS (intervallo di 200000 µs)
     # ros2 param describe /stereo/lx/camera frame_duration_limits
@@ -40,3 +41,4 @@ def generate_launch_description():
         lx_camera_node,
         rx_camera_node
     ])
+    

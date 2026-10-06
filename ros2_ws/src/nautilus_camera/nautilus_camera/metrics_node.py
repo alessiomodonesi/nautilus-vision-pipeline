@@ -6,6 +6,7 @@ import time
 from collections import deque
 import numpy as np
 
+
 class MetricsNode(Node):
     def __init__(self):
         super().__init__('metrics_node')
@@ -58,6 +59,7 @@ class MetricsNode(Node):
             self.frame_count = 0
             self.start_time = current_time
 
+
 def main(args=None):
     rclpy.init(args=args)
     node = MetricsNode()
@@ -71,3 +73,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+    
