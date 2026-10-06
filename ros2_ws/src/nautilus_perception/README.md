@@ -47,6 +47,21 @@ sudo apt install ros-jazzy-image-tools
 
 ---
 
+### Benchmark di Riferimento (Raspberry Pi 5)
+
+Durante i test di profilazione eseguiti sul target hardware (CPU ARM, no GPU), sono stati rilevati i seguenti carichi computazionali medi:
+
+* **Modalità `force_on` (Pipeline Completa con WaterNet su CPU):**
+  * Latenza media: **~79.89 secondi per frame**
+  * Framerate effettivo: **0.0 FPS**
+  * *Conclusione:* Inutilizzabile per applicazioni in tempo reale su dispositivi embedded.
+
+* **Modalità `force_off` (Pipeline Leggera solo OpenCV - Sharpening + CLAHE):**
+  * Latenza media: **~75.8 millisecondi per frame**
+  * Framerate effettivo: **Garantisce fluidità sufficiente per l'Object Detection** (il limite diventa la frequenza di scatto della telecamera).
+
+---
+
 ## 2. Esecuzione in Produzione (Stereocamera)
 
 Il nodo ROS 2 (`enhancement_node`) espone il parametro `waternet_mode`, permettendoti di configurare la pipeline in modo flessibile.

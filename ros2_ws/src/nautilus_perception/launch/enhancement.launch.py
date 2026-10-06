@@ -4,7 +4,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     # 'auto', 'force_on', 'force_off'
-    WATERNET_MODE = 'force_off' 
+    WATERNET_MODE = 'auto'
 
     # nodo per la camera lx
     lx_enhancement = Node(
