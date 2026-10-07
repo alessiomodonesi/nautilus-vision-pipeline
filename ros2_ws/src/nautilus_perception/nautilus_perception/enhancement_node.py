@@ -6,7 +6,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from ament_index_python.packages import get_package_share_directory
-from nautilus_perception.enhancement.main import WaternetEnhancer
+from nautilus_perception.enhancement.core_enhancement import WaternetEnhancer
 
 
 class EnhancementNode(Node):
@@ -19,7 +19,7 @@ class EnhancementNode(Node):
         
         # recupero del percorso della cartella share definita nel setup.py
         pkg_share = get_package_share_directory('nautilus_perception')
-        weights_file = os.path.join(pkg_share, 'enhancement', 'weights.pt')
+        weights_file = os.path.join(pkg_share, 'data', 'weights', 'waternet.pt')
         
         # inizializzazione della classe wrapper che contiene l'algoritmo
         # passo il parametro stringa letto da ROS

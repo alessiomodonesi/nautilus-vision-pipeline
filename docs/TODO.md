@@ -24,7 +24,7 @@ Obiettivo: un nodo in `nautilus_camera` che legge le immagini (enhanced o no, a 
 
 Obiettivo: un nodo in `nautilus_perception` che legge le immagini e pubblica i target.
 
-- [ ] Realizza il noto che fa la stereovision e trova i target.
+- [x] Realizza il nodo che fa la stereovision e trova i target.
 - [ ] Pubblicazione su `/stereo_down/targets` con `vision_msgs/Detection2DArray`.
 - [ ] Parametri (soglie, modello, device) in YAML e launch file funzionante.
 - [ ] Input configurabile: immagini raw o enhanced.

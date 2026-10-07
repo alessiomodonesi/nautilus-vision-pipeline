@@ -5,6 +5,9 @@ ros2_ws/src/nautilus_perception/enhancement/.venv_waternet/
 # Ignora l'immagine della SD card
 docker/clone_sd.img
 
+# Ignora i video di test per l'object detection
+ros2_ws/src/nautilus_perception/nautilus_perception/data/video/
+
 # Ignora le credenziali del Raspberry
 docker/pi_access.txt
 
