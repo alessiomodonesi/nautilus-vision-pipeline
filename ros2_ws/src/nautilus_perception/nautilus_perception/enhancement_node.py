@@ -90,7 +90,7 @@ class EnhancementNode(Node):
             )
             self.frame_count = 0
             self.start_time = current_time
-
+        
 def main(args=None):
     rclpy.init(args=args)
     node = EnhancementNode()
@@ -99,8 +99,9 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
     finally:
-        node.destroy_node()
-        rclpy.shutdown()
+        if node.context.ok():
+            node.destroy_node()
+            rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
