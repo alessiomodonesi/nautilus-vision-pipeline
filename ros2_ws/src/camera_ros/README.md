@@ -2,10 +2,10 @@
 
 This ROS 2 node provides support for a variety of cameras via [libcamera](https://libcamera.org). Amongst others, this node supports V4L2 and [Raspberry Pi cameras](https://www.raspberrypi.com/documentation/computers/camera_software.html).
 
-
 ## Installation
 
 Binary packages are available via the ROS package repository for some Linux and ROS distributions (check with `rosdep resolve camera_ros`). If it's available, you can install the DEB or RPM packages via:
+
 ```sh
 # source a ROS distribution
 source /opt/ros/$ROS_DISTRO/setup.bash
@@ -16,8 +16,7 @@ sudo dnf install ros-$ROS_DISTRO-camera-ros
 ```
 
 > [!NOTE]
-> This also installs the package [`libcamera`](https://index.ros.org/r/libcamera/) as dependency. This is the bloomed version of the official upstream repo at https://git.libcamera.org/libcamera/libcamera.git and may not contain full support for all Raspberry Pi camera modules. If you need full camera module support on Raspberry Pi, you have to build the "raspberrypi" fork from https://github.com/raspberrypi/libcamera manually.
-
+> This also installs the package [`libcamera`](https://index.ros.org/r/libcamera/) as dependency. This is the bloomed version of the official upstream repo at <https://git.libcamera.org/libcamera/libcamera.git> and may not contain full support for all Raspberry Pi camera modules. If you need full camera module support on Raspberry Pi, you have to build the "raspberrypi" fork from <https://github.com/raspberrypi/libcamera> manually.
 
 ## Build Instructions
 
@@ -30,13 +29,13 @@ The `camera_ros` node depends on libcamera version 0.1 or later. There are diffe
 - __ROS Package:__ You can also install a newer version from the ROS repo (package `ros-$ROS_DISTRO-libcamera`). This package will be installed by default when building `camera_ros` from source and resolving the rosdep keys.
 
 - __Source:__ Finally, you can always build libcamera from source. This is currently the only option for using the "raspberrypi" fork on Ubuntu. You can build libcamera as part of the ROS workspace using `colcon-meson`. This is recommended over a system-wide installation as it avoids conflicts with the system package. You will need to install the following dependencies:
-    1. Install the libcamera build dependencies according to https://libcamera.org/getting-started.html#dependencies.
+    1. Install the libcamera build dependencies according to <https://libcamera.org/getting-started.html#dependencies>.
     2. Install `colcon-meson` via the package manager, `sudo apt install -y python3-colcon-meson`, or pip, `pip install colcon-meson`.
-
 
 ### camera_ros
 
 The `camera_ros` package is built together with libcamera in a colcon workspace:
+
 ```sh
 # create workspace
 mkdir -p ~/camera_ws/src
@@ -61,23 +60,26 @@ colcon build --event-handlers=console_direct+
 
 If you are using a binary distribution of libcamera, you can skip adding this to the workspace. Additionally, if you want to use the bloomed libcamera package in the ROS repos, you can also omit `--skip-keys=libcamera` and have this binary dependency resolved automatically.
 
-
-
 ## Launching the Node
 
 The package provides a standalone node executable:
+
 ```sh
 ros2 run camera_ros camera_node
 ```
+
 a composable node (`camera::CameraNode`):
+
 ```sh
+
 ros2 component standalone camera_ros camera::CameraNode
 ```
+
 and an example launch file for the composable node:
+
 ```sh
 ros2 launch camera_ros camera.launch.py
 ```
-
 
 ## Interfaces
 
@@ -97,20 +99,22 @@ The camera node interfaces are compatible with the [`image_pipeline`](https://gi
 | ------------------- | ------------------------------- | --------------------- |
 | `~/set_camera_info` | `sensor_msgs/srv/SetCameraInfo` | set camera parameters |
 
-
 ## Parameters
 
 The node provides two sets of parameters:
+
 1. static read-only parameters to configure the camera stream once at the beginning
 2. dynamic parameters which are generated from the camera controls to change per-frame settings and which can be changed at runtime
 
 Those parameters can be set on the command line:
+
 ```sh
 # standalone executable
 ros2 run camera_ros camera_node --ros-args -p param1:=arg1 -p param2:=arg2
 # composable node
 ros2 component standalone camera_ros camera::CameraNode -p param1:=arg1 -p param2:=arg2
 ```
+
 or dynamically via the [ROS parameter API](https://docs.ros.org/en/rolling/Concepts/Basic/About-Parameters.html).
 
 ### Static Camera Stream Configuration
@@ -129,8 +133,8 @@ The camera stream is configured once when the node starts via the following stat
 | `frame_id`        | `string`              | frame_id of the camera frame used in the header of the image messages                                                       |
 | `use_node_time`   | `boolean`             | use node time instead of sensor timestamp for image message header [default: `false`]                                       |
 
-
 The configuration is done in the following order:
+
 1. select camera via `camera`
 2. configure camera stream via `role`
 3. set the pixel format for the stream via `format`
@@ -158,11 +162,11 @@ The dynamic parameters are created at runtime by inspecting the [controls](https
 libcamera does not expose the framerate directly as a parameter. Instead, the framerate range has to be converted to a duration:
 $$\text{duration} = \frac{1}{\text{framerate}} \cdot 10^6 \\ µs$$
 and then set via the control `FrameDurationLimits`, if it is exposed by the camera:
+
 ```sh
 # set fixed framerate of 20 Hz (50 ms)
 ros2 run camera_ros camera_node --ros-args -p FrameDurationLimits:="[50000,50000]"
 ```
-
 
 ## Calibration
 
@@ -174,12 +178,12 @@ If the camera has not been calibrated yet and the calibration file does not exis
 
 To calibrate the camera and set the parameters, you can use the [`cameracalibrator`](https://docs.ros.org/en/rolling/p/camera_calibration/) from the `camera_calibration` package or any other node that interfaces with the `~/set_camera_info` service.
 
-
 ## Trouble Shooting
 
 ### Log Verbosity
 
 More verbose logging can be enabled by setting the libcamera and node log levels:
+
 ```sh
 LIBCAMERA_LOG_LEVELS=*:DEBUG ros2 run camera_ros camera_node --ros-args --log-level camera:=debug
 ```
@@ -187,16 +191,21 @@ LIBCAMERA_LOG_LEVELS=*:DEBUG ros2 run camera_ros camera_node --ros-args --log-le
 ### Debugging: Preparation
 
 1. To debug the node with `gdb`, you have to make the debug symbols available:
-    - **binary:** If you are using the binary bloom package (`ros-$ROS_DISTRO-camera-ros`), you also have to install the `dbgsym` packages:
+
+    - __binary__: If you are using the binary bloom package (`ros-$ROS_DISTRO-camera-ros`), you also have to install the `dbgsym` packages:
+
         ```sh
         sudo apt install ros-$ROS_DISTRO-libcamera-dbgsym ros-$ROS_DISTRO-camera-ros-dbgsym
         ```
-    - **source:** If you are compiling from source, you have to set the build type to `Debug`:
+
+    - __source__: If you are compiling from source, you have to set the build type to `Debug`:
+
         ```sh
         colcon build --cmake-args -D CMAKE_BUILD_TYPE=Debug
         ```
 
 2. Enable core dumps (a.k.a. "core files"):
+
     ```sh
     sudo sysctl -w kernel.core_pattern=/tmp/%e-%t.core
     ulimit -c unlimited
@@ -210,13 +219,17 @@ To provide more information about a crash, generate a core dump or a backtrace w
 > The core dump and backtrace contains references to the source code. Therefore, when providing either, you also have to mention for which git tag or commit hash this was generated.
 
 #### core dump
+
 If core dumps have been enabled, they will be generated automatically at `/tmp/camera_node-$TIME.core` (`$TIME` is seconds since the epoch). Make sure that you ran `ulimit -c unlimited` in the terminal and then reproduce the crash (`ros2 run camera_ros camera_node`), compress the core dump file (`gzip /tmp/camera_node-$TIME.core`), and share the compressed `/tmp/camera_node-$TIME.core.gz` for post-mortem debugging.
 
 #### backtrace
+
 Run the node and reprduce the crash with `--prefix` set:
+
 ```sh
 LIBCAMERA_LOG_LEVELS=*:DEBUG ros2 run --prefix "gdb -ex='set pagination off' -ex=run -ex=backtrace --args" camera_ros camera_node --ros-args --log-level camera:=debug
 ```
+
 If the process crashes, the backtrace will be shown. Paste the full `stdout` output, including the debug logs and backtrace, in a issue.
 
 ### Common Issues
@@ -225,7 +238,8 @@ If the process crashes, the backtrace will be shown. Paste the full `stdout` out
 
 For standard V4L2 camera devices, check that its connection is detected (`lsusb`) and that it is also detected by V4L2 (`v4l2-ctl --list-devices`).
 
-On the Raspberry Pi, use `sudo vclog --msg` to inspect the VideoCore log messages for detected cameras. `vclog` is part of Raspberry Pi's `utils` repo at https://github.com/raspberrypi/utils. If this is not available in your distribution, such as Ubuntu, you have to build it from source:
+On the Raspberry Pi, use `sudo vclog --msg` to inspect the VideoCore log messages for detected cameras. `vclog` is part of Raspberry Pi's `utils` repo at <https://github.com/raspberrypi/utils>. If this is not available in your distribution, such as Ubuntu, you have to build it from source:
+
 ```sh
 # install build dependencies
 sudo apt -y install --no-install-recommends wget ca-certificates gcc libc6-dev

@@ -33,6 +33,36 @@ Questo pacchetto si appoggia a `camera_ros` per interfacciarsi direttamente con 
     ros2 run nautilus_camera metrics_node --ros-args -p display:=true
     ```
 
+## Esecuzione dei Test e Risultati
+
+Per avviare la pipeline hardware a nodo singolo e testare le metriche prestazionali (acquisizione nuda e cruda), eseguire in terminali separati:
+
+1. **Avvio del driver di acquisizione stereoscopica:**
+
+```bash
+ros2 launch nautilus_camera stereo_camera.launch.py
+```
+
+2. **Verifica della frequenza effettiva sul topic:**
+
+```bash
+ros2 topic hz /stereo/lx/camera/image_raw
+```
+
+3. **Avvio del nodo di logging metriche (benchmark headless):**
+
+```bash
+ros2 run nautilus_camera metrics_node
+```
+
+**Risultati del test sul Raspberry Pi:**
+
+* **FPS:** Stabili a **5.0 FPS** (in perfetto allineamento con i limiti hardware di 200000 µs configurati nel file di launch).
+* **Jitter (sx):** Costante a **0.00 ms** (flusso video pulito, assenza di ritardi sul bus hardware).
+* **Skew (sx-dx):** Compreso tra **1.00 ms e 1.50 ms** (sincronizzazione dei timestamp eccellente per la pipeline di visione).
+
+> **Nota di Sistema (Calibrazione):** Durante l'avvio, il nodo `camera_ros` emette dei warning di errore relativi all'apertura del file `camera_info` (`.yaml`). Attualmente il sistema non dispone della calibrazione geometrica delle fotocamere (intrinseca ed estrinseca). La mancanza dei parametri di calibrazione non influisce sull'acquisizione dei flussi grezzi (`image_raw`) né sui benchmark di latenza sopra riportati.
+
 ## Dipendenze Principali
 
 * `camera_ros`
