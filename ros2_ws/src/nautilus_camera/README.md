@@ -16,6 +16,22 @@ Questo pacchetto si appoggia a `camera_ros` per interfacciarsi direttamente con 
   * **FPS reali:** Frequenza effettiva di arrivo dei fotogrammi.
   * **Jitter:** Varianza temporale tra l'arrivo di frame consecutivi della stessa camera.
   * **Skew temporale:** Disallineamento (delta assoluto) tra i timestamp dei messaggi accoppiati (sinistro/destro).
+  
+  **Parametri:**
+  * `display` (bool, default: `false`): Se attivato (`true`), apre una finestra OpenCV per mostrare lo stream stereo affiancato con i dati in sovrimpressione. Se disattivato, il nodo esegue solo i calcoli matematici e stampa a terminale, annullando l'overhead grafico (consigliato per i benchmark).
+  
+  **Esempi di utilizzo:**
+  * Esecuzione headless (tramite SSH / benchmark):
+
+    ```bash
+    ros2 run nautilus_camera metrics_node
+    ```
+
+  * Esecuzione con GUI video (richiede monitor fisico o sessione VNC attiva):
+  
+    ```bash
+    ros2 run nautilus_camera metrics_node --ros-args -p display:=true
+    ```
 
 ## Dipendenze Principali
 
