@@ -2,5 +2,4 @@ detection_node:
   ros__parameters:
     # 'raw' o 'enhanced'
     input_type: 'raw'
-    conf_threshold: 0.25
-    model_path: '/home/nautilus/nautilus-vision-pipeline/ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n.pt'
+    conf_threshold: 0.2

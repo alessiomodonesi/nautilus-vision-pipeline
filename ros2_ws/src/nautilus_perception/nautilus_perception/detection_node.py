@@ -76,7 +76,7 @@ class DetectionNode(Node):
         self.get_logger().info(f"Nodo detection avviato. In ascolto su {left_topic} e {right_topic}")
 
     def stereo_callback(self, left_msg: Image, right_msg: Image):
-        self.get_logger().info("--- [DEBUG] CALLBACK STEREO ATTIVATA ---")
+        self.get_logger().info("[DEBUG] stereo_callback attivata")
         try:
             cv_left = self.bridge.imgmsg_to_cv2(left_msg, desired_encoding='bgr8')
             cv_right = self.bridge.imgmsg_to_cv2(right_msg, desired_encoding='bgr8')
@@ -128,7 +128,7 @@ class DetectionNode(Node):
                 det.results.append(hyp)
                 det_array_msg.detections.append(det)
         else:
-            self.get_logger().info("[DEBUG] Nessun oggetto rilevato da YOLO in questo frame.")
+            self.get_logger().info("[DEBUG] Nessun oggetto rilevato da YOLO in questo frame")
 
         # pubblica i risultati indipendentemente per notificare anche l'assenza di target
         self.detection_pub.publish(det_array_msg)

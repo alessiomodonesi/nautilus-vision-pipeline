@@ -19,13 +19,13 @@ def generate_launch_description():
     
     # nodo per la camera rx
     rx_enhancement = Node(
-        package='nautilus_perception',
-        executable='enhancement_node',
-        name='enhancement_node',
-        namespace='stereo/rx',
-        parameters=[{'waternet_mode': WATERNET_MODE}],
-        remappings=[('image_raw', 'camera/image_raw')],
-        output='screen'
+            package='nautilus_perception',
+            executable='enhancement_node',
+            name='enhancement_node',
+            namespace='stereo/rx',
+            parameters=[{'waternet_mode': WATERNET_MODE}],
+            remappings=[('image_raw', 'camera/image_raw')],
+            output='screen'
     )
 
     return LaunchDescription([
