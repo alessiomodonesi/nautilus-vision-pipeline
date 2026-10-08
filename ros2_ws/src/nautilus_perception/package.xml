@@ -10,11 +10,15 @@
   <depend>rclpy</depend>
   <depend>sensor_msgs</depend>
   <depend>cv_bridge</depend>
+  <depend>vision_msgs</depend>
+  <depend>message_filters</depend>
   
   <!-- Dipendenze a librerie Python -->
   <exec_depend>python3-opencv</exec_depend>
   <exec_depend>python3-torch</exec_depend>
   <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-ultralytics</exec_depend>
+  <exec_depend>python3-openvino</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
