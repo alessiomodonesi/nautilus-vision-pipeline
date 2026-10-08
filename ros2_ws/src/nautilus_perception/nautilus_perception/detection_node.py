@@ -24,21 +24,30 @@ class DetectionNode(Node):
         self.bridge = CvBridge()
 
         # dichiarazione dei parametri ROS 2 richiesti (soglie, modello, tipo di input)
-        self.declare_parameter('model_path', DEFAULT_MODEL)
+        self.declare_parameter('model_filename', 'yolov8n.pt')
+        self.declare_parameter('device', 'CPU')
         self.declare_parameter('conf_threshold', 0.3)
-        self.declare_parameter('input_type', 'raw') # 'raw' o 'enhanced'
+        self.declare_parameter('input_type', 'raw')
         self.declare_parameter('enable_debug', False)
         
-        self.enable_debug = self.get_parameter('enable_debug').get_parameter_value().bool_value
-        model_path = self.get_parameter('model_path').get_parameter_value().string_value
+        # legge i valori
+        model_filename = self.get_parameter('model_filename').get_parameter_value().string_value
+        device = self.get_parameter('device').get_parameter_value().string_value
         conf = self.get_parameter('conf_threshold').get_parameter_value().double_value
         input_type = self.get_parameter('input_type').get_parameter_value().string_value
+        self.enable_debug = self.get_parameter('enable_debug').get_parameter_value().bool_value
 
-        self.get_logger().info(f"Initializing YOLOv8 with model: {model_path}")
+        # costruisce il percorso dinamico
+        pkg_share = get_package_share_directory('nautilus_perception')
+        model_path = os.path.join(pkg_share, 'data', 'weights', model_filename)
+
+        self.get_logger().info(f"Initializing YOLOv8 with model: {model_path} on device: {device}")
         self.get_logger().info(f"OpenCV visual debugging: {'ENABLED' if self.enable_debug else 'DISABLED'}")
 
-        # inizializzazione detector e matcher stereo
-        self.detector = YoloDetector(model_path=model_path, conf=conf, half_res=True)
+        # inizializzazione il detector passando il percorso assoluto calcolato e il device
+        self.detector = YoloDetector(model_path=model_path, conf=conf, half_res=True, device=device)
+
+        # inizializzazione matcher stereo
         self.stereo_config = StereoConfig()
         self.matcher = SparseBlockMatcher(self.stereo_config)
         

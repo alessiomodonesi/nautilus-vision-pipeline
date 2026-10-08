@@ -1,5 +1,7 @@
 detection_node:
   ros__parameters:
-    # 'raw' o 'enhanced'
-    input_type: 'raw'
+    model_filename: 'yolov8n.pt'
+    device: 'CPU' # CPU, GPU o NPU
     conf_threshold: 0.4
+    input_type: 'raw' # 'raw' o 'enhanced'
+    enable_debug: False
