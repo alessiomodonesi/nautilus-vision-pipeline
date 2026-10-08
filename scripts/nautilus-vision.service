@@ -1,0 +1,13 @@
+[Unit]
+Description=Nautilus Vision Pipeline Auto-Start
+After=network.target multi-user.target
+
+[Service]
+Type=simple
+User=pi
+ExecStart=/bin/bash /usr/local/bin/start_pipeline.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
