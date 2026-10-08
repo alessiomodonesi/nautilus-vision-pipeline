@@ -14,7 +14,11 @@ def generate_launch_description():
         executable='detection_node',
         name='detection_node',
         output='screen',
-        parameters=[config_file]
+        parameters=[config_file],
+        remappings=[
+            ('/camera/left/image_raw', '/stereo/lx/image_raw'),
+            ('/camera/right/image_raw', '/stereo/rx/image_raw'),
+        ]
     )
 
     return LaunchDescription([

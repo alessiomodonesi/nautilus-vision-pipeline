@@ -62,7 +62,7 @@ class DetectionNode(Node):
         self.ts = message_filters.ApproximateTimeSynchronizer(
             [self.left_sub, self.right_sub], 
             queue_size=10, 
-            slop=0.1
+            slop=0.2
         )
         self.ts.registerCallback(self.stereo_callback)
 
@@ -76,6 +76,7 @@ class DetectionNode(Node):
         self.get_logger().info(f"Nodo detection avviato. In ascolto su {left_topic} e {right_topic}")
 
     def stereo_callback(self, left_msg: Image, right_msg: Image):
+        self.get_logger().info("--- [DEBUG] CALLBACK STEREO ATTIVATA ---")
         try:
             cv_left = self.bridge.imgmsg_to_cv2(left_msg, desired_encoding='bgr8')
             cv_right = self.bridge.imgmsg_to_cv2(right_msg, desired_encoding='bgr8')
@@ -89,6 +90,7 @@ class DetectionNode(Node):
 
         # trova i bounding box sull'immagine sinistra (Detect-Then-Range)
         detections = self.detector.detect(cv_left)
+        self.get_logger().info(f"[DEBUG] Detections grezze trovate da YOLO: {len(detections)}")
 
         det_array_msg = Detection2DArray()
         det_array_msg.header = left_msg.header 
@@ -98,11 +100,13 @@ class DetectionNode(Node):
             gray_l = cv2.cvtColor(cv_left, cv2.COLOR_BGR2GRAY)
             gray_r = cv2.cvtColor(cv_right, cv2.COLOR_BGR2GRAY)
 
-            for (x, y, w, h, conf) in detections:
+            for idx, (x, y, w, h, conf) in enumerate(detections):
                 cx, cy = x + w // 2, y + h // 2
+                self.get_logger().info(f"  -> Object [{idx}]: box=({x},{y},{w},{h}), conf={conf:.2f}, centro=({cx},{cy})")
 
                 # stima la distanza campionando il centro del bounding box
                 dist = self.matcher.estimate_distance(gray_l, gray_r, cx, cy)
+                self.get_logger().info(f"     Distanza stimata (Z): {dist:.3f} metri")
 
                 # compila il messaggio ROS 2
                 det = Detection2D()
@@ -123,9 +127,12 @@ class DetectionNode(Node):
 
                 det.results.append(hyp)
                 det_array_msg.detections.append(det)
+        else:
+            self.get_logger().info("[DEBUG] Nessun oggetto rilevato da YOLO in questo frame.")
 
         # pubblica i risultati indipendentemente per notificare anche l'assenza di target
         self.detection_pub.publish(det_array_msg)
+        self.get_logger().info(f"[DEBUG] Pubblicati {len(det_array_msg.detections)} target su /stereo_down/targets")
 
 def main(args=None):
     rclpy.init(args=args)

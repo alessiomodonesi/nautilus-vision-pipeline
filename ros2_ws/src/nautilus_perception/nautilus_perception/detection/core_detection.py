@@ -28,6 +28,7 @@ import logging
 import math
 import signal
 import sys
+import os
 import threading
 import time
 from abc import ABC, abstractmethod
@@ -37,8 +38,8 @@ import cv2
 import numpy as np
 
 # Abstracted configuration state payload injected at runtime
-import config
-from config import StereoConfig
+from . import config
+from .config import StereoConfig
 
 # ---------------------------------------------------------------------------
 # Telemetry & Logging Configuration
@@ -948,7 +949,7 @@ def main() -> None:
 
     log.info("Mapping intrinsic calibration matrices from stereo_calib.npz")
     try:
-        calib = np.load("stereo_calib.npz")
+        calib = np.load(os.path.join(config.DATA_DIR, "stereo_calib.npz"))
         map1x, map1y = calib["map1x"], calib["map1y"]
         map2x, map2y = calib["map2x"], calib["map2y"]
     except FileNotFoundError:
