@@ -145,6 +145,7 @@ nvidia-nvshmem-cu13==3.4.5
 nvidia-nvtx==13.0.85
 oauthlib==3.2.2
 olefile==0.46
+opencv-contrib-python>=4.8.0
 opencv-python==4.9.0.80
 oslo.config==9.4.0
 oslo.context==5.5.0
@@ -274,6 +275,7 @@ type-description-interfaces==2.0.4
 typing_extensions==4.10.0
 ubuntu-pro-client==8001
 ufw==0.36.2
+ultralytics>=8.0.0
 unattended-upgrades==0.1
 unique-identifier-msgs==2.5.1
 urllib3==2.0.7

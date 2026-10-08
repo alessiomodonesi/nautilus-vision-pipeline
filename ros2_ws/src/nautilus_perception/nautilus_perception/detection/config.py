@@ -11,8 +11,8 @@ DATA_DIR = os.path.join(BASE_DIR, "..", "data")
 
 DEFAULT_MODEL = os.path.join(DATA_DIR, "weights", "yolov8n.pt")
 DEFAULT_MODE = "yolo"
-DEFAULT_LEFT_SRC = os.path.join(DATA_DIR, "video", "test_video.mp4")
-DEFAULT_RIGHT_SRC = os.path.join(DATA_DIR, "video", "test_video.mp4")
+DEFAULT_LEFT_SRC = os.path.join(DATA_DIR, "test", "test_video_1.mp4")
+DEFAULT_RIGHT_SRC = os.path.join(DATA_DIR, "test", "test_video_1.mp4")
 
 # ---------------------------------------------------------------------------
 # Configuration
