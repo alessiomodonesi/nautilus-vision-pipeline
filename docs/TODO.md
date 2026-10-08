@@ -25,9 +25,9 @@ Obiettivo: un nodo in `nautilus_camera` che legge le immagini (enhanced o no, a 
 Obiettivo: un nodo in `nautilus_perception` che legge le immagini e pubblica i target.
 
 - [x] Realizza il nodo che fa la stereovision e trova i target.
-- [ ] Pubblicazione su `/stereo_down/targets` con `vision_msgs/Detection2DArray`.
-- [ ] Parametri (soglie, modello, device) in YAML e launch file funzionante.
-- [ ] Input configurabile: immagini raw o enhanced.
+- [x] Pubblicazione su `/stereo_down/targets` con `vision_msgs/Detection2DArray`.
+- [x] Parametri (soglie, modello, device) in YAML e launch file funzionante.
+- [x] Input configurabile: immagini raw o enhanced.
 
 ## Fase 5 — Benchmark
 
@@ -44,7 +44,7 @@ Obiettivo: un confronto equo e riproducibile eseguito sul Pi.
 
 Obiettivo: testare se la detection può restare sul Pi a box chiusa.
 
-- [ ] 1 h a box chiusa in tre configurazioni: solo acquisizione, acquisizione + detection, acquisizione + enhancement + detection.
+- [ ] 1h a box chiusa in tre configurazioni: solo acquisizione, acquisizione + detection, acquisizione + enhancement + detection.
 - [ ] Log ogni secondo di temperatura, frequenza CPU, FPS e flag di throttling.
 
 ## Fase 7 — Integrazione
