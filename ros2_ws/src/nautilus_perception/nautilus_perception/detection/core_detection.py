@@ -319,6 +319,30 @@ class PiCamera2Grabber:
             pass
 
 
+def draw_debug_window(frame: np.ndarray, detections: list, distances: list, window_name: str = "YOLO & Stereo Debug"):
+    """
+    Funzione esterna per disegnare i bounding box di YOLO e la distanza Z 
+    e mostrare la finestra di debug in tempo reale.
+    """
+    debug_frame = frame.copy()
+    
+    for idx, (x, y, w, h, conf) in enumerate(detections):
+        cx, cy = x + w // 2, y + h // 2
+        dist = distances[idx] if idx < len(distances) else 0.0
+
+        # Disegna il bounding box e il centro
+        cv2.rectangle(debug_frame, (x, y), (x + w, y + h), (0, 140, 255), 2)
+        cv2.circle(debug_frame, (cx, cy), 4, (0, 255, 0), -1)
+        
+        # Etichetta con distanza Z e confidenza
+        label = f"Z: {dist:.2f}m | Conf: {conf:.2f}"
+        cv2.putText(debug_frame, label, (x, max(25, y - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 140, 255), 2)
+
+    # Mostra a schermo
+    cv2.imshow(window_name, debug_frame)
+    cv2.waitKey(1)
+
+
 def synchronize_stereo_cameras(
     cam_left: PiCamera2Grabber, cam_right: PiCamera2Grabber, settle_s: float = 2.0
 ) -> None:

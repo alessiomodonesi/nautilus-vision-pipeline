@@ -2,4 +2,4 @@ detection_node:
   ros__parameters:
     # 'raw' o 'enhanced'
     input_type: 'raw'
-    conf_threshold: 0.2
+    conf_threshold: 0.4

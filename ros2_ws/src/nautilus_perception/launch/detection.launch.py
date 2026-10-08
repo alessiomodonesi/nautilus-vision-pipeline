@@ -3,12 +3,22 @@ import yaml
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
     pkg_dir = get_package_share_directory('nautilus_perception')
     config_file = os.path.join(pkg_dir, 'config', 'detection_params.yaml')
+
+    # argomento di lancio per attivare/disattivare il debug grafico
+    debug_arg = DeclareLaunchArgument(
+        'enable_debug',
+        default_value='false',
+        description='Enables the OpenCV debug graphics window'
+    )
+    enable_debug_conf = LaunchConfiguration('enable_debug')
 
     # parametro per configurare i remappings
     input_type = 'raw'
@@ -36,10 +46,14 @@ def generate_launch_description():
         executable='detection_node',
         name='detection_node',
         output='screen',
-        parameters=[config_file],
+        parameters=[
+            config_file,
+            {'enable_debug': enable_debug_conf}
+        ],
         remappings=remappings
     )
 
     return LaunchDescription([
+        debug_arg,
         detection_node
     ])
