@@ -33,9 +33,9 @@ sudo apt install ros-jazzy-image-tools
 
 3. Avvia il test da terminale:
 
-```bash
-ros2 launch nautilus_perception local_test.launch.py
-```
+    ```bash
+    ros2 launch nautilus_perception local_test.launch.py
+    ```
 
 4. Il terminale stamperà il log dei tempi di elaborazione (`Delay entrata-uscita`). L'immagine elaborata verrà automaticamente salvata nella home dell'utente (`~/enhancement_output.jpg`) grazie al parametro `save_output=True`.
 
@@ -84,4 +84,80 @@ Per l'utilizzo reale in acqua, la configurazione ottimale si imposta direttament
 
 ```bash
 ros2 launch nautilus_perception enhancement.launch.py
+```
+
+---
+
+## Guida al Nodo di Detection e Stereovisione
+
+Il modulo di detection (`detection_node`) implementa un'architettura **"Detect-Then-Range"** ottimizzata per dispositivi edge (Raspberry Pi 5):
+
+1. **Inferenza IA (Camera Sinistra):** Esegue il modello YOLOv8 Nano esclusivamente sul flusso sinistro rettificato per individuare i target ed estrarre i bounding box.
+2. **Stima della Distanza (Stereo):** Sfrutta la geometria epipolare e un `SparseBlockMatcher` normalizzato per calcolare la disparità e stimare la distanza metrica tridimensionale ($Z$) sfruttando la calibrazione stereo (`stereo_calib.npz`).
+
+### Configurazione (`detection_params.yaml`)
+
+Il nodo legge i parametri di configurazione dal file `config/detection_params.yaml`:
+
+* `input_type`: Seleziona il tipo di flusso in ingresso (`'raw'` per le immagini grezze o `'enhanced'` se si usa la pipeline di miglioramento).
+* `conf_threshold`: Soglia di confidenza di YOLO (es. `0.2` o `0.3`).
+* `model_path`: Gestito automaticamente in modo dinamico dal codice (supporta sia file `.pt` standard che modelli ottimizzati OpenVINO `.xml`).
+
+---
+
+## 1. Debug Visivo OpenCV
+
+Per verificare in tempo reale l'efficacia del rilevamento e la correttezza della calibrazione stereo (evitando che riflessi o materiali trasparenti falsino la stima della distanza), è integrata una finestra grafica OpenCV di debug.
+
+* **Cosa mostra:** L'immagine rettificata della camera sinistra con i bounding box arancioni di YOLO, il punto di campionamento verde e l'etichetta con la confidenza e la distanza metrica in metri ($Z$).
+* **Come attivarla:** Tramite l'argomento di lancio `enable_debug:=true` nel file di lancio della detection.
+
+---
+
+## 2. Comandi di Test e Verifica della Pipeline
+
+Di seguito trovi l'elenco completo dei comandi ROS 2 per compilare, avviare e testare l'intera catena di detection e stereovisione sul campo:
+
+### Compilazione del Workspace
+
+```bash
+cd ~/nautilus-vision-pipeline/ros2_ws
+colcon build --packages-select nautilus_perception
+source install/setup.bash
+```
+
+### Avvio dell'Acquisizione Stereo
+
+Avvia i driver delle due telecamere CSI (IMX708) con namespace e sincronizzazione dedicati:
+
+```bash
+ros2 launch nautilus_perception stereo_camera.launch.py
+```
+
+### Avvio del Nodo di Detection
+
+Puoi avviare la detection in due modalità differenti:
+
+* **Modalità Standard (Headless / Performance Piene):**
+
+Ideale per benchmark di stress termico o esecuzione su barchino senza monitor collegato:
+
+```bash
+ros2 launch nautilus_perception detection.launch.py
+```
+
+* **Modalità con Debug Visivo OpenCV (GUI attiva):**
+
+Ideale per la calibrazione e la verifica visiva sul campo (richiede schermo locale o X11 forwarding):
+
+```bash
+ros2 launch nautilus_perception detection.launch.py enable_debug:=true
+```
+
+### Monitoraggio dei Target Pubblicati
+
+Per visualizzare in tempo reale i messaggi strutturati (`vision_msgs/Detection2DArray`) pubblicati sul topic dei target:
+
+```bash
+ros2 topic echo /stereo_down/targets
 ```
