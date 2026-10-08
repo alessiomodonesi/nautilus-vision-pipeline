@@ -39,21 +39,21 @@ Per avviare la pipeline hardware a nodo singolo e testare le metriche prestazion
 
 1. **Avvio del driver di acquisizione stereoscopica:**
 
-```bash
-ros2 launch nautilus_camera stereo_camera.launch.py
-```
+  ```bash
+  ros2 launch nautilus_camera stereo_camera.launch.py
+  ```
 
 2. **Verifica della frequenza effettiva sul topic:**
 
-```bash
-ros2 topic hz /stereo/lx/camera/image_raw
-```
+  ```bash
+  ros2 topic hz /stereo/lx/camera/image_raw
+  ```
 
 3. **Avvio del nodo di logging metriche (benchmark headless):**
 
-```bash
-ros2 run nautilus_camera metrics_node
-```
+  ```bash
+  ros2 run nautilus_camera metrics_node
+  ```
 
 **Risultati del test sul Raspberry Pi:**
 

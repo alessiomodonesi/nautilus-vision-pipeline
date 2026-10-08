@@ -1,6 +1,7 @@
 import rclpy
 import time
 import os
+import cv2
 
 from rclpy.node import Node
 from sensor_msgs.msg import Image
@@ -15,7 +16,10 @@ class EnhancementNode(Node):
         
         # dichiarazione del parametro ROS modulare ('auto', 'force_on', 'force_off')
         self.declare_parameter('waternet_mode', 'auto')
+        self.declare_parameter('save_output', False)
+        
         waternet_mode_param = self.get_parameter('waternet_mode').get_parameter_value().string_value
+        self.save_output = self.get_parameter('save_output').get_parameter_value().bool_value
         
         # recupero del percorso della cartella share definita nel setup.py
         pkg_share = get_package_share_directory('nautilus_perception')
@@ -66,6 +70,14 @@ class EnhancementNode(Node):
         t1 = time.perf_counter()
         delay_ms = (t1 - t0) * 1000.0
         
+        # salvataggio opzionale su disco
+        if self.save_output:
+            # salva l'immagine direttamente nella home dell'utente per trovarla subito
+            output_path = os.path.expanduser('~/enhancement_output.jpg')
+            success = cv2.imwrite(output_path, enhanced_image)
+            if not success:
+                self.get_logger().error(f"Unable to save the image to {output_path}")
+        
         # calcolo FPS 
         self.frame_count += 1
         current_time = time.perf_counter()
@@ -92,3 +104,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+    

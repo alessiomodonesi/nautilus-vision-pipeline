@@ -32,7 +32,7 @@ sudo apt install ros-jazzy-image-tools
 
     ```python
     WATERNET_MODE = 'force_on'  # Opzioni: 'auto', 'force_on', 'force_off'
-    IMG_PATH = '/home/nautilus/nautilus-vision-pipeline/src/nautilus_perception/enhancement/test.jpg'
+    IMG_PATH = '/home/nautilus/nautilus-vision-pipeline/ros2_ws/src/nautilus_perception/nautilus_perception/enhancement/test.jpg'
     ```
 
 3. Avvia il test da terminale:
@@ -41,9 +41,9 @@ sudo apt install ros-jazzy-image-tools
     ros2 launch nautilus_perception local_test.launch.py
     ```
 
-4. Il terminale stamperà il log dei tempi di elaborazione (Delay entrata-uscita). Puoi visualizzare il risultato visivo in tempo reale aprendo un nuovo terminale e avviando `ros2 run rqt_image_view rqt_image_view` (selezionando il topic `/image_enhanced`).
+4. Il terminale stamperà il log dei tempi di elaborazione (Delay entrata-uscita). L'immagine elaborata verrà automaticamente salvata nella directory di esecuzione con il nome `output.jpg` (grazie al parametro `save_output=True` configurato nel launch file). Puoi anche visualizzare lo stream continuo aprendo un nuovo terminale e avviando `ros2 run rqt_image_view rqt_image_view` (selezionando il topic `/image_enhanced`).
 
-*(Nota: È ancora possibile testare lo script Python puro senza l'infrastruttura ROS eseguendo `python3 main.py` all'interno della cartella `enhancement`, previa configurazione della variabile `MODE` a fine file).*
+*(Nota: È ancora possibile testare lo script Python puro senza l'infrastruttura ROS eseguendo `python3 main.py` all'interno della cartella `enhancement`, previa configurazione della variabile `MODE` a fine file)*.
 
 ---
 
@@ -52,19 +52,25 @@ sudo apt install ros-jazzy-image-tools
 Durante i test di profilazione eseguiti sul target hardware (CPU ARM, no GPU), sono stati rilevati i seguenti carichi computazionali medi:
 
 * **Modalità `force_on` (Pipeline Completa con WaterNet su CPU):**
-  * Latenza media: **~79.89 secondi per frame**
-  * Framerate effettivo: **0.0 FPS**
-  * *Conclusione:* Inutilizzabile per applicazioni in tempo reale su dispositivi embedded.
+* Latenza media: **~79.89 secondi per frame**
+
+* Framerate effettivo: **0.0 FPS**
+
+* *Conclusione:* Inutilizzabile per applicazioni in tempo reale su dispositivi embedded.
 
 * **Modalità `force_off` (Pipeline Leggera solo OpenCV - Sharpening + CLAHE):**
-  * Latenza media: **~75.8 millisecondi per frame**
-  * Framerate effettivo: **Garantisce fluidità sufficiente per l'Object Detection** (il limite diventa la frequenza di scatto della telecamera).
+* Latenza media: **~75.8 millisecondi per frame**
+
+* Framerate effettivo: **Garantisce fluidità sufficiente per l'Object Detection** (il limite diventa la frequenza di scatto della telecamera).
 
 ---
 
 ## 2. Esecuzione in Produzione (Stereocamera)
 
-Il nodo ROS 2 (`enhancement_node`) espone il parametro `waternet_mode`, permettendoti di configurare la pipeline in modo flessibile.
+Il nodo ROS 2 (`enhancement_node`) espone i seguenti parametri per configurare la pipeline in modo flessibile:
+
+* `waternet_mode` (`auto`, `force_on`, `force_off`)
+* `save_output` (bool, default: `False`): Se abilitato, salva continuamente l'ultimo fotogramma come `output.jpg` nella directory di lavoro (sconsigliato in produzione per non usurare la SD card).
 
 ### Avvio tramite file Launch (Metodo Consigliato)
 
@@ -80,7 +86,10 @@ def generate_launch_description():
         executable='enhancement_node',
         name='enhancement_node',
         namespace='stereo/lx',
-        parameters=[{'waternet_mode': WATERNET_MODE}],
+        parameters=[{
+            'waternet_mode': WATERNET_MODE,
+            'save_output': False
+        }],
         remappings=[('image_raw', 'camera/image_raw')],
         output='screen'
     )
@@ -103,6 +112,6 @@ ros2 run nautilus_perception enhancement_node
 # Forzatura modalità Leggera (No WaterNet)
 ros2 run nautilus_perception enhancement_node --ros-args -p waternet_mode:="force_off"
 
-# Forzatura WaterNet su CPU
-ros2 run nautilus_perception enhancement_node --ros-args -p waternet_mode:="force_on"
+# Forzatura WaterNet e salvataggio su disco
+ros2 run nautilus_perception enhancement_node --ros-args -p waternet_mode:="force_on" -p save_output:=true
 ```
