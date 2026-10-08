@@ -27,6 +27,23 @@ L'elaborazione visiva è distribuita su nodi specializzati integrati nel reposit
 * **Nodo di Detection (`nautilus_perception`):** Riceve in input immagini raw o enhanced, esegue l'inferenza tramite OpenVINO e pubblica le detection su `/stereo_down/targets`.
 * **Messaggi Custom (`nautilus_msgs`):** Pacchetto dedicato per la definizione strutturata delle interfacce di comunicazione (es. comandi e target identificati) tra i vari nodi del sistema.
 
+## Mappa Ufficiale dei Topic ROS 2 (Pipeline End-to-End)
+
+La comunicazione tra i nodi della pipeline segue una struttura gerarchica basata su namespace (`stereo/lx` e `stereo/rx`) per garantire il perfetto disaccoppiamento tra acquisizione, enhancement e detection:
+
+* **1. Acquisizione (`stereo_camera.launch.py`)**
+* Camera Sinistra (Raw): `/stereo/lx/camera/image_raw`
+* Camera Destra (Raw): `/stereo/rx/camera/image_raw`
+
+* **2. Enhancement (`enhancement.launch.py`)**
+* Legge dai topic raw ed elabora le immagini tramite WaterNet/CLAHE.
+* Camera Sinistra (Enhanced): `/stereo/lx/image_enhanced`
+* Camera Destra (Enhanced): `/stereo/rx/image_enhanced`
+
+* **3. Detection & Stereovision (`detection.launch.py`)**
+* Configurato tramite parametro (`input_type: 'raw'` o `'enhanced'` nel file YAML) per sottoscriversi al flusso desiderato.
+* Uscita Target 3D: `/stereo_down/targets` (formato `vision_msgs/Detection2DArray`)
+
 ## Stack Tecnologico
 
 * **Linguaggio:** Python 3, C++
