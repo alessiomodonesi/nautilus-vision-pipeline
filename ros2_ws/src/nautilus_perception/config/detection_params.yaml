@@ -15,5 +15,5 @@ detection_node:
     # dimezza la risoluzione passata al modello (velocizza l'inferenza CPU)
     # OBBLIGATORIO a False per OpenVINO (evita il bug della distanza a 0m)
     # consigliato a True solo per modelli PyTorch (.pt)
-    half_res: False
+    half_res: True
     
