@@ -4,3 +4,4 @@ detection_node:
     conf_threshold: 0.4
     input_type: 'raw' # 'raw' o 'enhanced'
     enable_debug: True
+    half_res: False # False per OpenVINO, True per .pt

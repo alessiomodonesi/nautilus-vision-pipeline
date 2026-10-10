@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import rclpy
 import cv2
-import math
 import numpy as np
 import message_filters
 import os
@@ -11,6 +10,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image
 from vision_msgs.msg import Detection2DArray, Detection2D, ObjectHypothesisWithPose
 from cv_bridge import CvBridge
+from rcl_interfaces.msg import ParameterDescriptor
 
 # logica e configurazione dal modulo 'detection'
 from nautilus_perception.detection.core_detection import YoloDetector, SparseBlockMatcher
@@ -24,16 +24,27 @@ class DetectionNode(Node):
         self.bridge = CvBridge()
 
         # dichiarazione dei parametri ROS 2 richiesti (soglie, modello, tipo di input)
-        self.declare_parameter('model_filename', 'yolov8n.pt')
-        self.declare_parameter('conf_threshold', 0.3)
-        self.declare_parameter('input_type', 'raw')
-        self.declare_parameter('enable_debug', False)
+        dyn_desc = ParameterDescriptor(dynamic_typing=True)
+        self.declare_parameter('model_filename', descriptor=dyn_desc)
+        self.declare_parameter('conf_threshold', descriptor=dyn_desc)
+        self.declare_parameter('input_type', descriptor=dyn_desc)
+        self.declare_parameter('enable_debug', descriptor=dyn_desc)
+        self.declare_parameter('half_res', descriptor=dyn_desc)
         
-        # legge i valori
-        model_filename = self.get_parameter('model_filename').get_parameter_value().string_value
-        conf = self.get_parameter('conf_threshold').get_parameter_value().double_value
-        input_type = self.get_parameter('input_type').get_parameter_value().string_value
-        self.enable_debug = self.get_parameter('enable_debug').get_parameter_value().bool_value
+        # utility function per estrarre e validare i parametri
+        def get_param_strict(name):
+            param = self.get_parameter(name)
+            if param.type_ == rclpy.Parameter.Type.NOT_SET:
+                self.get_logger().fatal(f"CRITICAL: Parameter '{name}' is missing in the YAML file!")
+                raise ValueError(f"Incomplete configuration: parameter '{name}' is missing.")
+            return param.value
+
+        # lettura parametri dal file detection_params.yaml
+        model_filename = get_param_strict('model_filename')
+        conf = get_param_strict('conf_threshold')
+        input_type = get_param_strict('input_type')
+        self.enable_debug = get_param_strict('enable_debug')
+        half_res = get_param_strict('half_res')
 
         # costruisce il percorso dinamico
         pkg_share = get_package_share_directory('nautilus_perception')
@@ -41,9 +52,10 @@ class DetectionNode(Node):
 
         self.get_logger().info(f"Initializing YOLOv8 with model: {model_path}")
         self.get_logger().info(f"OpenCV visual debugging: {'ENABLED' if self.enable_debug else 'DISABLED'}")
+        self.get_logger().info(f"Half resolution inference: {'ENABLED' if half_res else 'DISABLED'}")
 
-        # inizializzazione il detector passando il percorso assoluto calcolato
-        self.detector = YoloDetector(model_path=model_path, conf=conf, half_res=True)
+        # inizializzazione del detector passando il percorso assoluto calcolato
+        self.detector = YoloDetector(model_path=model_path, conf=conf, half_res=half_res)
 
         # inizializzazione matcher stereo
         self.stereo_config = StereoConfig()
@@ -93,11 +105,11 @@ class DetectionNode(Node):
             self.get_logger().error(f"Error in image conversion: {e}")
             return
         
-        # Applicazione della rettifica stereo
+        # applicazione della rettifica stereo
         cv_left = cv2.remap(cv_left, self.map1x, self.map1y, cv2.INTER_LINEAR)
         cv_right = cv2.remap(cv_right, self.map2x, self.map2y, cv2.INTER_LINEAR)
 
-        # Rilevamento YOLO
+        # rilevamento YOLO
         detections = self.detector.detect(cv_left)
 
         det_array_msg = Detection2DArray()
@@ -158,7 +170,8 @@ def main(args=None):
         node.get_logger().info("Shutting down detection node...")
     finally:
         node.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
         cv2.destroyAllWindows()
 
 if __name__ == '__main__':
