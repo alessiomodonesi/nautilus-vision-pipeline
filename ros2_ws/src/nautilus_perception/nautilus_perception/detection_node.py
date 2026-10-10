@@ -109,6 +109,10 @@ class DetectionNode(Node):
         cv_left = cv2.remap(cv_left, self.map1x, self.map1y, cv2.INTER_LINEAR)
         cv_right = cv2.remap(cv_right, self.map2x, self.map2y, cv2.INTER_LINEAR)
 
+        # forza la contiguità in RAM
+        cv_left = np.ascontiguousarray(cv_left)
+        cv_right = np.ascontiguousarray(cv_right)
+
         # rilevamento YOLO
         detections = self.detector.detect(cv_left)
 

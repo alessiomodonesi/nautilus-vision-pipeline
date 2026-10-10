@@ -675,8 +675,9 @@ class YoloDetector(BaseDetector):
             infer_frame = frame
             scale = 1.0
 
+        # stream=True per forzare Ultralytics a liberare la memoria a ogni frame
         results = self.model.predict(
-            infer_frame, device=self.device, conf=self.conf, verbose=False
+            infer_frame, device=self.device, conf=self.conf, verbose=False, stream=True
         )
 
         detected_boxes: List[BBox] = []
