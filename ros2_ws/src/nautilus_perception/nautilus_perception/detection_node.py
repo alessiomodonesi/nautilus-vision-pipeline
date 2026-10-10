@@ -25,14 +25,12 @@ class DetectionNode(Node):
 
         # dichiarazione dei parametri ROS 2 richiesti (soglie, modello, tipo di input)
         self.declare_parameter('model_filename', 'yolov8n.pt')
-        self.declare_parameter('device', 'CPU')
         self.declare_parameter('conf_threshold', 0.3)
         self.declare_parameter('input_type', 'raw')
         self.declare_parameter('enable_debug', False)
         
         # legge i valori
         model_filename = self.get_parameter('model_filename').get_parameter_value().string_value
-        device = self.get_parameter('device').get_parameter_value().string_value
         conf = self.get_parameter('conf_threshold').get_parameter_value().double_value
         input_type = self.get_parameter('input_type').get_parameter_value().string_value
         self.enable_debug = self.get_parameter('enable_debug').get_parameter_value().bool_value
@@ -41,11 +39,11 @@ class DetectionNode(Node):
         pkg_share = get_package_share_directory('nautilus_perception')
         model_path = os.path.join(pkg_share, 'data', 'weights', model_filename)
 
-        self.get_logger().info(f"Initializing YOLOv8 with model: {model_path} on device: {device}")
+        self.get_logger().info(f"Initializing YOLOv8 with model: {model_path}")
         self.get_logger().info(f"OpenCV visual debugging: {'ENABLED' if self.enable_debug else 'DISABLED'}")
 
-        # inizializzazione il detector passando il percorso assoluto calcolato e il device
-        self.detector = YoloDetector(model_path=model_path, conf=conf, half_res=True, device=device)
+        # inizializzazione il detector passando il percorso assoluto calcolato
+        self.detector = YoloDetector(model_path=model_path, conf=conf, half_res=True)
 
         # inizializzazione matcher stereo
         self.stereo_config = StereoConfig()

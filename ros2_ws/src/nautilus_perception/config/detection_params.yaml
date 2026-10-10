@@ -1,7 +1,6 @@
 detection_node:
   ros__parameters:
-    model_filename: 'yolov8n.pt'
-    device: 'CPU' # CPU, GPU o NPU
+    model_filename: 'yolov8n_openvino_model'
     conf_threshold: 0.4
     input_type: 'raw' # 'raw' o 'enhanced'
-    enable_debug: False
+    enable_debug: True
