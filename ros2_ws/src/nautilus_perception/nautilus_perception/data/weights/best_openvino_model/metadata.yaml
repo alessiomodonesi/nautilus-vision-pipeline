@@ -1,6 +1,6 @@
 description: Ultralytics best model trained on ocean_waste/data.yaml
 author: Ultralytics
-date: '2026-10-10T18:14:38.151008+02:00'
+date: '2026-10-10T18:43:39.032224+02:00'
 version: 8.4.160
 license: AGPL-3.0 License (https://ultralytics.com/license)
 docs: https://docs.ultralytics.com
@@ -9,8 +9,8 @@ task: detect
 head: Detect
 batch: 1
 imgsz:
-- 416
-- 416
+- 480
+- 640
 names:
   0: Glass
   1: Metal
@@ -22,6 +22,6 @@ args:
   fraction: 1.0
   quantize: null
   nms: null
-  dynamic: true
+  dynamic: false
 channels: 3
 end2end: false
