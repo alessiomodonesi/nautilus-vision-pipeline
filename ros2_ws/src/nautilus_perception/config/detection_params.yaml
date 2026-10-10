@@ -3,5 +3,5 @@ detection_node:
     model_filename: 'yolov8n_openvino_model'
     conf_threshold: 0.4
     input_type: 'raw' # 'raw' o 'enhanced'
-    enable_debug: True
-    half_res: False # False per OpenVINO, True per .pt
+    enable_debug: False # finestra di debug
+    half_res: False # false per OpenVINO, true per .pt
