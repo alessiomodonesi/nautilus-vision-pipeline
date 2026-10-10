@@ -1,6 +1,7 @@
 import cv2
 from ultralytics import YOLO
 import os
+import numpy as np
 
 # percorso al modello OpenVINO
 model_path = "data/weights/yolov8n_openvino_model"
