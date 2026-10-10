@@ -104,10 +104,10 @@ class DetectionNode(Node):
         except Exception as e:
             self.get_logger().error(f"Error in image conversion: {e}")
             return
-
-        # applicazione della rettifica stereo con copia profonda per isolare la memoria
-        cv_left = cv2.remap(cv_left, self.map1x, self.map1y, cv2.INTER_LINEAR).copy()
-        cv_right = cv2.remap(cv_right, self.map2x, self.map2y, cv2.INTER_LINEAR).copy()
+        
+        # applicazione della rettifica stereo, copia e forzatura a uint8
+        cv_left = cv2.remap(cv_left, self.map1x, self.map1y, cv2.INTER_LINEAR).copy().astype(np.uint8)
+        cv_right = cv2.remap(cv_right, self.map2x, self.map2y, cv2.INTER_LINEAR).copy().astype(np.uint8)
 
         # rilevamento YOLO
         detections = self.detector.detect(cv_left)
