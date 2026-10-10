@@ -676,7 +676,7 @@ class YoloDetector(BaseDetector):
             scale = 1.0
 
         results = self.model.predict(
-            infer_frame, device=self.device, conf=self.conf, verbose=False
+            infer_frame, conf=self.conf, verbose=False
         )
 
         detected_boxes: List[BBox] = []
