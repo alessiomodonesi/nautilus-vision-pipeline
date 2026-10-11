@@ -16,6 +16,9 @@ from rcl_interfaces.msg import ParameterDescriptor
 from nautilus_perception.detection.core_detection import YoloDetector, SparseBlockMatcher
 from nautilus_perception.detection.config import DEFAULT_MODEL, StereoConfig
 
+# limitazione thread
+os.environ["OMP_NUM_THREADS"] = "2"
+os.environ["MKL_NUM_THREADS"] = "2"
 
 class DetectionNode(Node):
     def __init__(self):
