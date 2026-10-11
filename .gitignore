@@ -1,7 +1,3 @@
-# Ignora le cartelle degli ambienti virtuali
-ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/.venv_openvino/
-ros2_ws/src/nautilus_perception/enhancement/.venv_waternet/
-
 # Ignora l'immagine della SD card
 docker/clone_sd.img
 

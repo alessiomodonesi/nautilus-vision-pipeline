@@ -1,7 +1,8 @@
 detection_node:
   ros__parameters:
     # nome della cartella (per i modelli OpenVINO) o del file (es. yolov8n.pt per PyTorch) posizionato in data/weights/
-    model_filename: 'yolov8n_openvino_model'
+    # model_filename: 'yolov8n_openvino_model'
+    model_filename: 'yolov8n.pt'
     
     # soglia minima di confidenza (es. 0.4 = 40%) oltre la quale YOLO accetta la detection
     conf_threshold: 0.4
