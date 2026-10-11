@@ -3,6 +3,7 @@ import numpy as np
 import openvino as ov
 from ultralytics import YOLO
 
+
 def pre_process(image, input_shape):
     h, w = input_shape[2], input_shape[3]
     resized_img = cv2.resize(image, (w, h))
@@ -11,6 +12,7 @@ def pre_process(image, input_shape):
     input_tensor = np.transpose(input_tensor, (2, 0, 1))
     input_tensor = np.expand_dims(input_tensor, 0)
     return input_tensor, image.shape
+
 
 def post_process(output, orig_shape, input_shape, classes, conf_threshold=0.5):
     predictions = np.squeeze(output).T
@@ -48,12 +50,14 @@ def post_process(output, orig_shape, input_shape, classes, conf_threshold=0.5):
             })
     return results
 
+
 def init_ov(model_xml="yolov8n_openvino_model/yolov8n.xml"):
     """Inizializza OpenVINO e recupera le classi."""
     core = ov.Core()
     compiled_model = core.compile_model(model_xml, "CPU")
     model = YOLO('yolov8n.pt') 
     return compiled_model, model.names
+
 
 def run_ov(compiled_model, image, classes, conf_threshold=0.25):
     """Esegue l'intera pipeline OpenVINO su un singolo frame."""
@@ -65,22 +69,24 @@ def run_ov(compiled_model, image, classes, conf_threshold=0.25):
     result = compiled_model([input_tensor])[output_layer]
     return post_process(result, orig_shape, input_shape, classes, conf_threshold)
 
+
 def main():
-    print("Preparazione e caricamento modello OpenVINO...")
+    print("Preparing and loading OpenVINO model...")
     compiled_model, classes = init_ov()
-    
-    print("Generazione frame fittizio 1280x720...")
+
+    print("Generating dummy 1280x720 frame...")
     dummy_image = np.zeros((720, 1280, 3), dtype=np.uint8)
-    
-    print("Inferenza OpenVINO in corso...")
+
+    print("Running OpenVINO inference...")
     detections = run_ov(compiled_model, dummy_image, classes)
-    
-    print("\nRisultati OpenVINO:")
+
+    print("\nOpenVINO results:")
     if not detections:
-        print("Nessun target rilevato")
+        print("No targets detected")
     else:
         for d in detections:
-            print(f"[{d['class']}] Conf: {d['confidence']:.2f} | Centro: {d['center']} | Box: {d['box']}")
+            print(f"[{d['class']}] Conf: {d['confidence']:.2f} | Center: {d['center']} | Box: {d['box']}")
 
 if __name__ == "__main__":
     main()
+    

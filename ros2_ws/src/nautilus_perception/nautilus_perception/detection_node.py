@@ -20,6 +20,7 @@ from nautilus_perception.detection.config import DEFAULT_MODEL, StereoConfig
 os.environ["OMP_NUM_THREADS"] = "2"
 os.environ["MKL_NUM_THREADS"] = "2"
 
+
 class DetectionNode(Node):
     def __init__(self):
         super().__init__('detection_node')

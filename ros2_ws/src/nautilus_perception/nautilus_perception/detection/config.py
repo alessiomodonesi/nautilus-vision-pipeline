@@ -61,3 +61,4 @@ class StereoConfig:
 
     # ── YOLO half-resolution inference ─────────────────────────────────────
     yolo_half_res: bool = True     # Halve frame before YOLO → ~4× faster
+    

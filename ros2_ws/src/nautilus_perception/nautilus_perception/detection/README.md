@@ -55,7 +55,7 @@ The pipeline is built from four stages that run in sequence, once per frame:
 ## 2. Before running: what needs to already exist
 
 | File | Required for | Notes |
-|---|---|---|
+| --- | --- | --- |
 | `config.py` | Always | Default baseline, focal length, minimum detection area, model path. Any of these can be overridden with CLI flags. |
 | `stereo_calib.npz` | Always | Camera calibration data (rectification maps). **The script exits immediately if this is missing.** Produced by `stereo_calibrate.py` — see [Section 5](#5-calibration). |
 | YOLO weights (`.pt` file) | `--mode yolo` only | Path set in `config.py`, or overridden with `--model`. Not needed for `--mode apriltag`. |
@@ -66,14 +66,14 @@ at runtime — only `stereo_calibrate.py` reads it, to *produce*
 `stereo_calib.npz`. Once that file exists, the photos can be archived or
 deleted without affecting normal runs.
 
-If you are struggling to install "Module 3 cameras" on Raspberry Pi 5 with Ubuntu Server, you can follow this guide. (https://claude.ai/public/artifacts/421019b6-9752-4014-962c-ff84b6058954)
+If you are struggling to install "Module 3 cameras" on Raspberry Pi 5 with Ubuntu Server, you can follow this guide. (<https://claude.ai/public/artifacts/421019b6-9752-4014-962c-ff84b6058954>)
 
 ---
 
 ## 3. Command-line arguments
 
 | Flag | Values | Description |
-|---|---|---|
+| --- | --- | --- |
 | `--mode` | `yolo`, `apriltag` | Detection engine to use. |
 | `--tag-family` | see note below | Fiducial marker dictionary for `--mode apriltag`. Default: `apriltag_36h11`. Choices: `apriltag_16h5`, `apriltag_25h9`, `apriltag_36h10`, `apriltag_36h11`, `aruco_4x4_50/100/250`, `aruco_5x5_50/100/250`, `aruco_6x6_50/100/250`, `aruco_7x7_50/100/250`. `apriltag_*` and `aruco_*` are separate encodings — not interchangeable, even at the same grid size. |
 | `--left` | path, integer, or `picamN` | Left camera source. Ignored if `--picam2` is set. |
@@ -99,7 +99,7 @@ When `--ros2` is set, this script becomes the first node in the BlueBoat
 vision-to-control pipeline, publishing directly to the topic the rest of
 the team's nodes already expect:
 
-```
+```text
 main.py  →  /apriltag/detections  →  maneuver_manager_vs  →  /tracking_reference  →  controller_mavros_vs  →  MAVROS  →  boat
    (this script,                                      (both run on the boat's
     Raspberry Pi)                                       onboard computer)
@@ -111,6 +111,7 @@ ESP32-based bridge) — this script does the same job, publishing the same
 message type on the same topic, using the actual stereo cameras instead.
 
 **Behavior notes:**
+
 - Only the **single closest valid detection** is published per frame —
   `maneuver_manager_vs` tracks one target at a time, so if multiple tags
   are visible, the nearest one is treated as the target.
@@ -127,6 +128,7 @@ message type on the same topic, using the actual stereo cameras instead.
    to Ubuntu 24.04).
 2. `nautilus_apriltag_msgs` — just the message-definition package, not
    the full team workspace — built in a local workspace:
+
    ```bash
    mkdir -p ~/ros2_ws/src
    # copy the nautilus_apriltag_msgs folder into ~/ros2_ws/src/
@@ -134,6 +136,7 @@ message type on the same topic, using the actual stereo cameras instead.
    source /opt/ros/jazzy/setup.bash
    colcon build --packages-select nautilus_apriltag_msgs
    ```
+
 3. `ROS_DOMAIN_ID` set to match the boat's onboard computer (both
    machines must use the same value to discover each other over the
    network). Set this once in `~/.bashrc`.
@@ -192,34 +195,41 @@ distance estimates start looking consistently off.
 ## 6. Deployment examples
 
 **Local testing with recorded video (no camera hardware needed):**
+
 ```bash
 python3 main.py --mode apriltag --left video/left.mp4 --right video/right.mp4
 ```
 
 **Raspberry Pi 5, headless, YOLO debris detection:**
+
 ```bash
 python3 main.py --mode yolo --picam2 --no-display
 ```
 
 **Raspberry Pi 5, headless, AprilTag mode with ROS2 publishing (full deployment):**
+
 ```bash
 python3 main.py --picam2 --baseline 0.1217 --focal-length 959.9 --mode apriltag --no-display --ros2
 ```
 
 **Debugging camera alignment with a full dense depth map (any machine with a GPU):**
+
 ```bash
 python3 main.py --mode yolo --left 0 --right 1 --dense-depth --backend cuda
 ```
 
 **AprilTag mode with a non-default marker family (e.g. a physical ArUco 7x7 board instead of a real AprilTag):**
+
 ```bash
 python3 main.py --picam2 --baseline 0.1217 --focal-length 959.9 --mode apriltag --no-display --tag-family aruco_7x7_50
 ```
+
 If detection still fails, standard ArUco dictionaries come in variant
 sizes (`_50`, `_100`, `_250`) with different marker codebooks — try the
 other variants of the same grid family next.
 
 **Setup run example:**
+
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/ros2_ws/install/setup.bash

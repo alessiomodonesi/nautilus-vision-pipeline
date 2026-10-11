@@ -27,7 +27,7 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='Nautilus',
+    maintainer='Nautilus Software Team',
     maintainer_email='nautilus.unipd@gmail.com',
     description='Nodo di enhancement per Nautilus Camera',
     license='Apache-2.0',

@@ -1,14 +1,15 @@
 import time
 import numpy as np
 
-# Importiamo moduli di init e inferenza dagli script esistenti
+# moduli di init e inferenza dagli script esistenti
 from yolo_inference import init_yolo, run_yolo
 from ov_inference import init_ov, run_ov
 
+
 def run_benchmark(name, init_func, infer_func, num_frames=100):
-    print(f"\nInizializzazione {name}...")
+    print(f"\nInitializing {name}...")
     
-    # Init specifico in base al framework
+    # init specifico in base al framework
     if name == "OpenVINO":
         model, classes = init_func()
     else:
@@ -17,14 +18,14 @@ def run_benchmark(name, init_func, infer_func, num_frames=100):
         
     dummy_image = np.zeros((720, 1280, 3), dtype=np.uint8)
     
-    # Warm-up per caricare tensori e allocare memoria cache
+    # warm-up per caricare tensori e allocare memoria cache
     print(f"Warm-up {name}...")
     if name == "OpenVINO":
         infer_func(model, dummy_image, classes)
     else:
         infer_func(model, dummy_image)
         
-    print(f"Avvio misurazione {name} su {num_frames} frames...")
+    print(f"Starting measurement {name} on {num_frames} frames...")
     latencies = []
     start_time = time.time()
     
@@ -45,16 +46,17 @@ def run_benchmark(name, init_func, infer_func, num_frames=100):
 def main():
     print("Benchmark: YOLOv8 Nano vs OpenVINO")
     
-    # 100 frame corrispondono a 20 secondi di video a 5 FPS (il target del daemon)
+    # 100 frame corrispondono a 20 secondi di video a 5 FPS
     yolo_lat, yolo_fps = run_benchmark("YOLOv8 Nano", init_yolo, run_yolo, num_frames=100)
     ov_lat, ov_fps = run_benchmark("OpenVINO", init_ov, run_ov, num_frames=100)
     
-    print(f"\nYOLOv8 Nano: Latenza media = {yolo_lat:.2f} ms | Throughput = {yolo_fps:.2f} FPS")
-    print(f"\nOpenVINO: Latenza media = {ov_lat:.2f} ms | Throughput = {ov_fps:.2f} FPS")
+    print(f"\nYOLOv8 Nano: Average latency = {yolo_lat:.2f} ms | Throughput = {yolo_fps:.2f} FPS") 
+    print(f"\nOpenVINO: Average latency = {ov_lat:.2f} ms | Throughput = {ov_fps:.2f} FPS")
     
     if yolo_fps > 0:
         boost = ((ov_fps - yolo_fps) / yolo_fps) * 100
-        print(f"\nIncremento prestazionale FPS: +{boost:.1f}%")
+    print(f"\nFPS performance increase: +{boost:.1f}%")
 
 if __name__ == "__main__":
     main()
+    

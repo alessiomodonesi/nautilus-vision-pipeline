@@ -17,7 +17,7 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='Nautilus',
+    maintainer='Nautilus Software Team',
     maintainer_email='nautilus.unipd@gmail.com',
     description='Stereo camera node for the Nautilus vehicle (runs on the Raspberry Pi hosts).',
     license='Apache-2.0',

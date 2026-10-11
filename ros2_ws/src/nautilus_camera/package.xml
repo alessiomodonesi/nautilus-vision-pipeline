@@ -4,8 +4,7 @@
   <name>nautilus_camera</name>
   <version>0.0.1</version>
   <description>Stereo camera node for the Nautilus vehicle. Runs on the Raspberry Pi hosts.</description>
-  <!-- TODO: set a real maintainer before the first release -->
-  <maintainer email="TODO@example.com">Nautilus Software Team</maintainer>
+  <maintainer email="nautilus.unipd@gmail.com">Nautilus Software Team</maintainer>
   <license>Apache-2.0</license>
   <url type="repository">https://github.com/nautilus-unipd/Nautilus</url>
 

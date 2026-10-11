@@ -86,7 +86,7 @@ class EnhancementNode(Node):
         if elapsed >= 1.0:
             fps = self.frame_count / elapsed
             self.get_logger().info(
-                f"FPS: {fps:.1f} | Delay entrata-uscita: {delay_ms:.2f} ms"
+                f"FPS: {fps:.1f} | Delay in-exit: {delay_ms:.2f} ms"
             )
             self.frame_count = 0
             self.start_time = current_time
