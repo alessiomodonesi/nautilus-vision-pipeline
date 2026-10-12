@@ -9,8 +9,8 @@ works on a headless Ubuntu Server install with no X display at all.
 
 Run on the Raspberry Pi 5 itself:
 
-    python3 capture_calibration_pairs_web.py \\
-        --squares-x 8 --squares-y 11 --square-length 0.015 --marker-length 0.011
+    python3 -m calibration.capture_calibration_pairs_web \\
+        --resolution 1280x720 --lens-left 3.0 --lens-right 1.0
 
 Then, from ANY device on the same network (phone, laptop, whatever),
 open a browser to:
@@ -41,14 +41,39 @@ from flask import Flask, Response, jsonify, request
 from calibration.charuco_common import CharucoSetup, DICT_NAMES, detect_markers
 
 
-def open_camera(camera_num, resolution):
-    from picamera2 import Picamera2
+def open_camera(camera_num, resolution, lens_position=None,
+                lock_ae_awb=False, exposure_time=20000,
+                analogue_gain=None, colour_gains=(1.5, 1.5)):
+    try:
+        from picamera2 import Picamera2
+    except ImportError as exc:
+        raise RuntimeError(
+            "picamera2 is required for Pi Camera Module 3 support. "
+            "Install with: sudo apt install -y python3-picamera2"
+        ) from exc
 
     picam2 = Picamera2(camera_num=camera_num)
     cfg = picam2.create_video_configuration(main={"size": resolution, "format": "RGB888"})
     picam2.configure(cfg)
     picam2.start()
-    time.sleep(0.5)
+    time.sleep(1.0)   # lascia che AE/AWB convergano prima di (eventualmente) bloccarli
+
+    controls = {}
+    if lens_position is not None:
+        controls["AfMode"] = 0                        # manual focus
+        controls["LensPosition"] = float(lens_position)
+    if lock_ae_awb:
+        controls["AeEnable"] = False
+        controls["AwbEnable"] = False
+        controls["ExposureTime"] = int(exposure_time)
+        controls["ColourGains"] = tuple(colour_gains)
+        if analogue_gain is not None:
+            controls["AnalogueGain"] = float(analogue_gain)
+
+    if controls:
+        picam2.set_controls(controls)
+        time.sleep(0.5)
+        print(f"Camera {camera_num}: controls applicati -> {controls}")
     return picam2
 
 
@@ -226,7 +251,7 @@ def main():
                                   formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--left-cam", type=int, default=0)
     ap.add_argument("--right-cam", type=int, default=1)
-    ap.add_argument("--resolution", default="640x480")
+    ap.add_argument("--resolution", default="1280x720")
     ap.add_argument("--squares-x", type=int, default=8)
     ap.add_argument("--squares-y", type=int, default=11)
     ap.add_argument("--square-length", type=float, default=0.015,
@@ -243,7 +268,7 @@ def main():
                           "several confirmed upstream bugs where markers are found but "
                           "corners silently come back empty. Try this if markers show "
                           ">0 but corners stay at 0 no matter what.")
-    ap.add_argument("--min-shared-corners", type=int, default=8,
+    ap.add_argument("--min-shared-corners", type=int, default=15,
                      help="Minimum charuco corners shared between L/R to allow capture")
     ap.add_argument("--outdir", default="calib_pairs")
     ap.add_argument("--auto-dict", action="store_true",
@@ -251,6 +276,18 @@ def main():
     ap.add_argument("--port", type=int, default=8000)
     ap.add_argument("--host", default="0.0.0.0",
                      help="0.0.0.0 lets other devices on your network connect")
+    ap.add_argument("--lens-left", type=float, default=3.0,
+                    help="LensPosition per la camera sinistra (come in produzione)")
+    ap.add_argument("--lens-right", type=float, default=1.0,
+                    help="LensPosition per la camera destra (come in produzione)")
+    ap.add_argument("--lock-ae-awb", action="store_true",
+                    help="Blocca anche AE/AWB agli stessi valori della produzione")
+    ap.add_argument("--exposure-time", type=int, default=20000,
+                    help="Solo se --lock-ae-awb")
+    ap.add_argument("--analogue-gain", type=float, default=None,
+                    help="Solo se --lock-ae-awb (default: non impostato)")
+    ap.add_argument("--colour-gains", type=float, nargs=2, default=[1.5, 1.5],
+                    help="Solo se --lock-ae-awb")
     args = ap.parse_args()
 
     w, h = (int(x) for x in args.resolution.lower().split("x"))
@@ -259,8 +296,18 @@ def main():
     print(f"Opening left=camera_num {args.left_cam}, right=camera_num {args.right_cam} "
           f"at {resolution} ...")
     try:
-        cam_l = open_camera(args.left_cam, resolution)
-        cam_r = open_camera(args.right_cam, resolution)
+        cam_l = open_camera(args.left_cam, resolution,
+                            lens_position=args.lens_left,
+                            lock_ae_awb=args.lock_ae_awb,
+                            exposure_time=args.exposure_time,
+                            analogue_gain=args.analogue_gain,
+                            colour_gains=tuple(args.colour_gains))
+        cam_r = open_camera(args.right_cam, resolution,
+                            lens_position=args.lens_right,
+                            lock_ae_awb=args.lock_ae_awb,
+                            exposure_time=args.exposure_time,
+                            analogue_gain=args.analogue_gain,
+                            colour_gains=tuple(args.colour_gains))
     except RuntimeError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         sys.exit(1)
