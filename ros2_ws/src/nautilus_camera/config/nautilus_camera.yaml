@@ -41,3 +41,4 @@
     queue_size: 10
     flush_every_n: 1            # 1 = flush immediato su disco (sicuro ma lento)
     max_files_per_session: 0    # 0 = nessun limite (utile in test)
+    sync_slop_sec: 0.05         # tolleranza skew per message_filters

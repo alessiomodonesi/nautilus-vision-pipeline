@@ -33,7 +33,11 @@ class MetricsNode(Node):
         slop        = self.get_parameter('sync_slop_sec').value
         window      = self.get_parameter('window_size').value
         self.log_interval = self.get_parameter('log_interval_sec').value
-        self.display_enabled = self.get_parameter('display').value
+        display_param = self.get_parameter('display').value
+        if isinstance(display_param, str):
+            self.display_enabled = display_param.lower() in ('true', '1')
+        else:
+            self.display_enabled = bool(display_param)
 
         if self.display_enabled:
             self.bridge = CvBridge()

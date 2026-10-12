@@ -8,13 +8,14 @@ CONFIG_FILE="/home/pi/nautilus-vision-pipeline/pipeline_config.env"
 if [ -f "$CONFIG_FILE" ]; then
     source "$CONFIG_FILE"
 else
-    echo "Configuration file not found. Using defaults (everything enabled)."
-    ENABLE_ENHANCEMENT=true
-    ENABLE_DETECTION=true
+    echo "Configuration file not found. Using defaults (saving enabled)."
+    ENABLE_ENHANCEMENT=false
+    ENABLE_DETECTION=false
+    ENABLE_SAVING=true
 fi
 
-# lancia la pipeline completa passando gli argomenti dinamici
+# lancia la pipeline passando gli argomenti dinamici
 ros2 launch nautilus_camera stereo_camera.launch.py \
-    enable_saving:=$ENABLE_SAVING \
-    enable_metrics:=${ENABLE_METRICS:-true} 
+    enable_saving:=${ENABLE_SAVING:-true} \
+    enable_metrics:=${ENABLE_METRICS:-true}
   

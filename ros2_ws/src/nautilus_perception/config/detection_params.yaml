@@ -20,3 +20,6 @@ detection_node:
     
     # numero di thread per OpenVINO/CPU inferenza
     num_threads: 2
+
+    # tolleranza temporale (secondi) per la sincronizzazione stereo a 5 FPS (default 0.05 s)
+    sync_slop_sec: 0.05

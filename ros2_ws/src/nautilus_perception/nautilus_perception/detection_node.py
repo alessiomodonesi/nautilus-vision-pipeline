@@ -28,6 +28,7 @@ class DetectionNode(Node):
         self.declare_parameter('enable_debug', descriptor=dyn_desc)
         self.declare_parameter('half_res', descriptor=dyn_desc)
         self.declare_parameter('num_threads', 2)
+        self.declare_parameter('sync_slop_sec', 0.05)
         
         # utility function per estrarre e validare i parametri
         def get_param_strict(name):
@@ -95,10 +96,11 @@ class DetectionNode(Node):
         self.left_sub = message_filters.Subscriber(self, Image, left_topic)
         self.right_sub = message_filters.Subscriber(self, Image, right_topic)
         
+        sync_slop = float(self.get_parameter('sync_slop_sec').value)
         self.ts = message_filters.ApproximateTimeSynchronizer(
             [self.left_sub, self.right_sub], 
             queue_size=10, 
-            slop=0.2
+            slop=sync_slop
         )
         self.ts.registerCallback(self.stereo_callback)
 

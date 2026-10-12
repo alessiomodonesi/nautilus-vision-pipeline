@@ -66,6 +66,8 @@ def generate_launch_description():
     return LaunchDescription([
         enable_enhancement_arg,
         enable_detection_arg,
+        enable_saving_arg,
+        enable_metrics_arg,
         stereo_launch,
         enhancement_launch,
         detection_launch
