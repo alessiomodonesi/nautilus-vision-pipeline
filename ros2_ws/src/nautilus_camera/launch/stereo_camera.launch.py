@@ -39,8 +39,8 @@ def generate_launch_description():
                 'AeEnable': False,
                 'AwbEnable': False,
                 'ExposureTime': 20000,
-                'AnalogueGain': 1.0,
                 'ColourGains': [1.5, 1.5],
+                # AnalogueGain rimosso: rifiutato da camera_ros sul IMX708
             },
         ],
         output='screen',
@@ -56,8 +56,8 @@ def generate_launch_description():
                 'AeEnable': False,
                 'AwbEnable': False,
                 'ExposureTime': 20000,
-                'AnalogueGain': 1.0,
                 'ColourGains': [1.5, 1.5],
+                # AnalogueGain rimosso: rifiutato da camera_ros sul IMX708
             },
         ],
         output='screen',
