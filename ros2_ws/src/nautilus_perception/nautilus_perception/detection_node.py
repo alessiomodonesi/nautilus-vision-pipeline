@@ -143,12 +143,16 @@ class DetectionNode(Node):
 
             for idx, (x, y, w, h, conf) in enumerate(detections):
                 cx, cy = x + w // 2, y + h // 2
-
+                mx, my = max(1, w // 4), max(1, h // 4)
+                points = [(cx, cy), (cx, y+my), (cx, y+h-my), (x+mx, cy), (x+w-mx, cy)]
+                
                 # stima la distanza campionando il centro del bounding box
-                dist = self.matcher.estimate_distance(gray_l, gray_r, cx, cy)
+                dists = [d for px, py in points
+                         if (d := self.matcher.estimate_distance(gray_l, gray_r, px, py)) > 0.0]
+                dist = float(np.median(dists)) if dists else 0.0
                 distances.append(dist)
 
-                # Stampa il log pulito solo se ci sono rilevamenti effettivi
+                # stampa il log pulito solo se ci sono rilevamenti effettivi
                 self.get_logger().info(
                     f"[TARGET DETECTED] Obj [{idx}] -> Box: x={x}, y={y}, w={w}, h={h} | Conf: {conf:.2f} | Distance (Z): {dist:.3f} m"
                 )

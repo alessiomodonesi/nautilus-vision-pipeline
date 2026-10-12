@@ -33,7 +33,16 @@ def generate_launch_description():
         executable='camera_node',
         name='camera',
         namespace='stereo/lx',
-        parameters=[config_file],
+        parameters=[
+            config_file,
+            {
+                'AeEnable': False,
+                'AwbEnable': False,
+                'ExposureTime': 20000,
+                'AnalogueGain': 1.0,
+                'ColourGains': [1.5, 1.5],
+            },
+        ],
         output='screen',
     )
     rx_camera = Node(
@@ -41,7 +50,16 @@ def generate_launch_description():
         executable='camera_node',
         name='camera',
         namespace='stereo/rx',
-        parameters=[config_file],
+        parameters=[
+            config_file,
+            {
+                'AeEnable': False,
+                'AwbEnable': False,
+                'ExposureTime': 20000,
+                'AnalogueGain': 1.0,
+                'ColourGains': [1.5, 1.5],
+            },
+        ],
         output='screen',
     )
 

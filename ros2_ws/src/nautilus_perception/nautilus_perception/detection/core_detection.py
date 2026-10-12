@@ -379,72 +379,67 @@ class SparseBlockMatcher:
     """
     def __init__(self, config: StereoConfig) -> None:
         self.config = config
-        self.min_disparity = 15   
-        self.max_disparity = 180  
+        self.min_disparity = 15 # Z_max ≈ 8.9 m
+        self.max_disparity = 500 # Z_min ≈ 0.27 m 
+        # self.max_disparity = 180  
         self.patch_size = 25      
         self.row_tolerance = 3    
         self.min_confidence = 0.5
 
-    def estimate_distance(
-        self, gray_l: np.ndarray, gray_r: np.ndarray, cx: int, cy: int
-    ) -> float:
-        """
-        Executes localized epipolar search. Extracts a template tensor from the 
-        left frame and sweeps across the corresponding epipolar line segment in 
-        the right frame. 
-        """
+    def estimate_distance(self, gray_l, gray_r, cx, cy):
         h, w = gray_l.shape[:2]
         half = self.patch_size // 2
-
-        # Define bounded tensor slice for the reference patch (left frame)
+    
         ty0, ty1 = cy - half, cy + half
         tx0, tx1 = cx - half, cx + half
         if ty0 < 0 or tx0 < 0 or ty1 > h or tx1 > w:
+            print(f"[MATCH] FAIL=border cx={cx} cy={cy}")
             return 0.0
-
+    
         template = gray_l[ty0:ty1, tx0:tx1]
         if template.size == 0:
+            print(f"[MATCH] FAIL=empty_template")
             return 0.0
-
-        # Define bounded horizontal search space (right frame).
-        # Search constrained strictly leftward to respect epipolar geometry.
+    
         sy0 = max(0, ty0 - self.row_tolerance)
         sy1 = min(h, ty1 + self.row_tolerance)
         sx0 = max(0, cx - self.max_disparity)
         sx1 = min(w, cx - self.min_disparity + self.patch_size)
-
         if (sx1 - sx0) < self.patch_size or (sy1 - sy0) < self.patch_size:
+            print(f"[MATCH] FAIL=strip_too_small sx0={sx0} sx1={sx1} sy0={sy0} sy1={sy1}")
             return 0.0
-
-        # Execute SIMD-optimized normalized cross-correlation (NCC)
+    
         strip = gray_r[sy0:sy1, sx0:sx1]
         result = cv2.matchTemplate(strip, template, cv2.TM_CCOEFF_NORMED)
         _, max_val, _, max_loc = cv2.minMaxLoc(result)
-
+    
+        print(f"[MATCH] cx={cx} cy={cy} max_val={max_val:.3f} "
+              f"thr={self.min_confidence} template_std={template.std():.1f}")
+    
         if max_val < self.min_confidence:
+            print(f"[MATCH] FAIL=low_ncc")
             return 0.0
-
+    
         match_x, match_y = max_loc
         matched_x_center = sx0 + match_x + half
         raw_disparity = float(cx - matched_x_center)
-
-        # 1D Parabolic sub-pixel interpolation around the response peak to mitigate integer quantization errors
         sub_disparity = raw_disparity
         if 0 < match_x < (result.shape[1] - 1):
             v_center = result[match_y, match_x]
-            v_left = result[match_y, match_x - 1]
-            v_right = result[match_y, match_x + 1]
+            v_left   = result[match_y, match_x - 1]
+            v_right  = result[match_y, match_x + 1]
             denom = 2.0 * (v_left - 2.0 * v_center + v_right)
             if abs(denom) > 1e-5:
-                delta = (v_left - v_right) / denom
-                sub_disparity -= delta  
-
+                sub_disparity -= (v_left - v_right) / denom
+    
+        print(f"[MATCH] OK raw_disp={raw_disparity:.2f} sub_disp={sub_disparity:.2f}")
+    
         if sub_disparity <= 1.0:
+            print(f"[MATCH] FAIL=disparity_zero")
             return 0.0
-
-        # Depth mapping via standard triangulation formula: Z = (f * B) / d
+    
         return (self.config.focal_length * self.config.baseline) / sub_disparity
-
+    
 
 # ---------------------------------------------------------------------------
 # Dense Distance Estimation Layer (Opt-In Hardware Accelerated)
