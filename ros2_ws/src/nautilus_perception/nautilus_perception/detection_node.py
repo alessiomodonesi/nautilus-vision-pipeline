@@ -42,7 +42,11 @@ class DetectionNode(Node):
         model_filename = get_param_strict('model_filename')
         conf = get_param_strict('conf_threshold')
         input_type = get_param_strict('input_type')
-        self.enable_debug = get_param_strict('enable_debug')
+        enable_debug_val = get_param_strict('enable_debug')
+        if isinstance(enable_debug_val, str):
+            self.enable_debug = enable_debug_val.lower() in ('true', '1')
+        else:
+            self.enable_debug = bool(enable_debug_val)
         half_res = get_param_strict('half_res')
         num_threads = self.get_parameter('num_threads').value
 

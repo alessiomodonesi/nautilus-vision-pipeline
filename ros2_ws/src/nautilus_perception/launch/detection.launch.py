@@ -15,6 +15,12 @@ def generate_launch_description():
         description='Overrides input_type in YAML if provided'
     )
 
+    enable_debug_arg = DeclareLaunchArgument(
+        'enable_debug',
+        default_value='true',
+        description='Overrides enable_debug in YAML (true/false for OpenCV debug window)'
+    )
+
     detection_node = Node(
         package='nautilus_perception',
         executable='detection_node',
@@ -22,12 +28,16 @@ def generate_launch_description():
         output='screen',
         parameters=[
             config_file, 
-            {'input_type': LaunchConfiguration('input_type_override')}
+            {
+                'input_type': LaunchConfiguration('input_type_override'),
+                'enable_debug': LaunchConfiguration('enable_debug')
+            }
         ]
     )
 
     return LaunchDescription([
         input_type_arg,
+        enable_debug_arg,
         detection_node
     ])
     
