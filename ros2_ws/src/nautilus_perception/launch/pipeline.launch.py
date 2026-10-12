@@ -31,9 +31,23 @@ def generate_launch_description():
         ["'enhanced' if '", LaunchConfiguration('enable_enhancement'), "' == 'true' else 'raw'"]
     )
 
+    enable_saving_arg = DeclareLaunchArgument(
+        'enable_saving', default_value='true',
+        description='Enable saving to disk'
+    )
+    
+    enable_metrics_arg = DeclareLaunchArgument(
+        'enable_metrics', default_value='false',
+        description='Enable the benchmark node'
+    )
+
     # nodo di acquisizione (sempre attivo)
     stereo_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(camera_pkg, 'launch', 'stereo_camera.launch.py'))
+        PythonLaunchDescriptionSource(os.path.join(camera_pkg, 'launch', 'stereo_camera.launch.py')),
+        launch_arguments={
+            'enable_saving':  LaunchConfiguration('enable_saving'),
+            'enable_metrics': LaunchConfiguration('enable_metrics'),
+        }.items()
     )
 
     # nodo di enhancement (condizionale)

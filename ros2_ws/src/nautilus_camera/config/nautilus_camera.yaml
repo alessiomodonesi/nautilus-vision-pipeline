@@ -1,0 +1,43 @@
+# parametri hardware per camera_ros - camera sinistra (lx)
+/stereo/lx/camera:
+  ros__parameters:
+    camera: 0
+    width: 1280
+    height: 720
+    FrameDurationLimits: [200000, 200000]   # 200ms => 5 FPS
+    # FormatBayer / Format lo lasciamo al default di camera_ros
+    # per non rischiare incompatibilità con la Pipeline NVIDIA futura
+
+# parametri hardware per camera_ros - camera destra (rx)
+/stereo/rx/camera:
+  ros__parameters:
+    camera: 1
+    width: 1280
+    height: 720
+    FrameDurationLimits: [200000, 200000]
+
+# parametri del nodo di benchmark
+/**/metrics_node:
+  ros__parameters:
+    left_topic: '/stereo/lx/camera/image_raw'
+    right_topic: '/stereo/rx/camera/image_raw'
+    sync_slop_sec: 0.05         # tolleranza skew per message_filters
+    window_size: 30             # frame usati per std/jitter
+    log_interval_sec: 1.0       # ogni quanto stampare le metriche
+    display: false              # true => apre finestra OpenCV (solo con GUI)
+
+# parametri del nodo di salvataggio
+/**/saving_node:
+  ros__parameters:
+    enable_saving: true
+    left_topic: '/stereo/lx/camera/image_raw'
+    right_topic: '/stereo/rx/camera/image_raw'
+    save_directory: '/home/pi/nautilus_data'
+    save_left: true
+    save_right: true
+    image_format: 'jpg'         # 'jpg' o 'png'
+    jpeg_quality: 95            # solo per jpg
+    filename_prefix: 'nautilus'
+    queue_size: 10
+    flush_every_n: 1            # 1 = flush immediato su disco (sicuro ma lento)
+    max_files_per_session: 0    # 0 = nessun limite (utile in test)

@@ -12,13 +12,13 @@ Obiettivo: un nodo in `nautilus_perception` che legge le immagini e ci applica l
 - [x] Realizza il nodo che prende le immagini e le migliora (applica l'algoritmo in pratica).
 - [x] Misurare FPS reali e delay entrata-uscita da questo nodo.
 
-## Fase 3 — Nodo di salvataggio (probably one to skip)
+## Fase 3 — Nodo di salvataggio
 
 Obiettivo: un nodo in `nautilus_camera` che legge le immagini (enhanced o no, a seconda della configurazione) e le salva in una cartella per uso futuro.
 
-- [ ] Realizza il nodo che prende le immagini e le salva.
-- [ ] Misurare FPS reali e delay entrata-uscita da questo nodo.
-- [ ] Valutare prima `ros2 bag record` (mcap, immagini compresse). Il nodo serve se i biologi vogliono JPEG in cartelle; in quel caso numerazione incrementale dei file, perché manca l'RTC.
+- [x] Realizza il nodo che prende le immagini e le salva.
+- [x] Misurare FPS reali e delay entrata-uscita da questo nodo.
+- [x] Valutare prima `ros2 bag record` (mcap, immagini compresse). Il nodo serve se i biologi vogliono JPEG in cartelle; in quel caso numerazione incrementale dei file, perché manca l'RTC.
 
 ## Fase 4 — Nodo di detection
 

@@ -14,6 +14,7 @@ else
 fi
 
 # lancia la pipeline completa passando gli argomenti dinamici
-ros2 launch nautilus_perception pipeline.launch.py \
-    enable_enhancement:=$ENABLE_ENHANCEMENT \
-    enable_detection:=$ENABLE_DETECTION
+ros2 launch nautilus_camera stereo_camera.launch.py \
+    enable_saving:=$ENABLE_SAVING \
+    enable_metrics:=${ENABLE_METRICS:-true} 
+  
