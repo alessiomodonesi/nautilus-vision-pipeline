@@ -32,7 +32,7 @@
     enable_saving: true
     left_topic: '/stereo/lx/camera/image_raw'
     right_topic: '/stereo/rx/camera/image_raw'
-    save_directory: '/home/pi/nautilus_data'
+    save_directory: '/home/nautilus/nautilus_data'
     save_left: true
     save_right: true
     image_format: 'jpg'         # 'jpg' o 'png'

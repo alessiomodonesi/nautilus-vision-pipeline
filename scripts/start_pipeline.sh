@@ -1,10 +1,10 @@
 #!/bin/bash
 # carica l'ambiente di ROS 2
 source /opt/ros/jazzy/setup.bash
-source /home/pi/nautilus-vision-pipeline/ros2_ws/install/setup.bash
+source /home/nautilus/nautilus-vision-pipeline/ros2_ws/install/setup.bash
 
 # carica il file di configurazione globale
-CONFIG_FILE="/home/pi/nautilus-vision-pipeline/pipeline_config.env"
+CONFIG_FILE="/home/nautilus/nautilus-vision-pipeline/pipeline_config.env"
 if [ -f "$CONFIG_FILE" ]; then
     source "$CONFIG_FILE"
 else

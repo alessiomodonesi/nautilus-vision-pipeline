@@ -4,7 +4,7 @@ After=network.target multi-user.target
 
 [Service]
 Type=simple
-User=pi
+User=nautilus
 ExecStart=/bin/bash /usr/local/bin/start_pipeline.sh
 Restart=on-failure
 RestartSec=5

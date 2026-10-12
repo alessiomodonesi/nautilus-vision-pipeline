@@ -38,7 +38,7 @@ class SavingNode(Node):
         self.declare_parameter('sync_slop_sec', 0.05)
 
         self.enable_saving = self.get_parameter('enable_saving').value
-        self.save_dir      = self.get_parameter('save_directory').value
+        self.save_dir      = os.path.expanduser(self.get_parameter('save_directory').value)
         self.save_left     = self.get_parameter('save_left').value
         self.save_right    = self.get_parameter('save_right').value
         self.image_format  = self.get_parameter('image_format').value.lower()
