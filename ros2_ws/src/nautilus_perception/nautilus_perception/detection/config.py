@@ -3,16 +3,14 @@ from typing import Tuple
 import os
 
 # ── Default File Paths & Settings ──────────────────────────────────────────
-# Otteniamo il percorso assoluto della directory in cui si trova config.py
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Risaliamo di un livello (da 'detection' a 'nautilus_perception') e poi entriamo in 'data'
 DATA_DIR = os.path.join(BASE_DIR, "..", "data")
 
 DEFAULT_MODEL = os.path.join(DATA_DIR, "weights", "yolov8n.pt")
-DEFAULT_MODE = "yolo"
-DEFAULT_LEFT_SRC = os.path.join(DATA_DIR, "test", "test_video_1.mp4")
-DEFAULT_RIGHT_SRC = os.path.join(DATA_DIR, "test", "test_video_1.mp4")
+
+# NOTA: i video di test NON vanno definiti qui.
+# Sono asset di benchmark e vivono in benchmark/datasets/videos/.
+# I nodi/script che ne hanno bisogno devono riceverli via CLI o ROS param.
 
 # ---------------------------------------------------------------------------
 # Configuration

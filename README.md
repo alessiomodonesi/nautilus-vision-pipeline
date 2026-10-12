@@ -27,11 +27,18 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 * **[Package `nautilus_msgs`](ros2_ws/src/nautilus_msgs/README.md)** — Definizioni delle interfacce e dei messaggi custom della suite Nautilus.
 * **[Driver `camera_ros`](ros2_ws/src/camera_ros/README.md)** — Driver ROS 2 per `libcamera`, integrato per il controllo diretto dei doppi sensori CSI Pi Camera v3.
 
-### ⚙️ Script di Gestione e Deployment (`scripts/`) & Configurazione
+### ⚙️ Script di Gestione e Deployment (`deploy/`) & Configurazione
 
-* **[Script Avvio Pipeline](scripts/start_pipeline.sh)** — Entry point di boot invocato da systemd per avviare i nodi in base al file `.env`.
-* **[Servizio Systemd](scripts/nautilus-vision.service)** — Unit file per l'avvio automatico su Pi al boot (trigger reed switch).
+* **[Script Avvio Pipeline](deploy/start_pipeline.sh)** — Entry point di boot invocato da systemd per avviare i nodi in base al file `.env`.
+* **[Servizio Systemd](deploy/nautilus-vision.service)** — Unit file per l'avvio automatico su Pi al boot (trigger reed switch).
 * **[Configurazione Ambiente](pipeline_config.env)** — Switch booleani per abilitare/disabilitare enhancement, detection e salvataggio senza ricompilare.
+
+### 📊 Benchmark & Validation (`benchmarks/`)
+
+* **[Benchmark Overview](benchmarks/README.md)** — Metodologia dei test prestazionali e termici (Fase 5 e 6), configurazioni di pipeline, metriche raccolte (latenza p50/p95, CPU, RAM, temperatura, mAP) e linee guida di riproducibilità.
+* **[Script di Benchmark](benchmarks/scripts/)** — `benchmark_pipeline.py`, `system_monitor.py`, `evaluate_map.py`, `plot_results.py`, `model_benchmark.py`.
+* **[Dataset di Test](benchmarks/datasets/)** — Immagini e video stereo di test, dataset grezzi annotati e tool di pulizia (`clean_dataset.py`).
+* **[Risultati](benchmarks/results/)** — CSV temporizzati e grafici PNG prodotti durante le sessioni.
 
 ### 🏛️ Archivio Storico e Componenti Legacy
 
@@ -105,8 +112,8 @@ La pipeline adotta una duplice modalità di esecuzione per rispondere a due esig
 
 ### 1. Avvio Automatico di Produzione (All'accensione del Pi)
 
-* **Trigger Hardware:** Quando il robot viene acceso tramite magnete (interruttore reed switch), il sistema operativo avvia il servizio systemd [`nautilus-vision.service`](scripts/nautilus-vision.service).
-* **Comportamento:** Il servizio invoca [`start_pipeline.sh`](scripts/start_pipeline.sh), il quale legge le variabili d'ambiente in [`pipeline_config.env`](pipeline_config.env).
+* **Trigger Hardware:** Quando il robot viene acceso tramite magnete (interruttore reed switch), il sistema operativo avvia il servizio systemd [`nautilus-vision.service`](deploy/nautilus-vision.service).
+* **Comportamento:** Il servizio invoca [`start_pipeline.sh`](deploy/start_pipeline.sh), il quale legge le variabili d'ambiente in [`pipeline_config.env`](pipeline_config.env).
 * **Nodi avviati:** Viene lanciato [`stereo_camera.launch.py`](ros2_ws/src/nautilus_camera/launch/stereo_camera.launch.py):
   * **Acquisizione:** Obbligatoria (driver `camera_ros` sempre attivi).
   * **Salvataggio:** Opzionale (governato da `ENABLE_SAVING=true/false`).
@@ -197,14 +204,24 @@ Per i test prestazionali e termici della **Fase 5**, è consigliato organizzare 
 benchmarks/
 ├── scripts/
 │   ├── benchmark_pipeline.py    # Profilazione latenze p50/p95 e delay inter-nodo
-│   ├── system_monitor.py        # Logging ogni sec di CPU%, RAM, temperatura e vcgencmd throttled
-│   ├── evaluate_map.py          # Calcolo mAP sul validation set per i vari modelli
-│   └── plot_results.py          # Generazione automatica di grafici e comparazioni
-├── datasets/                    # Subset di immagini subacquee annotate per validazione mAP
-├── results/                     # Dati grezzi e report prodotti durante le sessioni
-│   ├── csv/                     # File CSV temporizzati
+│   ├── system_monitor.py        # Logging CPU%, RAM, temp, vcgencmd throttled
+│   ├── evaluate_map.py          # Calcolo mAP sul validation set
+│   ├── plot_results.py          # Generazione grafici e comparazioni
+│   ├── model_benchmark.py       # Confronto YOLO vs OpenVINO su frame dummy
+│   ├── yolo_inference.py        # Wrapper inferenza YOLOv8 nativa
+│   ├── ov_inference.py          # Wrapper inferenza OpenVINO
+│   └── infer_best_openvino.py   # Demo inferenza best_openvino_model (marine debris)
+├── datasets/
+│   ├── images/                  # Immagini di test (enhancement, waternet)
+│   ├── videos/                  # Video stereo di test
+│   ├── raw/                     # Dataset grezzi annotati
+│   ├── processed/               # Output di clean_dataset.py
+│   └── tools/
+│       └── clean_dataset.py     # Filtro varianza Laplaciano per selezione frame
+├── results/
+│   ├── csv/                     # Dati grezzi temporizzati
 │   └── plots/                   # Immagini PNG dei grafici
-└── README.md                    # Metodologia di test e riproducibilità dei benchmark
+└── README.md                    # Metodologia di test e riproducibilità
 ```
 
 ---

@@ -85,23 +85,30 @@ def clean_stereo_dataset(dir_lx, dir_rx, keep_left, keep_right, discard_left, di
 
 if __name__ == "__main__":
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    ros2_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
+    benchmark_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
 
     # percorsi sorgente (raw dataset)
-    dataset_raw_base = os.path.join(ros2_root, "datasets", "raw", "underwater-image")
+    dataset_raw_base = os.path.join(benchmark_root, "datasets", "raw", "underwater-image")
     lx_dir = os.path.join(dataset_raw_base, "2", "serie-1", "lx")
     rx_dir = os.path.join(dataset_raw_base, "2", "serie-1", "rx")
-    
+
     # percorsi destinazione (clean output sotto datasets/processed/)
-    clean_out_base = os.path.join(ros2_root, "datasets", "processed", "clean_output", "2", "serie-1")
+    clean_out_base = os.path.join(
+        benchmark_root, "datasets", "processed", "clean_output", "2", "serie-1"
+    )
     keep_left = os.path.join(clean_out_base, "keep_lx")
     keep_right = os.path.join(clean_out_base, "keep_rx")
     discard_left = os.path.join(clean_out_base, "discard_lx")
     discard_right = os.path.join(clean_out_base, "discard_rx")
-    
+
     # PASSO 1: calibrare la soglia
     # calibrate_threshold(lx_dir)
-    
+
     # PASSO 2: selezione e copia
-    clean_stereo_dataset(lx_dir, rx_dir, keep_left, keep_right, discard_left, discard_right, threshold=1.99)
+    clean_stereo_dataset(
+        lx_dir, rx_dir,
+        keep_left, keep_right,
+        discard_left, discard_right,
+        threshold=1.99,
+    )
     

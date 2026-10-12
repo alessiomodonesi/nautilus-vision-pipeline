@@ -61,7 +61,7 @@ ENABLE_SAVING=true
 | `ENABLE_DETECTION`    | `false` | Avvia il nodo di detection (nautilus_perception)                  |
 | `ENABLE_SAVING`       | `true`  | Avvia il nodo di salvataggio (nautilus_camera)                    |
 
-Lo script `scripts/start_pipeline.sh` legge questo file e passa dinamicamente i valori al launch file. All'avvio automatico del Raspberry Pi (trigger del reed sensor) viene lanciata **solo la parte di acquisizione + salvataggio**, come richiesto dal capo progetto.
+Lo script `deploy/start_pipeline.sh` legge questo file e passa dinamicamente i valori al launch file. All'avvio automatico del Raspberry Pi (trigger del reed sensor) viene lanciata **solo la parte di acquisizione + salvataggio**, come richiesto dal capo progetto.
 
 ### Routing automatico dei topic
 
@@ -167,7 +167,7 @@ source install/setup.bash
 
 ```bash
 cd ~/nautilus-vision-pipeline
-./scripts/start_pipeline.sh
+./deploy/start_pipeline.sh
 ```
 
 ### Avvio manuale con controllo granulare
@@ -208,10 +208,10 @@ Il Raspberry Pi è configurato per lanciare la pipeline in automatico all'avvio 
 
 ```bash
 # copia lo unit file
-sudo cp ~/nautilus-vision-pipeline/scripts/nautilus-vision.service \
+sudo cp ~/nautilus-vision-pipeline/deploy/nautilus-vision.service \
         /etc/systemd/system/
 # copia lo script di avvio
-sudo cp ~/nautilus-vision-pipeline/scripts/start_pipeline.sh \
+sudo cp ~/nautilus-vision-pipeline/deploy/start_pipeline.sh \
         /usr/local/bin/
 sudo chmod +x /usr/local/bin/start_pipeline.sh
 # ricarica e abilita

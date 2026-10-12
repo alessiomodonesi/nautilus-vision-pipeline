@@ -119,7 +119,7 @@ questi **non prendono** su `camera_ros`. Vanno riapplicati a runtime.
 ./lock_cameras.sh
 ```
 
-Lo script (in `scripts/lock_cameras.sh` o nella root del workspace):
+Lo script (in `deploy/lock_cameras.sh` o nella root del workspace):
 
 ```bash
 #!/bin/bash
@@ -315,5 +315,5 @@ focal_length: float = <P1[0,0]>
 
 - `docs/TODO.md` — Roadmap completa (Fase 9 per calibrazione)
 - `detection_params.yaml` — Parametri runtime del nodo
-- `scripts/lock_cameras.sh` — Lock fotometrico post-launch
+- `deploy/lock_cameras.sh` — Lock fotometrico post-launch
 - `calibration/README.md` — Dettagli sulla calibrazione (se presente)

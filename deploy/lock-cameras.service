@@ -1,0 +1,13 @@
+[Unit]
+Description=Lock Pi Camera v3 photometric parameters
+After=multi-user.target
+
+[Service]
+Type=oneshot
+User=nautilus
+ExecStartPre=/bin/sleep 5
+ExecStart=/bin/bash /home/nautilus/nautilus-vision-pipeline/deploy/lock_cameras.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

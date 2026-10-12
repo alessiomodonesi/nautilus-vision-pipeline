@@ -1,6 +1,7 @@
 import os
-from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
@@ -8,20 +9,32 @@ def generate_launch_description():
     # 'force_on' (con WaterNet) o 'force_off' (senza WaterNet, solo CLAHE)
     WATERNET_MODE = 'force_on'
 
-    # percorso per l'immagine di test nella directory "share" installata
-    pkg_dir = get_package_share_directory('nautilus_perception')
-    IMG_PATH = os.path.join(pkg_dir, 'data', 'test', 'test_image.jpg')
+    # le immagini di test non sono più installate con il pacchetto:
+    # vivono in benchmark/datasets/images/ alla root della repo
+    repo_root = os.environ.get(
+        'NAUTILUS_ROOT',
+        os.path.expanduser('~/nautilus-vision-pipeline')
+    )
+    default_image = os.path.join(
+        repo_root, 'benchmark', 'datasets', 'images', 'test_image.jpg'
+    )
+
+    image_path_arg = DeclareLaunchArgument(
+        'image_path',
+        default_value=default_image,
+        description='Path to the test image used by the local enhancement test'
+    )
 
     # nodo standard ROS per pubblicare un'immagine statica su un topic
     image_publisher = Node(
         package='image_publisher',
         executable='image_publisher_node',
         name='image_publisher',
-        arguments=[IMG_PATH],
+        arguments=[LaunchConfiguration('image_path')],
         parameters=[{
             'publish_rate': 1.0
         }],
-        remappings=[('image_raw', 'camera/image_raw')] 
+        remappings=[('image_raw', 'camera/image_raw')]
     )
 
     # nodo di enhancement
@@ -38,6 +51,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        image_path_arg,
         image_publisher,
         enhancer_node
     ])

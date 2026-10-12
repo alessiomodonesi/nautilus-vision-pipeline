@@ -37,10 +37,6 @@ from typing import List, Optional, Tuple
 import cv2
 import numpy as np
 
-# Abstracted configuration state payload injected at runtime
-from . import config
-from .config import StereoConfig
-
 # ---------------------------------------------------------------------------
 # Telemetry & Logging Configuration
 # ---------------------------------------------------------------------------
@@ -792,8 +788,8 @@ def parse_args() -> argparse.Namespace:
         description="Stereo vision pipeline — edge-optimised deployment architecture"
     )
     p.add_argument(
-        "--mode", choices=["yolo", "apriltag"], default=config.DEFAULT_MODE,
-        help=f"Detection topology (default: {config.DEFAULT_MODE})",
+        "--mode", choices=["yolo", "apriltag"], default="yolo",
+        help=f"Detection topology (default: yolo)",
     )
     p.add_argument(
         "--tag-family", choices=sorted(TAG_FAMILIES.keys()), default="apriltag_36h11",
@@ -807,12 +803,12 @@ def parse_args() -> argparse.Namespace:
              "25h9/aruco_5x5=7x7, 36h10/36h11/aruco_6x6=8x8, aruco_7x7=9x9.",
     )
     p.add_argument(
-        "--left", default=config.DEFAULT_LEFT_SRC,
+        "--left", required=True,
         metavar="SRC",
         help="Left primary source stream mapping",
     )
     p.add_argument(
-        "--right", default=config.DEFAULT_RIGHT_SRC,
+        "--right", required=True,
         metavar="SRC",
         help="Right secondary source stream mapping",
     )
