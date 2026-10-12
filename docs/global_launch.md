@@ -117,13 +117,15 @@ Tutti i parametri di acquisizione, benchmark e salvataggio vivono in un unico fi
     queue_size: 10
     flush_every_n: 1
     max_files_per_session: 0
+    sync_slop_sec: 0.05
 ```
 
 ### Note importanti sui parametri*
 
 * **`FrameDurationLimits`**: valori in microsecondi; `[200000, 200000]` forza 5 FPS stabili. Non modificare senza aggiornare i benchmark attesi.
-* **`sync_slop_sec`**: tolleranza di disallineamento temporale (in secondi) tra i frame sinistro e destro nel `message_filters.ApproximateTimeSynchronizer`. Con skew misurato ~1.5 ms, 50 ms è abbondante.
-* **`save_directory`**: deve essere una directory scrivibile dall'utente `pi`. Ad ogni avvio il nodo crea una sottocartella `YYYYmmdd-HHMMSS_session/` per non mescolare sessioni diverse.
+* **`sync_slop_sec`**: tolleranza di disallineamento temporale (in secondi) tra i frame sinistro e destro nel `message_filters.ApproximateTimeSynchronizer`. Con skew misurato ~1.5 ms, 50 ms è ideale a 5 FPS (il periodo tra frame è 200 ms: uno slop $\le 50\text{ ms}$ impedisce di accoppiare frame di epoche diverse).
+* **`flush_every_n`**: forza il commit su disco (`os.sync()`) ogni N coppie stereo salvate. Cruciale sul veicolo per prevenire corruzioni di filesystem della MicroSD a seguito dello spegnimento brusco con reed switch magnetico.
+* **`save_directory`**: deve essere una directory scrivibile dall'utente `pi`. Ad ogni avvio il nodo crea una sottocartella `YYYYmmdd-HHMMSS_session/` (con suffisso progressivo `_1`, `_2` in caso di orologio di sistema non sincronizzato) per evitare qualsiasi sovrascrittura accidentale.
 * **`image_format`**: `'jpg'` o `'png'`. Il formato JPEG occupa molto meno spazio, ma introduce artefatti di compressione; per uso scientifico dei biologi potrebbe servire PNG.
 * **`max_files_per_session`**: `0` significa nessun limite. Utile per test a tempo determinato.
 * **`display`** (metrics_node): apre una finestra OpenCV; richiede sessione grafica attiva. Disattivato per default perché introduce overhead e falsa i benchmark.
@@ -141,11 +143,13 @@ detection_node:
     enable_debug: True
     half_res: True               # False obbligatorio per OpenVINO
     num_threads: 2               # Core logici dedicati all'inferenza CPU/OpenVINO
+    sync_slop_sec: 0.05          # Tolleranza sincronizzazione stereo (50 ms)
 ```
 
 ### Note importanti sui parametri**
 
 * **`num_threads`**: è cruciale per i benchmark termici e prestazionali sul Raspberry Pi 5. Il nodo legge questo parametro e imposta le variabili di sistema `OMP_NUM_THREADS` e `MKL_NUM_THREADS` *prima* di caricare il modello, garantendo che le risorse CPU non vengano saturate in modo incontrollato.
+* **`sync_slop_sec`**: allineato a 50 ms per evitare che in caso di frame drop su un canale vengano associati fotogrammi a intervalli temporali diversi ($t$ con $t+200\text{ ms}$), falsando disparità e stima di profondità.
 
 ## 5. Come Compilare e Avviare
 
@@ -258,7 +262,7 @@ Di default i frame vengono salvati in:
 └── ...
 ```
 
-Il contatore è monotonicamente crescente e viene azzerato ad ogni avvio di sessione. Poiché il Raspberry Pi non ha RTC, **non fidarti dell'orario del filesystem**: usa il contatore per ordinare i frame, e l'ID sessione solo per raggrupparli.
+Il contatore è monotonicamente crescente e viene azzerato ad ogni avvio di sessione. Poiché il Raspberry Pi non ha RTC, **non fidarti dell'orario del filesystem**: usa il contatore per ordinare i frame, e l'ID sessione solo per raggrupparli. Inoltre, se l'orario di sistema coincide tra reboot successivi, `saving_node` rileva la collisione e crea automaticamente una sottocartella con suffisso incrementale (es. `YYYYmmdd-HHMMSS_session_1`), proteggendo i dati precedenti dalla sovrascrittura.
 
 Per contare i file salvati:
 
@@ -274,5 +278,7 @@ find /home/pi/nautilus_data -name "*.jpg" | wc -l
 | Skew > 50 ms persistente | i due sensori sono sincronizzati male | controlla cavi CSI, riduci risoluzione |
 | Warning `camera_info` mancante | calibrazione non presente | non blocca l'acquisizione, ignora per ora |
 | `saving_node` non scrive nulla | `save_directory` non scrivibile | `mkdir -p /home/pi/nautilus_data && chmod 755` |
+| File JPEG con colori invertiti (rosso/blu) | conversione spazio colore non conforme | `saving_node` converte forzatamente in `bgr8` prima di `cv2.imwrite` |
+| File parzialmente scritti o corrotti al distacco del magnete | cache I/O non svuotata prima del cut off | imposta `flush_every_n: 1` nel YAML per forzare `os.sync()` su MicroSD |
 | Servizio systemd non parte | path in `ExecStart` sbagliato | controlla `journalctl -u nautilus-vision -f` |
 | `ros2 launch` trova `pipeline.launch.py` ma non `stereo_camera.launch.py` | workspace non ricompilato | `colcon build --symlink-install && source install/setup.bash` |

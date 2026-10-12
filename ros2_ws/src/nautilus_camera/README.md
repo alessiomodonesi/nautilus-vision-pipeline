@@ -104,19 +104,23 @@ Nodo di salvataggio: sottoscrive le stesse coppie stereo e salva ogni frame su d
 **Caratteristiche:**
 
 * **Naming incrementale**: `nautilus_lx_00000001.jpg`, `nautilus_rx_00000001.jpg`, … — ordinabile anche senza RTC.
-* **Sessioni isolate**: ogni avvio crea una nuova sottocartella con ID sessione temporale.
+* **Sessioni isolate e anti-collisione**: ogni avvio crea una nuova sottocartella con ID sessione temporale. Se l'orologio di sistema al boot è ripetuto (es. assenza di modulo RTC), il nodo appende un suffisso numerico progressivo (`session_1`, `session_2`, ecc.) per evitare sovrascritture accidentali.
+* **Affidabilità su spegnimento brusco (reed switch)**: supporta `os.sync()` periodico o immediato via `flush_every_n` per garantire la persistenza dei frame su MicroSD prima dell'interruzione dell'alimentazione.
+* **Spazio colore coerente**: forza l'encoding OpenCV in `bgr8` per evitare l'inversione di canali cromatici (rosso/blu) durante la scrittura dei file.
 * **Spegnibile a runtime** via ROS 2 Service (vedi sotto).
-* **Skip dei frame vuoti**: i messaggi con data vuota vengono ignorati.
 
 **Parametri principali:**
 
 * `enable_saving` — stato iniziale (default `true`)
 * `save_directory` — directory di output (default `/home/pi/nautilus_data`)
-* `save_left` / `save_right` — salva solo una delle due camere
-* `image_format` — `'jpg'` o `'png'`
-* `jpeg_quality` — qualità JPEG (0-100)
-* `filename_prefix` — prefisso dei file
-* `max_files_per_session` — limite massimo di coppie salvate (0 = illimitato)
+* `save_left` / `save_right` — salva solo una delle due camere (default `true`)
+* `image_format` — `'jpg'` o `'png'` (default `'jpg'`)
+* `jpeg_quality` — qualità JPEG 0-100 (default `95`)
+* `filename_prefix` — prefisso dei file (default `'nautilus'`)
+* `queue_size` — profondità della coda di sincronizzazione (default `10`)
+* `flush_every_n` — forza `os.sync()` ogni N coppie stereo (default `1`, flush immediato)
+* `sync_slop_sec` — tolleranza di sincronizzazione temporale stereo (default `0.05` s)
+* `max_files_per_session` — limite massimo di coppie salvate (default `0` = illimitato)
 
 **Controllo a runtime (ROS 2 Service):**
 
@@ -166,14 +170,18 @@ Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato 
 /**/saving_node:
   ros__parameters:
     enable_saving: true
+    left_topic: '/stereo/lx/camera/image_raw'
+    right_topic: '/stereo/rx/camera/image_raw'
     save_directory: '/home/pi/nautilus_data'
+    save_left: true
+    save_right: true
     image_format: 'jpg'
     jpeg_quality: 95
     filename_prefix: 'nautilus'
-    save_left: true
-    save_right: true
     queue_size: 10
+    flush_every_n: 1
     max_files_per_session: 0
+    sync_slop_sec: 0.05
 ```
 
 ## Dipendenze
@@ -182,6 +190,7 @@ Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato 
 * `message_filters` — sincronizzazione stereo
 * `sensor_msgs` — `Image`
 * `std_srvs` — `SetBool` per il service di controllo
+* `std_msgs` — messaggi standard ROS 2
 * `cv_bridge` — conversione ROS ↔ OpenCV
 * `OpenCV` (Python) — encoding JPEG/PNG
 
@@ -200,6 +209,8 @@ Configurazione di riferimento: Pi 5, due Pi Camera v3 in box, 720p @ 5 FPS.
 ## Troubleshooting
 
 * **Nessun topic pubblicato** → verifica che `camera_ros` veda le due camere: `rpicam-hello --list-cameras`.
-* **Il nodo di salvataggio non scrive** → controlla che `save_directory` esista e sia scrivibile dall'utente che esegue ROS.
+* **Il nodo di salvataggio non scrive** → controlla che `save_directory` esista e sia scrivibile dall'utente che esegue ROS (`mkdir -p /home/pi/nautilus_data`).
+* **File salvati con colori errati** → `saving_node` esegue la decodifica in BGR per `cv2.imwrite`; non alterare il `desired_encoding`.
+* **Corruzione file su spegnimento reed switch** → mantieni `flush_every_n: 1` per forzare `os.sync()` su MicroSD ad ogni scrittura.
 * **Skew elevato (> 20 ms)** → problema di sincronizzazione hardware, controlla cavi CSI e riduci risoluzione.
 * **`colcon build` non trova `saving_node`** → verifica che `setup.py` contenga l'entry point e ricompila con `--symlink-install`.
