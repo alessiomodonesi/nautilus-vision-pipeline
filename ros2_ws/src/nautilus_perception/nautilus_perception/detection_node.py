@@ -11,14 +11,7 @@ from sensor_msgs.msg import Image
 from vision_msgs.msg import Detection2DArray, Detection2D, ObjectHypothesisWithPose
 from cv_bridge import CvBridge
 from rcl_interfaces.msg import ParameterDescriptor
-
-# logica e configurazione dal modulo 'detection'
-from nautilus_perception.detection.core_detection import YoloDetector, SparseBlockMatcher
 from nautilus_perception.detection.config import DEFAULT_MODEL, StereoConfig
-
-# limitazione thread
-os.environ["OMP_NUM_THREADS"] = "2"
-os.environ["MKL_NUM_THREADS"] = "2"
 
 
 class DetectionNode(Node):
@@ -34,6 +27,7 @@ class DetectionNode(Node):
         self.declare_parameter('input_type', descriptor=dyn_desc)
         self.declare_parameter('enable_debug', descriptor=dyn_desc)
         self.declare_parameter('half_res', descriptor=dyn_desc)
+        self.declare_parameter('num_threads', 2)
         
         # utility function per estrarre e validare i parametri
         def get_param_strict(name):
@@ -49,7 +43,16 @@ class DetectionNode(Node):
         input_type = get_param_strict('input_type')
         self.enable_debug = get_param_strict('enable_debug')
         half_res = get_param_strict('half_res')
+        num_threads = self.get_parameter('num_threads').value
 
+        # imposta le variabili d'ambiente prima di importare il detector
+        os.environ["OMP_NUM_THREADS"] = str(num_threads)
+        os.environ["MKL_NUM_THREADS"] = str(num_threads)
+        self.get_logger().info(f"Set OMP_NUM_THREADS and MKL_NUM_THREADS to {num_threads}")
+
+        # importa il detector
+        from nautilus_perception.detection.core_detection import YoloDetector, SparseBlockMatcher
+        
         # costruisce il percorso dinamico
         pkg_share = get_package_share_directory('nautilus_perception')
         model_path = os.path.join(pkg_share, 'data', 'weights', model_filename)
@@ -78,8 +81,15 @@ class DetectionNode(Node):
             raise e
 
         # configurazione dinamica dei topic in base all'input (raw o enhanced)
-        left_topic = f'/camera/left/image_{input_type}'
-        right_topic = f'/camera/right/image_{input_type}'
+        if input_type == 'raw':
+            left_topic = '/stereo/lx/camera/image_raw'
+            right_topic = '/stereo/rx/camera/image_raw'
+        elif input_type == 'enhanced':
+            left_topic = '/stereo/lx/image_enhanced'
+            right_topic = '/stereo/rx/image_enhanced'
+        else:
+            self.get_logger().fatal(f"Unknown input_type: {input_type}")
+            raise ValueError(f"Unknown input_type: {input_type}")
 
         # sincronizzazione dei flussi stereo tramite message_filters
         self.left_sub = message_filters.Subscriber(self, Image, left_topic)

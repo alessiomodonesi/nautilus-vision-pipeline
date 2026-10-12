@@ -14,7 +14,9 @@ detection_node:
     enable_debug: True
     
     # dimezza la risoluzione passata al modello (velocizza l'inferenza CPU)
-    # OBBLIGATORIO a False per OpenVINO (evita il bug della distanza a 0m)
+    # obbligatorio a False per OpenVINO
     # consigliato a True solo per modelli PyTorch (.pt)
     half_res: True
     
+    # numero di thread per OpenVINO/CPU inferenza
+    num_threads: 2
