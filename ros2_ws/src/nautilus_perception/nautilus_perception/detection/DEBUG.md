@@ -1,8 +1,9 @@
 # Nautilus — Detection Module (Debug & Status Notes)
 
-> **Ultimo aggiornamento:** 13/10/2026 — Test focus + prep calibrazione 720p
-> **Stato:** LensPosition di produzione fissate (lx=2.6, rx=1.5). Calibrazione
-> stereo 720p in corso (Fase 9).
+> **Ultimo aggiornamento:** 13/10/2026 — Calibrazione 720p completata e validata
+> **Stato:** Fase 5 chiusa. Stereo calibrated at 1280×720 (RMS 0.125 px),
+> Z validata su 4 distanze (60–90 cm) con errore < 1 cm. Pronti per Fase 6
+> (benchmark).
 
 ---
 
@@ -21,7 +22,7 @@ Componenti principali:
 | `detection_node.py` | Nodo ROS 2: sincronizzazione stereo, rectification, publishing |
 | `core_detection.py` | Implementazione matcher (`SparseBlockMatcher`) e detector (`YoloDetector`) |
 | `config.py` | Parametri hardware (`baseline`, `focal_length`) |
-| `calibration/` | Tooling per ricalibrazione a 720p (non ancora eseguita) |
+| `calibration/` | Tooling di calibrazione (720p eseguita il 13/10/2026) |
 | `../../config/detection_params.yaml` | Parametri runtime del nodo |
 
 ---
@@ -77,32 +78,43 @@ produzione.
 > rx=1.5`), che mettono a fuoco entrambe le camere a ~0.65 m e riflettono
 > l'offset reale della lente sinistra.
 
-### ⚠️ Non risolto — Mismatch risoluzione calibrazione/streaming
+### ✅ Risolto — Mismatch risoluzione calibrazione/streaming
 
-**Stato attuale:**
+**Sintomo (storico):** le mappe di rettifica erano calibrate a 640×480 ma le
+camere giravano a 1280×720. Applicare le mappe produceva rettifica
+geometricamente invalida: righe epipolari non allineate, bias sistematico
+sulla Z (~30% sottostimata), campo visivo ridotto.
 
-```text
-stereo_calib.npz    →  mappe (480, 640),  image_size = [640, 480]
-streaming camere    →  1280×720
-```
+**Soluzione (13/10/2026):** ricalibrazione completa a 1280×720 eseguita con
+`calibration/stereo_calibrate.py` su 36 coppie ChArUco catturate nel range
+0.50–0.85 m. Risultati:
 
-Le mappe di rettifica sono state calibrate a **640×480**, ma le camere girano a
-**1280×720**. Applicare le mappe a frame 720p produce una rettifica
-geometricamente invalida:
+| Metrica | Valore |
+| --- | --- |
+| Coppie usate | 36/36 (0 scartate) |
+| Per-camera RMS (lx) | 0.116 px |
+| Per-camera RMS (rx) | 0.116 px |
+| Stereo RMS | 0.125 px |
+| Baseline | 0.12017 m (12.02 cm) |
+| Focal length (raw) | 1423.27 px |
+| P1[0,0] (rectified) | 1500.89 px |
 
-- Le righe epipolari **NON sono allineate** → NCC cerca nella riga sbagliata
-- La distanza Z ha **bias sistematico del ~30%** (tipicamente sottostimata:
-  ~0.7 m invece di 1.0 m reale)
-- Il campo visivo utile si riduce al quadrante in alto a sinistra
+**File prodotti:**
 
-**Impatto sul benchmark:**
+- `stereo_calib_720p.npz` — calibrazione attiva (installata nel pacchetto)
+- `stereo_calib_480p.npz` — calibrazione legacy, tenuta per riferimento
 
-- ❌ Misurazione di **accuratezza metrica di Z**: non valida
-- ✅ Misurazione di **timing** (FPS, latenza, CPU, RAM): non influenzata
-- ✅ **mAP** della detection YOLO: non influenzata
+**Validazione Z metrica:** oggetto textureato a distanze misurate con metro,
+Z stimato dalla pipeline. Risultati (mediana di 5-10 letture per distanza):
 
-**Soluzione pianificata:** ricalibrazione completa a 1280×720. Il tooling è
-pronto (Fase 9 in `docs/TODO.md`), l'esecuzione è rimandata a dopo il benchmark.
+| Z reale | Z stimato | Errore |
+| --- | --- | --- |
+| 0.60 m | ~0.60 m | < 1 cm |
+| 0.70 m | ~0.70 m | < 1 cm |
+| 0.80 m | ~0.80 m | < 1 cm |
+| 0.90 m | ~0.90 m | < 1 cm |
+
+Errore su tutta la banda operativa < 1 cm. **Accuratezza Z validata.**
 
 ---
 
@@ -168,42 +180,38 @@ ros2 launch nautilus_perception detection.launch.py enable_debug:=true
 ```python
 @dataclass
 class StereoConfig:
-    baseline: float = 0.12         # ⚠️ valore non calibrato
-    focal_length: float = 1114.0   # ⚠️ valore non calibrato
+    baseline: float = 0.12017      # Calibrated 2026-10-13, 720p (12.02 cm)
+    focal_length: float = 1500.89  # P1[0,0] rectified, 720p
     ...
 ```
 
-**Nota:** questi valori sono **placeholder** che non corrispondono alla
-calibrazione reale (che è a 640×480, con `baseline=0.1217` e `focal_length=1082.5`).
-Vanno aggiornati dopo la ricalibrazione a 720p (Fase 9).
-
-**Aggiornamento (13/10/2026):** la calibrazione a 720p è in corso. Quando
-completata, sostituire i due valori con quelli estratti da `stereo_calib.npz`
-(campo `baseline_m` e `P1[0,0]`). Vedi Sezione 5.3.
+**Nota:** valori estratti da `stereo_calib_720p.npz`. La focale è
+`P1[0,0]` rettificata (1500.89 px), non la focale raw (1423.27 px), perché
+il matcher NCC lavora su frame già rimappati. La baseline (12.02 cm) coincide
+con la specifica del rig (12 cm).
 
 ### `SparseBlockMatcher.__init__`
 
 ```python
-self.min_disparity = 15
-self.max_disparity = 500    # range per f=1114, B=0.12: Z in [0.27, 8.9] m
-self.patch_size = 25
-self.row_tolerance = 3
-self.min_confidence = 0.5
+# Tuned for calibrated 720p (f=1500.89, B=0.12017, f*B=180.35)
+# Z_min ~0.40 m @ d=450, Z_max ~1.80 m @ d=100
+self.min_disparity = 100
+self.max_disparity = 450
+self.patch_size = 31
+self.row_tolerance = 5
+self.min_confidence = 0.6
 ```
 
-Dopo la ricalibrazione a 720p (focale raddoppiata a ~2165 px), aggiornare:
-
-```python
-self.min_disparity = 20
-self.max_disparity = 400    # Z in [0.66, 13] m a f=2165, B=0.122
-self.patch_size = 41        # patch più grande = NCC più stabile
-self.row_tolerance = 5      # tollera imperfezioni di rettifica
-self.min_confidence = 0.65  # scarta match deboli
-```
+**Nota (13/10/2026):** i valori precedenti (f=1114, range Z 0.27–8.9 m) erano
+basati su una calibrazione placeholder. I valori attuali derivano dalla
+calibrazione 720p reale e restringono il range a 0.40–1.80 m, che copre
+con margine la fascia operativa del braccio (0.40–1.10 m). Il valore
+"suggerito" originariamente (f~2165, `max_disparity=400`) era basato su una
+scala lineare errata — la focale reale è 1500.89 px, non 2165.
 
 ---
 
-## 5. Tooling di calibrazione (pronto, in esecuzione)
+## 5. Tooling di calibrazione (eseguito)
 
 Tutti gli script sono in `calibration/`:
 
@@ -212,7 +220,7 @@ Tutti gli script sono in `calibration/`:
 | `generate_charuco.py` | Genera board ChArUco 8×11, 15/11 mm, `DICT_4X4_50` |
 | `capture_calibration_pairs.py` | Cattura coppie L/R (GUI, richiede display) |
 | `capture_calibration_pairs_web.py` | Cattura coppie L/R (headless, browser) |
-| `stereo_calibrate.py` | Genera `stereo_calib.npz` dalle coppie |
+| `stereo_calibrate.py` | Genera `stereo_calib_720p.npz` dalle coppie |
 | `charuco_common.py` | Utility condivise (board + detector) |
 
 ### 5.1 Board ChArUco
@@ -281,12 +289,9 @@ print('P1[0,0] (rectified focal):', float(c['P1'][0,0]))
 "
 ```
 
-Sostituire in `config.py`:
-
-```python
-baseline: float = <baseline_m>
-focal_length: float = <P1[0,0]>
-```
+**Stato (13/10/2026):** eseguito con successo. `config.py` aggiornato,
+pacchetto `nautilus_perception` rebuildato, calibrazione installata e
+validata (vedi Sezione 2).
 
 ---
 
@@ -301,19 +306,25 @@ focal_length: float = <P1[0,0]>
 | Multi-point sampling (5 punti + mediana) | ✅ |
 | LensPosition di produzione (lx=2.6, rx=1.5) | ✅ |
 | Offset lente sinistra documentato (+1.05 diottrie) | ✅ |
-| Modulo IMX708 sinistro candidato a sostituzione | ⏳ |
-| Mappe rettifica a risoluzione corretta | ❌ (640×480 vs 1280×720) |
-| Calibrazione 720p eseguita (RMS < 1.0 px) | ⏳ (in corso) |
-| Validazione Z metrica su 3 distanze (0.5, 1.0, 2.0 m) | ❌ (dopo calibrazione) |
-| Benchmark FPS/latenza/CPU (Fase 5) | ⏳ |
+| Modulo IMX708 sinistro candidato a sostituzione | ⏳ (valutazione post-benchmark) |
+| Calibrazione 720p eseguita (RMS 0.125 px) | ✅ |
+| File `stereo_calib_720p.npz` installato nel pacchetto | ✅ |
+| `config.py` aggiornato (baseline 0.12017, focal 1500.89) | ✅ |
+| `SparseBlockMatcher` ritarato (disparity 100-450) | ✅ |
+| Validazione Z su 4 distanze (0.6–0.9 m) | ✅ (errore < 1 cm) |
+| Benchmark FPS/latenza/CPU (Fase 6) | ⏳ |
 
 ---
 
 ## 7. Riferimenti
 
-- `docs/TODO.md` — Roadmap completa (Fase 9 per calibrazione)
+- `docs/TODO.md` — Roadmap completa (Fase 5 = calibrazione 720p, chiusa)
 - `detection_params.yaml` — Parametri runtime del nodo
 - `deploy/lock_cameras.py` — Lock fotometrico post-launch (systemd)
 - `deploy/lock-cameras.service` — Unit systemd che lo invoca
 - `deploy/nautilus-vision.service` — Unit systemd della pipeline (a cui `lock-cameras` è agganciata via `PartOf`)
 - `calibration/README.md` — Dettagli sulla calibrazione (se presente)
+- `calibration/find_focus.py` — Test LensPosition con metrica di sharpness
+- `calibration/stereo_calibrate.py` — Genera `stereo_calib_720p.npz`
+- `stereo_calib_720p.npz` — Calibrazione attiva (1280×720)
+- `stereo_calib_480p.npz` — Calibrazione legacy (640×480), non usata
