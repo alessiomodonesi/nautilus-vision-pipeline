@@ -75,14 +75,14 @@ class DetectionNode(Node):
         
         # matrici di calibrazione
         pkg_share = get_package_share_directory('nautilus_perception')
-        calib_path = os.path.join(pkg_share, 'data', 'stereo_calib.npz')
+        calib_path = os.path.join(pkg_share, 'data', 'stereo_calib_720p.npz')
         try:
             calib = np.load(calib_path)
             self.map1x, self.map1y = calib["map1x"], calib["map1y"]
             self.map2x, self.map2y = calib["map2x"], calib["map2y"]
             self.get_logger().info("Calibration matrices loaded successfully.")
         except Exception as e:
-            self.get_logger().fatal(f"Error loading stereo_calib.npz: {e}")
+            self.get_logger().fatal(f"Error loading stereo_calib_720p.npz: {e}")
             raise e
 
         # configurazione dinamica dei topic in base all'input (raw o enhanced)

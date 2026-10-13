@@ -372,15 +372,16 @@ class SparseBlockMatcher:
     Highly optimized, region-of-interest normalized cross-correlation (NCC) matcher.
     Calculates localized epipolar disparities. Reduces O(W*H) full-frame matrix 
     computations to O(N) operations, where N is the number of valid detections.
-    """
+    """ 
     def __init__(self, config: StereoConfig) -> None:
         self.config = config
-        self.min_disparity = 15 # Z_max ≈ 8.9 m
-        self.max_disparity = 500 # Z_min ≈ 0.27 m 
-        # self.max_disparity = 180  
-        self.patch_size = 25      
-        self.row_tolerance = 3    
-        self.min_confidence = 0.5
+        # Disparity range tuned for calibrated 720p (f=1500.89, B=0.12017, f*B=180.35)
+        # Z_min ~0.40 m @ d=450, Z_max ~1.80 m @ d=100
+        self.min_disparity = 100
+        self.max_disparity = 450
+        self.patch_size = 31
+        self.row_tolerance = 5
+        self.min_confidence = 0.6
 
     def estimate_distance(
         self, gray_l: np.ndarray, gray_r: np.ndarray, cx: int, cy: int
@@ -968,13 +969,13 @@ def main() -> None:
     # Pre-allocate contiguous memory buffers to strictly prevent heap fragmentation
     disp_vis_buf: Optional[np.ndarray] = None
 
-    log.info("Mapping intrinsic calibration matrices from stereo_calib.npz")
+    log.info("Mapping intrinsic calibration matrices from stereo_calib_720p.npz")
     try:
-        calib = np.load(os.path.join(config.DATA_DIR, "stereo_calib.npz"))
+        calib = np.load(os.path.join(config.DATA_DIR, "stereo_calib_720p.npz"))
         map1x, map1y = calib["map1x"], calib["map1y"]
         map2x, map2y = calib["map2x"], calib["map2y"]
     except FileNotFoundError:
-        log.error("stereo_calib.npz mapping failed! Halting execution.")
+        log.error("stereo_calib_720p.npz mapping failed! Halting execution.")
         sys.exit(1)
 
     fps_counter = 0

@@ -23,12 +23,14 @@ class StereoConfig:
     Units
     -----
     baseline      : metres  (not cm — depth formula gives metres)
-    focal_length  : pixels  (from calibration)
+    focal_length  : pixels  (P1[0,0] rectified, 720p, 2026-10-13)
+
+    Calibration : stereo_calib_720p.npz (RMS 0.125 px, baseline 12.02 cm)
     """
 
     # ── Camera geometry ────────────────────────────────────────────────────
-    baseline: float = 0.12         # Inter-camera distance in metres (12 cm rig)
-    focal_length: float = 1114.0   # Calibrated focal length in pixels
+    baseline: float = 0.12017      # Calibrated 2026-10-13, 720p (12.02 cm)
+    focal_length: float = 1500.89  # P1[0,0] rectified, 720p
 
     # ── Pi Camera Module 3 capture settings ─────────────────────────────────
     pi_resolution: Tuple[int, int] = (640, 480)   # Lowered from 720p for Pi 5 headroom

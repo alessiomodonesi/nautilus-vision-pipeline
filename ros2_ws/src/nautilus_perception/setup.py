@@ -19,7 +19,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
         (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
-        (os.path.join('share', package_name, 'data'), ['nautilus_perception/data/stereo_calib.npz']),
+        (os.path.join('share', package_name, 'data'), ['nautilus_perception/data/stereo_calib_720p.npz']),
         (os.path.join('share', package_name, 'data', 'weights'), glob('nautilus_perception/data/weights/*.*')),
         (os.path.join('share', package_name, 'data', 'weights', 'best_openvino_model'), glob('nautilus_perception/data/weights/best_openvino_model/*.*')),
         (os.path.join('share', package_name, 'data', 'weights', 'yolov8n_openvino_model'), glob('nautilus_perception/data/weights/yolov8n_openvino_model/*.*')),
