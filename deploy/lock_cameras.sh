@@ -6,23 +6,30 @@ source /opt/ros/jazzy/setup.bash
 source "$HOME/nautilus-vision-pipeline/ros2_ws/install/setup.bash"
 
 echo "Waiting for node discovery..."
-sleep 3
 
 # LensPosition diverso per lx e rx: lenti fisiche con offset meccanico diverso
 declare -A LENS_POS
 LENS_POS[lx]=3.0
 LENS_POS[rx]=1.0
 
+# attende fino a 30 s che entrambe le camere siano visibili
+for i in $(seq 1 30); do
+  if ros2 node list 2>/dev/null | grep -q "^/stereo/lx/camera$" && \
+     ros2 node list 2>/dev/null | grep -q "^/stereo/rx/camera$"; then
+    break
+  fi
+  sleep 1
+done
+
 for ns in lx rx; do
   node="/stereo/${ns}/camera"
 
   if ! ros2 node list 2>/dev/null | grep -q "^${node}$"; then
-    echo "[ERROR] Node $node not found. Are the cameras active?"
+    echo "[ERROR] Node $node not found after 30s. Are the cameras active?"
     exit 1
   fi
 
   echo "Locking $node (LensPosition=${LENS_POS[$ns]})"
-
   ros2 param set "$node" AeEnable     false               || echo "  [WARN] AeEnable"
   ros2 param set "$node" AwbEnable    false               || echo "  [WARN] AwbEnable"
   ros2 param set "$node" ExposureTime 20000               || echo "  [WARN] ExposureTime"
@@ -33,5 +40,3 @@ for ns in lx rx; do
 
   echo "[OK] $node"
 done
-
-echo "Lock completed on both cameras."
