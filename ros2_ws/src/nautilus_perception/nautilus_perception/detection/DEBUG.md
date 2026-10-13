@@ -39,7 +39,8 @@ indipendenti, convergendo a valori fotometrici diversi. Il matcher NCC falliva
 silenziosamente (`max_val < 0.5`) perché le due immagini non erano confrontabili.
 
 **Soluzione:** lock dei parametri **a runtime** dopo l'avvio delle camere tramite
-`lock_cameras.sh` (vedi Sezione 4). I valori di `AeEnable=False`,
+lo script `deploy/lock_cameras.py`, invocato automaticamente dal servizio
+systemd `lock-cameras.service` (vedi Sezione 3.2). I valori di `AeEnable=False`,
 `ExposureTime=20000`, `ColourGains=[1.5,1.5]` devono essere **identici** su
 `lx` e `rx`.
 
@@ -114,56 +115,40 @@ questi **non prendono** su `camera_ros`. Vanno riapplicati a runtime.
 
 ### 3.2 Lock fotometrico a runtime
 
-```bash
-# In un terminale separato, con le camere attive
-./lock_cameras.sh
-```
+Lo script (`deploy/lock_cameras.py`) applica il lock in un'unica chiamata
+di servizio batch `SetParameters` per camera, in ~3 s.
 
-Lo script (in `deploy/lock_cameras.sh` o nella root del workspace):
+In produzione viene eseguito automaticamente dal servizio systemd
+`lock-cameras.service` (`Type=oneshot`, agganciato a `nautilus-vision.service`
+via `PartOf` + `WantedBy`). Non serve alcuna azione manuale al boot.
 
-```bash
-#!/bin/bash
-# lock_cameras.sh — imposta parametri di lock fotometrico su entrambe le camere
-source /opt/ros/jazzy/setup.bash
-source "$HOME/nautilus-vision-pipeline/ros2_ws/install/setup.bash"
-
-sleep 3   # discovery
-
-declare -A LENS_POS
-LENS_POS[lx]=3.0
-LENS_POS[rx]=1.0
-
-for ns in lx rx; do
-  node="/stereo/${ns}/camera"
-  if ! ros2 node list 2>/dev/null | grep -q "^${node}$"; then
-    echo "[ERROR] $node not found"
-    exit 1
-  fi
-  ros2 param set "$node" AeEnable     false
-  ros2 param set "$node" AwbEnable    false
-  ros2 param set "$node" ExposureTime 20000
-  ros2 param set "$node" ColourGains  "[1.5, 1.5]"
-  ros2 param set "$node" AfMode       0
-  ros2 param set "$node" LensPosition "${LENS_POS[$ns]}"
-  echo "[OK] $node locked"
-done
-```
-
-### 3.3 Verifica rapida
+**Esecuzione manuale** (debug, con pipeline attiva):
 
 ```bash
-ros2 param get /stereo/lx/camera AeEnable        # atteso: False
-ros2 param get /stereo/rx/camera AeEnable        # atteso: False
-ros2 param get /stereo/lx/camera ExposureTime    # atteso: 20000
-ros2 param get /stereo/rx/camera ExposureTime    # atteso: 20000
-ros2 param get /stereo/lx/camera LensPosition    # atteso: 3.0
-ros2 param get /stereo/rx/camera LensPosition    # atteso: 1.0
+sudo -u nautilus bash -c 'source /opt/ros/jazzy/setup.bash \
+  && source $HOME/nautilus-vision-pipeline/ros2_ws/install/setup.bash \
+  && python3 $HOME/nautilus-vision-pipeline/deploy/lock_cameras.py'
 ```
 
 Confronto visivo con `rqt_image_view` sui due topic `image_raw`: le immagini
 devono essere visivamente identiche per luminosità e colore.
 
-### 3.4 Lancio detection
+**Verifica dell'applicazione:**
+
+```bash
+ros2 param dump /stereo/lx/camera | grep -E "AeEnable|AwbEnable|ExposureTime|ColourGains|LensPosition|AnalogueGain"
+ros2 param dump /stereo/rx/camera | grep -E "AeEnable|AwbEnable|ExposureTime|ColourGains|LensPosition|AnalogueGain"
+```
+
+Attesi su entrambe: `AeEnable=false`, `AwbEnable=false`, `ExposureTime=20000`,
+`ColourGains=[1.5, 1.5]`, `AnalogueGain` identico al bit.
+`LensPosition=3.0` (lx) / `1.0` (rx).
+
+È il test più affidabile: `ros2 param get` individuale a volte fallisce su
+discovery DDS (il `Node not found` che hai visto), mentre `dump` fa una sola
+chiamata di servizio.
+
+### 3.3 Lancio detection
 
 ```bash
 ros2 launch nautilus_perception detection.launch.py
@@ -315,5 +300,7 @@ focal_length: float = <P1[0,0]>
 
 - `docs/TODO.md` — Roadmap completa (Fase 9 per calibrazione)
 - `detection_params.yaml` — Parametri runtime del nodo
-- `deploy/lock_cameras.sh` — Lock fotometrico post-launch
+- `deploy/lock_cameras.py` — Lock fotometrico post-launch (systemd)
+- `deploy/lock-cameras.service` — Unit systemd che lo invoca
+- `deploy/nautilus-vision.service` — Unit systemd della pipeline (a cui `lock-cameras` è agganciata via `PartOf`)
 - `calibration/README.md` — Dettagli sulla calibrazione (se presente)
