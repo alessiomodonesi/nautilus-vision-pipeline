@@ -1,8 +1,8 @@
 # Nautilus — Detection Module (Debug & Status Notes)
 
-> **Ultimo aggiornamento:** 12/10/2026 — Sessione di debug stereo Z = 0.00m
-> **Stato:** Pipeline detection funzionante per benchmark; calibrazione stereo
-> rimandata (Fase 9 in `docs/TODO.md`).
+> **Ultimo aggiornamento:** 13/10/2026 — Test focus + prep calibrazione 720p
+> **Stato:** LensPosition di produzione fissate (lx=2.6, rx=1.5). Calibrazione
+> stereo 720p in corso (Fase 9).
 
 ---
 
@@ -72,6 +72,11 @@ Non è un problema — le due lenti fisiche hanno offset diversi. Va però impos
 `AfMode=0` (manuale) per evitare che l'AF modifichi la focale tra cattura e
 produzione.
 
+> **Nota (13/10/2026):** questi valori (`lx=3.0, rx=1.0`) sono stati **superati**
+> dal test `find_focus.py`. Vedi Sezione 3.2 per i valori attuali (`lx=2.6,
+> rx=1.5`), che mettono a fuoco entrambe le camere a ~0.65 m e riflettono
+> l'offset reale della lente sinistra.
+
 ### ⚠️ Non risolto — Mismatch risoluzione calibrazione/streaming
 
 **Stato attuale:**
@@ -115,38 +120,32 @@ questi **non prendono** su `camera_ros`. Vanno riapplicati a runtime.
 
 ### 3.2 Lock fotometrico a runtime
 
-Lo script (`deploy/lock_cameras.py`) applica il lock in un'unica chiamata
-di servizio batch `SetParameters` per camera, in ~3 s.
+Valori attuali (aggiornati 13/10/2026 dopo test `find_focus.py`):
 
-In produzione viene eseguito automaticamente dal servizio systemd
-`lock-cameras.service` (`Type=oneshot`, agganciato a `nautilus-vision.service`
-via `PartOf` + `WantedBy`). Non serve alcuna azione manuale al boot.
+| Camera | LensPosition | Fuoco effettivo |
+| --- | --- | --- |
+| lx | 2.6 | ~0.65 m |
+| rx | 1.5 | ~0.65 m |
 
-**Esecuzione manuale** (debug, con pipeline attiva):
+**Nota (13/10/2026):** la camera sinistra mostra un offset di **+1.05 diottrie**
+rispetto al valore teorico `1/d` (verificato su 3 distanze: 0.40, 0.65, 0.90 m
+con `calibration/find_focus.py`). La destra è nominale (picco ≈ teorico).
+La pulizia della lente con alcol isopropilico ha migliorato la nitidezza di
+entrambe (+20-27%) ma non ha corretto l'offset, che è di natura meccanica.
+
+**Impatto:** la sinistra ha sharpness ~50% della destra fuori dal picco
+(0.40 m e 0.90 m), quindi il range utile di calibrazione è **0.50–0.85 m**,
+più stretto del range di lavoro teorico del braccio (0.40–1.10 m).
+
+**Da valutare:** sostituzione del modulo IMX708 sinistro (~30€) se la
+differenza di nitidezza off-peak causa problemi in produzione.
+
+**Script di verifica:** `calibration/find_focus.py` (sweep di LensPosition
+con metrica di sharpness = varianza del Laplaciano). Esempi di run:
 
 ```bash
-sudo -u nautilus bash -c 'source /opt/ros/jazzy/setup.bash \
-  && source $HOME/nautilus-vision-pipeline/ros2_ws/install/setup.bash \
-  && python3 $HOME/nautilus-vision-pipeline/deploy/lock_cameras.py'
+python3 -m calibration.find_focus --distance 0.65 --sweep 1.6 --steps 12
 ```
-
-Confronto visivo con `rqt_image_view` sui due topic `image_raw`: le immagini
-devono essere visivamente identiche per luminosità e colore.
-
-**Verifica dell'applicazione:**
-
-```bash
-ros2 param dump /stereo/lx/camera | grep -E "AeEnable|AwbEnable|ExposureTime|ColourGains|LensPosition|AnalogueGain"
-ros2 param dump /stereo/rx/camera | grep -E "AeEnable|AwbEnable|ExposureTime|ColourGains|LensPosition|AnalogueGain"
-```
-
-Attesi su entrambe: `AeEnable=false`, `AwbEnable=false`, `ExposureTime=20000`,
-`ColourGains=[1.5, 1.5]`, `AnalogueGain` identico al bit.
-`LensPosition=3.0` (lx) / `1.0` (rx).
-
-È il test più affidabile: `ros2 param get` individuale a volte fallisce su
-discovery DDS (il `Node not found` che hai visto), mentre `dump` fa una sola
-chiamata di servizio.
 
 ### 3.3 Lancio detection
 
@@ -178,6 +177,10 @@ class StereoConfig:
 calibrazione reale (che è a 640×480, con `baseline=0.1217` e `focal_length=1082.5`).
 Vanno aggiornati dopo la ricalibrazione a 720p (Fase 9).
 
+**Aggiornamento (13/10/2026):** la calibrazione a 720p è in corso. Quando
+completata, sostituire i due valori con quelli estratti da `stereo_calib.npz`
+(campo `baseline_m` e `P1[0,0]`). Vedi Sezione 5.3.
+
 ### `SparseBlockMatcher.__init__`
 
 ```python
@@ -200,7 +203,7 @@ self.min_confidence = 0.65  # scarta match deboli
 
 ---
 
-## 5. Tooling di calibrazione (pronto, non eseguito)
+## 5. Tooling di calibrazione (pronto, in esecuzione)
 
 Tutti gli script sono in `calibration/`:
 
@@ -238,19 +241,26 @@ quadrato misuri **15 mm**, incollare su supporto rigido.
 Fermare prima le camere (`Ctrl+C` su `stereo_camera.launch.py`), poi:
 
 ```bash
-cd ros2_ws/src/nautilus_perception/nautilus_perception/detection
 python3 -m calibration.capture_calibration_pairs_web \
-    --resolution 1280x720 --lens-left 3.0 --lens-right 1.0
+    --resolution 1280x720 --lens-left 2.6 --lens-right 1.5 \
+    --outdir calib_pairs_720p
 ```
 
-Aprire `http://<ip-del-pi>:8000` da browser. Catturare **30–40 coppie** con
-**varietà di tilt** (angolare la board, non solo traslarla). L'overlay deve
-essere **verde (READY)** prima di ogni scatto.
+Aprire `http://<ip-del-pi>:8000` da browser.
+
+**Range di cattura:** 0.50 – 0.85 m (limitato dall'offset della lente sinistra,
+vedi Sezione 3.2). Distribuzione consigliata su 36 coppie:
+
+| Fascia | Distanza | Coppie |
+| --- | --- | --- |
+| Vicino | 0.50 – 0.60 m | 8 |
+| Target | 0.60 – 0.75 m | 16 |
+| Lontano | 0.75 – 0.85 m | 12 |
 
 ### 5.3 Ricalibrazione
 
 ```bash
-python3 -m calibration.stereo_calibrate --dir calib_pairs --out stereo_calib_720p.npz
+python3 -m calibration.stereo_calibrate --dir calib_pairs_720p --out stereo_calib_720p.npz
 ```
 
 Verificare nell'output:
@@ -289,9 +299,12 @@ focal_length: float = <P1[0,0]>
 | Input raw/enhanced configurabile | ✅ |
 | Lock AE/AWB a runtime (workaround) | ✅ |
 | Multi-point sampling (5 punti + mediana) | ✅ |
-| LensPosition allineato (lx=3.0, rx=1.0) | ✅ |
+| LensPosition di produzione (lx=2.6, rx=1.5) | ✅ |
+| Offset lente sinistra documentato (+1.05 diottrie) | ✅ |
+| Modulo IMX708 sinistro candidato a sostituzione | ⏳ |
 | Mappe rettifica a risoluzione corretta | ❌ (640×480 vs 1280×720) |
-| Accuratezza Z validata | ❌ (dipende dalla ricalibrazione) |
+| Calibrazione 720p eseguita (RMS < 1.0 px) | ⏳ (in corso) |
+| Validazione Z metrica su 3 distanze (0.5, 1.0, 2.0 m) | ❌ (dopo calibrazione) |
 | Benchmark FPS/latenza/CPU (Fase 5) | ⏳ |
 
 ---

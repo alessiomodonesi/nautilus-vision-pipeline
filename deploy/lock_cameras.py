@@ -17,7 +17,7 @@ LOCK_PARAMS = {
         "ExposureTime": 20000,
         "ColourGains":  [1.5, 1.5],
         "AfMode":       0,
-        "LensPosition": 3.0,
+        "LensPosition": 2.6,
     },
     "rx": {
         "AeEnable":     False,
@@ -25,7 +25,7 @@ LOCK_PARAMS = {
         "ExposureTime": 20000,
         "ColourGains":  [1.5, 1.5],
         "AfMode":       0,
-        "LensPosition": 1.0,
+        "LensPosition": 1.5,
     },
 }
 
