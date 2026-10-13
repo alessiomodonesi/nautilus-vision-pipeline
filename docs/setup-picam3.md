@@ -2,13 +2,16 @@
 
 **Why this guide exists:** Unlike Raspberry Pi OS, Ubuntu does not ship
 working Camera Module 3 support out of the box. `python3-picamera2` is not
-reliably published for Ubuntu's `noble` (24.04) release, and Ubuntu's
-stock `libcamera` package doesn't include the Pi 5's `pisp` pipeline
-handler at all. The only reliable fix (as of mid/late-2026) is building
-the Raspberry Pi–specific camera stack from source. This guide captures
-the exact working sequence, including every dead end worth skipping.
+published for Ubuntu's `noble` (24.04) release, and Ubuntu's stock
+`libcamera` package doesn't include the Pi 5's `pisp` pipeline handler at
+all. The only reliable fix (as of mid/late-2026) is building the
+Raspberry Pi–specific camera stack from source. This guide captures the
+exact working sequence, including every dead end worth skipping.
 
-**Time estimate:** 45-90 minutes, mostly unattended build time.
+**Time estimate:** 60-90 minutes, mostly unattended build time.
+
+**Tested on:** Ubuntu Server 24.04 (noble), Raspberry Pi 5, 2× Camera
+Module 3 (IMX708) on dual CSI, Python 3.12.
 
 ---
 
@@ -21,8 +24,6 @@ the exact working sequence, including every dead end worth skipping.
 - Have the camera physically connected before you boot, and confirm it's
   seated correctly in the CSI connector (metal contacts facing the correct
   way per the ribbon cable orientation).
-
----
 
 ## 1. Enable the `universe` repository
 
@@ -90,6 +91,17 @@ sudo apt install -y git python3-pip python3-jinja2 meson cmake ninja-build \
   libexpat1-dev
 ```
 
+**[FIX 2026-10-13]** Ubuntu Server does *not* ship `python3-venv` or
+`ensurepip` by default, and installing them later is easy to forget until
+you hit the error. Install them now, along with `libcap-dev` which
+`python-prctl` (a `picamera2` dependency) needs at build time — without
+it, `pip install picamera2` fails partway through with
+`You need to install libcap development headers to build this module`:
+
+```bash
+sudo apt install -y python3.12-venv python3-pip libcap-dev
+```
+
 Everything here should install cleanly once steps 1 and 3 are done. If you
 still see `Unable to locate package` for any of these, double check
 `universe` is really enabled (step 1).
@@ -113,6 +125,17 @@ This takes roughly 15-20 minutes. Watch for `imx708.json` (the Camera
 Module 3 sensor's calibration file) being installed under both the `pisp`
 and `vc4` pipeline data directories in the output — that's a good sign
 your specific sensor is supported by this build.
+
+**Where the Python bindings land:** `/usr/local/lib/python3/dist-packages/libcamera/`.
+Not `/usr/local/lib/python/dist-packages/` (no `3`), and not
+`/usr/local/lib/python3.12/dist-packages/` (versioned) — the unversioned
+`python3/dist-packages` is the Debian/Ubuntu convention, and it *does*
+contain the `3`. Verify after install:
+
+```bash
+ls -la /usr/local/lib/python3/dist-packages/libcamera/
+# expect: __init__.py  __pycache__  _libcamera.cpython-312-aarch64-linux-gnu.so
+```
 
 ## 6. Build `rpicam-apps`
 
@@ -153,11 +176,8 @@ up the Python side.
 ## 8. Set up your Python venv correctly
 
 `picamera2` needs to be pip-installed *inside* your project's venv, but it
-also needs to see the `libcamera` Python bindings you just built system-wide
-(they land in `/usr/local/lib/python3/dist-packages/libcamera`, **not**
-`/usr/local/lib/python3.12/dist-packages` — note: no version number in the
-path, a Debian/Ubuntu-specific quirk). A plain venv can't see either of
-these, so:
+also needs to see the `libcamera` Python bindings you just built
+system-wide. A plain venv can't see them, so:
 
 ```bash
 cd ~/your_project
@@ -165,28 +185,62 @@ python3 -m venv --system-site-packages .venv
 source .venv/bin/activate
 ```
 
-`--system-site-packages` gets you most of the way, but the unversioned
-`dist-packages` path above typically still isn't on the venv's `sys.path`.
-Confirm with:
+**[FIX 2026-10-13]** `--system-site-packages` gets you most of the way,
+but the `/usr/local/lib/python3/dist-packages` path (where `libcamera`
+landed in step 5) is still **not** on the venv's `sys.path`. The original
+guide suggested a symlink — **do not use a symlink**. On Ubuntu 24.04 +
+Python 3.12, `importlib` does not reliably follow symlinked *directories*
+inside `site-packages`, so `import libcamera` fails with
+`ModuleNotFoundError` even though the symlink looks correct in `ls -la`.
+
+**Copy the directory instead:**
+
+```bash
+# Confirm the source path first
+ls -la /usr/local/lib/python3/dist-packages/libcamera/
+
+# Copy it physically into the venv
+cp -r /usr/local/lib/python3/dist-packages/libcamera \
+      ~/your_project/.venv/lib/python3.12/site-packages/libcamera
+
+# Verify
+python3 -c "import libcamera; print('libcamera OK:', libcamera.__file__)"
+```
+
+Expected: `libcamera OK: /home/<user>/<project>/.venv/lib/python3.12/site-packages/libcamera/__init__.py`
+
+If the copy still doesn't import, debug with:
 
 ```bash
 python3 -c "import sys; print('\n'.join(sys.path))"
+python3 -c "import site; print(site.getsitepackages())"
 ```
 
-If `/usr/local/lib/python3/dist-packages` is missing, symlink the
-`libcamera` bindings directly into your venv (use your actual Python
-version in the path):
-
-```bash
-ln -s /usr/local/lib/python3/dist-packages/libcamera \
-  ~/your_project/.venv/lib/python3.12/site-packages/libcamera
-```
+The venv's own `site-packages` must appear in `sys.path`, and it must be
+the same directory you copied into.
 
 ## 9. pip install picamera2
 
 ```bash
-pip install picamera2
+pip install picamera2 flask
 python3 -c "from picamera2 import Picamera2; print('picamera2 OK')"
+```
+
+**[FIX 2026-10-13]** `flask` is added because `capture_calibration_pairs_web.py`
+imports it at module load. If `pip install picamera2` fails partway
+through with:
+
+```text
+error: subprocess-exited-with-error
+× python setup.py egg_info did not run successfully.
+You need to install libcap development headers to build this module
+```
+
+…you skipped the `libcap-dev` install in step 4. Install it and retry:
+
+```bash
+sudo apt install -y libcap-dev
+pip install picamera2
 ```
 
 ## 10. Fix the `pykms` import error
@@ -221,9 +275,36 @@ the Python module itself is found.
 python3 -c "from picamera2 import Picamera2; print('picamera2 OK')"
 ```
 
+**[FIX 2026-10-13]** Note: `picamera2.__version__` does **not** exist as
+an attribute of the package (unlike many Python packages). Do not use
+`python3 -c "import picamera2; print(picamera2.__version__)"` as a check —
+it will raise `AttributeError` even when everything is fine. Use `from
+picamera2 import Picamera2` instead, or `pip show picamera2 | grep -i version`.
+
 If this prints cleanly, you're done — every layer (libcamera → rpicam-apps
 → picamera2 → pykms) is now correctly built, installed, and visible to
 your venv.
+
+---
+
+## 12. Do NOT commit the venv to the repo
+
+The `.venv/` directory is machine-specific (absolute paths in
+`pyvenv.cfg`) and architecture-specific (the compiled `.so` files are
+`aarch64`). Committing it makes the repo huge and useless to anyone on a
+different machine. Exclude it in `.gitignore`:
+
+```gitignore
+.venv/
+venv/
+env/
+ENV/
+```
+
+Anyone who clones the repo recreates the venv from this guide in ~30
+seconds once the system-level build (steps 5, 6, 10) is done — and those
+system-level components *are* machine-specific too and must be rebuilt
+locally anyway.
 
 ---
 
@@ -234,9 +315,12 @@ your venv.
 | `E: Unable to locate package X` | `universe` not enabled | Step 1 |
 | PPA gives `404 Not Found` on `Release` | PPA has no `noble` build | Skip PPA entirely, use source build |
 | `Depends: X (= version) but Y is to be installed` | Stale/partial apt state | `apt update && apt full-upgrade -y` |
-| `ModuleNotFoundError: No module named 'libcamera'` (inside venv) | venv can't see the unversioned system dist-packages path | Step 8, symlink |
-| `ModuleNotFoundError: No module named 'pykms'` | kms++ Python bindings not installed | Step 10 |
+| `The virtual environment was not created successfully because ensurepip is not available` | `python3-venv` not installed | Step 4: `sudo apt install python3.12-venv` |
+| `You need to install libcap development headers to build this module` (during `pip install picamera2`) | `libcap-dev` missing | Step 4: `sudo apt install libcap-dev` |
+| `ModuleNotFoundError: No module named 'libcamera'` (inside venv) | Symlink inside `site-packages` not followed by importlib | Step 8: **copy** the directory, do not symlink |
+| `ModuleNotFoundError: No module named 'pykms'` / `'kms'` | kms++ Python bindings not installed | Step 10 |
 | `ImportError: libkms++.so.0: cannot open shared object file` | Built kmsxx but didn't run `sudo ninja -C build install` | Re-run install step + `ldconfig` |
+| `AttributeError: module 'picamera2' has no attribute '__version__'` | Not a real error — `picamera2` simply doesn't expose `__version__` | Use `from picamera2 import Picamera2` as the import check |
 | `rpicam-hello --list-cameras` shows nothing | Camera not seated, or libcamera build didn't pick up `pisp` handler | Reseat ribbon cable; re-check step 5 output for `pisp` pipeline |
 
 ---
@@ -249,3 +333,5 @@ your venv.
 - Reflashing to Raspberry Pi OS — this guide is the alternative to that,
   useful if you specifically need Ubuntu for something else (e.g. ROS2,
   which ships official binaries for Ubuntu but not Raspberry Pi OS/Debian).
+- Committing the `.venv/` directory to your project repo — recreate it
+  locally instead (step 12).

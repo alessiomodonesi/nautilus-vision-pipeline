@@ -19,3 +19,29 @@ ros2_ws/log/
 # Ignora file di sistema macOS
 .DS_Store
 Icon?
+
+# Ignora il virtualenv Python (ricreato localmente seguendo docs/setup-picam3.md)
+.venv/
+venv/
+env/
+ENV/
+
+# Ignora le coppie di calibrazione grezze e i backup (artefatti locali)
+calib_pairs/
+calib_pairs_720p/
+*.npz.bak
+
+# Ignora cache e artefatti di build Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Ignora file IDE/editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
