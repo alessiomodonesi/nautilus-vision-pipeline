@@ -6,8 +6,7 @@ PartOf=nautilus-vision.service
 [Service]
 Type=oneshot
 User=nautilus
-ExecStartPre=/bin/sleep 8
-ExecStart=/bin/bash /home/nautilus/nautilus-vision-pipeline/deploy/lock_cameras.sh
+ExecStart=/bin/bash -c 'source /opt/ros/jazzy/setup.bash && source /home/nautilus/nautilus-vision-pipeline/ros2_ws/install/setup.bash && exec /usr/bin/python3 /home/nautilus/nautilus-vision-pipeline/deploy/lock_cameras.py'
 RemainAfterExit=yes
 
 [Install]
