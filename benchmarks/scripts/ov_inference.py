@@ -2,6 +2,10 @@ import cv2
 import numpy as np
 import openvino as ov
 from ultralytics import YOLO
+from pathlib import Path
+
+WEIGHTS = (Path(__file__).resolve().parents[2] /
+           "ros2_ws/src/nautilus_perception/nautilus_perception/data/weights")
 
 
 def pre_process(image, input_shape):
@@ -51,11 +55,13 @@ def post_process(output, orig_shape, input_shape, classes, conf_threshold=0.5):
     return results
 
 
-def init_ov(model_xml="yolov8n_openvino_model/yolov8n.xml"):
+def init_ov(model_xml=None):
     """Inizializza OpenVINO e recupera le classi."""
+    if model_xml is None:
+        model_xml = WEIGHTS / "yolov8n_openvino_model" / "yolov8n.xml"
     core = ov.Core()
-    compiled_model = core.compile_model(model_xml, "CPU")
-    model = YOLO('yolov8n.pt') 
+    compiled_model = core.compile_model(str(model_xml), "CPU")
+    model = YOLO(str(WEIGHTS / "yolov8n.pt"))
     return compiled_model, model.names
 
 

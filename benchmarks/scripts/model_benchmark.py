@@ -55,7 +55,9 @@ def main():
     
     if yolo_fps > 0:
         boost = ((ov_fps - yolo_fps) / yolo_fps) * 100
-    print(f"\nFPS performance increase: +{boost:.1f}%")
+        print(f"\nFPS performance increase: +{boost:.1f}%")
+    else:
+        print("\nCannot compute FPS increase (YOLO FPS = 0)")
 
 if __name__ == "__main__":
     main()

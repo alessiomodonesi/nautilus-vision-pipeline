@@ -1,6 +1,11 @@
 import cv2
 import numpy as np
 import openvino as ov
+from pathlib import Path
+
+WEIGHTS = (Path(__file__).resolve().parents[2] /
+           "ros2_ws/src/nautilus_perception/nautilus_perception/data/weights")
+
 
 # 4 classi estratte dal file data.yaml
 CLASSES = ["Glass", "Metal", "Plastic", "Trash"]
@@ -75,7 +80,7 @@ def post_process(output, orig_shape, input_shape, conf_threshold=0.5):
 
 def main():
     core = ov.Core()
-    compiled_model = core.compile_model("best_openvino_model/best.xml", "CPU")
+    compiled_model = core.compile_model(str(WEIGHTS / "best_openvino_model" / "best.xml"), "CPU")
     input_layer = compiled_model.input(0)
     output_layer = compiled_model.output(0)
     input_shape = input_layer.shape
