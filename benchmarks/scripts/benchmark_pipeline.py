@@ -162,9 +162,14 @@ def main():
     elif tgt is not None and raw is not None:
         print(f"  detection stage:   {tgt - raw:>7.1f} ms")
 
+
     print(f"\nSaved: {out_path}")
-    node.destroy_node()
-    rclpy.shutdown()
+    try:
+        node.destroy_node()
+    except Exception:
+        pass
+    if rclpy.ok():
+        rclpy.shutdown()
 
 if __name__ == "__main__":
     main()
