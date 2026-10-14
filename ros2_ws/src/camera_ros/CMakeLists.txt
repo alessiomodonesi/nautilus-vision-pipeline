@@ -73,7 +73,11 @@ set_property(TARGET param PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # composable ROS2 node
 add_library(camera_component SHARED src/CameraNode.cpp)
-rclcpp_components_register_node(camera_component PLUGIN "camera::CameraNode" EXECUTABLE "camera_node")
+rclcpp_components_register_node(camera_component
+  PLUGIN "camera::CameraNode"
+  EXECUTABLE camera_node
+  EXECUTOR MultiThreadedExecutor
+)
 target_link_libraries(camera_component PUBLIC
   rclcpp::rclcpp
   rclcpp_components::component

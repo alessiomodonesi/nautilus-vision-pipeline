@@ -1,11 +1,8 @@
 # Nautilus — Benchmark & Validation
 
-Cartella dedicata ai test prestazionali, termici e di accuratezza della pipeline
-Nautilus Vision sul target hardware (Raspberry Pi 5, 8 GB RAM, no dissipazione
-attiva, box stagna).
+Cartella dedicata ai test prestazionali, termici e di accuratezza della pipeline Nautilus Vision sul target hardware (Raspberry Pi 5, 8 GB RAM, no dissipazione attiva, box stagna).
 
-Questa cartella implementa la **Fase 5 (Benchmark)** e la **Fase 6 (Stress test
-termico)** della roadmap in `docs/TODO.md`.
+Questa cartella implementa la **Fase 6 (Benchmark)** e la **Fase 7 (Stress test termico)** della roadmap in `docs/TODO.md`.
 
 ---
 
@@ -37,10 +34,9 @@ benchmarks/
 
 ---
 
-## Configurazioni di test (Fase 5)
+## Configurazioni di test (Fase 6)
 
-Tre configurazioni di pipeline, da eseguire in sequenza sullo stesso hardware e
-con la stessa scena:
+Tre configurazioni di pipeline, da eseguire in sequenza sullo stesso hardware e con la stessa scena:
 
 | # | Configurazione | Comando |
 | --- | --- | --- |
@@ -54,7 +50,7 @@ Ogni configurazione va eseguita **almeno 3 volte** per valutare la varianza.
 
 ## Metriche raccolte
 
-### Prestazioni (Fase 5)
+### Prestazioni (Fase 6)
 
 - **Latenza** media, p50, p95 — con `time.perf_counter`, separata in
   pre-processing, inferenza, post-processing.
@@ -62,14 +58,14 @@ Ogni configurazione va eseguita **almeno 3 volte** per valutare la varianza.
 - **CPU%** per processo (`psutil` o `/proc/stat`).
 - **RAM** residente per nodo.
 
-### Termica (Fase 6)
+### Termica (Fase 7)
 
 - Temperatura SoC (`vcgencmd measure_temp`).
 - Frequenza CPU (`vcgencmd measure_clock arm`).
 - Flag di throttling (`vcgencmd get_throttled`).
 - Log ogni secondo per 1 ora a box chiusa.
 
-### Accuratezza (Fase 5)
+### Accuratezza (Fase 6)
 
 - **mAP@0.5** e **mAP@0.5:0.95** sul validation set, per ogni variante
   (YOLOv8n `.pt` vs `yolov8n_openvino_model`, con/senza enhancement).
