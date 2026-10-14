@@ -101,19 +101,26 @@ def main():
     print(f"  enhanced: {args.enhanced_topic}")
     print(f"  targets:  {args.targets_topic}\n")
 
+    # timer per stampa live
     t0 = time.time()
-    last = t0
+
+    def print_live():
+        dt = time.time() - t0
+        print(f"[{dt:>6.1f}s] {node.live()}")
+
+    def stop():
+        print(f"\n[{time.time()-t0:>6.1f}s] Stopping...")
+        raise KeyboardInterrupt
+
+    node.create_timer(args.print_interval, print_live)
+    node.create_timer(float(args.duration), stop)
+
     try:
-        while rclpy.ok():
-            rclpy.spin_once(node, timeout_sec=0.1)
-            now = time.time()
-            if now - last >= args.print_interval:
-                print(f"[{now-t0:>6.1f}s] {node.live()}")
-                last = now
-            if now - t0 >= args.duration:
-                break
+        rclpy.spin(node)
     except KeyboardInterrupt:
-        print("\nInterrupted.")
+        pass
+    except Exception as e:
+        print(f"\n[WARN] spin terminato con: {type(e).__name__}: {e}")
 
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -158,7 +165,6 @@ def main():
     print(f"\nSaved: {out_path}")
     node.destroy_node()
     rclpy.shutdown()
-
 
 if __name__ == "__main__":
     main()
