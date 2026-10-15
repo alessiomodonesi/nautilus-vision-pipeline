@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CycloneDDS xmlns="https://cdds.io/config">
+    <Domain id="any">
+        <General>
+            <Interfaces>
+                <NetworkInterface name="wlan0"/>
+            </Interfaces>
+            <AllowMulticast>spdp</AllowMulticast>
+            <MaxMessageSize>65500B</MaxMessageSize>
+        </General>
+        <Discovery>
+            <Peers>
+                <Peer Address="127.0.0.1"/>
+            </Peers>
+        </Discovery>
+        <SharedMemory>
+            <Enable>false</Enable>
+        </SharedMemory>
+        <Internal>
+            <SocketReceiveBufferSize min="10MB" />
+        </Internal>
+    </Domain>
+</CycloneDDS>

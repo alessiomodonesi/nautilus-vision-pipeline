@@ -5,6 +5,9 @@ After=network.target multi-user.target
 [Service]
 Type=simple
 User=nautilus
+Environment="RMW_IMPLEMENTATION=rmw_cyclonedds_cpp"
+Environment="CYCLONEDDS_URI=file:///home/nautilus/.ros/cyclonedds.xml"
+Environment="ROS_DOMAIN_ID=0"
 ExecStart=/bin/bash /usr/local/bin/start_pipeline.sh
 Restart=on-failure
 RestartSec=5
