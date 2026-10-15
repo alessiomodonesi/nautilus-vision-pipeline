@@ -1,0 +1,9 @@
+detection_node:
+  ros__parameters:
+    model_filename: 'yolov8n.pt'
+    conf_threshold: 0.4
+    input_type: 'raw'
+    enable_debug: False
+    half_res: True
+    num_threads: 2
+    sync_slop_sec: 0.05

@@ -37,6 +37,11 @@ def generate_launch_description():
         'enable_debug', default_value='false',
         description='Enable OpenCV debug window in detection node (false for benchmarks)'
     )
+    
+    params_file_arg = DeclareLaunchArgument(
+        'params_file', default_value='detection_params.yaml',
+        description='Nome file params detection (detection_params_pt.yaml | detection_params_ov.yaml)'
+    )
 
     # determina l'input_type dinamicamente in base ad enable_enhancement
     dynamic_input_type = PythonExpression(
@@ -61,13 +66,14 @@ def generate_launch_description():
 
     # nodo di detection (condizionale)
     detection_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(perception_pkg, 'launch', 'detection.launch.py')),
-        launch_arguments={
-            'input_type_override': dynamic_input_type,
-            'enable_debug': LaunchConfiguration('enable_debug'),
-        }.items(),
-        condition=IfCondition(LaunchConfiguration('enable_detection'))
-    )
+    PythonLaunchDescriptionSource(os.path.join(perception_pkg, 'launch', 'detection.launch.py')),
+    launch_arguments={
+        'input_type_override': dynamic_input_type,
+        'enable_debug': LaunchConfiguration('enable_debug'),
+        'params_file': LaunchConfiguration('params_file'),
+    }.items(),
+    condition=IfCondition(LaunchConfiguration('enable_detection'))
+)
 
     return LaunchDescription([
         enable_enhancement_arg,
@@ -77,6 +83,7 @@ def generate_launch_description():
         enable_debug_arg,
         stereo_launch,
         enhancement_launch,
-        detection_launch
+        detection_launch,
+        params_file_arg
     ])
     

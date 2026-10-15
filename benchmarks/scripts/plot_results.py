@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Genera grafici comparativi dai CSV di benchmark Nautilus Vision."""
+"""Genera grafici comparativi dai CSV di benchmark Nautilus Vision (5 config)."""
 import argparse
 import csv
 import re
@@ -12,18 +12,28 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-LATENCY_RE = re.compile(
-    r"^(?P<date>\d{4}-\d{2}-\d{2})_(?P<config>[ABC])_(?P<name>[\w\-]+)"
-    r"_run(?P<run>\d+)_latency\.csv$")
-SYSTEM_RE = re.compile(
-    r"^(?P<date>\d{4}-\d{2}-\d{2})_(?P<config>[ABC])_(?P<name>[\w\-]+)"
-    r"_run(?P<run>\d+)_system\.csv$")
-MAP_RE = re.compile(r"^map_.*\.csv$")
+CONFIG_ORDER = ["A_baseline", "B_pt", "B_ov", "C_pt", "C_ov"]
+CONFIG_LABEL = {
+    "A_baseline": "A — solo camera",
+    "B_pt": "B — detection (.pt)",
+    "B_ov": "B — detection (OpenVINO)",
+    "C_pt": "C — full (.pt)",
+    "C_ov": "C — full (OpenVINO)",
+}
+CONFIG_COLOR = {
+    "A_baseline": "#4C72B0",
+    "B_pt":       "#DD8452",
+    "B_ov":       "#F5B041",
+    "C_pt":       "#55A868",
+    "C_ov":       "#82C99A",
+}
 
-CONFIG_LABEL = {"A": "A — solo acquisizione",
-                "B": "B — acquisizione + detection",
-                "C": "C — pipeline completa"}
-CONFIG_COLOR = {"A": "#4C72B0", "B": "#DD8452", "C": "#55A868"}
+CONFIG_RE = "|".join(CONFIG_ORDER)
+LATENCY_RE = re.compile(
+    rf"^(?P<date>\d{{4}}-\d{{2}}-\d{{2}})_(?P<config>{CONFIG_RE})_run(?P<run>\d+)_latency\.csv$")
+SYSTEM_RE = re.compile(
+    rf"^(?P<date>\d{{4}}-\d{{2}}-\d{{2}})_(?P<config>{CONFIG_RE})_run(?P<run>\d+)_system\.csv$")
+MAP_RE = re.compile(r"^map_.*\.csv$")
 
 
 def load_latency(path):
@@ -52,7 +62,6 @@ def load_system(path):
                 "elapsed_s": _f("elapsed_s"),
                 "cpu_pct": _f("cpu_pct"),
                 "ram_used_mb": _f("ram_used_mb"),
-                "ram_pct": _f("ram_pct"),
                 "soc_temp_c": _f("soc_temp_c"),
             })
     return out
@@ -79,76 +88,69 @@ def scan(csv_dir):
 
 def plot_mean_latency(lat, out_dir):
     stages = ["raw", "enhanced", "targets"]
-    configs = [c for c in "ABC" if c in lat]
+    configs = [c for c in CONFIG_ORDER if c in lat]
     if not configs:
         return
-    fig, ax = plt.subplots(figsize=(9, 5))
+    fig, ax = plt.subplots(figsize=(11, 5))
     x = np.arange(len(stages))
     width = 0.8 / len(configs)
     for i, cfg in enumerate(configs):
         means, errs = [], []
         for st in stages:
-            vals = [r["mean"] for _, rows in lat[cfg]
-                    for r in rows if r["stage"] == st]
+            vals = [r["mean"] for _, rows in lat[cfg] for r in rows if r["stage"] == st]
             means.append(np.mean(vals) if vals else 0)
             errs.append(np.std(vals) if len(vals) > 1 else 0)
         offset = (i - (len(configs) - 1) / 2) * width
-        bars = ax.bar(x + offset, means, width, yerr=errs, capsize=4,
+        bars = ax.bar(x + offset, means, width, yerr=errs, capsize=3,
                       label=CONFIG_LABEL[cfg], color=CONFIG_COLOR[cfg])
         for b, v in zip(bars, means):
             if v > 0:
                 ax.text(b.get_x() + b.get_width() / 2, v, f"{v:.0f}",
-                        ha="center", va="bottom", fontsize=8)
+                        ha="center", va="bottom", fontsize=7)
     ax.set_xticks(x)
     ax.set_xticklabels(stages)
     ax.set_ylabel("Latenza media [ms]")
-    ax.set_title("Latenza media per stage e configurazione (± std sui run)")
+    ax.set_title("Latenza media per stage e configurazione")
     ax.grid(axis="y", alpha=0.3)
-    ax.legend()
+    ax.legend(fontsize=8)
     fig.tight_layout()
     out = Path(out_dir) / "01_latency_mean_by_config.png"
-    fig.savefig(out, dpi=150)
-    plt.close(fig)
+    fig.savefig(out, dpi=150); plt.close(fig)
     print(f"  {out}")
 
 
 def plot_p50_p95(lat, out_dir):
     stages = ["raw", "enhanced", "targets"]
-    configs = [c for c in "ABC" if c in lat]
+    configs = [c for c in CONFIG_ORDER if c in lat]
     if not configs:
         return
-    fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5), sharey=True)
     for ax, metric in zip(axes, ["p50", "p95"]):
         x = np.arange(len(stages))
         width = 0.8 / len(configs)
         for i, cfg in enumerate(configs):
             vals = []
             for st in stages:
-                vs = [r[metric] for _, rows in lat[cfg]
-                      for r in rows if r["stage"] == st]
+                vs = [r[metric] for _, rows in lat[cfg] for r in rows if r["stage"] == st]
                 vals.append(np.mean(vs) if vs else 0)
             offset = (i - (len(configs) - 1) / 2) * width
-            ax.bar(x + offset, vals, width, label=CONFIG_LABEL[cfg],
-                   color=CONFIG_COLOR[cfg])
-        ax.set_xticks(x)
-        ax.set_xticklabels(stages)
-        ax.set_title(metric.upper())
-        ax.grid(axis="y", alpha=0.3)
+            ax.bar(x + offset, vals, width, label=CONFIG_LABEL[cfg], color=CONFIG_COLOR[cfg])
+        ax.set_xticks(x); ax.set_xticklabels(stages)
+        ax.set_title(metric.upper()); ax.grid(axis="y", alpha=0.3)
     axes[0].set_ylabel("Latenza [ms]")
-    axes[0].legend()
+    axes[0].legend(fontsize=7)
     fig.suptitle("Latenza p50 / p95 per stage e configurazione")
     fig.tight_layout()
     out = Path(out_dir) / "02_latency_p50_p95.png"
-    fig.savefig(out, dpi=150)
-    plt.close(fig)
+    fig.savefig(out, dpi=150); plt.close(fig)
     print(f"  {out}")
 
 
 def plot_fps(lat, out_dir):
-    configs = [c for c in "ABC" if c in lat]
+    configs = [c for c in CONFIG_ORDER if c in lat]
     if not configs:
         return
-    fig, ax = plt.subplots(figsize=(7, 5))
+    fig, ax = plt.subplots(figsize=(9, 5))
     x = np.arange(len(configs))
     fps, err = [], []
     for cfg in configs:
@@ -166,21 +168,20 @@ def plot_fps(lat, out_dir):
         ax.text(b.get_x() + b.get_width() / 2, v, f"{v:.2f}",
                 ha="center", va="bottom", fontsize=9)
     ax.set_xticks(x)
-    ax.set_xticklabels([CONFIG_LABEL[c] for c in configs], fontsize=8)
+    ax.set_xticklabels([CONFIG_LABEL[c] for c in configs], fontsize=8, rotation=15, ha="right")
     ax.set_ylabel("FPS")
-    ax.set_title("FPS medi per configurazione (output detection)")
+    ax.set_title("Throughput effettivo per configurazione")
     ax.grid(axis="y", alpha=0.3)
-    ax.axhline(5.0, ls="--", c="gray", lw=1, label="target 5 FPS")
+    ax.axhline(5.0, ls="--", c="gray", lw=1, label="target 5 FPS (camera)")
     ax.legend()
     fig.tight_layout()
     out = Path(out_dir) / "03_fps_by_config.png"
-    fig.savefig(out, dpi=150)
-    plt.close(fig)
+    fig.savefig(out, dpi=150); plt.close(fig)
     print(f"  {out}")
 
 
 def _time_series(sys_, out_dir, field, ylabel, title, out_name):
-    configs = [c for c in "ABC" if c in sys_]
+    configs = [c for c in CONFIG_ORDER if c in sys_]
     if not configs:
         return
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -192,8 +193,7 @@ def _time_series(sys_, out_dir, field, ylabel, title, out_name):
         grid = np.linspace(0, max_t, 300)
         interps = []
         for _, rows in sys_[cfg]:
-            t = np.array([r["elapsed_s"] for r in rows
-                          if r["elapsed_s"] is not None])
+            t = np.array([r["elapsed_s"] for r in rows if r["elapsed_s"] is not None])
             v = np.array([r[field] if r[field] is not None else np.nan
                           for r in rows if r["elapsed_s"] is not None])
             if len(t) < 2:
@@ -202,17 +202,15 @@ def _time_series(sys_, out_dir, field, ylabel, title, out_name):
         if not interps:
             continue
         mean = np.nanmean(np.vstack(interps), axis=0)
-        ax.plot(grid, mean, label=CONFIG_LABEL[cfg],
-                color=CONFIG_COLOR[cfg])
+        ax.plot(grid, mean, label=CONFIG_LABEL[cfg], color=CONFIG_COLOR[cfg])
     ax.set_xlabel("Tempo [s]")
     ax.set_ylabel(ylabel)
     ax.set_title(title + " (media sui run)")
     ax.grid(alpha=0.3)
-    ax.legend()
+    ax.legend(fontsize=8)
     fig.tight_layout()
     out = Path(out_dir) / out_name
-    fig.savefig(out, dpi=150)
-    plt.close(fig)
+    fig.savefig(out, dpi=150); plt.close(fig)
     print(f"  {out}")
 
 
@@ -230,33 +228,27 @@ def plot_map(maps, out_dir):
         return
     x = np.arange(len(tags))
     width = 0.4
-    fig, ax = plt.subplots(figsize=(8, 5))
-    b1 = ax.bar(x - width / 2, m50, width, label="mAP@0.5",
-                color="#4C72B0")
-    b2 = ax.bar(x + width / 2, m5095, width, label="mAP@0.5:0.95",
-                color="#DD8452")
+    fig, ax = plt.subplots(figsize=(9, 5))
+    b1 = ax.bar(x - width / 2, m50, width, label="mAP@0.5", color="#4C72B0")
+    b2 = ax.bar(x + width / 2, m5095, width, label="mAP@0.5:0.95", color="#DD8452")
     for bars in (b1, b2):
         for b in bars:
             ax.text(b.get_x() + b.get_width() / 2, b.get_height(),
-                    f"{b.get_height():.3f}", ha="center", va="bottom",
-                    fontsize=8)
-    ax.set_xticks(x)
-    ax.set_xticklabels(tags, rotation=15, ha="right")
+                    f"{b.get_height():.3f}", ha="center", va="bottom", fontsize=8)
+    ax.set_xticks(x); ax.set_xticklabels(tags, rotation=15, ha="right")
     ax.set_ylabel("mAP")
     ax.set_title("Accuratezza detection (validation set)")
-    ax.grid(axis="y", alpha=0.3)
-    ax.legend()
+    ax.grid(axis="y", alpha=0.3); ax.legend()
     fig.tight_layout()
     out = Path(out_dir) / "07_map_comparison.png"
-    fig.savefig(out, dpi=150)
-    plt.close(fig)
+    fig.savefig(out, dpi=150); plt.close(fig)
     print(f"  {out}")
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", required=True, help="Cartella dei CSV")
-    ap.add_argument("--out", required=True, help="Cartella dei plot")
+    ap.add_argument("--csv", required=True)
+    ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
     out_dir = Path(args.out)
@@ -264,8 +256,7 @@ def main():
 
     lat, sys_, maps = scan(args.csv)
     print(f"Trovati: {sum(len(v) for v in lat.values())} latency, "
-          f"{sum(len(v) for v in sys_.values())} system, "
-          f"{len(maps)} map")
+          f"{sum(len(v) for v in sys_.values())} system, {len(maps)} map")
     print(f"Output in: {out_dir}\n")
 
     plot_mean_latency(lat, out_dir)
