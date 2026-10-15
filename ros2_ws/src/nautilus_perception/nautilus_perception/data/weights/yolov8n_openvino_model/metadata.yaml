@@ -1,6 +1,6 @@
 description: Ultralytics YOLOv8n model trained on coco.yaml
 author: Ultralytics
-date: '2026-10-10T19:15:12.258564+02:00'
+date: '2026-10-15T14:11:26.855432+02:00'
 version: 8.4.175
 license: AGPL-3.0 License (https://ultralytics.com/license)
 docs: https://docs.ultralytics.com
@@ -9,7 +9,7 @@ task: detect
 head: Detect
 batch: 1
 imgsz:
-- 480
+- 640
 - 640
 names:
   0: person
