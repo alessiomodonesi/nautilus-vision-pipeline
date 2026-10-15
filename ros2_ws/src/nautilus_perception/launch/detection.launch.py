@@ -17,7 +17,7 @@ def generate_launch_description():
 
     enable_debug_arg = DeclareLaunchArgument(
         'enable_debug',
-        default_value='true',
+        default_value='false',
         description='Overrides enable_debug in YAML (true/false for OpenCV debug window)'
     )
 

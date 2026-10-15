@@ -11,7 +11,7 @@ detection_node:
     input_type: 'raw'
     
     # attiva l'interfaccia grafica OpenCV per vedere bounding box e distanze
-    enable_debug: True
+    enable_debug: False
     
     # dimezza la risoluzione passata al modello (velocizza l'inferenza CPU)
     # obbligatorio a False per OpenVINO

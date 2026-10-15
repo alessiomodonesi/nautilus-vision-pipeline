@@ -61,8 +61,6 @@ ros2 launch nautilus_camera stereo_camera.launch.py \
 
 ```bash
 python3 ~/nautilus-vision-pipeline/deploy/lock_cameras.py
-python3 ~/nautilus-vision-pipeline/deploy/print_params.py
-# Atteso: due righe con LensPosition = 2.6 (lx) e 1.5 (rx), poi "OK"
 ```
 
 ### Monitor di sistema (Terminale 3)
@@ -110,7 +108,8 @@ ros2 launch nautilus_perception pipeline.launch.py \
   enable_enhancement:=false \
   enable_detection:=true \
   enable_saving:=false \
-  enable_metrics:=true
+  enable_metrics:=true \
+  enable_debug:=false
 ```
 
 ### Verifica topic (Terminale 2)
@@ -186,7 +185,8 @@ ros2 launch nautilus_perception pipeline.launch.py \
   enable_enhancement:=true \
   enable_detection:=true \
   enable_saving:=false \
-  enable_metrics:=true
+  enable_metrics:=true \
+  enable_debug:=false
 ```
 
 ### Verifica topic (Terminale 2)
@@ -298,9 +298,11 @@ notes,configurazione baseline senza detection né enhancement
 Per Config B e C aggiungi:
 
 ```csv
-model,best_openvino_model
+model,yolov8n.pt
 precision,FP32
-num_threads,4
+num_threads,2
+imgsz,640
+half_res,true
 ```
 
 (Il valore di `num_threads` è in `detection_params.yaml`.)

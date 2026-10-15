@@ -14,23 +14,15 @@ def generate_launch_description():
 
     # dichiarazione degli argomenti di lancio
     enable_enhancement_arg = DeclareLaunchArgument(
-        'enable_enhancement',
-        default_value='true',
+        'enable_enhancement', default_value='true',
         description='Set to true to launch the enhancement node'
     )
     
     enable_detection_arg = DeclareLaunchArgument(
-        'enable_detection',
-        default_value='true',
+        'enable_detection', default_value='true',
         description='Set to true to launch the detection node'
     )
     
-    
-    # determina l'input_type dinamicamente in base ad enable_enhancement
-    dynamic_input_type = PythonExpression(
-        ["'enhanced' if '", LaunchConfiguration('enable_enhancement'), "' == 'true' else 'raw'"]
-    )
-
     enable_saving_arg = DeclareLaunchArgument(
         'enable_saving', default_value='true',
         description='Enable saving to disk'
@@ -39,6 +31,16 @@ def generate_launch_description():
     enable_metrics_arg = DeclareLaunchArgument(
         'enable_metrics', default_value='false',
         description='Enable the benchmark node'
+    )
+    
+    enable_debug_arg = DeclareLaunchArgument(
+        'enable_debug', default_value='false',
+        description='Enable OpenCV debug window in detection node (false for benchmarks)'
+    )
+
+    # determina l'input_type dinamicamente in base ad enable_enhancement
+    dynamic_input_type = PythonExpression(
+        ["'enhanced' if '", LaunchConfiguration('enable_enhancement'), "' == 'true' else 'raw'"]
     )
 
     # nodo di acquisizione (sempre attivo)
@@ -53,13 +55,17 @@ def generate_launch_description():
     # nodo di enhancement (condizionale)
     enhancement_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(perception_pkg, 'launch', 'enhancement.launch.py')),
+        launch_arguments={'waternet_mode': 'force_off'}.items(),
         condition=IfCondition(LaunchConfiguration('enable_enhancement'))
     )
 
     # nodo di detection (condizionale)
     detection_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(perception_pkg, 'launch', 'detection.launch.py')),
-        launch_arguments={'input_type_override': dynamic_input_type}.items(),
+        launch_arguments={
+            'input_type_override': dynamic_input_type,
+            'enable_debug': LaunchConfiguration('enable_debug'),
+        }.items(),
         condition=IfCondition(LaunchConfiguration('enable_detection'))
     )
 
@@ -68,6 +74,7 @@ def generate_launch_description():
         enable_detection_arg,
         enable_saving_arg,
         enable_metrics_arg,
+        enable_debug_arg,
         stereo_launch,
         enhancement_launch,
         detection_launch

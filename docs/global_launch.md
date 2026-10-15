@@ -85,7 +85,7 @@ Tutti i parametri di acquisizione, benchmark e salvataggio vivono in un unico fi
     camera: 0
     width: 1280
     height: 720
-    FrameDurationLimits: [200000, 200000]   # 200 ms => 5 FPS
+    FrameDurationLimits: [200000, 200000]   # 200000 µs = 200 ms => 5 FPS
 # Parametri hardware per camera_ros - camera destra (rx)
 /stereo/rx/camera:
   ros__parameters:
@@ -108,7 +108,7 @@ Tutti i parametri di acquisizione, benchmark e salvataggio vivono in un unico fi
     enable_saving: true
     left_topic:  '/stereo/lx/camera/image_raw'
     right_topic: '/stereo/rx/camera/image_raw'
-    save_directory: '/home/pi/nautilus_data'
+    save_directory: '/home/nautilus/nautilus_data'
     save_left: true
     save_right: true
     image_format: 'jpg'
@@ -125,7 +125,7 @@ Tutti i parametri di acquisizione, benchmark e salvataggio vivono in un unico fi
 * **`FrameDurationLimits`**: valori in microsecondi; `[200000, 200000]` forza 5 FPS stabili. Non modificare senza aggiornare i benchmark attesi.
 * **`sync_slop_sec`**: tolleranza di disallineamento temporale (in secondi) tra i frame sinistro e destro nel `message_filters.ApproximateTimeSynchronizer`. Con skew misurato ~1.5 ms, 50 ms è ideale a 5 FPS (il periodo tra frame è 200 ms: uno slop $\le 50\text{ ms}$ impedisce di accoppiare frame di epoche diverse).
 * **`flush_every_n`**: forza il commit su disco (`os.sync()`) ogni N coppie stereo salvate. Cruciale sul veicolo per prevenire corruzioni di filesystem della MicroSD a seguito dello spegnimento brusco con reed switch magnetico.
-* **`save_directory`**: deve essere una directory scrivibile dall'utente `pi`. Ad ogni avvio il nodo crea una sottocartella `YYYYmmdd-HHMMSS_session/` (con suffisso progressivo `_1`, `_2` in caso di orologio di sistema non sincronizzato) per evitare qualsiasi sovrascrittura accidentale.
+* **`save_directory`**: deve essere una directory scrivibile dall'utente `nautilus`. Ad ogni avvio il nodo crea una sottocartella `YYYYmmdd-HHMMSS_session/` (con suffisso progressivo `_1`, `_2` in caso di orologio di sistema non sincronizzato) per evitare qualsiasi sovrascrittura accidentale.
 * **`image_format`**: `'jpg'` o `'png'`. Il formato JPEG occupa molto meno spazio, ma introduce artefatti di compressione; per uso scientifico dei biologi potrebbe servire PNG.
 * **`max_files_per_session`**: `0` significa nessun limite. Utile per test a tempo determinato.
 * **`display`** (metrics_node): apre una finestra OpenCV; richiede sessione grafica attiva. Disattivato per default perché introduce overhead e falsa i benchmark.
@@ -140,7 +140,7 @@ detection_node:
     model_filename: 'yolov8n.pt' # o 'yolov8n_openvino_model'
     conf_threshold: 0.4
     input_type: 'raw'            # fallback (sovrascritto dinamicamente)
-    enable_debug: True
+    enable_debug: False
     half_res: True               # False obbligatorio per OpenVINO
     num_threads: 2               # Core logici dedicati all'inferenza CPU/OpenVINO
     sync_slop_sec: 0.05          # Tolleranza sincronizzazione stereo (50 ms)
@@ -232,7 +232,7 @@ sudo systemctl status nautilus-vision.service
 journalctl -u nautilus-vision.service -f
 ```
 
-## 7. Esempi di Configurazione per i Test (Fase 5 e 6)
+## 7. Esempi di Configurazione per i Test (Fase 6 e 7)
 
 1. **Test: Solo Acquisizione (Baseline hardware)**
    * Nel `.env`: `ENABLE_ENHANCEMENT=false`, `ENABLE_DETECTION=false`, `ENABLE_SAVING=false`
@@ -249,12 +249,16 @@ journalctl -u nautilus-vision.service -f
    * Avvia con `enable_metrics:=true` per loggare FPS, jitter e skew ogni secondo.
    * Logga in parallelo temperatura e throttling: `vcgencmd measure_temp` e `vcgencmd get_throttled`.
 
+5. **Test: Benchmark Fase 6 (9 run A/B/C)**
+   * Usa `benchmarks/CONFIGS.md` come riferimento
+   * `enable_debug:=false` sempre
+
 ## 8. Dove trovare i dati salvati
 
 Di default i frame vengono salvati in:
 
 ```text
-/home/pi/nautilus_data/<YYYYmmdd-HHMMSS_session>/
+/home/nautilus/nautilus_data/<YYYYmmdd-HHMMSS_session>/
 ├── nautilus_lx_00000001.jpg
 ├── nautilus_rx_00000001.jpg
 ├── nautilus_lx_00000002.jpg
@@ -267,7 +271,7 @@ Il contatore è monotonicamente crescente e viene azzerato ad ogni avvio di sess
 Per contare i file salvati:
 
 ```bash
-find /home/pi/nautilus_data -name "*.jpg" | wc -l
+find /home/nautilus/nautilus_data -name "*.jpg" | wc -l
 ```
 
 ## 9. Troubleshooting
@@ -277,7 +281,7 @@ find /home/pi/nautilus_data -name "*.jpg" | wc -l
 | `camera_ros` non trova la camera | device ID errato nel YAML | verifica con `rpicam-hello --list-cameras` |
 | Skew > 50 ms persistente | i due sensori sono sincronizzati male | controlla cavi CSI, riduci risoluzione |
 | Warning `camera_info` mancante | calibrazione non presente | non blocca l'acquisizione, ignora per ora |
-| `saving_node` non scrive nulla | `save_directory` non scrivibile | `mkdir -p /home/pi/nautilus_data && chmod 755` |
+| `saving_node` non scrive nulla | `save_directory` non scrivibile | `mkdir -p /home/nautilus/nautilus_data && chmod 755` |
 | File JPEG con colori invertiti (rosso/blu) | conversione spazio colore non conforme | `saving_node` converte forzatamente in `bgr8` prima di `cv2.imwrite` |
 | File parzialmente scritti o corrotti al distacco del magnete | cache I/O non svuotata prima del cut off | imposta `flush_every_n: 1` nel YAML per forzare `os.sync()` su MicroSD |
 | Servizio systemd non parte | path in `ExecStart` sbagliato | controlla `journalctl -u nautilus-vision -f` |

@@ -72,7 +72,7 @@ Il nodo ROS 2 (`enhancement_node`) espone i parametri `waternet_mode` e `save_ou
 Per l'utilizzo reale in acqua, la configurazione ottimale si imposta direttamente nel file `launch/enhancement.launch.py`. Modificando la variabile `WATERNET_MODE` in cima al file su `'force_off'`, configurerai simultaneamente sia la telecamera destra che quella sinistra:
 
 ```bash
-ros2 launch nautilus_perception enhancement.launch.py
+ros2 launch nautilus_perception enhancement.launch.py waternet_mode:=force_off
 ```
 
 ---
@@ -91,6 +91,7 @@ Il nodo legge i parametri di configurazione dal file `config/detection_params.ya
 * `input_type`: Seleziona il tipo di flusso in ingresso (`'raw'` per le immagini grezze o `'enhanced'` se si usa la pipeline di miglioramento).
 * `conf_threshold`: Soglia di confidenza di YOLO (es. `0.2` o `0.3`).
 * `model_path`: Gestito automaticamente in modo dinamico dal codice (supporta sia file `.pt` standard che modelli ottimizzati OpenVINO `.xml`).
+* `enable_debug`: Apre finestra OpenCV di debug. Default `false` nel YAML; sovrascrivibile con `enable_debug:=true` al lancio.
 
 ---
 

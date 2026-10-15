@@ -20,6 +20,8 @@ benchmarks/
 │   ├── ov_inference.py          # Wrapper inferenza OpenVINO
 │   └── infer_best_openvino.py   # Demo inferenza best_openvino_model (marine debris)
 ├── datasets/
+│   ├── coco128/                 # 128 immagini COCO + labels (scaricate)
+│   ├── coco128.yaml             # config Ultralytics con path assoluto
 │   ├── images/                  # Immagini di test (enhancement, waternet)
 │   ├── videos/                  # Video stereo di test per pipeline
 │   ├── raw/                     # Dataset grezzi annotati
@@ -69,8 +71,8 @@ Ogni configurazione va eseguita **almeno 3 volte** per valutare la varianza.
 
 - **mAP@0.5** e **mAP@0.5:0.95** sul validation set, per ogni variante
   (YOLOv8n `.pt` vs `yolov8n_openvino_model`, con/senza enhancement).
-- **Errore su Z**: oggetto a 0.5 / 1.0 / 2.0 m → verifica entro ±5%.
-  ⚠️ Bloccato dalla calibrazione a 640×480 (vedi Fase 9 in `docs/TODO.md`).
+- **Errore su Z**: oggetto a 0.6 / 0.7 / 0.8 / 0.9 m → verifica entro ±5%.
+  ✅ Validato il 13/10/2026 su calibrazione 720p (RMS 0.125 px), errore osservato < 1 cm.
 
 ---
 
@@ -100,8 +102,9 @@ Lascia girare in un secondo terminale mentre la pipeline è attiva.
 ```bash
 python3 benchmarks/scripts/evaluate_map.py \
     --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n.pt \
-    --data benchmarks/datasets/raw/underwater-image/data.yaml \
-    --out benchmarks/results/csv/map_yolov8n.csv
+    --data benchmarks/datasets/coco128.yaml \
+    --imgsz 640 --tag yolov8n_pt \
+    --out benchmarks/results/csv/map_yolov8n_pt.csv
 ```
 
 ### Grafici

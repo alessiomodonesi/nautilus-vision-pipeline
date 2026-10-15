@@ -13,7 +13,7 @@ def generate_launch_description():
 
     # argomenti di lancio
     enable_metrics_arg = DeclareLaunchArgument(
-        'enable_metrics', default_value='true',
+        'enable_metrics', default_value='false',
         description='Avvia il nodo di benchmark (FPS/jitter/skew)'
     )
     enable_saving_arg = DeclareLaunchArgument(

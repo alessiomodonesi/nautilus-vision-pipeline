@@ -1,63 +1,109 @@
+#!/usr/bin/env python3
+"""Confronto PyTorch (.pt) vs OpenVINO per lo stesso modello YOLO.
+
+Usa Ultralytics per entrambi i backend, così pre-processing, letterbox,
+NMS e post-processing sono identici: l'unica variabile è il backend.
+Ogni coppia usa la propria imgsz nativa (yolov8n=640, best=416).
+"""
+import argparse
+import csv
+import statistics
 import time
+from pathlib import Path
+
 import numpy as np
-
-# moduli di init e inferenza dagli script esistenti
-from yolo_inference import init_yolo, run_yolo
-from ov_inference import init_ov, run_ov
+from ultralytics import YOLO
 
 
-def run_benchmark(name, init_func, infer_func, num_frames=100):
-    print(f"\nInitializing {name}...")
-    
-    # init specifico in base al framework
-    if name == "OpenVINO":
-        model, classes = init_func()
-    else:
-        model = init_func()
-        classes = None
-        
-    dummy_image = np.zeros((720, 1280, 3), dtype=np.uint8)
-    
-    # warm-up per caricare tensori e allocare memoria cache
-    print(f"Warm-up {name}...")
-    if name == "OpenVINO":
-        infer_func(model, dummy_image, classes)
-    else:
-        infer_func(model, dummy_image)
-        
-    print(f"Starting measurement {name} on {num_frames} frames...")
-    latencies = []
-    start_time = time.time()
-    
-    for _ in range(num_frames):
-        t0 = time.time()
-        if name == "OpenVINO":
-            infer_func(model, dummy_image, classes)
-        else:
-            infer_func(model, dummy_image)
-        latencies.append((time.time() - t0) * 1000)
-        
-    total_time = time.time() - start_time
-    fps = num_frames / total_time
-    avg_latency = np.mean(latencies)
-    
-    return avg_latency, fps
+WEIGHTS = (Path(__file__).resolve().parents[2] /
+           "ros2_ws/src/nautilus_perception/nautilus_perception/data/weights")
+
+
+def bench(label, model_path, imgsz, n_frames, warmup, dummy):
+    print(f"\n== {label} ==")
+    print(f"  path:  {model_path}")
+    print(f"  imgsz: {imgsz}")
+    model = YOLO(str(model_path))
+
+    # warm-up (compila grafi, alloca cache)
+    for _ in range(warmup):
+        model.predict(source=dummy, imgsz=imgsz, verbose=False, device="cpu")
+
+    lat = []
+    for _ in range(n_frames):
+        t0 = time.perf_counter()
+        model.predict(source=dummy, imgsz=imgsz, verbose=False, device="cpu")
+        lat.append((time.perf_counter() - t0) * 1000.0)
+
+    lat_sorted = sorted(lat)
+    n = len(lat_sorted)
+    return {
+        "label": label,
+        "model": str(model_path),
+        "imgsz": imgsz,
+        "n": n,
+        "mean_ms": statistics.mean(lat),
+        "p50_ms": statistics.median(lat),
+        "p95_ms": lat_sorted[min(int(0.95 * n), n - 1)],
+        "min_ms": min(lat),
+        "max_ms": max(lat),
+        "fps": 1000.0 / statistics.mean(lat),
+    }
+
 
 def main():
-    print("Benchmark: YOLOv8 Nano vs OpenVINO")
-    
-    # 100 frame corrispondono a 20 secondi di video a 5 FPS
-    yolo_lat, yolo_fps = run_benchmark("YOLOv8 Nano", init_yolo, run_yolo, num_frames=100)
-    ov_lat, ov_fps = run_benchmark("OpenVINO", init_ov, run_ov, num_frames=100)
-    
-    print(f"\nYOLOv8 Nano: Average latency = {yolo_lat:.2f} ms | Throughput = {yolo_fps:.2f} FPS") 
-    print(f"\nOpenVINO: Average latency = {ov_lat:.2f} ms | Throughput = {ov_fps:.2f} FPS")
-    
-    if yolo_fps > 0:
-        boost = ((ov_fps - yolo_fps) / yolo_fps) * 100
-        print(f"\nFPS performance increase: +{boost:.1f}%")
-    else:
-        print("\nCannot compute FPS increase (YOLO FPS = 0)")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--frames", type=int, default=100)
+    ap.add_argument("--warmup", type=int, default=5)
+    ap.add_argument("--out", default=None, help="CSV di output (opzionale)")
+    args = ap.parse_args()
+
+    dummy = np.zeros((720, 1280, 3), dtype=np.uint8)
+
+    pairs = [
+        ("yolov8n_pt", WEIGHTS / "yolov8n.pt",             640),
+        ("yolov8n_ov", WEIGHTS / "yolov8n_openvino_model", 640),
+        ("best_pt",    WEIGHTS / "best.pt",                416),
+        ("best_ov",    WEIGHTS / "best_openvino_model",    416),
+    ]
+
+    results = []
+    for label, path, imgsz in pairs:
+        if not Path(path).exists():
+            print(f"[SKIP] {label}: {path} non esiste")
+            continue
+        results.append(bench(label, path, imgsz,
+                             args.frames, args.warmup, dummy))
+
+    if not results:
+        print("Nessun modello trovato. Verifica i path in WEIGHTS.")
+        return
+
+    print("\n\n== Riepilogo ==")
+    print(f"{'label':<14}{'imgsz':>7}{'mean':>9}{'p50':>9}{'p95':>9}{'fps':>8}")
+    for r in results:
+        print(f"{r['label']:<14}{r['imgsz']:>7}"
+              f"{r['mean_ms']:>8.1f}m{r['p50_ms']:>8.1f}m"
+              f"{r['p95_ms']:>8.1f}m{r['fps']:>7.2f}")
+
+    # boost OpenVINO per ogni coppia .pt/.ov
+    by_label = {r["label"]: r for r in results}
+    for pt, ov in [("yolov8n_pt", "yolov8n_ov"), ("best_pt", "best_ov")]:
+        if pt in by_label and ov in by_label:
+            b = ((by_label[ov]["fps"] - by_label[pt]["fps"]) /
+                 by_label[pt]["fps"]) * 100
+            print(f"\n{ov} vs {pt}: {b:+.1f}% FPS "
+                  f"({by_label[pt]['fps']:.2f} -> {by_label[ov]['fps']:.2f})")
+
+    if args.out:
+        out = Path(args.out)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        with open(out, "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(results[0].keys()))
+            w.writeheader()
+            w.writerows(results)
+        print(f"\nSaved: {out}")
+
 
 if __name__ == "__main__":
     main()
