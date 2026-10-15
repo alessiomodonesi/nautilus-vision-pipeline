@@ -10,21 +10,33 @@ def generate_launch_description():
     pkg_dir = get_package_share_directory('nautilus_perception')
 
     params_file_arg = DeclareLaunchArgument(
-        'params_file',
-        default_value='detection_params.yaml',
+        'params_file', default_value='detection_params.yaml',
         description='Nome del file params in config/'
     )
-
+    
     input_type_arg = DeclareLaunchArgument(
-        'input_type_override',
-        default_value='raw',
-        description='Overrides input_type in YAML if provided'
+        'input_type_override', default_value='raw',
+        description="Override input_type: 'raw' | 'enhanced'"
     )
-
+    
     enable_debug_arg = DeclareLaunchArgument(
-        'enable_debug',
-        default_value='false',
-        description='Overrides enable_debug in YAML (true/false for OpenCV debug window)'
+        'enable_debug', default_value='false',
+        description='OpenCV debug window (true/false)'
+    )
+    
+    model_filename_arg = DeclareLaunchArgument(
+        'model_filename_override', default_value='yolov8n.pt',
+        description='Nome cartella OpenVINO o file .pt in data/weights/'
+    )
+    
+    half_res_arg = DeclareLaunchArgument(
+        'half_res_override', default_value='true',
+        description='Dimezza il frame prima di YOLO (solo PyTorch)'
+    )
+    
+    imgsz_arg = DeclareLaunchArgument(
+        'imgsz_override', default_value='640',
+        description='Risoluzione di inferenza, deve combaciare con export'
     )
 
     params_path = PathJoinSubstitution(
@@ -40,7 +52,10 @@ def generate_launch_description():
             params_path,
             {
                 'input_type': LaunchConfiguration('input_type_override'),
-                'enable_debug': LaunchConfiguration('enable_debug')
+                'enable_debug': LaunchConfiguration('enable_debug'),
+                'model_filename': LaunchConfiguration('model_filename_override'),
+                'half_res': LaunchConfiguration('half_res_override'),
+                'imgsz': LaunchConfiguration('imgsz_override'),
             }
         ]
     )
@@ -49,6 +64,8 @@ def generate_launch_description():
         params_file_arg,
         input_type_arg,
         enable_debug_arg,
-        detection_node
+        model_filename_arg,
+        half_res_arg,
+        imgsz_arg,
+        detection_node,
     ])
-    

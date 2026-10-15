@@ -47,6 +47,19 @@ def generate_launch_description():
     dynamic_input_type = PythonExpression(
         ["'enhanced' if '", LaunchConfiguration('enable_enhancement'), "' == 'true' else 'raw'"]
     )
+    
+    model_filename_arg = DeclareLaunchArgument(
+        'model_filename_override', default_value='yolov8n.pt',
+        description='Nome modello in data/weights/'
+    )
+    
+    half_res_arg = DeclareLaunchArgument(
+        'half_res_override', default_value='true',
+    )
+    
+    imgsz_arg = DeclareLaunchArgument(
+        'imgsz_override', default_value='640',
+    )
 
     # nodo di acquisizione (sempre attivo)
     stereo_launch = IncludeLaunchDescription(
@@ -66,14 +79,19 @@ def generate_launch_description():
 
     # nodo di detection (condizionale)
     detection_launch = IncludeLaunchDescription(
-    PythonLaunchDescriptionSource(os.path.join(perception_pkg, 'launch', 'detection.launch.py')),
-    launch_arguments={
-        'input_type_override': dynamic_input_type,
-        'enable_debug': LaunchConfiguration('enable_debug'),
-        'params_file': LaunchConfiguration('params_file'),
-    }.items(),
-    condition=IfCondition(LaunchConfiguration('enable_detection'))
-)
+        PythonLaunchDescriptionSource(
+            os.path.join(perception_pkg, 'launch', 'detection.launch.py')
+        ),
+        launch_arguments={
+            'input_type_override': dynamic_input_type,
+            'enable_debug': LaunchConfiguration('enable_debug'),
+            'params_file': LaunchConfiguration('params_file'),
+            'model_filename_override': LaunchConfiguration('model_filename_override'),
+            'half_res_override': LaunchConfiguration('half_res_override'),
+            'imgsz_override': LaunchConfiguration('imgsz_override'),
+        }.items(),
+        condition=IfCondition(LaunchConfiguration('enable_detection'))
+    )
 
     return LaunchDescription([
         enable_enhancement_arg,
@@ -81,9 +99,11 @@ def generate_launch_description():
         enable_saving_arg,
         enable_metrics_arg,
         enable_debug_arg,
+        params_file_arg,
+        model_filename_arg,
+        half_res_arg,
+        imgsz_arg,
         stereo_launch,
         enhancement_launch,
         detection_launch,
-        params_file_arg
     ])
-    

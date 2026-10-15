@@ -61,10 +61,12 @@ def main():
     dummy = np.zeros((720, 1280, 3), dtype=np.uint8)
 
     pairs = [
-        ("yolov8n_pt", WEIGHTS / "yolov8n.pt",             640),
-        ("yolov8n_ov", WEIGHTS / "yolov8n_openvino_model", 640),
-        ("best_pt",    WEIGHTS / "best.pt",                416),
-        ("best_ov",    WEIGHTS / "best_openvino_model",    416),
+        ("yolov8n_pt",        WEIGHTS / "yolov8n.pt",                    640),
+        ("yolov8n_fp32_640",  WEIGHTS / "yolov8n_openvino_640_fp32",     640),
+        ("yolov8n_int8_640",  WEIGHTS / "yolov8n_openvino_640_int8",     640),
+        ("yolov8n_int8_416",  WEIGHTS / "yolov8n_openvino_416_int8",     416),
+        ("best_pt",           WEIGHTS / "best.pt",                       416),
+        ("best_fp32_416",     WEIGHTS / "best_openvino_416_fp32",        416),
     ]
 
     results = []
@@ -88,7 +90,10 @@ def main():
 
     # boost OpenVINO per ogni coppia .pt/.ov
     by_label = {r["label"]: r for r in results}
-    for pt, ov in [("yolov8n_pt", "yolov8n_ov"), ("best_pt", "best_ov")]:
+    for pt, ov in [("yolov8n_pt", "yolov8n_fp32_640"),
+                   ("yolov8n_pt", "yolov8n_int8_640"),
+                   ("yolov8n_pt", "yolov8n_int8_416"),
+                   ("best_pt",    "best_fp32_416")]:
         if pt in by_label and ov in by_label:
             b = ((by_label[ov]["fps"] - by_label[pt]["fps"]) /
                  by_label[pt]["fps"]) * 100

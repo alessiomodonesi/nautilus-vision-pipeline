@@ -58,7 +58,7 @@ def post_process(output, orig_shape, input_shape, classes, conf_threshold=0.5):
 def init_ov(model_xml=None):
     """Inizializza OpenVINO e recupera le classi."""
     if model_xml is None:
-        model_xml = WEIGHTS / "yolov8n_openvino_model" / "yolov8n.xml"
+        model_xml = WEIGHTS / "yolov8n_openvino_640_fp32" / "yolov8n.xml"
     core = ov.Core()
     compiled_model = core.compile_model(str(model_xml), "CPU")
     model = YOLO(str(WEIGHTS / "yolov8n.pt"))

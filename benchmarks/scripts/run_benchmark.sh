@@ -22,13 +22,17 @@ DATE=$(date +%Y-%m-%d)
 CSV_DIR="$ROOT/benchmarks/results/csv"
 mkdir -p "$CSV_DIR"
 
-# interpreta config
+# config → (ENH, DET, MODEL, HALF_RES, IMGSZ, NOTE)
 case "$CONFIG" in
-    A_baseline) ENH="false"; DET="false"; PARAMS="detection_params_pt.yaml"; NOTE="baseline solo camera" ;;
-    B_pt)       ENH="false"; DET="true";  PARAMS="detection_params_pt.yaml"; NOTE="yolov8n.pt half_res=True" ;;
-    B_ov)       ENH="false"; DET="true";  PARAMS="detection_params_ov.yaml"; NOTE="OpenVINO FP32 half_res=False" ;;
-    C_pt)       ENH="true";  DET="true";  PARAMS="detection_params_pt.yaml"; NOTE="full pipeline .pt" ;;
-    C_ov)       ENH="true";  DET="true";  PARAMS="detection_params_ov.yaml"; NOTE="full pipeline OpenVINO" ;;
+    A_baseline)    ENH="false"; DET="false"; MODEL="";                       HALF_RES="true";  IMGSZ="640"; NOTE="baseline solo camera" ;;
+    B_pt)          ENH="false"; DET="true";  MODEL="yolov8n.pt";             HALF_RES="true";  IMGSZ="640"; NOTE="yolov8n.pt half_res=True" ;;
+    B_ov_fp32)     ENH="false"; DET="true";  MODEL="yolov8n_openvino_640_fp32"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO FP32 640" ;;
+    B_ov_int8_640) ENH="false"; DET="true";  MODEL="yolov8n_openvino_640_int8"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO INT8 640" ;;
+    B_ov_int8_416) ENH="false"; DET="true";  MODEL="yolov8n_openvino_416_int8"; HALF_RES="false"; IMGSZ="416"; NOTE="OpenVINO INT8 416" ;;
+    B_best_fp32)   ENH="false"; DET="true";  MODEL="best_openvino_416_fp32";  HALF_RES="false"; IMGSZ="416"; NOTE="best FP32 416" ;;
+    C_pt)          ENH="true";  DET="true";  MODEL="yolov8n.pt";             HALF_RES="true";  IMGSZ="640"; NOTE="full .pt" ;;
+    C_ov_int8_640) ENH="true";  DET="true";  MODEL="yolov8n_openvino_640_int8"; HALF_RES="false"; IMGSZ="640"; NOTE="full OpenVINO INT8 640" ;;
+    C_ov_int8_416) ENH="true";  DET="true";  MODEL="yolov8n_openvino_416_int8"; HALF_RES="false"; IMGSZ="416"; NOTE="full OpenVINO INT8 416" ;;
     *) echo "Config non valida: $CONFIG"; exit 1 ;;
 esac
 
@@ -68,7 +72,10 @@ ros2 launch nautilus_perception pipeline.launch.py \
     enable_saving:=false \
     enable_metrics:=true \
     enable_debug:=false \
-    params_file:=$PARAMS \
+    params_file:=detection_params.yaml \
+    model_filename_override:=$MODEL \
+    half_res_override:=$HALF_RES \
+    imgsz_override:=$IMGSZ \
     > "$LAUNCH_LOG" 2>&1 &
 LAUNCH_PID=$!
 
@@ -127,7 +134,9 @@ enable_enhancement,$ENH
 enable_detection,$DET
 enable_saving,false
 enable_metrics,true
-params_file,$PARAMS
+model_filename,$MODEL
+half_res,$HALF_RES
+imgsz,$IMGSZ
 soc_temp_initial_c,$TEMP
 soc_temp_final_c,$TEMP_END
 notes,$NOTE

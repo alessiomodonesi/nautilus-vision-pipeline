@@ -636,12 +636,14 @@ class YoloDetector(BaseDetector):
         model_path: str,
         conf: float = 0.3,
         half_res: bool = True,
+        imgsz = 640
     ) -> None:
         from ultralytics import YOLO  
 
         self.model = YOLO(model_path)
         self.conf = conf
         self.half_res = half_res
+        self.imgsz = imgsz
 
         self.device = self._pick_device()
         log.info("YOLO inference engine mapped to device: %s", self.device)
@@ -674,7 +676,7 @@ class YoloDetector(BaseDetector):
             scale = 1.0
 
         results = self.model.predict(
-            infer_frame, conf=self.conf, verbose=False
+            infer_frame, conf=self.conf, imgsz=self.imgsz, verbose=False
         )
 
         detected_boxes: List[BBox] = []
@@ -863,6 +865,10 @@ def parse_args() -> argparse.Namespace:
         "--camera-frame", default="camera_frame",
         help="frame_id to stamp on published detection headers",
     )
+    p.add_argument(
+        "--imgsz", type=int, default=640,
+        help="Risoluzione di inferenza (deve combaciare con export del modello)",
+    )
     return p.parse_args()
 
 
@@ -945,6 +951,7 @@ def main() -> None:
             model_path=args.model,
             conf=0.3,
             half_res=pipeline_config.yolo_half_res,
+            imgsz=args.imgsz,
         )
     else:
         detector = AprilTagDetector(tag_family=TAG_FAMILIES[args.tag_family])

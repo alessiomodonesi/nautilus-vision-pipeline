@@ -80,7 +80,9 @@ def post_process(output, orig_shape, input_shape, conf_threshold=0.5):
 
 def main():
     core = ov.Core()
-    compiled_model = core.compile_model(str(WEIGHTS / "best_openvino_model" / "best.xml"), "CPU")
+    compiled_model = core.compile_model(
+        str(WEIGHTS / "best_openvino_416_fp32" / "best.xml"), "CPU"
+    )
     input_layer = compiled_model.input(0)
     output_layer = compiled_model.output(0)
     input_shape = input_layer.shape

@@ -4,7 +4,6 @@ import sys
 from pathlib import Path
 
 import openvino as ov
-import torch
 from ultralytics import YOLO
 
 WEIGHTS = (Path(__file__).resolve().parents[2] /
@@ -54,16 +53,22 @@ def inspect_ov(xml_path):
 
 
 def main():
-    pt = WEIGHTS / "yolov8n.pt"
-    xml = WEIGHTS / "yolov8n_openvino_model" / "yolov8n.xml"
-    best_xml = WEIGHTS / "best_openvino_model" / "best.xml"
+    core = ov.Core()
+    # scansiona TUTTI i modelli OpenVINO presenti
+    for d in sorted(WEIGHTS.glob("*openvino*")):
+        if not d.is_dir():
+            continue
+        xmls = sorted(d.glob("*.xml"))
+        if not xmls:
+            continue
+        print(f"\n== {d.name} ==")
+        inspect_ov(xmls[0])
 
-    if pt.exists():
-        inspect_pt(pt, runtime_imgsz=416)
-    if xml.exists():
-        inspect_ov(xml)
-    if best_xml.exists():
-        inspect_ov(best_xml)
+    # i .pt per confronto
+    for pt_name in ["yolov8n.pt", "best.pt"]:
+        pt = WEIGHTS / pt_name
+        if pt.exists():
+            inspect_pt(pt, runtime_imgsz=416 if "best" in pt_name else 640)
 
 
 if __name__ == "__main__":

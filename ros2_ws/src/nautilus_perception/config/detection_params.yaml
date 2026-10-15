@@ -1,25 +1,12 @@
 detection_node:
   ros__parameters:
-    # nome della cartella (per i modelli OpenVINO) o del file (es. yolov8n.pt per PyTorch) posizionato in data/weights/
+    # questi sono i DEFAULT, sovrascrivibili a runtime via launch args:
+    # model_filename_override, half_res_override, imgsz_override, input_type_override, enable_debug
     model_filename: 'yolov8n.pt'
-    # model_filename: 'yolov8n_openvino_model'
-    
-    # soglia minima di confidenza (es. 0.4 = 40%) oltre la quale YOLO accetta la detection
     conf_threshold: 0.4
-    
-    # seleziona la pipeline di input: 'raw' (feed telecamera grezzo) oppure 'enhanced' (richiede che il nodo di enhancement sia attivo)
     input_type: 'raw'
-    
-    # attiva l'interfaccia grafica OpenCV per vedere bounding box e distanze
     enable_debug: False
-    
-    # dimezza la risoluzione passata al modello (velocizza l'inferenza CPU)
-    # obbligatorio a False per OpenVINO
-    # consigliato a True solo per modelli PyTorch (.pt)
     half_res: True
-    
-    # numero di thread per OpenVINO/CPU inferenza
+    imgsz: 640
     num_threads: 2
-
-    # tolleranza temporale (secondi) per la sincronizzazione stereo a 5 FPS (default 0.05 s)
     sync_slop_sec: 0.05

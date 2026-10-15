@@ -27,6 +27,7 @@ class DetectionNode(Node):
         self.declare_parameter('input_type', descriptor=dyn_desc)
         self.declare_parameter('enable_debug', descriptor=dyn_desc)
         self.declare_parameter('half_res', descriptor=dyn_desc)
+        self.declare_parameter('imgsz', 640)
         self.declare_parameter('num_threads', 2)
         self.declare_parameter('sync_slop_sec', 0.05)
         
@@ -48,6 +49,7 @@ class DetectionNode(Node):
         else:
             self.enable_debug = bool(enable_debug_val)
         half_res = get_param_strict('half_res')
+        imgsz = int(self.get_parameter('imgsz').value)
         num_threads = self.get_parameter('num_threads').value
 
         # imposta le variabili d'ambiente prima di importare il detector
@@ -67,7 +69,7 @@ class DetectionNode(Node):
         self.get_logger().info(f"Half resolution inference: {'ENABLED' if half_res else 'DISABLED'}")
 
         # inizializzazione del detector passando il percorso assoluto calcolato
-        self.detector = YoloDetector(model_path=model_path, conf=conf, half_res=half_res)
+        self.detector = YoloDetector(model_path=model_path, conf=conf, half_res=half_res, imgsz=imgsz)
 
         # inizializzazione matcher stereo
         self.stereo_config = StereoConfig()
