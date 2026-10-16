@@ -44,7 +44,6 @@ if (( $(echo "$TEMP > 55" | bc -l) )); then
 fi
 echo "== ${CONFIG} run ${RUN_N} =="
 echo "Temperatura SoC iniziale: ${TEMP}°C"
-echo "Params file: ${PARAMS}"
 
 # ambiente
 source /opt/ros/jazzy/setup.bash
@@ -66,7 +65,11 @@ LAUNCH_LOG="$CSV_DIR/${DATE}_${CONFIG}_run${RUN_N}_launch.log"
 META="$CSV_DIR/${DATE}_${CONFIG}_run${RUN_N}_metadata.csv"
 
 # lancio pipeline in background
+# include_stereo_camera:=true è obbligatorio perché il wrapper ha appena
+# fermato i servizi: le camere non sono attive e pipeline.launch.py di
+# default non le avvia (assume che siano già su).
 ros2 launch nautilus_perception pipeline.launch.py \
+    include_stereo_camera:=true \
     enable_enhancement:=$ENH \
     enable_detection:=$DET \
     enable_saving:=false \

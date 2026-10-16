@@ -17,10 +17,7 @@ benchmarks/
 │   ├── plot_results.py          # Grafici comparativi a partire dai CSV
 │   ├── model_benchmark.py       # Confronto .pt vs OpenVINO standalone (no ROS)
 │   ├── check_imgsz.py           # Ispeziona shape input di .pt e .ov
-│   ├── run_benchmark.sh         # Wrapper: lancia un run completo di una config
-│   ├── yolo_inference.py        # Wrapper inferenza YOLOv8 (demo standalone)
-│   ├── ov_inference.py          # Wrapper inferenza OpenVINO (demo standalone)
-│   └── infer_best_openvino.py   # Demo inferenza best_openvino_model (marine debris)
+│   └── run_benchmark.sh         # Wrapper: lancia un run completo di una config
 ├── datasets/
 │   ├── coco128/                 # 128 immagini COCO + labels (scaricate)
 │   ├── coco128.yaml             # config Ultralytics con path assoluto
@@ -41,36 +38,36 @@ benchmarks/
 
 ## Configurazioni di test (Fase 6)
 
-Cinque configurazioni di pipeline, da eseguire **3 volte ciascuna** sullo
+Cinque configurazioni principali, da eseguire **3 volte ciascuna** sullo
 stesso hardware, con la stessa scena e la stessa illuminazione:
 
-| # | ID | Config | Modello | half_res | Params file |
+| # | ID | Config | Modello | half_res | imgsz |
 | --- | --- | --- | --- | --- | --- |
-| 1 | `A_baseline` | solo camera | — | — | n/a |
-| 2 | `B_pt` | camera + detection | `yolov8n.pt` | True | `detection_params_pt.yaml` |
-| 3 | `B_ov` | camera + detection | `yolov8n_openvino_model` | False | `detection_params_ov.yaml` |
-| 4 | `C_pt` | camera + enh + detection | `yolov8n.pt` | True | `detection_params_pt.yaml` |
-| 5 | `C_ov` | camera + enh + detection | `yolov8n_openvino_model` | False | `detection_params_ov.yaml` |
+| 1 | `A_baseline` | solo camera | — | — | — |
+| 2 | `B_pt` | camera + detection | `yolov8n.pt` | True | 640 |
+| 3 | `B_ov_fp32` | camera + detection | `yolov8n_openvino_640_fp32` | False | 640 |
+| 4 | `C_pt` | camera + enh + detection | `yolov8n.pt` | True | 640 |
+| 5 | `C_ov_int8_640` | camera + enh + detection | `yolov8n_openvino_640_int8` | False | 640 |
 
-Il confronto `.pt` vs OpenVINO è l'unica variabile tra B_pt/B_ov e C_pt/C_ov.
-Dettaglio completo in [`CONFIGS.md`](CONFIGS.md).
+Il confronto `.pt` vs OpenVINO FP32 è l'unica variabile tra B_pt/B_ov_fp32
+e C_pt/C_ov_int8_640. Dettaglio completo in [`CONFIGS.md`](CONFIGS.md).
 
 ### Uso rapido del wrapper
 
 ```bash
 cd ~/nautilus-vision-pipeline
 ./benchmarks/scripts/run_benchmark.sh <config> <run_n>
-# es: ./benchmarks/scripts/run_benchmark.sh B_ov 1
+# es: ./benchmarks/scripts/run_benchmark.sh B_ov_fp32 1
 ```
 
-Il wrapper gestisce: stop servizi, check temperatura, lancio pipeline, lock
-fotometrico, warmup 30s, monitor sistema 300s, benchmark latenze 120s,
-scrittura metadata, cooldown 30s.
+Il wrapper gestisce: stop servizi, check temperatura, lancio pipeline con
+`include_stereo_camera:=true`, lock fotometrico, warmup 30s, monitor
+sistema 300s, benchmark latenze 120s, scrittura metadata, cooldown 30s.
 
-### Batch completo (15 run, ~3 h)
+### Batch completo (15 run, ~1 h)
 
 ```bash
-for cfg in A_baseline B_pt B_ov C_pt C_ov; do
+for cfg in A_baseline B_pt B_ov_fp32 C_pt C_ov_int8_640; do
     for n in 1 2 3; do
         ./benchmarks/scripts/run_benchmark.sh "$cfg" "$n"
     done

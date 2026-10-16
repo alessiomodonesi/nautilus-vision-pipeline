@@ -99,7 +99,11 @@ ros2 launch nautilus_camera stereo_camera.launch.py \\
 
 ```bash
 # B_pt
+# include_stereo_camera:=true è necessario perché i servizi sono stati
+# fermati: le camere non sono attive e pipeline.launch.py di default
+# assume che lo siano già.
 ros2 launch nautilus_perception pipeline.launch.py \
+  include_stereo_camera:=true \
   enable_enhancement:=false enable_detection:=true \
   enable_saving:=false enable_metrics:=true enable_debug:=false \
   model_filename_override:=yolov8n.pt \
@@ -107,6 +111,7 @@ ros2 launch nautilus_perception pipeline.launch.py \
 
 # C_pt
 ros2 launch nautilus_perception pipeline.launch.py \
+  include_stereo_camera:=true \
   enable_enhancement:=true enable_detection:=true \
   enable_saving:=false enable_metrics:=true enable_debug:=false \
   model_filename_override:=yolov8n.pt \
@@ -118,6 +123,7 @@ ros2 launch nautilus_perception pipeline.launch.py \
 ```bash
 # B_ov_int8_416
 ros2 launch nautilus_perception pipeline.launch.py \
+  include_stereo_camera:=true \
   enable_enhancement:=false enable_detection:=true \
   enable_saving:=false enable_metrics:=true enable_debug:=false \
   model_filename_override:=yolov8n_openvino_416_int8 \

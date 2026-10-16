@@ -12,20 +12,41 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-CONFIG_ORDER = ["A_baseline", "B_pt", "B_ov", "C_pt", "C_ov"]
+# devono combaciare con i config ID di run_benchmark.sh
+CONFIG_ORDER = [
+    "A_baseline",
+    "B_pt",
+    "B_ov_fp32",
+    "B_ov_int8_640",
+    "B_ov_int8_416",
+    "B_best_fp32",
+    "C_pt",
+    "C_ov_int8_640",
+    "C_ov_int8_416",
+]
+
 CONFIG_LABEL = {
-    "A_baseline": "A — solo camera",
-    "B_pt": "B — detection (.pt)",
-    "B_ov": "B — detection (OpenVINO)",
-    "C_pt": "C — full (.pt)",
-    "C_ov": "C — full (OpenVINO)",
+    "A_baseline":    "A — solo camera",
+    "B_pt":          "B — detection (.pt)",
+    "B_ov_fp32":     "B — detection (OV FP32 640)",
+    "B_ov_int8_640": "B — detection (OV INT8 640)",
+    "B_ov_int8_416": "B — detection (OV INT8 416)",
+    "B_best_fp32":   "B — best FP32 416",
+    "C_pt":          "C — full (.pt)",
+    "C_ov_int8_640": "C — full (OV INT8 640)",
+    "C_ov_int8_416": "C — full (OV INT8 416)",
 }
+
 CONFIG_COLOR = {
-    "A_baseline": "#4C72B0",
-    "B_pt":       "#DD8452",
-    "B_ov":       "#F5B041",
-    "C_pt":       "#55A868",
-    "C_ov":       "#82C99A",
+    "A_baseline":    "#4C72B0",
+    "B_pt":          "#DD8452",
+    "B_ov_fp32":     "#F5B041",
+    "B_ov_int8_640": "#E67E22",
+    "B_ov_int8_416": "#D35400",
+    "B_best_fp32":   "#8E44AD",
+    "C_pt":          "#55A868",
+    "C_ov_int8_640": "#82C99A",
+    "C_ov_int8_416": "#A9DFBF",
 }
 
 CONFIG_RE = "|".join(CONFIG_ORDER)

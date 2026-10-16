@@ -205,13 +205,12 @@ Per i test prestazionali e termici della **Fase 5**, è consigliato organizzare 
 benchmarks/
 ├── scripts/
 │   ├── benchmark_pipeline.py    # Profilazione latenze p50/p95 e delay inter-nodo
-│   ├── system_monitor.py        # Logging CPU%, RAM, temp, vcgencmd throttled
-│   ├── evaluate_map.py          # Calcolo mAP sul validation set
-│   ├── plot_results.py          # Generazione grafici e comparazioni
-│   ├── model_benchmark.py       # Confronto YOLO vs OpenVINO su frame dummy
-│   ├── yolo_inference.py        # Wrapper inferenza YOLOv8 nativa
-│   ├── ov_inference.py          # Wrapper inferenza OpenVINO
-│   └── infer_best_openvino.py   # Demo inferenza best_openvino_model (marine debris)
+│   ├── system_monitor.py        # Logging CPU%, RAM, temperatura, vcgencmd throttled
+│   ├── evaluate_map.py          # Calcolo mAP sul validation set per ogni variante
+│   ├── plot_results.py          # Grafici comparativi a partire dai CSV
+│   ├── model_benchmark.py       # Confronto .pt vs OpenVINO standalone (no ROS)
+│   ├── check_imgsz.py           # Ispeziona shape input di .pt e .ov
+│   └── run_benchmark.sh         # Wrapper: lancia un run completo di una config
 ├── datasets/
 │   ├── images/                  # Immagini di test (enhancement, waternet)
 │   ├── videos/                  # Video stereo di test
