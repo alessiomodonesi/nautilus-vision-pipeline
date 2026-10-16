@@ -8,21 +8,24 @@ Il progetto è dedicato all'esplorazione autonoma, al monitoraggio dell'ambiente
 
 ## 🧭 Indice della Documentazione e Mappa della Repository
 
-Indice unificato per navigare direttamente in tutta la documentazione, i pacchetti ROS 2 e i moduli presenti nel repository:
+Indice unificato per navigare direttamente in tutta la documentazione, i pacchetti ROS 2 e i moduli presenti nel repository.
 
 ### 📄 Documentazione Generale (`docs/`)
 
-* **[Guida al Lancio Globale](docs/global_launch.md)** — Architettura del sistema di lancio dinamico, routing automatico dei topic, gestione delle variabili d'ambiente e comandi di test.
-* **[Roadmap Operativa](docs/TODO.md)** — Tabella di marcia suddivisa in 8 fasi (Acquisizione, Enhancement, Salvataggio, Detection, Benchmark, Stress test, Integrazione, Documentazione).
-* **[Setup Hardware Pi Camera v3](docs/setup-picam3.md)** — Configurazione del Raspberry Pi 5, overlay CSI nel `config.txt`, comandi `rpicam-hello` e tuning hardware.
+* **[Guida al Lancio Globale](docs/global_launch.md)** — Architettura del sistema di lancio, routing automatico dei topic, gestione delle variabili d'ambiente, service systemd (`nautilus-vision.service`, `lock-cameras.service`) e comandi di test.
+* **[Roadmap Operativa](docs/TODO.md)** — Tabella di marcia suddivisa in 9 fasi (Acquisizione, Enhancement, Salvataggio, Detection, Calibrazione 720p, Benchmark, Stress test termico, Integrazione, Documentazione).
+* **[Setup Hardware Pi Camera v3](docs/setup-picam3.md)** — Configurazione del Raspberry Pi 5 con Ubuntu Server 24.04, build di `libcamera` da sorgente per il pipeline handler `pisp`, installazione di `rpicam-apps` e `picamera2`, fix noti (`libcap-dev`, `pykms`, symlink `site-packages`).
+* **[Export OpenVINO](docs/ov_export.md)** — Procedura di export YOLOv8n e `best.pt` in FP32/INT8, gestione dataset di calibrazione, verifica shape e test `imgsz`.
 * **[Cheat-Sheet Comandi ROS 2](docs/ros2-cmds.md)** — Raccolta di comandi essenziali per build (`colcon`), launch, ispezione nodi/topic e registrazione bag.
 * **[Dipendenze Raspberry Pi](docs/requirements_pi.txt)** — Elenco dei pacchetti Python e di sistema per l'ambiente Pi.
+* **[Dipendenze Virtual Environment](docs/requirements_venv.txt)** — Pacchetti Python per il venv di sviluppo (export OpenVINO, calibrazione, benchmark).
+* **[Accesso al Pi](docs/pi_access.txt)** — Credenziali, IP statici e note di accesso SSH.
 
 ### 📦 Workspace e Pacchetti ROS 2 (`ros2_ws/`)
 
 * **[Workspace Overview](ros2_ws/README.md)** — Struttura generale del workspace, istruzioni di build e configurazione CycloneDDS.
-* **[Package `nautilus_camera`](ros2_ws/src/nautilus_camera/README.md)** — Acquisizione hardware 720p @ 5 FPS, nodo di benchmark (`metrics_node`), nodo di salvataggio immagini su MicroSD (`saving_node`) con gestione crash e assenza RTC.
-* **[Package `nautilus_perception`](ros2_ws/src/nautilus_perception/README.md)** — Modulo core di elaborazione visiva: nodo di enhancement (WaterNet/CLAHE) e nodo di detection IA + stereovisione.
+* **[Package `nautilus_camera`](ros2_ws/src/nautilus_camera/README.md)** — Acquisizione hardware 720p @ 5 FPS, nodo di benchmark (`metrics_node`), nodo di salvataggio immagini su MicroSD (`saving_node`) con gestione crash e assenza RTC. Configurazione centralizzata in `nautilus_camera.yaml`.
+* **[Package `nautilus_perception`](ros2_ws/src/nautilus_perception/README.md)** — Modulo core di elaborazione visiva: nodo di enhancement (WaterNet/CLAHE, default `force_off`) e nodo di detection IA + stereovisione.
   * **[Sottomodulo Detection](ros2_ws/src/nautilus_perception/nautilus_perception/detection/README.md)** — Dettagli su architettura *Detect-Then-Range*, calibrazione stereo ChArUco e matching epipolare.
   * **[Debug & Status](ros2_ws/src/nautilus_perception/nautilus_perception/detection/DEBUG.md)** — Problemi noti/risolti, lock fotometrico (`lock_cameras.py`), workflow operativo e checklist di stato del modulo.
 * **[Package `nautilus_msgs`](ros2_ws/src/nautilus_msgs/README.md)** — Definizioni delle interfacce e dei messaggi custom della suite Nautilus.
@@ -30,16 +33,26 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 
 ### ⚙️ Script di Gestione e Deployment (`deploy/`) & Configurazione
 
-* **[Script Avvio Pipeline](deploy/start_pipeline.sh)** — Entry point di boot invocato da systemd per avviare i nodi in base al file `.env`.
-* **[Servizio Systemd](deploy/nautilus-vision.service)** — Unit file per l'avvio automatico su Pi al boot (trigger reed switch).
-* **[Configurazione Ambiente](pipeline_config.env)** — Switch booleani per abilitare/disabilitare enhancement, detection e salvataggio senza ricompilare.
+* **[Script Avvio Pipeline](deploy/start_pipeline.sh)** — Entry point di boot invocato da systemd: avvia **solo** acquisizione + salvataggio opzionale. Enhancement, detection e metriche non partono mai automaticamente.
+* **[Servizio Systemd Pipeline](deploy/nautilus-vision.service)** — Unit file per l'avvio automatico al boot (trigger reed switch).
+* **[Servizio Systemd Lock Cameras](deploy/lock-cameras.service)** — Unit file che lancia `lock_cameras.py` subito dopo l'avvio delle camere per riapplicare i parametri fotometrici.
+* **[Script Lock Fotometrico](deploy/lock_cameras.py)** — Rilegge `nautilus_camera.yaml` e riapplica lens position, autofocus, exposure e colour gains via `set_parameters`. Necessario perché `camera_ros` rifiuta `AfMode`/`LensPosition` su IMX708 al boot.
+* **[Configurazione Ambiente](pipeline_config.env)** — Unico flag: `ENABLE_SAVING` (true/false). Enhancement, detection e metriche si lanciano sempre a mano.
+* **[Configurazione CycloneDDS](deploy/cyclonedds.xml)** — Profilo DDS usato da tutti i nodi per la comunicazione su rete.
+* **[Disabilitazione WiFi Power Save](deploy/wifi-powersave-off.service)** — Unit systemd opzionale per ridurre jitter di rete.
 
 ### 📊 Benchmark & Validation (`benchmarks/`)
 
-* **[Benchmark Overview](benchmarks/README.md)** — Metodologia dei test prestazionali e termici (Fase 5 e 6), configurazioni di pipeline, metriche raccolte (latenza p50/p95, CPU, RAM, temperatura, mAP) e linee guida di riproducibilità.
-* **[Script di Benchmark](benchmarks/scripts/)** — `benchmark_pipeline.py`, `system_monitor.py`, `evaluate_map.py`, `plot_results.py`, `model_benchmark.py`.
-* **[Dataset di Test](benchmarks/datasets/)** — Immagini e video stereo di test, dataset grezzi annotati e tool di pulizia (`clean_dataset.py`).
-* **[Risultati](benchmarks/results/)** — CSV temporizzati e grafici PNG prodotti durante le sessioni.
+* **[Benchmark Overview](benchmarks/README.md)** — Metodologia dei test prestazionali e termici (Fase 6 e 7), configurazioni di pipeline, metriche raccolte (latenza p50/p95, CPU, RAM, temperatura, mAP) e linee guida di riproducibilità.
+* **[Configurazioni di Test](benchmarks/CONFIGS.md)** — Le 5 config ufficiali (`A_baseline`, `B_pt`, `B_ov_fp32`, `C_pt`, `C_ov_int8_640`) + 4 di ottimizzazione, prerequisiti, valori attesi e batch di run.
+* **[Script di Benchmark](benchmarks/scripts/)** — `benchmark_pipeline.py`, `system_monitor.py`, `evaluate_map.py`, `plot_results.py`, `model_benchmark.py`, `check_imgsz.py`, `run_benchmark.sh`.
+* **[Dataset di Test](benchmarks/datasets/)** — Immagini e video stereo di test, dataset grezzi annotati, dataset COCO128 per mAP e tool di pulizia (`clean_dataset.py`).
+* **[Risultati](benchmarks/results/)** — CSV temporizzati (`csv/`) e grafici PNG (`plots/`) prodotti durante le sessioni.
+
+### 🐳 Containerizzazione (`docker/`)
+
+* **[Dockerfile](docker/Dockerfile)** — Immagine Docker per il deploy riproducibile della pipeline.
+* **[Docker Compose](docker/docker-compose.yaml)** — Orchestrazione del container con volumi e rete.
 
 ### 🏛️ Archivio Storico e Componenti Legacy
 
@@ -50,9 +63,9 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 
 ---
 
-## 🏗️ Architettura dei 4 Nodi della Pipeline
+## 🏗️ Architettura dei Nodi della Pipeline
 
-L'architettura della visione stereoscopica è organizzata in 4 nodi distribuiti su 2 pacchetti principali:
+L'architettura della visione stereoscopica è organizzata in 4 nodi distribuiti su 2 pacchetti principali.
 
 ```mermaid
 flowchart TD
@@ -64,8 +77,8 @@ flowchart TD
     end
 
     subgraph PkgPerc ["nautilus_perception"]
-        EnhLX["enhancement_node (lx)\n(WaterNet / CLAHE)"]
-        EnhRX["enhancement_node (rx)\n(WaterNet / CLAHE)"]
+        EnhLX["enhancement_node (lx)\n(force_off: CLAHE + sharpen)"]
+        EnhRX["enhancement_node (rx)\n(force_off: CLAHE + sharpen)"]
         Detect["detection_node\n(YOLOv8 Nano / OpenVINO + 3D Range)"]
     end
 
@@ -90,55 +103,79 @@ flowchart TD
 1. **Nodo 1 — Acquisizione (`camera_ros`, package `nautilus_camera`):**
    * Gestisce in contemporanea le due telecamere Pi Camera v3 su bus CSI.
    * Risoluzione forzata a **720p (1280×720)** e framerate calibrato a **5 FPS** (`FrameDurationLimits: [200000, 200000]`).
-   * Include il nodo diagnostico [`metrics_node`](ros2_ws/src/nautilus_camera/nautilus_camera/metrics_node.py) per monitorare FPS effettivi, jitter e skew stereo (~1.5 ms).
+   * **È l'unico nodo che parte automaticamente al boot**, tramite `nautilus-vision.service`.
+   * Include il nodo diagnostico [`metrics_node`](ros2_ws/src/nautilus_camera/nautilus_camera/metrics_node.py) per monitorare FPS effettivi, jitter e skew stereo (~1.5 ms). **Non parte mai automaticamente**: si lancia a mano durante i test.
+
 2. **Nodo 2 — Salvataggio (`saving_node`, package `nautilus_camera`):**
    * Salva le coppie di frame stereo su MicroSD con naming incrementale ordinabile (`nautilus_lx_00000001.jpg`).
    * Supporta isolamento delle sessioni con protezione automatica da sovrascrittura in caso di orologio di sistema non sincronizzato (assenza RTC).
    * Esegue `os.sync()` regolabile tramite parametro `flush_every_n` per evitare la perdita di file in caso di spegnimento immediato da reed switch.
    * Controllabile dinamicamente a runtime tramite servizio ROS 2 `~/set_saving` (`std_srvs/srv/SetBool`).
+   * **Parte al boot solo se `ENABLE_SAVING=true`** in `pipeline_config.env`.
+
 3. **Nodo 3 — Enhancement (`enhancement_node`, package `nautilus_perception`):**
    * Applica algoritmi di miglioramento del contrasto e bilanciamento cromatico subacqueo su entrambi i flussi stereo.
-   * Modalità configurabile: `auto` (rilevamento hardware), `force_off` (Sharpening + CLAHE leggero, ideale per Pi 5), `force_on` (WaterNet completo basato su PyTorch).
+   * Modalità configurabile tramite parametro `waternet_mode`:
+     * **`force_off` (default)**: disabilita WaterNet, esegue solo CLAHE + sharpening. È il default perché WaterNet è una rete neurale pensata per la post-produzione delle immagini destinate ai biologi, **non per la navigazione né la detection**. Su Raspberry Pi la latenza misurata è di ~70 s per frame, incompatibile con l'uso operativo.
+     * **`auto`**: rileva l'hardware e attiva WaterNet solo se trova CUDA/MPS. Utile solo su workstation di sviluppo.
+     * **`force_on`**: forza WaterNet anche su CPU. Solo per rigenerare immagini a posteriori.
    * Mantiene invariati i timestamp originali dell'header per non degradare la sincronizzazione stereo a valle.
+   * **Non parte mai automaticamente**: si lancia a mano quando serve.
+
 4. **Nodo 4 — Detection & Stereovisione (`detection_node`, package `nautilus_perception`):**
    * Architettura **Detect-Then-Range**: esegue l'inferenza IA (YOLOv8n / OpenVINO) sul frame sinistro rettificato e campiona la disparità stereo epipolare per calcolare la distanza tridimensionale $Z$.
-   * Supporta input commutabile sia da immagini grezze (`/stereo/{lx,rx}/camera/image_raw`) sia migliorate (`/stereo/{lx,rx}/image_enhanced`).
+   * Supporta input commutabile sia da immagini grezze (`/stereo/{lx,rx}/camera/image_raw`) sia migliorate (`/stereo/{lx,rx}/image_enhanced`). Il routing è automatico in `pipeline.launch.py` in base a `enable_enhancement`.
    * Pubblica i target su `/stereo_down/targets` con coordinate 2D/3D in formato `vision_msgs/Detection2DArray`.
+   * **Non parte mai automaticamente**: si lancia a mano quando serve.
 
 ---
 
 ## 🚀 Logica di Esecuzione e Lancio
 
-La pipeline adotta una duplice modalità di esecuzione per rispondere a due esigenze operative distinte:
+La pipeline adotta una distinzione netta tra **cosa parte al boot** e **cosa si lancia a mano**.
 
-### 1. Avvio Automatico di Produzione (All'accensione del Pi)
+### 1. Avvio automatico al boot (produzione)
 
-* **Trigger Hardware:** Quando il robot viene acceso tramite magnete (interruttore reed switch), il sistema operativo avvia il servizio systemd [`nautilus-vision.service`](deploy/nautilus-vision.service).
-* **Comportamento:** Il servizio invoca [`start_pipeline.sh`](deploy/start_pipeline.sh), il quale legge le variabili d'ambiente in [`pipeline_config.env`](pipeline_config.env).
-* **Nodi avviati:** Viene lanciato [`stereo_camera.launch.py`](ros2_ws/src/nautilus_camera/launch/stereo_camera.launch.py):
-  * **Acquisizione:** Obbligatoria (driver `camera_ros` sempre attivi).
-  * **Salvataggio:** Opzionale (governato da `ENABLE_SAVING=true/false`).
-  * **Metriche:** Attivabili via `ENABLE_METRICS`.
-* **Obiettivo:** Evitare l'esecuzione inutile di modelli di deep learning pesanti all'avvio, preservando batteria, RAM e termica per le missioni di acquisizione scientifica.
+* **Trigger hardware:** quando il robot viene acceso tramite magnete (interruttore reed switch), il sistema operativo avvia il servizio systemd [`nautilus-vision.service`](deploy/nautilus-vision.service).
+* **Comportamento:** il servizio invoca [`start_pipeline.sh`](deploy/start_pipeline.sh), il quale legge `ENABLE_SAVING` da [`pipeline_config.env`](pipeline_config.env) e lancia [`stereo_camera.launch.py`](ros2_ws/src/nautilus_camera/launch/stereo_camera.launch.py):
+  * **Acquisizione:** obbligatoria (`camera_ros` sempre attivi).
+  * **Salvataggio:** opzionale, governato da `ENABLE_SAVING=true/false`.
+  * **Metriche:** **mai** (forzato `enable_metrics:=false`).
+* **Post-avvio:** [`lock-cameras.service`](deploy/lock-cameras.service) parte dopo `nautilus-vision.service` e invoca [`lock_cameras.py`](deploy/lock_cameras.py), che rilegge `nautilus_camera.yaml` e riapplica i parametri fotometrici via `set_parameters`.
+* **Obiettivo:** zero consumo di risorse per modelli di deep learning pesanti all'avvio; batteria, RAM e termica sono riservate all'acquisizione scientifica.
 
-### 2. Avvio Completo / Benchmark (Fase 5)
+### 2. Avvio manuale di enhancement e detection
 
-* **Launch file globale:** [`pipeline.launch.py`](ros2_ws/src/nautilus_perception/launch/pipeline.launch.py).
-* **Comportamento:** Avvia la catena completa o parziale accettando argomenti condizionali con routing automatico dei topic:
+Enhancement, detection e metriche si lanciano a mano, **sopra le camere già attive**. Il launch file [`pipeline.launch.py`](ros2_ws/src/nautilus_perception/launch/pipeline.launch.py) ha `include_stereo_camera:=false` di default: assume che le camere siano già su e non tenta di riavviarle.
 
-  ```bash
-  # 1. Configurazione: Solo acquisizione (baseline hardware)
-  ros2 launch nautilus_perception pipeline.launch.py \
-      enable_enhancement:=false enable_detection:=false enable_saving:=false enable_metrics:=true
+```bash
+# 1. Solo detection, input raw (nessun pre-processing)
+ros2 launch nautilus_perception pipeline.launch.py \
+    enable_detection:=true \
+    enable_enhancement:=false
 
-  # 2. Configurazione: Acquisizione + Detection (senza pre-processing)
-  ros2 launch nautilus_perception pipeline.launch.py \
-      enable_enhancement:=false enable_detection:=true enable_saving:=false enable_metrics:=true
+# 2. Enhancement (force_off) + detection
+ros2 launch nautilus_perception pipeline.launch.py \
+    enable_detection:=true \
+    enable_enhancement:=true \
+    waternet_mode:=force_off
 
-  # 3. Configurazione: Pipeline completa (Acquisizione + Enhancement + Detection)
-  ros2 launch nautilus_perception pipeline.launch.py \
-      enable_enhancement:=true enable_detection:=true enable_saving:=true enable_metrics:=true
-  ```
+# 3. Solo enhancement (raro, per debug visivo)
+ros2 launch nautilus_perception pipeline.launch.py \
+    enable_detection:=false \
+    enable_enhancement:=true
+```
+
+Se invece vuoi partire da zero (es. su workstation con i service systemd fermi), passa `include_stereo_camera:=true` per far avviare anche le camere:
+
+```bash
+ros2 launch nautilus_perception pipeline.launch.py \
+    include_stereo_camera:=true \
+    enable_detection:=true \
+    enable_enhancement:=false
+```
+
+**Attenzione:** se le camere sono già attive dal boot e lanci `stereo_camera.launch.py` di nuovo, ROS 2 va in errore per nodo duplicato. Questo è il motivo per cui `pipeline.launch.py` di default non le riavvia.
 
 ---
 
@@ -152,6 +189,7 @@ La pipeline adotta una duplice modalità di esecuzione per rispondere a due esig
 | `/stereo/rx/image_enhanced` | `sensor_msgs/Image` | `enhancement_node (rx)` | `detection_node` (se enhanced) | Immagine migliorata (CLAHE/WaterNet) dx |
 | `/stereo_down/targets` | `vision_msgs/Detection2DArray` | `detection_node` | Stack di controllo veicolo / Jetson | Bounding box 2D + stima distanza metrica Z |
 | `/saving_node/set_saving` | `std_srvs/SetBool` *(Service)* | `saving_node` | Client esterno / operatore | Abilita/disabilita salvataggio a runtime |
+| `/stereo/{lx,rx}/camera/set_parameters` | `rcl_interfaces/SetParameters` *(Service)* | `camera_ros` | `lock_cameras.py` | Riapplica parametri fotometrici via `lock_cameras.py` |
 
 ---
 
@@ -162,8 +200,11 @@ La pipeline adotta una duplice modalità di esecuzione per rispondere a due esig
 * **Librerie Vision & AI:**
   * OpenCV 4.x (con binding Python e `cv_bridge`).
   * Intel OpenVINO 2024.x per inferenza accelerata su CPU ARM.
-  * Ultralytics YOLOv8 (PyTorch).
-  * `libcamera` e `camera_ros`.
+  * Ultralytics YOLOv8 (PyTorch, solo su workstation/export).
+  * `libcamera` (fork Raspberry Pi) e `camera_ros`.
+* **Python:** PyYAML (per `lock_cameras.py`).
+
+Per il setup completo dell'ambiente Pi Camera su Ubuntu Server vedi [`docs/setup-picam3.md`](docs/setup-picam3.md).
 
 ---
 
@@ -180,9 +221,11 @@ colcon build --symlink-install
 source install/setup.bash
 ```
 
+Per i comandi più usati durante lo sviluppo vedi [`docs/ros2-cmds.md`](docs/ros2-cmds.md).
+
 ---
 
-## 📈 Roadmap di Sviluppo (Allineamento con `TODO.md`)
+## 📈 Roadmap di Sviluppo (Allineamento con `docs/TODO.md`)
 
 | Fase | Descrizione | Stato | Componenti Coinvolti |
 | --- | --- | --- | --- |
@@ -190,16 +233,17 @@ source install/setup.bash
 | **Fase 2** | Nodo di Enhancement (WaterNet / CLAHE) | ✅ Completata | `nautilus_perception/enhancement_node` |
 | **Fase 3** | Nodo di Salvataggio su MicroSD (Anti-RTC, Service) | ✅ Completata | `nautilus_camera/saving_node` |
 | **Fase 4** | Nodo di Detection (YOLO/OpenVINO + Stereovisione) | ✅ Completata | `nautilus_perception/detection_node`, `detection_params.yaml` |
-| **Fase 5** | Benchmarking Comparativo (Latenza p50/p95, CPU, FPS) | 🔄 Prossima | Cartella `benchmarks/`, `pipeline.launch.py` |
-| **Fase 6** | Stress Test Termico (1h a box chiusa, thermal throttling) | ⏳ Pianificata | Script di monitoraggio `vcgencmd`, box stagna |
-| **Fase 7** | Integrazione con Stack Nautilus & Jetson (Chrony) | ⏳ Pianificata | CycloneDDS, sincronizzazione `chrony` |
-| **Fase 8** | Tesi, Slide e Documentazione Finale | 🔄 In corso | Cartella `docs/`, report e grafici |
+| **Fase 5** | Calibrazione stereo 720p (RMS 0.125 px, Z validata) | ✅ Completata | `nautilus_perception/detection/calibration/`, `stereo_calib_720p.npz`, `config.py` |
+| **Fase 6** | Benchmark comparativo (latenza p50/p95, CPU, FPS, mAP) | 🔄 Prossima | `benchmarks/`, `pipeline.launch.py`, `run_benchmark.sh` |
+| **Fase 7** | Stress test termico (1 h a box chiusa, throttling) | ⏳ Pianificata | `benchmarks/scripts/system_monitor.py`, `vcgencmd` |
+| **Fase 8** | Integrazione con Stack Nautilus & Jetson (Chrony) | ⏳ Pianificata | CycloneDDS, sincronizzazione `chrony` |
+| **Fase 9** | Tesi, Slide e Documentazione Finale | 🔄 In corso | Cartella `docs/`, report e grafici |
 
 ---
 
-## 📁 Struttura della Cartella `benchmarks/` per la Fase 5
+## 📁 Struttura della Cartella `benchmarks/` per la Fase 6
 
-Per i test prestazionali e termici della **Fase 5**, è consigliato organizzare i file all'interno della cartella dedicata `benchmarks/` nella radice del progetto:
+Per i test prestazionali e termici della **Fase 6**, i file sono organizzati all'interno della cartella `benchmarks/` nella radice del progetto:
 
 ```text
 benchmarks/
@@ -212,6 +256,8 @@ benchmarks/
 │   ├── check_imgsz.py           # Ispeziona shape input di .pt e .ov
 │   └── run_benchmark.sh         # Wrapper: lancia un run completo di una config
 ├── datasets/
+│   ├── coco128/                 # 128 immagini COCO + labels (per mAP)
+│   ├── coco128.yaml             # config Ultralytics con path assoluto
 │   ├── images/                  # Immagini di test (enhancement, waternet)
 │   ├── videos/                  # Video stereo di test
 │   ├── raw/                     # Dataset grezzi annotati
@@ -219,16 +265,19 @@ benchmarks/
 │   └── tools/
 │       └── clean_dataset.py     # Filtro varianza Laplaciano per selezione frame
 ├── results/
-│   ├── csv/                     # Dati grezzi temporizzati
-│   └── plots/                   # Immagini PNG dei grafici
+│   ├── csv/                     # Dati grezzi temporizzati + metadata
+│   └── plots/                   # PNG dei grafici generati
+├── CONFIGS.md                   # Dettaglio delle 9 configurazioni di test
 └── README.md                    # Metodologia di test e riproducibilità
 ```
+
+Per il dettaglio delle configurazioni vedi [`benchmarks/CONFIGS.md`](benchmarks/CONFIGS.md).
 
 ---
 
 ## 🤝 Riconoscimenti e Codice di Terze Parti
 
-* **Sensing Rigs Daemon (`sensing-rigs-daemon/`):** Codice sviluppato per la phototrap Nautilus; rimane versionato come riferimento storico e per il confronto delle metriche di acquisizione.
-* **Algoritmo di Image Enhancement (`ros2_ws/src/nautilus_perception/nautilus_perception/enhancement/`):** Il codice sorgente core dell'algoritmo di miglioramento delle immagini deriva dal repository [underwater-image-enhancement](https://github.com/nautilus-unipd/underwater-image-enhancement) del team Nautilus ed è stato incapsulato ("wrappato") all'interno di un nodo ROS 2 compatibile con la pipeline.
-* **Marine Debris Computer Vision (`ros2_ws/src/nautilus_perception/nautilus_perception/detection/`):** I pesi e la metodologia per l'identificazione di detriti marini provengono dal lavoro svolto nel repository [marine_debris_CV](https://github.com/bazzy22/marine_debris_CV) di Manuel, adattati ed esportati in formato OpenVINO per inferenza edge su Raspberry Pi.
-* **Acquisizione Hardware (`camera_ros`):** Il driver ROS 2 per `libcamera` è basato sul progetto open source [camera_ros](https://github.com/christianrauch/camera_ros) di Christian Rauch.
+* **Sensing Rigs Daemon (`sensing-rigs-daemon/`):** codice sviluppato per la phototrap Nautilus; rimane versionato come riferimento storico e per il confronto delle metriche di acquisizione.
+* **Algoritmo di Image Enhancement (`ros2_ws/src/nautilus_perception/nautilus_perception/enhancement/`):** il codice sorgente core dell'algoritmo di miglioramento delle immagini deriva dal repository [underwater-image-enhancement](https://github.com/nautilus-unipd/underwater-image-enhancement) del team Nautilus ed è stato incapsulato ("wrappato") all'interno di un nodo ROS 2 compatibile con la pipeline.
+* **Marine Debris Computer Vision (`ros2_ws/src/nautilus_perception/nautilus_perception/detection/`):** i pesi e la metodologia per l'identificazione di detriti marini provengono dal lavoro svolto nel repository [marine_debris_CV](https://github.com/bazzy22/marine_debris_CV) di Manuel, adattati ed esportati in formato OpenVINO per inferenza edge su Raspberry Pi.
+* **Acquisizione Hardware (`camera_ros`):** il driver ROS 2 per `libcamera` è basato sul progetto open source [camera_ros](https://github.com/christianrauch/camera_ros) di Christian Rauch.
