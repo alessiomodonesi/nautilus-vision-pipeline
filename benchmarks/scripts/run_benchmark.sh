@@ -1,7 +1,8 @@
 #!/bin/bash
-# lancia un singolo run di benchmark per una config.
 # uso: ./run_benchmark.sh <config> <run_n>
-#   config: A_baseline | B_pt | B_ov | C_pt | C_ov
+#   config: A_baseline | B1_pt | B2_ov_fp32 | B3_ov_int8_640 | B4_ov_int8_416
+#         | C_full
+#         | B1_pt_oc | B2_ov_fp32_oc | B3_ov_int8_640_oc | B4_ov_int8_416_oc | C_full_oc
 #   run_n:  1 | 2 | 3
 
 set -e
@@ -11,7 +12,9 @@ RUN_N="$2"
 
 if [ -z "$CONFIG" ] || [ -z "$RUN_N" ]; then
     echo "Uso: $0 <config> <run_n>"
-    echo "  config: A_baseline | B_pt | B_ov | C_pt | C_ov"
+    echo "  config: A_baseline | B1_pt | B2_ov_fp32 | B3_ov_int8_640 | B4_ov_int8_416"
+    echo "        | C_full"
+    echo "        | B1_pt_oc | B2_ov_fp32_oc | B3_ov_int8_640_oc | B4_ov_int8_416_oc | C_full_oc"
     echo "  run_n:  1 | 2 | 3"
     exit 1
 fi
@@ -24,15 +27,19 @@ mkdir -p "$CSV_DIR"
 
 # config → (ENH, DET, MODEL, HALF_RES, IMGSZ, NOTE)
 case "$CONFIG" in
-    A_baseline)    ENH="false"; DET="false"; MODEL="";                       HALF_RES="true";  IMGSZ="640"; NOTE="baseline solo camera" ;;
-    B_pt)          ENH="false"; DET="true";  MODEL="yolov8n.pt";             HALF_RES="true";  IMGSZ="640"; NOTE="yolov8n.pt half_res=True" ;;
-    B_ov_fp32)     ENH="false"; DET="true";  MODEL="yolov8n_openvino_640_fp32"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO FP32 640" ;;
-    B_ov_int8_640) ENH="false"; DET="true";  MODEL="yolov8n_openvino_640_int8"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO INT8 640" ;;
-    B_ov_int8_416) ENH="false"; DET="true";  MODEL="yolov8n_openvino_416_int8"; HALF_RES="false"; IMGSZ="416"; NOTE="OpenVINO INT8 416" ;;
-    B_best_fp32)   ENH="false"; DET="true";  MODEL="best_openvino_416_fp32";  HALF_RES="false"; IMGSZ="416"; NOTE="best FP32 416" ;;
-    C_pt)          ENH="true";  DET="true";  MODEL="yolov8n.pt";             HALF_RES="true";  IMGSZ="640"; NOTE="full .pt" ;;
-    C_ov_int8_640) ENH="true";  DET="true";  MODEL="yolov8n_openvino_640_int8"; HALF_RES="false"; IMGSZ="640"; NOTE="full OpenVINO INT8 640" ;;
-    C_ov_int8_416) ENH="true";  DET="true";  MODEL="yolov8n_openvino_416_int8"; HALF_RES="false"; IMGSZ="416"; NOTE="full OpenVINO INT8 416" ;;
+    # ── Fase A: senza overclock ─────────────────────────────────────────
+    A_baseline)          ENH="false"; DET="false"; MODEL="";                          HALF_RES="true";  IMGSZ="640"; NOTE="baseline solo camera (no OC)" ;;
+    B1_pt)               ENH="false"; DET="true";  MODEL="yolov8n.pt";                HALF_RES="true";  IMGSZ="640"; NOTE="yolov8n.pt (no OC)" ;;
+    B2_ov_fp32)          ENH="false"; DET="true";  MODEL="yolov8n_openvino_640_fp32"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO FP32 640 (no OC)" ;;
+    B3_ov_int8_640)      ENH="false"; DET="true";  MODEL="yolov8n_openvino_640_int8"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO INT8 640 (no OC)" ;;
+    B4_ov_int8_416)      ENH="false"; DET="true";  MODEL="yolov8n_openvino_416_int8"; HALF_RES="false"; IMGSZ="416"; NOTE="OpenVINO INT8 416 (no OC)" ;;
+    C_full)              ENH="true";  DET="true";  MODEL="yolov8n_openvino_640_fp32"; HALF_RES="false"; IMGSZ="640"; NOTE="full + OV FP32 640 (no OC)" ;;
+    # ── Fase B: con overclock 2800 MHz ──────────────────────────────────
+    B1_pt_oc)            ENH="false"; DET="true";  MODEL="yolov8n.pt";                HALF_RES="true";  IMGSZ="640"; NOTE="yolov8n.pt (OC 2800)" ;;
+    B2_ov_fp32_oc)       ENH="false"; DET="true";  MODEL="yolov8n_openvino_640_fp32"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO FP32 640 (OC 2800)" ;;
+    B3_ov_int8_640_oc)   ENH="false"; DET="true";  MODEL="yolov8n_openvino_640_int8"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO INT8 640 (OC 2800)" ;;
+    B4_ov_int8_416_oc)   ENH="false"; DET="true";  MODEL="yolov8n_openvino_416_int8"; HALF_RES="false"; IMGSZ="416"; NOTE="OpenVINO INT8 416 (OC 2800)" ;;
+    C_full_oc)           ENH="true";  DET="true";  MODEL="yolov8n_openvino_640_fp32"; HALF_RES="false"; IMGSZ="640"; NOTE="full + OV FP32 640 (OC 2800)" ;;
     *) echo "Config non valida: $CONFIG"; exit 1 ;;
 esac
 

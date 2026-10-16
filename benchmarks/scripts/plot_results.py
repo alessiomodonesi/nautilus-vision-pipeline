@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Genera grafici comparativi dai CSV di benchmark Nautilus Vision (5 config)."""
+"""Genera grafici comparativi dai CSV di benchmark Nautilus Vision (11 config, 6 senza OC + 5 con OC)."""
 import argparse
 import csv
 import re
@@ -12,44 +12,52 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-# devono combaciare con i config ID di run_benchmark.sh
+# devono combaciare ESATTAMENTE con i config ID di run_benchmark.sh
 CONFIG_ORDER = [
     "A_baseline",
-    "B_pt",
-    "B_ov_fp32",
-    "B_ov_int8_640",
-    "B_ov_int8_416",
-    "B_best_fp32",
-    "C_pt",
-    "C_ov_int8_640",
-    "C_ov_int8_416",
+    "B1_pt",
+    "B2_ov_fp32",
+    "B3_ov_int8_640",
+    "B4_ov_int8_416",
+    "C_full",
+    "B1_pt_oc",
+    "B2_ov_fp32_oc",
+    "B3_ov_int8_640_oc",
+    "B4_ov_int8_416_oc",
+    "C_full_oc",
 ]
 
 CONFIG_LABEL = {
-    "A_baseline":    "A — solo camera",
-    "B_pt":          "B — detection (.pt)",
-    "B_ov_fp32":     "B — detection (OV FP32 640)",
-    "B_ov_int8_640": "B — detection (OV INT8 640)",
-    "B_ov_int8_416": "B — detection (OV INT8 416)",
-    "B_best_fp32":   "B — best FP32 416",
-    "C_pt":          "C — full (.pt)",
-    "C_ov_int8_640": "C — full (OV INT8 640)",
-    "C_ov_int8_416": "C — full (OV INT8 416)",
+    "A_baseline":        "A — solo camera",
+    "B1_pt":             "B1 — .pt (no OC)",
+    "B2_ov_fp32":        "B2 — OV FP32 640 (no OC)",
+    "B3_ov_int8_640":    "B3 — OV INT8 640 (no OC)",
+    "B4_ov_int8_416":    "B4 — OV INT8 416 (no OC)",
+    "C_full":            "C — full + OV FP32 (no OC)",
+    "B1_pt_oc":          "B1 — .pt (OC)",
+    "B2_ov_fp32_oc":     "B2 — OV FP32 640 (OC)",
+    "B3_ov_int8_640_oc": "B3 — OV INT8 640 (OC)",
+    "B4_ov_int8_416_oc": "B4 — OV INT8 416 (OC)",
+    "C_full_oc":         "C — full + OV FP32 (OC)",
 }
 
 CONFIG_COLOR = {
-    "A_baseline":    "#4C72B0",
-    "B_pt":          "#DD8452",
-    "B_ov_fp32":     "#F5B041",
-    "B_ov_int8_640": "#E67E22",
-    "B_ov_int8_416": "#D35400",
-    "B_best_fp32":   "#8E44AD",
-    "C_pt":          "#55A868",
-    "C_ov_int8_640": "#82C99A",
-    "C_ov_int8_416": "#A9DFBF",
+    "A_baseline":        "#4C72B0",
+    "B1_pt":             "#DD8452",
+    "B2_ov_fp32":        "#F5B041",
+    "B3_ov_int8_640":    "#E67E22",
+    "B4_ov_int8_416":    "#D35400",
+    "C_full":            "#55A868",
+    "B1_pt_oc":          "#A87AA8",
+    "B2_ov_fp32_oc":     "#8E44AD",
+    "B3_ov_int8_640_oc": "#6C3483",
+    "B4_ov_int8_416_oc": "#512E5F",
+    "C_full_oc":         "#1E8449",
 }
 
-CONFIG_RE = "|".join(CONFIG_ORDER)
+# ordina per lunghezza decrescente: evita che 'B1_pt' venga
+# matchato prima di 'B1_pt_oc' sullo stesso input
+CONFIG_RE = "|".join(sorted(CONFIG_ORDER, key=len, reverse=True))
 LATENCY_RE = re.compile(
     rf"^(?P<date>\d{{4}}-\d{{2}}-\d{{2}})_(?P<config>{CONFIG_RE})_run(?P<run>\d+)_latency\.csv$")
 SYSTEM_RE = re.compile(
