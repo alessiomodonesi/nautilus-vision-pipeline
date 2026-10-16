@@ -14,8 +14,10 @@ class EnhancementNode(Node):
     def __init__(self):
         super().__init__('enhancement_node')
         
-        # dichiarazione del parametro ROS modulare ('auto', 'force_on', 'force_off')
-        self.declare_parameter('waternet_mode', 'auto')
+        # dichiarazione del parametro ROS modulare ('auto', 'force_on', 'force_off').
+        # default 'force_off': WaterNet è una rete neurale utile solo in
+        # post-produzione, non per la navigazione.
+        self.declare_parameter('waternet_mode', 'force_off')
         self.declare_parameter('save_output', False)
         
         waternet_mode_param = self.get_parameter('waternet_mode').get_parameter_value().string_value

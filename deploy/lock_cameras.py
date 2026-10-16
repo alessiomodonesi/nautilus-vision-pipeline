@@ -1,33 +1,50 @@
 #!/usr/bin/env python3
 """Lock fotometrico delle Pi Camera v3 per la pipeline stereo Nautilus."""
 
+import os
 import sys
 import time
+import yaml
 import rclpy
+
+from ament_index_python.packages import get_package_share_directory
 from rclpy.node import Node
 from rcl_interfaces.srv import SetParameters
 from rcl_interfaces.msg import Parameter, ParameterValue, ParameterType
 
 
-# LensPosition diverso: offset meccanico tra i due obiettivi
-LOCK_PARAMS = {
-    "lx": {
-        "AeEnable":     False,
-        "AwbEnable":    False,
-        "ExposureTime": 20000,
-        "ColourGains":  [1.5, 1.5],
-        "AfMode":       0,
-        "LensPosition": 2.6,
-    },
-    "rx": {
-        "AeEnable":     False,
-        "AwbEnable":    False,
-        "ExposureTime": 20000,
-        "ColourGains":  [1.5, 1.5],
-        "AfMode":       0,
-        "LensPosition": 1.5,
-    },
+# parametri che possono essere cambiati a runtime via set_parameters.
+LOCKABLE_KEYS = {
+    'AeEnable',
+    'AwbEnable',
+    'ExposureTime',
+    'ColourGains',
+    'AfMode',
+    'LensPosition',
 }
+
+# namespace -> chiave nel yaml
+CAMERA_YAML_KEYS = {
+    'lx': '/stereo/lx/camera',
+    'rx': '/stereo/rx/camera',
+}
+
+
+def load_lock_params(config_path):
+    """Estrae i parametri lockabili da nautilus_camera.yaml"""
+    with open(config_path, 'r') as f:
+        cfg = yaml.safe_load(f)
+
+    lock_params = {}
+    for ns, yaml_key in CAMERA_YAML_KEYS.items():
+        section = cfg.get(yaml_key, {}).get('ros__parameters', {})
+        filtered = {k: v for k, v in section.items() if k in LOCKABLE_KEYS}
+        if not filtered:
+            raise ValueError(
+                f"no lockable parameters found under {yaml_key} in {config_path}"
+            )
+        lock_params[ns] = filtered
+    return lock_params
 
 
 def to_param(name, value):
@@ -47,7 +64,7 @@ def to_param(name, value):
             type=ParameterType.PARAMETER_DOUBLE_ARRAY,
             double_array_value=[float(v) for v in value])
     else:
-        raise TypeError(f"Unsupported parameter type for {name}: {type(value)}")
+        raise TypeError(f"unsupported parameter type for {name}: {type(value)}")
     return p
 
 
@@ -65,7 +82,17 @@ def main() -> int:
     node = Node("lock_cameras")
 
     try:
-        for ns, params in LOCK_PARAMS.items():
+        # risolve il percorso del yaml tramite ament index
+        pkg_share = get_package_share_directory('nautilus_camera')
+        config_path = os.path.join(pkg_share, 'config', 'nautilus_camera.yaml')
+
+        try:
+            lock_params = load_lock_params(config_path)
+        except (OSError, ValueError, yaml.YAMLError) as e:
+            print(f"[ERROR] cannot load {config_path}: {e}", file=sys.stderr)
+            return 1
+
+        for ns, params in lock_params.items():
             service_name = f"/stereo/{ns}/camera/set_parameters"
             client = node.create_client(SetParameters, service_name)
 

@@ -5,8 +5,15 @@
     width: 1280
     height: 720
     FrameDurationLimits: [200000, 200000]   # 200ms => 5 FPS
-    # FormatBayer / Format lo lasciamo al default di camera_ros
-    # per non rischiare incompatibilità con la Pipeline NVIDIA futura
+    # lock fotometrico: niente auto-exposure, niente auto-WB
+    AeEnable: false
+    AwbEnable: false
+    ExposureTime: 20000
+    ColourGains: [1.5, 1.5]
+    # messa a fuoco manuale: lx=2.6 diottrie (offset meccanico +1.05 vs rx)
+    # se camera_ros non accetta AfMode o LensPosition al boot, vengono comunque riapplicati da lock_cameras.py
+    AfMode: 0
+    LensPosition: 2.6
 
 # parametri hardware per camera_ros - camera destra (rx)
 /stereo/rx/camera:
@@ -15,6 +22,12 @@
     width: 1280
     height: 720
     FrameDurationLimits: [200000, 200000]
+    AeEnable: false
+    AwbEnable: false
+    ExposureTime: 20000
+    ColourGains: [1.5, 1.5]
+    AfMode: 0
+    LensPosition: 1.5
 
 # parametri del nodo di benchmark
 /**/metrics_node:
@@ -24,7 +37,7 @@
     sync_slop_sec: 0.05         # tolleranza skew per message_filters
     window_size: 30             # frame usati per std/jitter
     log_interval_sec: 1.0       # ogni quanto stampare le metriche
-    display: false              # true => apre finestra OpenCV (solo con GUI)
+    display: false              # true => apre finestra OpenCV
 
 # parametri del nodo di salvataggio
 /**/saving_node:
@@ -39,6 +52,6 @@
     jpeg_quality: 95            # solo per jpg
     filename_prefix: 'nautilus'
     queue_size: 10
-    flush_every_n: 1            # 1 = flush immediato su disco (sicuro ma lento)
-    max_files_per_session: 0    # 0 = nessun limite (utile in test)
+    flush_every_n: 1            # 1 = flush immediato su disco
+    max_files_per_session: 0    # 0 = nessun limite
     sync_slop_sec: 0.05         # tolleranza skew per message_filters

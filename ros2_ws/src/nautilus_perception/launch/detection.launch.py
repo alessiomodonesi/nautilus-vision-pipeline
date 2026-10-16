@@ -13,36 +13,39 @@ def generate_launch_description():
         'params_file', default_value='detection_params.yaml',
         description='Nome del file params in config/'
     )
-    
     input_type_arg = DeclareLaunchArgument(
         'input_type_override', default_value='raw',
         description="Override input_type: 'raw' | 'enhanced'"
     )
-    
     enable_debug_arg = DeclareLaunchArgument(
         'enable_debug', default_value='false',
         description='OpenCV debug window (true/false)'
     )
-    
     model_filename_arg = DeclareLaunchArgument(
         'model_filename_override', default_value='yolov8n.pt',
         description='Nome cartella OpenVINO o file .pt in data/weights/'
     )
-    
     half_res_arg = DeclareLaunchArgument(
         'half_res_override', default_value='true',
         description='Dimezza il frame prima di YOLO (solo PyTorch)'
     )
-    
     imgsz_arg = DeclareLaunchArgument(
         'imgsz_override', default_value='640',
         description='Risoluzione di inferenza, deve combaciare con export'
     )
-
     params_path = PathJoinSubstitution(
         [pkg_dir, 'config', LaunchConfiguration('params_file')]
     )
-
+    
+    # nodo di detection
+    # NB: i parametri qui sotto (input_type, enable_debug,
+    # model_filename, half_res, imgsz) vengono SEMPRE sovrascritti dal
+    # launch, anche quando l'utente non passa gli argomenti: i default
+    # di DeclareLaunchArgument vincono sul YAML. se modifichi questi
+    # valori in detection_params.yaml, devi anche aggiornare i default
+    # qui sopra oppure passare gli override espliciti a riga di comando.
+    # gli altri parametri (conf_threshold, num_threads, sync_slop_sec)
+    # non hanno override di lancio e restano quelli del YAML.
     detection_node = Node(
         package='nautilus_perception',
         executable='detection_node',
@@ -69,3 +72,4 @@ def generate_launch_description():
         imgsz_arg,
         detection_node,
     ])
+    

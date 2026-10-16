@@ -26,7 +26,7 @@ class SavingNode(Node):
         self.declare_parameter('enable_saving', True)
         self.declare_parameter('left_topic',  '/stereo/lx/camera/image_raw')
         self.declare_parameter('right_topic', '/stereo/rx/camera/image_raw')
-        self.declare_parameter('save_directory', '/home/pi/nautilus_data')
+        self.declare_parameter('save_directory', '/home/nautilus/nautilus_data')
         self.declare_parameter('save_left',  True)
         self.declare_parameter('save_right', True)
         self.declare_parameter('image_format', 'jpg')

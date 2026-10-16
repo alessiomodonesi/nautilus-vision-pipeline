@@ -25,24 +25,14 @@ def generate_launch_description():
         description='Apre la finestra OpenCV del metrics_node (richiede GUI)'
     )
 
-    # nodi camera_ros (sempre attivi)
-    # nota: camera_ros legge i parametri per-nodo dal YAML, quindi
-    # non vengono specificati di nuovo qui per evitare duplicazioni.
+    # nodi camera_ros
+    # nota: camera_ros legge tutti i parametri per-nodo dal YAML
     lx_camera = Node(
         package='camera_ros',
         executable='camera_node',
         name='camera',
         namespace='stereo/lx',
-        parameters=[
-            config_file,
-            {
-                'AeEnable': False,
-                'AwbEnable': False,
-                'ExposureTime': 20000,
-                'ColourGains': [1.5, 1.5],
-                # AnalogueGain rimosso: rifiutato da camera_ros sul IMX708
-            },
-        ],
+        parameters=[config_file],
         output='screen',
     )
     rx_camera = Node(
@@ -50,16 +40,7 @@ def generate_launch_description():
         executable='camera_node',
         name='camera',
         namespace='stereo/rx',
-        parameters=[
-            config_file,
-            {
-                'AeEnable': False,
-                'AwbEnable': False,
-                'ExposureTime': 20000,
-                'ColourGains': [1.5, 1.5],
-                # AnalogueGain rimosso: rifiutato da camera_ros sul IMX708
-            },
-        ],
+        parameters=[config_file],
         output='screen',
     )
 

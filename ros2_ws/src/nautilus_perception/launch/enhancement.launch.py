@@ -5,10 +5,15 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    # 'auto', 'force_on', 'force_off'
+    # modalità waternet: 'auto', 'force_on', 'force_off'
+    # il default è 'force_off' perché WaterNet è una rete neurale pensata solo
+    # per post-produzione delle immagini. sulla barca non serve alla navigazione
+    # né alla detection e consuma batteria e CPU/GPU senza alcun beneficio operativo.
+    # 'auto' e 'force_on' restano disponibili per uso su workstation o per
+    # rigenerare immagini a posteriori: vanno richiesti esplicitamente.
     waternet_mode_arg = DeclareLaunchArgument(
         'waternet_mode', default_value='force_off',
-        description='auto | force_on | force_off = CLAHE + sharpening only'
+        description="auto | force_on | force_off = CLAHE + sharpening only"
     )
 
     # nodo per la camera lx
