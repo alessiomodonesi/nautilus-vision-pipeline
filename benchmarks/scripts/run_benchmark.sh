@@ -52,18 +52,34 @@ fi
 echo "== ${CONFIG} run ${RUN_N} =="
 echo "Temperatura SoC iniziale: ${TEMP}°C"
 
+# forza il governor 'performance' su tutti i core per evitare che la CPU
+# scali dinamicamente di frequenza durante il benchmark (default: powersave).
+# va fatto prima di leggere il clock, altrimenti leggiamo 1600 MHz a idle.
+CUR_GOV=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
+if [ "$CUR_GOV" != "performance" ]; then
+    echo "Imposto governor CPU: ${CUR_GOV} -> performance"
+    echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor > /dev/null
+    sleep 1
+fi
+echo "Governor CPU: $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)"
+
 # throttling/clock iniziale
 THR_START=$(vcgencmd get_throttled | cut -d= -f2)
 CLK_START=$(vcgencmd measure_clock arm | cut -d= -f2)
 
-# cpu clock
+# cpu clock atteso in base alla fase
 case "$CONFIG" in
     *_oc) EXPECT_CLOCK=2800 ;;
     *)    EXPECT_CLOCK=2400 ;;
 esac
+
+# attesa breve per far assestare il clock dopo il cambio governor
+sleep 1
 CLK_MHZ=$(( $(vcgencmd measure_clock arm | cut -d= -f2) / 1000000 ))
 if [ "$CLK_MHZ" -lt "$EXPECT_CLOCK" ]; then
     echo "ERRORE: clock ${CLK_MHZ} MHz < atteso ${EXPECT_CLOCK} MHz per $CONFIG"
+    echo "  governor corrente: $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)"
+    echo "  frequenza max disponibile: $(cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq) kHz"
     exit 1
 fi
 echo "Clock CPU: ${CLK_MHZ} MHz (atteso ${EXPECT_CLOCK})"
@@ -87,6 +103,19 @@ SYS_CSV="$CSV_DIR/${DATE}_${CONFIG}_run${RUN_N}_system.csv"
 LAUNCH_LOG="$CSV_DIR/${DATE}_${CONFIG}_run${RUN_N}_launch.log"
 META="$CSV_DIR/${DATE}_${CONFIG}_run${RUN_N}_metadata.csv"
 
+# costruzione argomenti di override: vanno passati SOLO se non vuoti,
+# altrimenti ros2 launch esce con "malformed launch argument".
+OVERRIDES=()
+if [ -n "$MODEL" ]; then
+    OVERRIDES+=("model_filename_override:=$MODEL")
+fi
+if [ -n "$HALF_RES" ]; then
+    OVERRIDES+=("half_res_override:=$HALF_RES")
+fi
+if [ -n "$IMGSZ" ]; then
+    OVERRIDES+=("imgsz_override:=$IMGSZ")
+fi
+
 # lancio pipeline in background
 # include_stereo_camera:=true è obbligatorio perché il wrapper ha appena
 # fermato i servizi: le camere non sono attive e pipeline.launch.py di
@@ -98,10 +127,7 @@ ros2 launch nautilus_perception pipeline.launch.py \
     enable_saving:=false \
     enable_metrics:=true \
     enable_debug:=false \
-    params_file:=detection_params.yaml \
-    model_filename_override:=$MODEL \
-    half_res_override:=$HALF_RES \
-    imgsz_override:=$IMGSZ \
+    "${OVERRIDES[@]}" \
     > "$LAUNCH_LOG" 2>&1 &
 LAUNCH_PID=$!
 
