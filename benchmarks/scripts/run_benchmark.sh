@@ -52,6 +52,22 @@ fi
 echo "== ${CONFIG} run ${RUN_N} =="
 echo "Temperatura SoC iniziale: ${TEMP}°C"
 
+# throttling/clock iniziale
+THR_START=$(vcgencmd get_throttled | cut -d= -f2)
+CLK_START=$(vcgencmd measure_clock arm | cut -d= -f2)
+
+# cpu clock
+case "$CONFIG" in
+    *_oc) EXPECT_CLOCK=2800 ;;
+    *)    EXPECT_CLOCK=2400 ;;
+esac
+CLK_MHZ=$(( $(vcgencmd measure_clock arm | cut -d= -f2) / 1000000 ))
+if [ "$CLK_MHZ" -lt "$EXPECT_CLOCK" ]; then
+    echo "ERRORE: clock ${CLK_MHZ} MHz < atteso ${EXPECT_CLOCK} MHz per $CONFIG"
+    exit 1
+fi
+echo "Clock CPU: ${CLK_MHZ} MHz (atteso ${EXPECT_CLOCK})"
+
 # ambiente
 source /opt/ros/jazzy/setup.bash
 source "$WS/install/setup.bash"
@@ -107,16 +123,20 @@ MON_PID=$!
 # benchmark latenze (120 s)
 TGT_TOPIC=""
 ENH_TOPIC=""
+STG_TOPIC=""
 if [ "$DET" = "true" ]; then TGT_TOPIC="/stereo_down/targets"; fi
 if [ "$ENH" = "true" ]; then ENH_TOPIC="/stereo/lx/image_enhanced"; fi
 
 echo "Benchmark latenze 120s..."
+if [ "$DET" = "true" ]; then STG_TOPIC="/stereo_down/timings"; fi
+
 python3 "$ROOT/benchmarks/scripts/benchmark_pipeline.py" \
     --duration 120 \
     --out "$LAT_CSV" \
     --raw-topic /stereo/lx/camera/image_raw \
     --enhanced-topic "$ENH_TOPIC" \
-    --targets-topic "$TGT_TOPIC"
+    --targets-topic "$TGT_TOPIC" \
+    --stages-topic "$STG_TOPIC"
 
 # attesa monitor
 wait $MON_PID 2>/dev/null || true
@@ -132,6 +152,10 @@ pkill -f metrics_node 2>/dev/null || true
 # temperatura finale
 TEMP_END=$(vcgencmd measure_temp | sed "s/temp=//;s/'C//")
 echo "Temperatura SoC finale: ${TEMP_END}°C"
+
+# throttling/clock finale
+THR_END=$(vcgencmd get_throttled | cut -d= -f2)
+CLK_END=$(vcgencmd measure_clock arm | cut -d= -f2)
 
 # metadata
 COMMIT=$(cd "$ROOT" && git rev-parse HEAD 2>/dev/null || echo "unknown")
@@ -149,6 +173,10 @@ half_res,$HALF_RES
 imgsz,$IMGSZ
 soc_temp_initial_c,$TEMP
 soc_temp_final_c,$TEMP_END
+throttled_initial,$THR_START
+throttled_final,$THR_END
+cpu_clock_initial_mhz,$((CLK_START / 1000000))
+cpu_clock_final_mhz,$((CLK_END / 1000000))
 notes,$NOTE
 EOF
 

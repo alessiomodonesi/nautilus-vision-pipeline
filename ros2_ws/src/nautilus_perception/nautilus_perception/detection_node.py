@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import message_filters
 import os
+import time
 
 from ament_index_python.packages import get_package_share_directory
 from rclpy.node import Node
@@ -12,6 +13,7 @@ from vision_msgs.msg import Detection2DArray, Detection2D, ObjectHypothesisWithP
 from cv_bridge import CvBridge
 from rcl_interfaces.msg import ParameterDescriptor
 from nautilus_perception.detection.config import StereoConfig
+from std_msgs.msg import Float32MultiArray
 
 
 def _to_bool(value):
@@ -119,6 +121,7 @@ class DetectionNode(Node):
             10
         )
         
+        self.timing_pub = self.create_publisher(Float32MultiArray, '/stereo_down/timings', 10)
         self.get_logger().info(f"Detection node started. Listening on {left_topic} and {right_topic}")
 
     def _get_param_strict(self, name):
@@ -134,24 +137,32 @@ class DetectionNode(Node):
         return param.value
 
     def stereo_callback(self, left_msg: Image, right_msg: Image):
+        t0 = time.perf_counter()
+
+        # pre-processing
         try:
             cv_left = self.bridge.imgmsg_to_cv2(left_msg, desired_encoding='bgr8')
             cv_right = self.bridge.imgmsg_to_cv2(right_msg, desired_encoding='bgr8')
         except Exception as e:
             self.get_logger().error(f"Error in image conversion: {e}")
             return
-        
+
         # applicazione della rettifica stereo, copia e forzatura a uint8
         cv_left = cv2.remap(cv_left, self.map1x, self.map1y, cv2.INTER_LINEAR).copy().astype(np.uint8)
         cv_right = cv2.remap(cv_right, self.map2x, self.map2y, cv2.INTER_LINEAR).copy().astype(np.uint8)
+        t_pre = time.perf_counter()
 
-        # rilevamento YOLO
+        # inferenza
+        # NB: YoloDetector.detect() include internamente letterbox + infer + NMS.
+        # per una separazione più fine bisogna instrumentare core_detection.py.
         detections = self.detector.detect(cv_left)
+        t_infer = time.perf_counter()
 
+        # post-processing
         det_array_msg = Detection2DArray()
-        det_array_msg.header = left_msg.header 
-
+        det_array_msg.header = left_msg.header
         distances = []
+
         if detections:
             # converti in scala di grigi per il matcher stereo per evitare ridondanze
             gray_l = cv2.cvtColor(cv_left, cv2.COLOR_BGR2GRAY)
@@ -200,7 +211,19 @@ class DetectionNode(Node):
 
         # pubblicazione sul topic
         self.detection_pub.publish(det_array_msg)
-        
+        t_post = time.perf_counter()
+
+        # timings
+        timings = Float32MultiArray()
+        timings.data = [
+            (t_pre   - t0)      * 1000.0,   # pre_ms
+            (t_infer - t_pre)   * 1000.0,   # infer_ms
+            (t_post  - t_infer) * 1000.0,   # post_ms
+            (t_post  - t0)      * 1000.0,   # total_ms
+        ]
+        self.timing_pub.publish(timings)
+    
+    
 def main(args=None):
     rclpy.init(args=args)
     node = DetectionNode()

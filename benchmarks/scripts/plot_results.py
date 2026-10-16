@@ -62,8 +62,9 @@ LATENCY_RE = re.compile(
     rf"^(?P<date>\d{{4}}-\d{{2}}-\d{{2}})_(?P<config>{CONFIG_RE})_run(?P<run>\d+)_latency\.csv$")
 SYSTEM_RE = re.compile(
     rf"^(?P<date>\d{{4}}-\d{{2}}-\d{{2}})_(?P<config>{CONFIG_RE})_run(?P<run>\d+)_system\.csv$")
+STAGES_RE = re.compile(
+    rf"^(?P<date>\d{{4}}-\d{{2}}-\d{{2}})_(?P<config>{CONFIG_RE})_run(?P<run>\d+)_stages\.csv$")
 MAP_RE = re.compile(r"^map_.*\.csv$")
-
 
 def load_latency(path):
     out = []
@@ -100,6 +101,7 @@ def scan(csv_dir):
     csv_dir = Path(csv_dir)
     lat = defaultdict(list)
     sys_ = defaultdict(list)
+    stages = defaultdict(list)
     maps = []
     for p in sorted(csv_dir.glob("*.csv")):
         m = LATENCY_RE.match(p.name)
@@ -110,9 +112,13 @@ def scan(csv_dir):
         if m:
             sys_[m["config"]].append((int(m["run"]), load_system(p)))
             continue
+        m = STAGES_RE.match(p.name)
+        if m:
+            stages[m["config"]].append((int(m["run"]), load_stages(p)))
+            continue
         if MAP_RE.match(p.name):
             maps.append(p)
-    return lat, sys_, maps
+    return lat, sys_, stages, maps
 
 
 def plot_mean_latency(lat, out_dir):
@@ -274,6 +280,52 @@ def plot_map(maps, out_dir):
     print(f"  {out}")
 
 
+def load_stages(path):
+    out = {}
+    with open(path) as f:
+        for r in csv.DictReader(f):
+            out[r["stage"]] = {
+                "mean": float(r["mean_ms"]),
+                "p50":  float(r["p50_ms"]),
+                "p95":  float(r["p95_ms"]),
+                "n":    int(r["n"]),
+            }
+    return out
+
+
+def plot_stages(stages, out_dir):
+    configs = [c for c in CONFIG_ORDER if c in stages]
+    if not configs:
+        return
+    fig, ax = plt.subplots(figsize=(10, 5))
+    keys = ["pre", "infer", "post"]
+    x = np.arange(len(configs))
+    bottom = np.zeros(len(configs))
+    colors = {"pre": "#4C72B0", "infer": "#DD8452", "post": "#55A868"}
+    for k in keys:
+        vals = []
+        for cfg in configs:
+            # stages[cfg] = [(run, {stage: {...}}), ...]
+            per_run = [rows[k]["mean"]
+                       for _, rows in stages[cfg] if k in rows]
+            vals.append(np.mean(per_run) if per_run else 0)
+        ax.bar(x, vals, bottom=bottom, label=k, color=colors[k])
+        bottom += np.array(vals)
+    for i, v in enumerate(bottom):
+        ax.text(i, v, f"{v:.0f}", ha="center", va="bottom", fontsize=8)
+    ax.set_xticks(x)
+    ax.set_xticklabels([CONFIG_LABEL[c] for c in configs],
+                       rotation=15, ha="right", fontsize=8)
+    ax.set_ylabel("Latenza [ms]")
+    ax.set_title("Scomposizione pre / inferenza / post per config")
+    ax.grid(axis="y", alpha=0.3)
+    ax.legend()
+    fig.tight_layout()
+    out = Path(out_dir) / "08_detection_stages.png"
+    fig.savefig(out, dpi=150); plt.close(fig)
+    print(f"  {out}")
+    
+    
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--csv", required=True)
@@ -283,9 +335,11 @@ def main():
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    lat, sys_, maps = scan(args.csv)
+    lat, sys_, stages, maps = scan(args.csv)
     print(f"Trovati: {sum(len(v) for v in lat.values())} latency, "
-          f"{sum(len(v) for v in sys_.values())} system, {len(maps)} map")
+          f"{sum(len(v) for v in sys_.values())} system, "
+          f"{sum(len(v) for v in stages.values())} stages, "
+          f"{len(maps)} map")
     print(f"Output in: {out_dir}\n")
 
     plot_mean_latency(lat, out_dir)
@@ -298,6 +352,7 @@ def main():
     _time_series(sys_, out_dir, "ram_used_mb", "RAM usata [MB]",
                  "RAM usata nel tempo", "06_ram.png")
     plot_map(maps, out_dir)
+    plot_stages(stages, out_dir)
 
     print("\nDone.")
 

@@ -11,6 +11,7 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 from sensor_msgs.msg import Image
 from vision_msgs.msg import Detection2DArray
+from std_msgs.msg import Float32MultiArray
 
 
 SENSOR_QOS = QoSProfile(
@@ -47,10 +48,38 @@ class TopicStats:
         }
 
 
+class StageStats:
+    def __init__(self):
+        self.rows = []  # (pre, infer, post, total)
+
+    def add(self, data):
+        if len(data) >= 4:
+            self.rows.append(tuple(float(x) for x in data[:4]))
+
+    def summary(self):
+        if not self.rows:
+            return None
+        a = np.array(self.rows)
+        def _s(col):
+            return {
+                "mean": float(np.mean(col)),
+                "p50":  float(np.percentile(col, 50)),
+                "p95":  float(np.percentile(col, 95)),
+            }
+        return {
+            "n":            len(self.rows),
+            "pre":          _s(a[:, 0]),
+            "infer":        _s(a[:, 1]),
+            "post":         _s(a[:, 2]),
+            "total":        _s(a[:, 3]),
+        }
+        
+
 class Benchmark(Node):
-    def __init__(self, raw, enhanced, targets):
+    def __init__(self, raw, enhanced, targets, stages=None):
         super().__init__("benchmark_pipeline")
         self.stats = {}
+        self.stages = None
         if raw:
             self.stats["raw"] = TopicStats(raw)
             self.create_subscription(Image, raw,
@@ -63,6 +92,10 @@ class Benchmark(Node):
             self.stats["targets"] = TopicStats(targets)
             self.create_subscription(Detection2DArray, targets,
                 lambda m: self._tgt("targets", m), 10)
+        if stages:
+            self.stages = StageStats()
+            self.create_subscription(Float32MultiArray, stages,
+                lambda m: self.stages.add(m.data), 10)
 
     def _lat_ms(self, header):
         now = self.get_clock().now()
@@ -92,10 +125,13 @@ def main():
     ap.add_argument("--enhanced-topic", default="/stereo/lx/image_enhanced")
     ap.add_argument("--targets-topic", default="/stereo_down/targets")
     ap.add_argument("--print-interval", type=float, default=2.0)
+    ap.add_argument("--stages-topic", default="")
+    ap.add_argument("--stages-out", default="")
     args = ap.parse_args()
 
     rclpy.init()
-    node = Benchmark(args.raw_topic, args.enhanced_topic, args.targets_topic)
+    node = Benchmark(args.raw_topic, args.enhanced_topic,
+                 args.targets_topic, args.stages_topic or None)
     print(f"Duration: {args.duration}s")
     print(f"  raw:      {args.raw_topic}")
     print(f"  enhanced: {args.enhanced_topic}")
@@ -141,6 +177,21 @@ def main():
                         f"{s['p95']:.3f}", f"{s['min']:.3f}",
                         f"{s['max']:.3f}", f"{s['fps']:.3f}"])
 
+    if node.stages and node.stages.summary():
+        out = args.stages_out
+        if not out:
+            p = Path(args.out)
+            out = str(p.with_name(p.stem.replace("_latency", "") + "_stages.csv"))
+        s = node.stages.summary()
+        with open(out, "w", newline="") as f:
+            w = csv.writer(f)
+            w.writerow(["stage", "n", "mean_ms", "p50_ms", "p95_ms"])
+            for k in ("pre", "infer", "post", "total"):
+                v = s[k]
+                w.writerow([k, s["n"],
+                            f"{v['mean']:.3f}", f"{v['p50']:.3f}", f"{v['p95']:.3f}"])
+        print(f"\nStage breakdown saved: {out}")
+        
     print("\nSummary")
     for key, s in summaries.items():
         print(f"{key:>9s}: n={s['n']:>5d}  "
