@@ -2,13 +2,15 @@
 
 ## Guida all'Uso del Nodo di Enhancement
 
-Il modulo di enhancement delle immagini sottomarine è progettato per essere **modulare e adattivo**. Può eseguire una pipeline pesante (WaterNet + Sharpening + CLAHE) su macchine dotate di GPU, oppure una pipeline ultraleggera (Sharpening + CLAHE) su dispositivi embedded come il Raspberry Pi.
+Il modulo di enhancement delle immagini sottomarine è progettato per essere **modulare**. Può eseguire una pipeline pesante (WaterNet + Sharpening + CLAHE), utile solo in fase di post-produzione per i biologi, oppure una pipeline ultraleggera (Sharpening + CLAHE) pensata per l'object detection in tempo reale sul Raspberry Pi.
 
 Il sistema supporta tre modalità operative:
 
-* **`auto` (Default):** Rileva automaticamente l'hardware. Se trova CUDA o MPS attiva WaterNet, altrimenti usa la versione leggera per CPU.
-* **`force_off`:** Disabilita forzatamente WaterNet, eseguendo solo CLAHE e Sharpening (massimi FPS, ideale per Object Detection su Raspberry).
-* **`force_on`:** Forza l'esecuzione di WaterNet anche in assenza di GPU dedicata (utile per testare il carico computazionale e la latenza).
+* **`force_off` (Default):** disabilita WaterNet, esegue solo CLAHE e Sharpening. È il default perché WaterNet è una rete neurale che **non serve alla navigazione né alla detection**: consumerebbe solo batteria e potenza di calcolo sulla barca (Pi 5 o Jetson). Su Raspberry Pi la latenza misurata è di **~70 secondi per frame**, incompatibile con qualunque uso real-time.
+* **`auto`:** rileva l'hardware. Se trova CUDA o MPS attiva WaterNet, altrimenti usa la versione leggera. Utile **solo su workstation di sviluppo** con GPU dedicata, dove WaterNet gira in tempi ragionevoli.
+* **`force_on`:** forza WaterNet anche in assenza di GPU dedicata. Serve per rigenerare immagini a posteriori o per misurare il carico computazionale su hardware specifico, non per l'uso operativo.
+
+**Regola pratica**: sulla barca si usa sempre `force_off`. WaterNet si attiva solo in post-produzione, su workstation, per le immagini destinate ai biologi.
 
 Di seguito le istruzioni per utilizzare il modulo sia per i benchmark locali che in produzione tramite ROS 2.
 
@@ -18,7 +20,7 @@ Di seguito le istruzioni per utilizzare il modulo sia per i benchmark locali che
 
 Per testare la pipeline su una singola foto fissa simulando il comportamento completo del nodo in ROS 2, è disponibile un file di launch dedicato. Questo metodo pubblica ciclicamente l'immagine e ti permette di misurare esattamente il ritardo in millisecondi e gli FPS risultanti.
 
-**Requisito:** Assicurati di avere installato il pacchetto per la pubblicazione di immagini statiche.
+**Requisito:** assicurati di avere installato il pacchetto per la pubblicazione di immagini statiche.
 
 ```bash
 sudo apt update
@@ -49,15 +51,15 @@ Durante i test di profilazione eseguiti sul target hardware (CPU ARM, no GPU), s
 * Latenza media: **~70,658.15 ms (~70.6 secondi per frame)**
 * Framerate effettivo: **0.0 FPS**
 
-* *Conclusione:* Inutilizzabile per applicazioni in tempo reale su dispositivi embedded.
+* *Conclusione:* inutilizzabile per applicazioni in tempo reale su dispositivi embedded. Da qui la scelta di `force_off` come default.
 
 * *Output di esempio disponibili in `benchmarks/datasets/images/waternet_output.jpg`.*
 
-* **Modalità `force_off` (Pipeline Leggera solo OpenCV - Sharpening + CLAHE):**
+* **Modalità `force_off` (Pipeline Leggera solo OpenCV * Sharpening + CLAHE):**
 * Latenza media: **~65.3 - 67.1 ms per frame**
 * Framerate effettivo: **~1.0 - 1.1 FPS** (con pubblicazione da file di test a 1Hz, salirebbe al limite della camera in streaming live)
 
-* *Conclusione:* Prestazioni eccellenti e perfettamente compatibili con i vincoli di bordo per l'Object Detection.
+* *Conclusione:* prestazioni compatibili con i vincoli di bordo per l'object detection.
 
 * *Output di esempio disponibili in `benchmarks/datasets/images/enhancement_output.jpg`.*
 
@@ -65,14 +67,37 @@ Durante i test di profilazione eseguiti sul target hardware (CPU ARM, no GPU), s
 
 ## 2. Esecuzione in Produzione (Stereocamera)
 
-Il nodo ROS 2 (`enhancement_node`) espone i parametri `waternet_mode` e `save_output` per configurare la pipeline in modo flessibile.
+Il nodo ROS 2 (`enhancement_node`) espone i parametri `waternet_mode` e `save_output`.
 
-### Avvio tramite file Launch (Metodo Consigliato)
+### Default
 
-Per l'utilizzo reale in acqua, la configurazione ottimale si imposta direttamente nel file `launch/enhancement.launch.py`. Modificando la variabile `WATERNET_MODE` in cima al file su `'force_off'`, configurerai simultaneamente sia la telecamera destra che quella sinistra:
+Il default di `waternet_mode` è **`force_off`** in tutte e tre le sedi:
+
+* `enhancement_node.py` (default hardcoded nel nodo)
+* `enhancement.launch.py` (default del `DeclareLaunchArgument`)
+* `pipeline.launch.py` (default passato al launch di enhancement)
+
+Non ci sono valori divergenti: la scelta "sulla barca WaterNet non gira" è coerenza di configurazione, non solo di intenti.
+
+### Avvio tramite file Launch
+
+Per avviare l'enhancement sulla stereocamera:
 
 ```bash
-ros2 launch nautilus_perception enhancement.launch.py waternet_mode:=force_off
+# default: force_off (CLAHE + sharpening, adatto alla barca)
+ros2 launch nautilus_perception enhancement.launch.py
+
+# per uso su workstation con GPU, se vuoi sperimentare WaterNet
+ros2 launch nautilus_perception enhancement.launch.py waternet_mode:=auto
+```
+
+Oppure, all'interno della pipeline completa (con detection a valle):
+
+```bash
+ros2 launch nautilus_perception pipeline.launch.py \
+    enable_enhancement:=true \
+    enable_detection:=true \
+    waternet_mode:=force_off
 ```
 
 ---
@@ -81,17 +106,21 @@ ros2 launch nautilus_perception enhancement.launch.py waternet_mode:=force_off
 
 Il modulo di detection (`detection_node`) implementa un'architettura **"Detect-Then-Range"** ottimizzata per dispositivi edge (Raspberry Pi 5):
 
-1. **Inferenza IA (Camera Sinistra):** Esegue il modello YOLOv8 Nano esclusivamente sul flusso sinistro rettificato per individuare i target ed estrarre i bounding box.
-2. **Stima della Distanza (Stereo):** Sfrutta la geometria epipolare e un `SparseBlockMatcher` normalizzato per calcolare la disparità e stimare la distanza metrica tridimensionale ($Z$) sfruttando la calibrazione stereo (`stereo_calib.npz`).
+1. **Inferenza IA (Camera Sinistra):** esegue il modello YOLOv8 Nano esclusivamente sul flusso sinistro rettificato per individuare i target ed estrarre i bounding box.
+2. **Stima della Distanza (Stereo):** sfrutta la geometria epipolare e un `SparseBlockMatcher` normalizzato per calcolare la disparità e stimare la distanza metrica tridimensionale (Z) sfruttando la calibrazione stereo (`stereo_calib_720p.npz`).
 
 ### Configurazione (`detection_params.yaml`)
 
 Il nodo legge i parametri di configurazione dal file `config/detection_params.yaml`:
 
-* `input_type`: Seleziona il tipo di flusso in ingresso (`'raw'` per le immagini grezze o `'enhanced'` se si usa la pipeline di miglioramento).
-* `conf_threshold`: Soglia di confidenza di YOLO (es. `0.2` o `0.3`).
-* `model_path`: Gestito automaticamente in modo dinamico dal codice (supporta sia file `.pt` standard che modelli ottimizzati OpenVINO `.xml`).
-* `enable_debug`: Apre finestra OpenCV di debug. Default `false` nel YAML; sovrascrivibile con `enable_debug:=true` al lancio.
+* `model_filename`: file `.pt` o directory OpenVINO in `data/weights/`. Gestito dinamicamente dal nodo.
+* `input_type`: seleziona il tipo di flusso in ingresso (`'raw'` per le immagini grezze o `'enhanced'` se si usa la pipeline di miglioramento). Sovrascritto dinamicamente da `pipeline.launch.py` in base a `enable_enhancement`.
+* `conf_threshold`: soglia di confidenza di YOLO.
+* `enable_debug`: apre finestra OpenCV di debug. Default `false`; sovrascrivibile con `enable_debug:=true` al lancio.
+* `half_res`: dimezza il frame prima di YOLO. Deve essere `false` per OpenVINO.
+* `imgsz`: risoluzione di inferenza, deve combaciare con l'export del modello.
+
+**Nota sui default**: il launch file `detection.launch.py` sovrascrive **sempre** `input_type`, `enable_debug`, `model_filename`, `half_res`, `imgsz` con i propri `DeclareLaunchArgument`. Per modificare questi valori, o si aggiornano i default in `detection.launch.py`, o si passano come argomenti al lancio. Gli altri parametri (`conf_threshold`, `num_threads`, `sync_slop_sec`) restano invece quelli del YAML.
 
 ---
 
@@ -99,14 +128,14 @@ Il nodo legge i parametri di configurazione dal file `config/detection_params.ya
 
 Per verificare in tempo reale l'efficacia del rilevamento e la correttezza della calibrazione stereo (evitando che riflessi o materiali trasparenti falsino la stima della distanza), è integrata una finestra grafica OpenCV di debug.
 
-* **Cosa mostra:** L'immagine rettificata della camera sinistra con i bounding box arancioni di YOLO, il punto di campionamento verde e l'etichetta con la confidenza e la distanza metrica in metri ($Z$).
-* **Come attivarla:** Tramite l'argomento di lancio `enable_debug:=true` nel file di lancio della detection.
+* **Cosa mostra:** l'immagine rettificata della camera sinistra con i bounding box arancioni di YOLO, il punto di campionamento verde e l'etichetta con la confidenza e la distanza metrica in metri (Z).
+* **Come attivarla:** tramite l'argomento di lancio `enable_debug:=true` nel file di lancio della detection.
 
 ---
 
 ## 2. Comandi di Test e Verifica della Pipeline
 
-Di seguito trovi l'elenco completo dei comandi ROS 2 per compilare, avviare e testare l'intera catena di detection e stereovisione sul campo:
+Di seguito trovi l'elenco completo dei comandi ROS 2 per compilare, avviare e testare l'intera catena di detection e stereovisione sul campo.
 
 ### Compilazione del Workspace
 
@@ -124,9 +153,11 @@ Avvia i driver delle due telecamere CSI (IMX708) con namespace e sincronizzazion
 ros2 launch nautilus_camera stereo_camera.launch.py
 ```
 
+**Nota**: se le camere sono già attive dal boot (caso normale sulla barca, gestito da `nautilus-vision.service`), **non** rilanciare questo comando: va in errore per nodo duplicato. Salta direttamente alla sezione "Avvio del Nodo di Detection".
+
 ### Avvio del Nodo di Detection
 
-Puoi avviare la detection in due modalità differenti:
+Puoi avviare la detection in due modalità differenti.
 
 * **Modalità Standard (Headless / Performance Piene):**
 
@@ -144,6 +175,14 @@ Ideale per la calibrazione e la verifica visiva sul campo (richiede schermo loca
 ros2 launch nautilus_perception detection.launch.py enable_debug:=true
 ```
 
+Se invece vuoi lanciare detection + enhancement in un colpo solo, sopra le camere già attive:
+
+```bash
+ros2 launch nautilus_perception pipeline.launch.py \
+    enable_detection:=true \
+    enable_enhancement:=true
+```
+
 ### Monitoraggio dei Target Pubblicati
 
 Per visualizzare in tempo reale i messaggi strutturati (`vision_msgs/Detection2DArray`) pubblicati sul topic dei target:
@@ -151,3 +190,41 @@ Per visualizzare in tempo reale i messaggi strutturati (`vision_msgs/Detection2D
 ```bash
 ros2 topic echo /stereo_down/targets
 ```
+
+---
+
+## Riepilogo delle correzioni
+
+**`global_launch.md`:**
+
+* Sezione 1: chiarito che solo acquisizione (+ salvataggio opzionale) parte al boot.
+* Sezione 2: rimosso il riferimento a `ENABLE_ENHANCEMENT` / `ENABLE_DETECTION` / `ENABLE_METRICS`. Ora c'è solo `ENABLE_SAVING`. Aggiunto blocco che mostra cosa fa `start_pipeline.sh`.
+* Sezione 3: aggiornato il YAML con i parametri fotometrici mancanti. Aggiornato `save_directory`.
+* Sezione 4: aggiunta nota sul doppio livello di override (YAML + launch sempre attivo sui 5 parametri).
+* Sezione 5: aggiunti esempi per `pipeline.launch.py` con `include_stereo_camera`, con spiegazione del perché di default è `false`.
+* Sezione 6: riscritta per includere `lock-cameras.service` e spiegare come `lock_cameras.py` legge il YAML.
+* Sezione 7: aggiornati gli esempi di test (niente più riferimenti a env var inesistenti).
+* Sezione 9: aggiunte due righe di troubleshooting ("node already exists", lens position non applicata).
+
+**`ros2_ws/README.md`:**
+
+* Aggiunta sezione "Cosa parte automaticamente al boot".
+* Aggiunto PyYAML tra le dipendenze.
+* Chiarito che WaterNet è disabilitata di default e perché.
+* Corretto l'esempio di avvio.
+
+**`nautilus_camera/README.md`:**
+
+* Corretto `enable_metrics` default: `false` (non `true`).
+* Corretto `save_directory` default: `/home/nautilus/nautilus_data` (non `/home/pi/...`).
+* Aggiunti i parametri fotometrici nel YAML di esempio.
+* Aggiunta sezione "Perché i parametri fotometrici sono nel YAML" con riferimento a `lock_cameras.py`.
+* Aggiunta riga di troubleshooting per lens position.
+
+**`nautilus_perception/README.md`:**
+
+* Cambiato il default di WaterNet da `auto` a `force_off` con spiegazione.
+* Rimossa la menzione a `WATERNET_MODE` (variabile inesistente in `enhancement.launch.py`): il launch arg è `waternet_mode`.
+* Aggiunta sezione "Default" per chiarire che il valore è coerente in tre file.
+* Aggiunta nota sul doppio livello di override in detection.
+* Aggiunto warning di non rilanciare `stereo_camera.launch.py` se le camere sono già attive dal boot.

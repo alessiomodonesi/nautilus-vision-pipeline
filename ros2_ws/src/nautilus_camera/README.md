@@ -6,11 +6,13 @@ Pacchetto ROS 2 dedicato all'acquisizione stereoscopica, al salvataggio su disco
 
 Questo pacchetto si appoggia a [`camera_ros`](https://github.com/christianrauch/camera_ros) per interfacciarsi direttamente con i due sensori Pi Camera (CSI) e fornisce:
 
-1. **Acquisizione** a 1280×720 @ 5 FPS, con parametri hardware centralizzati in un unico YAML.
+1. **Acquisizione** a 1280×720 @ 5 FPS, con parametri hardware e fotometrici centralizzati in un unico YAML.
 2. **Benchmark** in tempo reale di FPS, jitter e skew stereo (`metrics_node`).
 3. **Salvataggio** su filesystem locale in JPEG/PNG, con contatore incrementale e nessuna dipendenza da RTC (`saving_node`).
 
-I tre blocchi possono essere attivati/disattivati indipendentemente tramite argomenti di lancio, per supportare sia l'uso in produzione (acquisizione + salvataggio) sia i benchmark puliti (solo acquisizione + metriche).
+Il blocco di acquisizione è l'unico che parte automaticamente al boot del Raspberry Pi (tramite `nautilus-vision.service`). Il salvataggio è opzionale, controllato da `ENABLE_SAVING` in `pipeline_config.env`. Il benchmark non parte mai da solo.
+
+Lo stesso `nautilus_camera.yaml` è letto anche da `lock_cameras.py` (deploy esterno), che riapplica i parametri fotometrici via `set_parameters` subito dopo il boot: così la fonte di verità è unica e non ci sono duplicazioni.
 
 ## Struttura del Pacchetto
 
@@ -43,32 +45,32 @@ Fa partire in un colpo solo:
 * `metrics_node` (opzionale);
 * `saving_node` (opzionale).
 
-I parametri hardware di `camera_ros` **non vengono ripetuti** nel launch file: sono letti direttamente dal blocco `/stereo/lx/camera` e `/stereo/rx/camera` di `config/nautilus_camera.yaml`. Questo evita duplicazioni e drift di configurazione.
+I parametri hardware di `camera_ros` **non vengono ripetuti** nel launch file: sono letti direttamente dai blocchi `/stereo/lx/camera` e `/stereo/rx/camera` di `config/nautilus_camera.yaml`. Questo evita duplicazioni e drift di configurazione.
 
 **Argomenti di lancio:**
 
 | Argomento          | Default | Descrizione                                    |
 |--------------------|---------|------------------------------------------------|
-| `enable_metrics`   | `true`  | Avvia il nodo di benchmark                     |
+| `enable_metrics`   | `false` | Avvia il nodo di benchmark                     |
 | `enable_saving`    | `true`  | Avvia il nodo di salvataggio su disco          |
 | `enable_display`   | `false` | Apre finestra OpenCV del `metrics_node`        |
 
 **Esempi:**
 
 ```bash
-# Pipeline standard: camera + metriche + salvataggio
+# Acquisizione + salvataggio (configurazione di produzione)
 ros2 launch nautilus_camera stereo_camera.launch.py
 
-# Solo camera + metriche (benchmark pulito, zero I/O)
+# Solo acquisizione (zero I/O)
+ros2 launch nautilus_camera stereo_camera.launch.py enable_saving:=false
+
+# Acquisizione + benchmark (run di test)
 ros2 launch nautilus_camera stereo_camera.launch.py \
     enable_saving:=false enable_metrics:=true
 
-# Solo camera + salvataggio (produzione)
-ros2 launch nautilus_camera stereo_camera.launch.py \
-    enable_saving:=true enable_metrics:=false
-
 # Con finestra video (richiede GUI attiva)
-ros2 launch nautilus_camera stereo_camera.launch.py enable_display:=true
+ros2 launch nautilus_camera stereo_camera.launch.py \
+    enable_metrics:=true enable_display:=true
 ```
 
 ## Nodi
@@ -112,7 +114,7 @@ Nodo di salvataggio: sottoscrive le stesse coppie stereo e salva ogni frame su d
 **Parametri principali:**
 
 * `enable_saving` — stato iniziale (default `true`)
-* `save_directory` — directory di output (default `/home/pi/nautilus_data`)
+* `save_directory` — directory di output (default `/home/nautilus/nautilus_data`)
 * `save_left` / `save_right` — salva solo una delle due camere (default `true`)
 * `image_format` — `'jpg'` o `'png'` (default `'jpg'`)
 * `jpeg_quality` — qualità JPEG 0-100 (default `95`)
@@ -127,7 +129,7 @@ Nodo di salvataggio: sottoscrive le stesse coppie stereo e salva ogni frame su d
 Il nodo espone il service `~/set_saving` di tipo `std_srvs/SetBool`:
 
 ```bash
-# disabilita il salvataggio (l'acquisizione e le metriche continuano)
+# disabilita il salvataggio (l'acquisizione continua)
 ros2 service call /saving_node/set_saving std_srvs/srv/SetBool "{data: false}"
 
 # riabilita
@@ -148,6 +150,12 @@ Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato 
     width: 1280
     height: 720
     FrameDurationLimits: [200000, 200000]   # 5 FPS
+    AeEnable: false
+    AwbEnable: false
+    ExposureTime: 20000
+    ColourGains: [1.5, 1.5]
+    AfMode: 0
+    LensPosition: 2.6
 
 /stereo/rx/camera:
   ros__parameters:
@@ -155,6 +163,12 @@ Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato 
     width: 1280
     height: 720
     FrameDurationLimits: [200000, 200000]
+    AeEnable: false
+    AwbEnable: false
+    ExposureTime: 20000
+    ColourGains: [1.5, 1.5]
+    AfMode: 0
+    LensPosition: 1.5
 
 # 2) parametri del nodo di benchmark
 /**/metrics_node:
@@ -172,7 +186,7 @@ Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato 
     enable_saving: true
     left_topic: '/stereo/lx/camera/image_raw'
     right_topic: '/stereo/rx/camera/image_raw'
-    save_directory: '/home/pi/nautilus_data'
+    save_directory: '/home/nautilus/nautilus_data'
     save_left: true
     save_right: true
     image_format: 'jpg'
@@ -183,6 +197,12 @@ Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato 
     max_files_per_session: 0
     sync_slop_sec: 0.05
 ```
+
+### Perché i parametri fotometrici sono nel YAML
+
+I parametri `AeEnable`, `AwbEnable`, `ExposureTime`, `ColourGains` garantiscono coerenza radiometrica tra i due sensori. La stereo correlation (NCC, SGBM) fallisce se left e right hanno esposizione o white balance diversi. `AfMode` e `LensPosition` fissano la messa a fuoco: l'offset meccanico tra i due obiettivi è di +1.05 diottrie sulla sinistra.
+
+`camera_ros` può rifiutare `AfMode` e `LensPosition` al boot su IMX708. In quel caso interviene `lock_cameras.py`, esterno al pacchetto, che rilegge questo stesso YAML e riapplica i valori via `set_parameters`. Vedi `docs/global_launch.md` sezione 6.
 
 ## Dipendenze
 
@@ -209,8 +229,9 @@ Configurazione di riferimento: Pi 5, due Pi Camera v3 in box, 720p @ 5 FPS.
 ## Troubleshooting
 
 * **Nessun topic pubblicato** → verifica che `camera_ros` veda le due camere: `rpicam-hello --list-cameras`.
-* **Il nodo di salvataggio non scrive** → controlla che `save_directory` esista e sia scrivibile dall'utente che esegue ROS (`mkdir -p /home/pi/nautilus_data`).
+* **Il nodo di salvataggio non scrive** → controlla che `save_directory` esista e sia scrivibile dall'utente che esegue ROS (`mkdir -p /home/nautilus/nautilus_data`).
 * **File salvati con colori errati** → `saving_node` esegue la decodifica in BGR per `cv2.imwrite`; non alterare il `desired_encoding`.
 * **Corruzione file su spegnimento reed switch** → mantieni `flush_every_n: 1` per forzare `os.sync()` su MicroSD ad ogni scrittura.
+* **Lens position non applicata al boot** → `camera_ros` può rifiutare `AfMode`/`LensPosition`; verifica `journalctl -u lock-cameras.service`.
 * **Skew elevato (> 20 ms)** → problema di sincronizzazione hardware, controlla cavi CSI e riduci risoluzione.
 * **`colcon build` non trova `saving_node`** → verifica che `setup.py` contenga l'entry point e ricompila con `--symlink-install`.

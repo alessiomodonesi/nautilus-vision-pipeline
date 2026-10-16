@@ -6,33 +6,38 @@ Questo workspace contiene l'implementazione dei nodi ROS 2 (Jazzy) per la pipeli
 
 All'interno di questo workspace, il codice sorgente è organizzato nei seguenti pacchetti principali:
 
-* **`nautilus_perception`**: Il pacchetto core dedicato all'elaborazione delle immagini. Contiene:
-  * **nodo di enhancement**: Applica algoritmi di miglioramento (incapsulando codice di terze parti) alle immagini grezze per facilitare il riconoscimento.
-  * **nodo di detection**: Esegue l'inferenza per la stereovisione utilizzando modelli ottimizzati tramite OpenVINO. Accetta in input immagini raw o enhanced e pubblica i target identificati sul topic `/stereo_down/targets` utilizzando il formato standard `vision_msgs/Detection2DArray`.
+* **`nautilus_perception`**: il pacchetto core dedicato all'elaborazione delle immagini. Contiene:
+  * **nodo di enhancement**: applica algoritmi di miglioramento (incapsulando codice di terze parti) alle immagini grezze. La rete neurale WaterNet è **disabilitata di default** perché pensata solo per post-produzione, non per navigazione: sulla barca la pipeline gira solo in modalità `force_off` (CLAHE + sharpening).
+  * **nodo di detection**: esegue l'inferenza per la stereovisione utilizzando modelli ottimizzati tramite OpenVINO. Accetta in input immagini raw o enhanced e pubblica i target identificati sul topic `/stereo_down/targets` utilizzando il formato standard `vision_msgs/Detection2DArray`.
 
-* **`nautilus_camera`**: Pacchetto focalizzato sulla gestione e memorizzazione dei dati visivi. Contiene il **nodo di salvataggio**, utile per registrare le immagini tramite `ros2 bag record` (in formato mcap) o salvarle su cartella in formato JPEG con numerazione incrementale per le successive analisi dei biologi marini.
+* **`nautilus_camera`**: pacchetto focalizzato sull'acquisizione e sulla memorizzazione dei dati visivi. Contiene il **nodo di salvataggio** (JPEG/PNG su cartella, con numerazione incrementale) e il **nodo di benchmark** (FPS, jitter, skew stereo). Le camere sono configurate tramite un unico YAML letto anche dal `lock_cameras.py` che riapplica i parametri fotometrici al boot.
 
-* **`nautilus_msgs`**: Pacchetto contenente le definizioni dei messaggi custom, per garantire una comunicazione strutturata e coerente tra i vari nodi del sistema.
+* **`nautilus_msgs`**: pacchetto contenente le definizioni dei messaggi custom, per garantire una comunicazione strutturata e coerente tra i vari nodi del sistema.
+
+## Cosa parte automaticamente al boot
+
+Solo il blocco di acquisizione (`nautilus_camera/stereo_camera.launch.py`) parte in automatico tramite `nautilus-vision.service`. Il salvataggio è opzionale, controllato da `ENABLE_SAVING` in `pipeline_config.env`. Enhancement, detection e metriche **non partono mai da soli**: vanno lanciati a mano. Dettagli operativi in `docs/global_launch.md`.
 
 ## Prerequisiti e Dipendenze
 
 * **Sistema Base**: Ubuntu 24.04 con ROS 2 Jazzy
 * **Middleware**: CycloneDDS
 * **Librerie AI e Visione**: OpenCV, Ultralytics (YOLOv8), Intel OpenVINO
-* **Acquisizione Hardware**: I nodi presuppongono l'uso del pacchetto `camera_ros` per il corretto interfacciamento con i sensori stereoscopici.
+* **Python**: PyYAML (per `lock_cameras.py`)
+* **Acquisizione Hardware**: i nodi presuppongono l'uso del pacchetto `camera_ros` per il corretto interfacciamento con i sensori stereoscopici.
 
 ## Compilazione
 
 Per compilare i nodi del sistema visivo, spostati nella root del workspace ed esegui `colcon`:
 
 ```bash
-# Entra nel workspace
+# entra nel workspace
 cd ros2_ws
 
-# Compila tutti i pacchetti (oppure usa --packages-select per pacchetti specifici)
+# compila tutti i pacchetti (oppure usa --packages-select per pacchetti specifici)
 colcon build
 
-# Rendi disponibili i binari e i package nel path corrente
+# rendi disponibili i binari e i package nel path corrente
 source install/setup.bash
 ```
 
@@ -46,12 +51,22 @@ export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 ### Configurazione tramite YAML
 
-I parametri operativi del nodo di detection (come le soglie di confidenza, il percorso del modello OpenVINO e il device target per l'inferenza) sono configurabili tramite appositi file YAML da passare in fase di lancio.
+I parametri operativi sono distribuiti su due file YAML, uno per pacchetto:
+
+* `nautilus_camera/config/nautilus_camera.yaml` — parametri camera_ros, metrics_node, saving_node.
+* `nautilus_perception/config/detection_params.yaml` — parametri detection (modello, soglia, threads, sync).
+
+I parametri passati come launch argument sovrascrivono i valori YAML per la singola run, senza modificare il file.
 
 ### Avvio della Pipeline
 
-Si consiglia di avviare il sistema completo tramite i file di launch, in modo da caricare automaticamente le configurazioni:
+Si consiglia di avviare i nodi tramite i file di launch, in modo da caricare automaticamente le configurazioni:
 
 ```bash
-ros2 launch nautilus_perception <nome_launch_file>.launch.py
+# acquisizione (sempre)
+ros2 launch nautilus_camera stereo_camera.launch.py
+
+# aggiungi detection/enhancement sopra l'acquisizione già attiva
+ros2 launch nautilus_perception pipeline.launch.py \
+    enable_detection:=true enable_enhancement:=false
 ```
