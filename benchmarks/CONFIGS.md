@@ -170,14 +170,24 @@ sotto il valore nominale della fase, c'è stato throttling.
 
 ---
 
+## Scena di test e considerazioni
+
+Per ottenere un benchmark attendibile anche in assenza di un ambiente subacqueo reale, la scena inquadrata dalle telecamere deve rispettare due requisiti: **oggetti rilevabili** e **texture sufficiente**.
+
+- **YOLO e inferenza**: Il tempo di inferenza (e quindi la latenza) dipende esclusivamente dalle dimensioni dei tensori (es. 640x640) e dal modello (`.pt` o OpenVINO). Non dipende da *cosa* inquadra la telecamera. Una stanza con oggetti comuni (es. una bottiglia, una lattina, una sveglia) è perfetta.
+- **Matcher Stereo (Post-processing)**: Se la telecamera inquadra un muro bianco o il soffitto, YOLO non troverà nulla e il matcher stereo non calcolerà le distanze. Per misurare i tempi di `post`, inquadra 2 o 3 oggetti riconoscibili (con `enable_debug:=true` verifica che vengano disegnati i box). Il matcher lavorerà a pieno regime.
+- **Enhancement (C_full)**: Il nodo di enhancement sul Raspberry Pi non usa la rete neurale WaterNet, ma algoritmi classici di Computer Vision (Laplacian sharpening + CLAHE). Essendo deterministici, si comportano in modo identico su un'immagine statica, rendendo le misure di latenza estremamente stabili e veritiere.
+
+---
+
 ## Lancio manuale (una config)
 
-Wrapper unico per tutte le config: `benchmarks/scripts/run_benchmark.sh`.
+Wrapper unico per tutte le config: `benchmarks/run_benchmark.sh`.
 Uso:
 
 ```bash
 cd ~/nautilus-vision-pipeline
-./benchmarks/scripts/run_benchmark.sh <config> <run_n>
+./benchmarks/run_benchmark.sh <config> <run_n>
 #   config Fase A: A_baseline | B1_pt | B2_ov_fp32 | B3_ov_int8_640
 #                | B4_ov_int8_416 | C_full
 #   config Fase B: B1_pt_oc | B2_ov_fp32_oc | B3_ov_int8_640_oc
@@ -217,7 +227,7 @@ ros2 launch nautilus_perception pipeline.launch.py \
   include_stereo_camera:=true \
   enable_enhancement:=false enable_detection:=true \
   enable_saving:=false enable_metrics:=true enable_debug:=false \
-  model_filename_override:=yolov8n_openvino_640_fp32 \
+  model_filename_override:=yolov8n_640_fp32_openvino_model \
   half_res_override:=false imgsz_override:=640
 ```
 
@@ -228,7 +238,7 @@ ros2 launch nautilus_perception pipeline.launch.py \
   include_stereo_camera:=true \
   enable_enhancement:=true enable_detection:=true \
   enable_saving:=false enable_metrics:=true enable_debug:=false \
-  model_filename_override:=yolov8n_openvino_640_fp32 \
+  model_filename_override:=yolov8n_640_fp32_openvino_model \
   half_res_override:=false imgsz_override:=640
 ```
 
@@ -295,7 +305,7 @@ riavvia. Poi:
 ```bash
 for cfg in A_baseline B1_pt B2_ov_fp32 B3_ov_int8_640 B4_ov_int8_416 C_full; do
     for n in 1 2 3; do
-        ./benchmarks/scripts/run_benchmark.sh "$cfg" "$n"
+        ./benchmarks/run_benchmark.sh "$cfg" "$n"
     done
 done
 ```
@@ -308,7 +318,7 @@ Modifica `config.txt` per attivare l'OC (2800 MHz), riavvia, verifica
 ```bash
 for cfg in B1_pt_oc B2_ov_fp32_oc B3_ov_int8_640_oc B4_ov_int8_416_oc C_full_oc; do
     for n in 1 2 3; do
-        ./benchmarks/scripts/run_benchmark.sh "$cfg" "$n"
+        ./benchmarks/run_benchmark.sh "$cfg" "$n"
     done
 done
 ```
@@ -402,13 +412,13 @@ python3 benchmarks/scripts/evaluate_map.py \
   --out benchmarks/results/csv/map_yolov8n_pt.csv
 
 python3 benchmarks/scripts/evaluate_map.py \
-  --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n_openvino_640_fp32 \
+  --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n_640_fp32_openvino_model \
   --data benchmarks/datasets/coco128.yaml \
   --imgsz 640 --tag yolov8n_ov_fp32 \
   --out benchmarks/results/csv/map_yolov8n_ov_fp32.csv
 
 python3 benchmarks/scripts/evaluate_map.py \
-  --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n_openvino_640_int8 \
+  --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n_640_int8_openvino_model \
   --data benchmarks/datasets/coco128.yaml \
   --imgsz 640 --tag yolov8n_ov_int8_640 \
   --out benchmarks/results/csv/map_yolov8n_ov_int8_640.csv

@@ -10,14 +10,14 @@ Questa cartella implementa la **Fase 6 (Benchmark)** e la **Fase 7 (Stress test 
 
 ```text
 benchmarks/
+├── run_benchmark.sh             # Wrapper: lancia un run completo di una config
 ├── scripts/
 │   ├── benchmark_pipeline.py    # Profilazione latenze p50/p95 e delay inter-nodo
 │   ├── system_monitor.py        # Logging CPU%, RAM, temperatura, vcgencmd throttled
 │   ├── evaluate_map.py          # Calcolo mAP sul validation set per ogni variante
 │   ├── plot_results.py          # Grafici comparativi a partire dai CSV
 │   ├── model_benchmark.py       # Confronto .pt vs OpenVINO standalone (no ROS)
-│   ├── check_imgsz.py           # Ispeziona shape input di .pt e .ov
-│   └── run_benchmark.sh         # Wrapper: lancia un run completo di una config
+│   └── check_imgsz.py           # Ispeziona shape input di .pt e .ov
 ├── datasets/
 │   ├── coco128/                 # 128 immagini COCO + labels (scaricate)
 │   ├── coco128.yaml             # config Ultralytics con path assoluto
@@ -88,9 +88,9 @@ dei flag di throttling e sui valori attesi, vedi [`CONFIGS.md`](CONFIGS.md).
 
 ```bash
 cd ~/nautilus-vision-pipeline
-./benchmarks/scripts/run_benchmark.sh <config> <run_n>
-# es: ./benchmarks/scripts/run_benchmark.sh B2_ov_fp32 1
-#     ./benchmarks/scripts/run_benchmark.sh B2_ov_fp32_oc 1
+./benchmarks/run_benchmark.sh <config> <run_n>
+# es: ./benchmarks/run_benchmark.sh B2_ov_fp32 1
+#     ./benchmarks/run_benchmark.sh B2_ov_fp32_oc 1
 ```
 
 Il wrapper gestisce: stop servizi, check temperatura, lancio pipeline con
@@ -103,14 +103,14 @@ sistema 300s, benchmark latenze 120s, scrittura metadata, cooldown 30s.
 # Fase A — senza OC (assicurati che config.txt sia a 2400 MHz e riavvia)
 for cfg in A_baseline B1_pt B2_ov_fp32 B3_ov_int8_640 B4_ov_int8_416 C_full; do
     for n in 1 2 3; do
-        ./benchmarks/scripts/run_benchmark.sh "$cfg" "$n"
+        ./benchmarks/run_benchmark.sh "$cfg" "$n"
     done
 done
 
 # Fase B — con OC (modifica config.txt a 2800 MHz, riavvia, verifica clock)
 for cfg in B1_pt_oc B2_ov_fp32_oc B3_ov_int8_640_oc B4_ov_int8_416_oc C_full_oc; do
     for n in 1 2 3; do
-        ./benchmarks/scripts/run_benchmark.sh "$cfg" "$n"
+        ./benchmarks/run_benchmark.sh "$cfg" "$n"
     done
 done
 ```
@@ -141,7 +141,7 @@ Da lanciare in `tmux` o `screen`. Al termine, in `results/csv/` ci sono
 ### Accuratezza (Fase 6)
 
 - **mAP@0.5** e **mAP@0.5:0.95** su COCO128 per `yolov8n.pt` e
-  `yolov8n_openvino_640_fp32` — test di non-regressione dell'export OpenVINO.
+  `yolov8n_640_fp32_openvino_model` — test di non-regressione dell'export OpenVINO.
 - **Errore su Z**: oggetto a 0.6 / 0.7 / 0.8 / 0.9 m → verifica entro ±5%.
   ✅ Validato il 13/10/2026 su calibrazione 720p (RMS 0.125 px), errore osservato < 1 cm.
 
@@ -202,7 +202,7 @@ python3 benchmarks/scripts/evaluate_map.py \
 
 # yolov8n_openvino_640_fp32
 python3 benchmarks/scripts/evaluate_map.py \
-    --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n_openvino_640_fp32 \
+    --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n_640_fp32_openvino_model \
     --data benchmarks/datasets/coco128.yaml \
     --imgsz 640 --tag yolov8n_ov_fp32 \
     --out benchmarks/results/csv/map_yolov8n_ov_fp32.csv
@@ -282,3 +282,15 @@ run è da scartare.
 - ⚠️ Con OC attivo (2800 MHz), verifica `vcgencmd get_throttled` sui CSV
   system: se uno dei bit `16`-`19` è settato, la run è compromessa e va
   scartata.
+- ⚠️ **Scena di test e oggetti**: per validare il post-processing (matcher
+  stereo), la telecamera deve inquadrare oggetti riconoscibili da YOLO
+  (es. bottiglie, lattine, sveglie). Inquadrare un soffitto bianco o una
+  parete vuota impedisce a YOLO di generare box e al matcher stereo di
+  calcolare la profondità (Z). Il benchmark della latenza resta valido,
+  ma il tempo di `post` risulterebbe falsato a zero.
+- **Algoritmo di Enhancement**: il nodo `enhancement_node` in questa fase
+  non utilizza la rete neurale WaterNet (troppo pesante per il Pi), ma
+  applica tecniche di Computer Vision classiche (Laplacian + CLAHE).
+  Queste operazioni sono deterministiche e il loro tempo di esecuzione
+  non risente della staticità della scena, rendendo la configurazione
+  `C_full` perfettamente misurabile.
