@@ -8,17 +8,10 @@ from pathlib import Path
 import numpy as np
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 from sensor_msgs.msg import Image
 from vision_msgs.msg import Detection2DArray
 from std_msgs.msg import Float32MultiArray
-
-
-SENSOR_QOS = QoSProfile(
-    reliability=ReliabilityPolicy.BEST_EFFORT,
-    history=HistoryPolicy.KEEP_LAST,
-    depth=10,
-)
+from nautilus_common.qos_profiles import IMAGE_QOS, DETECTION_QOS, DEBUG_QOS
 
 
 class TopicStats:
@@ -83,19 +76,19 @@ class Benchmark(Node):
         if raw:
             self.stats["raw"] = TopicStats(raw)
             self.create_subscription(Image, raw,
-                lambda m: self._img("raw", m), SENSOR_QOS)
+                lambda m: self._img("raw", m), IMAGE_QOS)
         if enhanced:
             self.stats["enhanced"] = TopicStats(enhanced)
             self.create_subscription(Image, enhanced,
-                lambda m: self._img("enhanced", m), SENSOR_QOS)
+                lambda m: self._img("enhanced", m), IMAGE_QOS)
         if targets:
             self.stats["targets"] = TopicStats(targets)
             self.create_subscription(Detection2DArray, targets,
-                lambda m: self._tgt("targets", m), 10)
+                lambda m: self._tgt("targets", m), DETECTION_QOS)
         if stages:
             self.stages = StageStats()
             self.create_subscription(Float32MultiArray, stages,
-                lambda m: self.stages.add(m.data), 10)
+                lambda m: self.stages.add(m.data), DEBUG_QOS)
 
     def _lat_ms(self, header):
         now = self.get_clock().now()

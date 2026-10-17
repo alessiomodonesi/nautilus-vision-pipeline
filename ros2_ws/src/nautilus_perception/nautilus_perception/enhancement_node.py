@@ -8,6 +8,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from ament_index_python.packages import get_package_share_directory
 from nautilus_perception.enhancement.core_enhancement import WaternetEnhancer
+from nautilus_common.qos_profiles import IMAGE_QOS
 
 
 class EnhancementNode(Node):
@@ -39,11 +40,11 @@ class EnhancementNode(Node):
             Image,
             'image_raw',
             self.image_callback,
-            10
+            IMAGE_QOS
         )
         
         # publisher per l'immagine migliorata
-        self.publisher = self.create_publisher(Image, 'image_enhanced', 10)
+        self.publisher = self.create_publisher(Image, 'image_enhanced', IMAGE_QOS)
         
         # variabili per il calcolo di delay e FPS
         self.frame_count = 0

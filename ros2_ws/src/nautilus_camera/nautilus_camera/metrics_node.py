@@ -8,6 +8,7 @@ from collections import deque
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
+from nautilus_common.qos_profiles import IMAGE_QOS
 
 
 class MetricsNode(Node):
@@ -43,8 +44,8 @@ class MetricsNode(Node):
             self.bridge = CvBridge()
 
         # sottoscrizioni sincronizzate
-        self.left_sub  = message_filters.Subscriber(self, Image, left_topic)
-        self.right_sub = message_filters.Subscriber(self, Image, right_topic)
+        self.left_sub  = message_filters.Subscriber(self, Image, left_topic, qos_profile=IMAGE_QOS)
+        self.right_sub = message_filters.Subscriber(self, Image, right_topic, qos_profile=IMAGE_QOS)
         self.ts = message_filters.ApproximateTimeSynchronizer(
             [self.left_sub, self.right_sub],
             queue_size=10,

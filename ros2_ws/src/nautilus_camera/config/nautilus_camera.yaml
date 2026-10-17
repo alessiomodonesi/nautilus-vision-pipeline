@@ -14,6 +14,11 @@
     # se camera_ros non accetta AfMode o LensPosition al boot, vengono comunque riapplicati da lock_cameras.py
     AfMode: 0
     LensPosition: 2.6
+    qos_overrides:
+      /stereo/lx/camera/image_raw:
+        publisher:
+          reliability: best_effort
+          depth: 5
 
 # parametri hardware per camera_ros - camera destra (rx)
 /stereo/rx/camera:
@@ -28,6 +33,11 @@
     ColourGains: [1.5, 1.5]
     AfMode: 0
     LensPosition: 1.5
+    qos_overrides:
+      /stereo/rx/camera/image_raw:
+        publisher:
+          reliability: best_effort
+          depth: 5
 
 # parametri del nodo di benchmark
 /**/metrics_node:
@@ -54,4 +64,4 @@
     queue_size: 10
     flush_every_n: 1            # 1 = flush immediato su disco
     max_files_per_session: 0    # 0 = nessun limite
-    sync_slop_sec: 0.05         # tolleranza skew per message_filters
+    sync_slop_sec: 0.05         # tolleranza skew per message_filters   

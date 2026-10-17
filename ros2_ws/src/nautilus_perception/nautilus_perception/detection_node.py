@@ -15,6 +15,7 @@ from cv_bridge import CvBridge
 from rcl_interfaces.msg import ParameterDescriptor
 from nautilus_perception.detection.config import StereoConfig
 from std_msgs.msg import Float32MultiArray
+from nautilus_common.qos_profiles import IMAGE_QOS, DETECTION_QOS, DEBUG_QOS
 
 
 def _to_bool(value):
@@ -112,8 +113,8 @@ class DetectionNode(Node):
             raise ValueError(f"Unknown input_type: {input_type}")
 
         # sincronizzazione dei flussi stereo tramite message_filters
-        self.left_sub = message_filters.Subscriber(self, Image, left_topic)
-        self.right_sub = message_filters.Subscriber(self, Image, right_topic)
+        self.left_sub = message_filters.Subscriber(self, Image, left_topic, qos_profile=IMAGE_QOS)
+        self.right_sub = message_filters.Subscriber(self, Image, right_topic, qos_profile=IMAGE_QOS)
         
         self.ts = message_filters.ApproximateTimeSynchronizer(
             [self.left_sub, self.right_sub], 
@@ -126,10 +127,10 @@ class DetectionNode(Node):
         self.detection_pub = self.create_publisher(
             Detection2DArray,
             '/stereo_down/targets',
-            10
+            DETECTION_QOS
         )
         
-        self.timing_pub = self.create_publisher(Float32MultiArray, '/stereo_down/timings', 10)
+        self.timing_pub = self.create_publisher(Float32MultiArray, '/stereo_down/timings', DEBUG_QOS)
         self.get_logger().info(f"Detection node started. Listening on {left_topic} and {right_topic}")
 
     def _get_param_strict(self, name):

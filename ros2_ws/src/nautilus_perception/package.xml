@@ -12,6 +12,7 @@
   <depend>cv_bridge</depend>
   <depend>vision_msgs</depend>
   <depend>message_filters</depend>
+  <depend>nautilus_common</depend>
   
   <!-- Dipendenze a librerie Python -->
   <exec_depend>python3-opencv</exec_depend>
