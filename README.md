@@ -24,6 +24,7 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 ### 📦 Workspace e Pacchetti ROS 2 (`ros2_ws/`)
 
 * **[Workspace Overview](ros2_ws/README.md)** — Struttura generale del workspace, istruzioni di build e configurazione CycloneDDS.
+* **[Package `nautilus_common`](ros2_ws/src/nautilus_common/README.md)** — Utility condivise, costanti e profili QoS centralizzati per garantire l'allineamento della comunicazione DDS tra tutti i nodi (sia Python che C++).
 * **[Package `nautilus_camera`](ros2_ws/src/nautilus_camera/README.md)** — Acquisizione hardware 720p @ 5 FPS, nodo di benchmark (`metrics_node`), nodo di salvataggio immagini su MicroSD (`saving_node`) con gestione crash e assenza RTC. Configurazione centralizzata in `nautilus_camera.yaml`.
 * **[Package `nautilus_perception`](ros2_ws/src/nautilus_perception/README.md)** — Modulo core di elaborazione visiva: nodo di enhancement (WaterNet/CLAHE, default `force_off`) e nodo di detection IA + stereovisione.
   * **[Sottomodulo Detection](ros2_ws/src/nautilus_perception/nautilus_perception/detection/README.md)** — Dettagli su architettura *Detect-Then-Range*, calibrazione stereo ChArUco e matching epipolare.
@@ -45,7 +46,8 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 
 * **[Benchmark Overview](benchmarks/README.md)** — Metodologia dei test prestazionali e termici (Fase 6 e 7), configurazioni di pipeline, metriche raccolte (latenza p50/p95, CPU, RAM, temperatura, mAP) e linee guida di riproducibilità.
 * **[Configurazioni di Test](benchmarks/CONFIGS.md)** — Le 5 config ufficiali (`A_baseline`, `B_pt`, `B_ov_fp32`, `C_pt`, `C_ov_int8_640`) + 4 di ottimizzazione, prerequisiti, valori attesi e batch di run.
-* **[Script di Benchmark](benchmarks/scripts/)** — `benchmark_pipeline.py`, `system_monitor.py`, `evaluate_map.py`, `plot_results.py`, `model_benchmark.py`, `check_imgsz.py`, `run_benchmark.sh`.
+* **[Script di Lancio](benchmarks/)** — `run_benchmark.sh`.
+* **[Script di Benchmark](benchmarks/scripts/)** — `benchmark_pipeline.py`, `system_monitor.py`, `evaluate_map.py`, `plot_results.py`, `model_benchmark.py`, `check_imgsz.py`.
 * **[Dataset di Test](benchmarks/datasets/)** — Immagini e video stereo di test, dataset grezzi annotati, dataset COCO128 per mAP e tool di pulizia (`clean_dataset.py`).
 * **[Risultati](benchmarks/results/)** — CSV temporizzati (`csv/`) e grafici PNG (`plots/`) prodotti durante le sessioni.
 
@@ -247,14 +249,14 @@ Per i test prestazionali e termici della **Fase 6**, i file sono organizzati all
 
 ```text
 benchmarks/
+├── run_benchmark.sh             # Wrapper: lancia un run completo di una config
 ├── scripts/
 │   ├── benchmark_pipeline.py    # Profilazione latenze p50/p95 e delay inter-nodo
 │   ├── system_monitor.py        # Logging CPU%, RAM, temperatura, vcgencmd throttled
 │   ├── evaluate_map.py          # Calcolo mAP sul validation set per ogni variante
 │   ├── plot_results.py          # Grafici comparativi a partire dai CSV
 │   ├── model_benchmark.py       # Confronto .pt vs OpenVINO standalone (no ROS)
-│   ├── check_imgsz.py           # Ispeziona shape input di .pt e .ov
-│   └── run_benchmark.sh         # Wrapper: lancia un run completo di una config
+│   └── check_imgsz.py           # Ispeziona shape input di .pt e .ov 
 ├── datasets/
 │   ├── coco128/                 # 128 immagini COCO + labels (per mAP)
 │   ├── coco128.yaml             # config Ultralytics con path assoluto

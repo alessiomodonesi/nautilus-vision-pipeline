@@ -156,6 +156,11 @@ Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato 
     ColourGains: [1.5, 1.5]
     AfMode: 0
     LensPosition: 2.6
+    qos_overrides:
+      /stereo/lx/camera/image_raw:
+        publisher:
+          reliability: best_effort
+          depth: 5
 
 /stereo/rx/camera:
   ros__parameters:
@@ -169,6 +174,11 @@ Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato 
     ColourGains: [1.5, 1.5]
     AfMode: 0
     LensPosition: 1.5
+    qos_overrides:
+      /stereo/rx/camera/image_raw:
+        publisher:
+          reliability: best_effort
+          depth: 5
 
 # 2) parametri del nodo di benchmark
 /**/metrics_node:
@@ -197,6 +207,14 @@ Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato 
     max_files_per_session: 0
     sync_slop_sec: 0.05
 ```
+
+## Allineamento QoS (Quality of Service)
+
+Per garantire la massima reattività e ridurre la latenza di rete, il driver `camera_ros` (scritto in C++) è configurato per pubblicare i flussi video con QoS `BEST_EFFORT` e profondità 5.
+
+Questo allineamento viene forzato tramite il blocco `qos_overrides` all'interno del file `config/nautilus_camera.yaml`, che sovrascrive i default del driver. 
+
+Tutti i nodi Python di sottoscrizione (`metrics_node`, `saving_node`, `enhancement_node`, `detection_node`) utilizzano lo stesso profilo `IMAGE_QOS` importato dal pacchetto [`nautilus_common`](../nautilus_common/README.md). Questa uniformità evita disallineamenti silenziosi (in cui un publisher e un subscriber non si vedono) e impedisce che il driver C++ sprechi risorse in attese di conferma (ACK) tipiche del protocollo `RELIABLE`.
 
 ### Perché i parametri fotometrici sono nel YAML
 

@@ -6,11 +6,13 @@ Questo workspace contiene l'implementazione dei nodi ROS 2 (Jazzy) per la pipeli
 
 All'interno di questo workspace, il codice sorgente è organizzato nei seguenti pacchetti principali:
 
+* **`nautilus_camera`**: pacchetto focalizzato sull'acquisizione e sulla memorizzazione dei dati visivi. Contiene il **nodo di salvataggio** (JPEG/PNG su cartella, con numerazione incrementale) e il **nodo di benchmark** (FPS, jitter, skew stereo). Le camere sono configurate tramite un unico YAML letto anche dal `lock_cameras.py` che riapplica i parametri fotometrici al boot.
+
 * **`nautilus_perception`**: il pacchetto core dedicato all'elaborazione delle immagini. Contiene:
   * **nodo di enhancement**: applica algoritmi di miglioramento (incapsulando codice di terze parti) alle immagini grezze. La rete neurale WaterNet è **disabilitata di default** perché pensata solo per post-produzione, non per navigazione: sulla barca la pipeline gira solo in modalità `force_off` (CLAHE + sharpening).
   * **nodo di detection**: esegue l'inferenza per la stereovisione utilizzando modelli ottimizzati tramite OpenVINO. Accetta in input immagini raw o enhanced e pubblica i target identificati sul topic `/stereo_down/targets` utilizzando il formato standard `vision_msgs/Detection2DArray`.
 
-* **`nautilus_camera`**: pacchetto focalizzato sull'acquisizione e sulla memorizzazione dei dati visivi. Contiene il **nodo di salvataggio** (JPEG/PNG su cartella, con numerazione incrementale) e il **nodo di benchmark** (FPS, jitter, skew stereo). Le camere sono configurate tramite un unico YAML letto anche dal `lock_cameras.py` che riapplica i parametri fotometrici al boot.
+* **`nautilus_common`**: pacchetto di utility condivise. Centralizza costanti e profili di comunicazione (QoS) che devono essere identici in tutta la pipeline. Garantisce che i nodi Python (tramite import) e i nodi C++ (tramite `qos_overrides` nei file YAML) comunichino con le stesse regole, evitando disallineamenti silenziosi e colli di bottiglia di rete. Vedi [`README.md`](src/nautilus_common/README.md) per i dettagli.
 
 * **`nautilus_msgs`**: pacchetto contenente le definizioni dei messaggi custom, per garantire una comunicazione strutturata e coerente tra i vari nodi del sistema.
 

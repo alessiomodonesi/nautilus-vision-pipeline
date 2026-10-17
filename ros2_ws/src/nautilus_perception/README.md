@@ -102,6 +102,16 @@ ros2 launch nautilus_perception pipeline.launch.py \
 
 ---
 
+## Sistema di QoS (Quality of Service)
+
+I nodi di questo pacchetto (`enhancement_node` e `detection_node`) utilizzano i profili QoS centralizzati definiti nel pacchetto [`nautilus_common`](../nautilus_common/README.md) per garantire l'allineamento con il resto della pipeline.
+
+* **Immagini (`IMAGE_QOS`)**: Iscrizioni e pubblicazioni dei flussi video usano `BEST_EFFORT` (depth 5). Questo previene colli di bottiglia di rete e garantisce che l'enhancement e la detection non siano bloccati da logiche di ritrasmissione dei frame persi.
+* **Target (`DETECTION_QOS`)**: Il topic `/stereo_down/targets` usa `RELIABLE` (depth 10). Poiché rappresenta l'output finale per la logica di bordo, un target rilevato non deve mai andare perso.
+* **Telemetria (`DEBUG_QOS`)**: Il topic `/stereo_down/timings` usa `BEST_EFFORT`. I dati sulle prestazioni (pre/inferenza/post) sono diagnostici e la loro eventuale perdita non deve impattare la pipeline.
+
+---
+
 ## Guida al Nodo di Detection e Stereovisione
 
 Il modulo di detection (`detection_node`) implementa un'architettura **"Detect-Then-Range"** ottimizzata per dispositivi edge (Raspberry Pi 5):
