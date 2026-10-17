@@ -5,6 +5,7 @@ import numpy as np
 import message_filters
 import os
 import time
+import glob
 
 from ament_index_python.packages import get_package_share_directory
 from rclpy.node import Node
@@ -65,11 +66,18 @@ class DetectionNode(Node):
 
         # importa il detector
         from nautilus_perception.detection.core_detection import YoloDetector, SparseBlockMatcher
-        
+
         # costruisce il percorso dinamico
         pkg_share = get_package_share_directory('nautilus_perception')
         model_path = os.path.join(pkg_share, 'data', 'weights', model_filename)
 
+        # ultralytics non riconosce le directory OpenVINO se
+        # non terminano con '_openvino_model'
+        if os.path.isdir(model_path):
+            xmls = glob.glob(os.path.join(model_path, '*.xml'))
+            if xmls:
+                model_path = xmls[0]
+                
         self.get_logger().info(f"Initializing YOLOv8 with model: {model_path}")
         self.get_logger().info(f"OpenCV visual debugging: {'ENABLED' if self.enable_debug else 'DISABLED'}")
         self.get_logger().info(f"Half resolution inference: {'ENABLED' if half_res else 'DISABLED'}")
@@ -147,82 +155,97 @@ class DetectionNode(Node):
             self.get_logger().error(f"Error in image conversion: {e}")
             return
 
-        # applicazione della rettifica stereo, copia e forzatura a uint8
-        cv_left = cv2.remap(cv_left, self.map1x, self.map1y, cv2.INTER_LINEAR).copy().astype(np.uint8)
-        cv_right = cv2.remap(cv_right, self.map2x, self.map2y, cv2.INTER_LINEAR).copy().astype(np.uint8)
-        t_pre = time.perf_counter()
+        # log shape al primo frame per verificare che combaci con la calibrazione
+        if not hasattr(self, '_shape_logged'):
+            self.get_logger().info(
+                f"Image shape: {cv_left.shape} | "
+                f"map1x shape: {self.map1x.shape} | "
+                f"map2x shape: {self.map2x.shape}"
+            )
+            self._shape_logged = True
 
-        # inferenza
-        # NB: YoloDetector.detect() include internamente letterbox + infer + NMS.
-        # per una separazione più fine bisogna instrumentare core_detection.py.
-        detections = self.detector.detect(cv_left)
-        t_infer = time.perf_counter()
+        try:
+            # pre-processing
+            # applicazione della rettifica stereo, copia e forzatura a uint8
+            cv_left = cv2.remap(cv_left, self.map1x, self.map1y, cv2.INTER_LINEAR).copy().astype(np.uint8)
+            cv_right = cv2.remap(cv_right, self.map2x, self.map2y, cv2.INTER_LINEAR).copy().astype(np.uint8)
+            t_pre = time.perf_counter()
 
-        # post-processing
-        det_array_msg = Detection2DArray()
-        det_array_msg.header = left_msg.header
-        distances = []
+            # inferenza
+            detections = self.detector.detect(cv_left)
+            t_infer = time.perf_counter()
 
-        if detections:
-            # converti in scala di grigi per il matcher stereo per evitare ridondanze
-            gray_l = cv2.cvtColor(cv_left, cv2.COLOR_BGR2GRAY)
-            gray_r = cv2.cvtColor(cv_right, cv2.COLOR_BGR2GRAY)
+            # post-processing
+            det_array_msg = Detection2DArray()
+            det_array_msg.header = left_msg.header
+            distances = []
 
-            for idx, (x, y, w, h, conf) in enumerate(detections):
-                cx, cy = x + w // 2, y + h // 2
-                mx, my = max(1, w // 4), max(1, h // 4)
-                points = [(cx, cy), (cx, y+my), (cx, y+h-my), (x+mx, cy), (x+w-mx, cy)]
-                
-                # stima la distanza campionando il centro del bounding box
-                dists = [d for px, py in points
-                         if (d := self.matcher.estimate_distance(gray_l, gray_r, px, py)) > 0.0]
-                dist = float(np.median(dists)) if dists else 0.0
-                distances.append(dist)
+            if detections:
+                # converte in scala di grigi per il matcher stereo per evitare ridondanze
+                gray_l = cv2.cvtColor(cv_left, cv2.COLOR_BGR2GRAY)
+                gray_r = cv2.cvtColor(cv_right, cv2.COLOR_BGR2GRAY)
 
-                # stampa il log pulito solo se ci sono rilevamenti effettivi
-                self.get_logger().info(
-                    f"[TARGET DETECTED] Obj [{idx}] -> Box: x={x}, y={y}, w={w}, h={h} | Conf: {conf:.2f} | Distance (Z): {dist:.3f} m"
-                )
+                for idx, (x, y, w, h, conf) in enumerate(detections):
+                    cx, cy = x + w // 2, y + h // 2
+                    mx, my = max(1, w // 4), max(1, h // 4)
+                    points = [(cx, cy), (cx, y+my), (cx, y+h-my), (x+mx, cy), (x+w-mx, cy)]
+                    
+                    # stima la distanza campionando il centro del bounding box
+                    dists = [d for px, py in points
+                             if (d := self.matcher.estimate_distance(gray_l, gray_r, px, py)) > 0.0]
+                    dist = float(np.median(dists)) if dists else 0.0
+                    distances.append(dist)
 
-                # compila il messaggio ROS 2
-                det = Detection2D()
-                det.header = left_msg.header
-                
-                det.bbox.center.position.x = float(cx)
-                det.bbox.center.position.y = float(cy)
-                det.bbox.size_x = float(w)
-                det.bbox.size_y = float(h)
+                    # stampa il log pulito solo se ci sono rilevamenti effettivi
+                    self.get_logger().info(
+                        f"[TARGET DETECTED] Obj [{idx}] -> Box: x={x}, y={y}, w={w}, h={h} | Conf: {conf:.2f} | Distance (Z): {dist:.3f} m"
+                    )
 
-                hyp = ObjectHypothesisWithPose()
-                hyp.hypothesis.class_id = "target"
-                hyp.hypothesis.score = float(conf)
-                
-                # distanza stimata (Z) nella posa 3D
-                if dist > 0.0:
-                    hyp.pose.pose.position.z = float(dist)
+                    # compila il messaggio ROS 2
+                    det = Detection2D()
+                    det.header = left_msg.header
+                    det.bbox.center.position.x = float(cx)
+                    det.bbox.center.position.y = float(cy)
+                    det.bbox.size_x = float(w)
+                    det.bbox.size_y = float(h)
 
-                det.results.append(hyp)
-                det_array_msg.detections.append(det)
+                    hyp = ObjectHypothesisWithPose()
+                    hyp.hypothesis.class_id = "target"
+                    hyp.hypothesis.score = float(conf)
+                    
+                    # distanza stimata (Z) nella posa 3D
+                    if dist > 0.0:
+                        hyp.pose.pose.position.z = float(dist)
 
-        # chiamata esterna per il debug visivo
-        if self.enable_debug:
-            from nautilus_perception.detection.core_detection import draw_debug_window
-            draw_debug_window(cv_left, detections, distances)
+                    det.results.append(hyp)
+                    det_array_msg.detections.append(det)
 
-        # pubblicazione sul topic
-        self.detection_pub.publish(det_array_msg)
-        t_post = time.perf_counter()
+            # chiamata esterna per il debug visivo
+            if self.enable_debug:
+                from nautilus_perception.detection.core_detection import draw_debug_window
+                draw_debug_window(cv_left, detections, distances)
 
-        # timings
-        timings = Float32MultiArray()
-        timings.data = [
-            (t_pre   - t0)      * 1000.0,   # pre_ms
-            (t_infer - t_pre)   * 1000.0,   # infer_ms
-            (t_post  - t_infer) * 1000.0,   # post_ms
-            (t_post  - t0)      * 1000.0,   # total_ms
-        ]
-        self.timing_pub.publish(timings)
-    
+            # pubblicazione sul topic
+            self.detection_pub.publish(det_array_msg)
+            t_post = time.perf_counter()
+
+            # timings
+            timings = Float32MultiArray()
+            timings.data = [
+                (t_pre   - t0)      * 1000.0,   # pre_ms
+                (t_infer - t_pre)   * 1000.0,   # infer_ms
+                (t_post  - t_infer) * 1000.0,   # post_ms
+                (t_post  - t0)      * 1000.0,   # total_ms
+            ]
+            self.timing_pub.publish(timings)
+
+        except Exception as e:
+            import traceback
+            self.get_logger().error(
+                f"stereo_callback failed: {type(e).__name__}: {e}\n"
+                f"{traceback.format_exc()}"
+            )
+            return
     
 def main(args=None):
     rclpy.init(args=args)
