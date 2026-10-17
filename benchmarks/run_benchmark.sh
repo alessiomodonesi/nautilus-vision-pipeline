@@ -30,16 +30,16 @@ case "$CONFIG" in
     # ── Fase A: senza overclock ─────────────────────────────────────────
     A_baseline)          ENH="false"; DET="false"; MODEL="";                          HALF_RES="true";  IMGSZ="640"; NOTE="baseline solo camera (no OC)" ;;
     B1_pt)               ENH="false"; DET="true";  MODEL="yolov8n.pt";                HALF_RES="true";  IMGSZ="640"; NOTE="yolov8n.pt (no OC)" ;;
-    B2_ov_fp32)          ENH="false"; DET="true";  MODEL="yolov8n_openvino_640_fp32"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO FP32 640 (no OC)" ;;
-    B3_ov_int8_640)      ENH="false"; DET="true";  MODEL="yolov8n_openvino_640_int8"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO INT8 640 (no OC)" ;;
-    B4_ov_int8_416)      ENH="false"; DET="true";  MODEL="yolov8n_openvino_416_int8"; HALF_RES="false"; IMGSZ="416"; NOTE="OpenVINO INT8 416 (no OC)" ;;
-    C_full)              ENH="true";  DET="true";  MODEL="yolov8n_openvino_640_fp32"; HALF_RES="false"; IMGSZ="640"; NOTE="full + OV FP32 640 (no OC)" ;;
+    B2_ov_fp32)          ENH="false"; DET="true";  MODEL="yolov8n_640_fp32_openvino_model"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO FP32 640 (no OC)" ;;
+    B3_ov_int8_640)      ENH="false"; DET="true";  MODEL="yolov8n_640_int8_openvino_model"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO INT8 640 (no OC)" ;;
+    B4_ov_int8_416)      ENH="false"; DET="true";  MODEL="yolov8n_416_int8_openvino_model"; HALF_RES="false"; IMGSZ="416"; NOTE="OpenVINO INT8 416 (no OC)" ;;
+    C_full)              ENH="true";  DET="true";  MODEL="yolov8n_640_fp32_openvino_model"; HALF_RES="false"; IMGSZ="640"; NOTE="full + OV FP32 640 (no OC)" ;;
     # ── Fase B: con overclock 2800 MHz ──────────────────────────────────
     B1_pt_oc)            ENH="false"; DET="true";  MODEL="yolov8n.pt";                HALF_RES="true";  IMGSZ="640"; NOTE="yolov8n.pt (OC 2800)" ;;
-    B2_ov_fp32_oc)       ENH="false"; DET="true";  MODEL="yolov8n_openvino_640_fp32"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO FP32 640 (OC 2800)" ;;
-    B3_ov_int8_640_oc)   ENH="false"; DET="true";  MODEL="yolov8n_openvino_640_int8"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO INT8 640 (OC 2800)" ;;
-    B4_ov_int8_416_oc)   ENH="false"; DET="true";  MODEL="yolov8n_openvino_416_int8"; HALF_RES="false"; IMGSZ="416"; NOTE="OpenVINO INT8 416 (OC 2800)" ;;
-    C_full_oc)           ENH="true";  DET="true";  MODEL="yolov8n_openvino_640_fp32"; HALF_RES="false"; IMGSZ="640"; NOTE="full + OV FP32 640 (OC 2800)" ;;
+    B2_ov_fp32_oc)       ENH="false"; DET="true";  MODEL="yolov8n_640_fp32_openvino_model"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO FP32 640 (OC 2800)" ;;
+    B3_ov_int8_640_oc)   ENH="false"; DET="true";  MODEL="yolov8n_640_int8_openvino_model"; HALF_RES="false"; IMGSZ="640"; NOTE="OpenVINO INT8 640 (OC 2800)" ;;
+    B4_ov_int8_416_oc)   ENH="false"; DET="true";  MODEL="yolov8n_416_int8_openvino_model"; HALF_RES="false"; IMGSZ="416"; NOTE="OpenVINO INT8 416 (OC 2800)" ;;
+    C_full_oc)           ENH="true";  DET="true";  MODEL="yolov8n_640_fp32_openvino_model"; HALF_RES="false"; IMGSZ="640"; NOTE="full + OV FP32 640 (OC 2800)" ;;
     *) echo "Config non valida: $CONFIG"; exit 1 ;;
 esac
 
