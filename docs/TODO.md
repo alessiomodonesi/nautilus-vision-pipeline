@@ -19,6 +19,7 @@ Obiettivo: un nodo in `nautilus_camera` che legge le immagini (enhanced o no, a 
 - [x] Realizza il nodo che prende le immagini e le salva.
 - [x] Misurare FPS reali e delay entrata-uscita da questo nodo.
 - [x] Valutare prima `ros2 bag record` (mcap, immagini compresse). Il nodo serve se i biologi vogliono JPEG in cartelle; in quel caso numerazione incrementale dei file, perché manca l'RTC.
+- [x] Estrattore post-missione `tools/extract_bag_frames.py` (MCAP → JPEG passthrough, zero ricompressione, `metadata.csv`, `--copy-calibration`). Chiude il requisito "i biologi vogliono JPEG in cartelle" senza mantenere `saving_node` attivo in produzione.
 
 ## Fase 4 — Nodo di detection
 
