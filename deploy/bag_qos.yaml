@@ -1,0 +1,24 @@
+# deploy/bag_qos.yaml
+- topic: /stereo/lx/camera/image_raw/compressed
+  reliability: best_effort
+  durability: volatile
+  history: keep_last
+  depth: 1
+
+- topic: /stereo/rx/camera/image_raw/compressed
+  reliability: best_effort
+  durability: volatile
+  history: keep_last
+  depth: 1
+
+- topic: /stereo/lx/camera/camera_info
+  reliability: reliable
+  durability: transient_local
+  history: keep_last
+  depth: 1
+
+- topic: /stereo/rx/camera/camera_info
+  reliability: reliable
+  durability: transient_local
+  history: keep_last
+  depth: 1

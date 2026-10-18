@@ -1,0 +1,31 @@
+# deploy/nautilus-bag.service
+[Unit]
+Description=Nautilus Stereo Rosbag Recorder (MCAP, optional via ENABLE_BAG)
+After=nautilus-vision.service
+PartOf=nautilus-vision.service
+Requires=nautilus-vision.service
+
+[Service]
+Type=simple
+User=nautilus
+Environment="RMW_IMPLEMENTATION=rmw_cyclonedds_cpp"
+Environment="CYCLONEDDS_URI=file:///home/nautilus/nautilus-vision-pipeline/deploy/cyclonedds.xml"
+Environment="ROS_DOMAIN_ID=42"
+Environment="NAUTILUS_BAG_DIR=/home/nautilus/nautilus_bags"
+
+# skippa il servizio se ENABLE_BAG != true nel file env.
+# robusto a 'export ENABLE_BAG=true', spazi e commenti.
+ExecCondition=/bin/bash -c 'set -a; . /home/nautilus/nautilus-vision-pipeline/pipeline_config.env; set +a; [ "${ENABLE_BAG:-false}" = "true" ]'
+
+ExecStart=/bin/bash /home/nautilus/nautilus-vision-pipeline/deploy/record_stereo_bag.sh
+
+# SIGINT è il segnale che ros2 bag record attende per finalizzare MCAP.
+KillSignal=SIGINT
+KillMode=mixed
+TimeoutStopSec=30
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=nautilus-vision.service
