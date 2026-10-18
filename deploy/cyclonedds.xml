@@ -1,23 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CycloneDDS xmlns="https://cdds.io/config">
-    <Domain id="any">
-        <General>
-            <Interfaces>
-                <NetworkInterface name="wlan0"/>
-            </Interfaces>
-            <AllowMulticast>spdp</AllowMulticast>
-            <MaxMessageSize>65500B</MaxMessageSize>
-        </General>
-        <Discovery>
-            <Peers>
-                <Peer Address="127.0.0.1"/>
-            </Peers>
-        </Discovery>
-        <SharedMemory>
-            <Enable>false</Enable>
-        </SharedMemory>
-        <Internal>
-            <SocketReceiveBufferSize min="10MB" />
-        </Internal>
-    </Domain>
+<!--
+  CycloneDDS configuration for the Nautilus network.
+
+      export CYCLONEDDS_URI=file:///path/to/nautilus_ros2/config/cyclonedds.xml
+      export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      export ROS_DOMAIN_ID=42        # TODO: confirm, see docs/network.md
+
+  All four hosts must agree on ROS_DOMAIN_ID *and* on the RMW implementation.
+-->
+<CycloneDDS xmlns="https://cdds.io/config"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="https://cdds.io/config
+                                https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd">
+  <Domain id="any">
+
+    <General>
+      <Interfaces>
+        <NetworkInterface autodetermine="true" priority="default" multicast="default" />
+      </Interfaces>
+      <AllowMulticast>false</AllowMulticast>
+      <!-- WiFi MTU is 1500, keep fragments below it to avoid IP fragmentation. -->
+      <MaxMessageSize>1400B</MaxMessageSize>
+      <FragmentSize>1344B</FragmentSize>
+    </General>
+
+    <Discovery>
+      <ParticipantIndex>auto</ParticipantIndex>
+      <!-- Static peer list -->
+      <Peers>
+        <Peer address="127.0.0.1"/>     <!-- Loopback   -->
+        <Peer address="192.168.2.10"/>  <!-- TODO Jetson -->
+        <Peer address="192.168.2.11"/>  <!-- TODO RPi 1 (stereo_front) -->
+        <Peer address="192.168.2.12"/>  <!-- TODO RPi 2 (stereo_down) -->
+        <Peer address="192.168.2.2"/>   <!-- TODO BlueBoat / BlueOS -->
+      </Peers>
+      <MaxAutoParticipantIndex>10</MaxAutoParticipantIndex>
+    </Discovery>
+
+    <Internal>
+      <Watermarks>
+        <WhcHigh>2MB</WhcHigh>
+      </Watermarks>
+      <MinimumSocketReceiveBufferSize>4MB</MinimumSocketReceiveBufferSize>
+    </Internal>
+
+    <Tracing>
+      <Verbosity>warning</Verbosity>
+      <OutputFile>stderr</OutputFile>
+    </Tracing>
+
+  </Domain>
 </CycloneDDS>
