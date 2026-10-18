@@ -8,7 +8,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from ament_index_python.packages import get_package_share_directory
 from nautilus_perception.enhancement.core_enhancement import WaternetEnhancer
-from nautilus_common.qos_profiles import IMAGE_QOS
+from nautilus_common.qos_profiles import IMAGE_PUB_QOS, ENHANCED_PUB_QOS
 
 
 class EnhancementNode(Node):
@@ -35,16 +35,16 @@ class EnhancementNode(Node):
         # utility per convertire i messaggi ROS in array NumPy per OpenCV
         self.bridge = CvBridge()
         
-        # sottoscrizione al topic raw
+        # subscription: real-time, drop frame vecchi
         self.subscription = self.create_subscription(
             Image,
             'image_raw',
             self.image_callback,
-            IMAGE_QOS
+            IMAGE_PUB_QOS
         )
         
-        # publisher per l'immagine migliorata
-        self.publisher = self.create_publisher(Image, 'image_enhanced', IMAGE_QOS)
+        # publisher: real-time, depth 1 (l'output va a detection che deve vedere il più recente)
+        self.publisher = self.create_publisher(Image, 'image_enhanced', ENHANCED_PUB_QOS)
         
         # variabili per il calcolo di delay e FPS
         self.frame_count = 0
@@ -76,7 +76,8 @@ class EnhancementNode(Node):
         # salvataggio opzionale su disco
         if self.save_output:
             # salva l'immagine direttamente nella home dell'utente per trovarla subito
-            output_path = os.path.expanduser('~/enhancement_output.jpg')
+            self._save_counter = getattr(self, '_save_counter', 0) + 1
+            output_path = os.path.expanduser(f'~/enhancement_{self._save_counter:06d}.jpg')
             success = cv2.imwrite(output_path, enhanced_image)
             if not success:
                 self.get_logger().error(f"Unable to save the image to {output_path}")

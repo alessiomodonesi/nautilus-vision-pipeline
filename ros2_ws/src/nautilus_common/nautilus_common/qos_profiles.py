@@ -53,6 +53,17 @@ def get_qos(topic: str, direction: str = 'publisher') -> QoSProfile:
                                    DurabilityPolicy.VOLATILE),
     )
 
-IMAGE_QOS     = get_qos('/stereo/lx/camera/image_raw', 'publisher')
+# publisher real-time: scarta i frame vecchi (depth 1, dal YAML)
+IMAGE_PUB_QOS = get_qos('/stereo/lx/camera/image_raw', 'publisher')
+
+# subscriber per message_filters: buffer 5 per sync stereo + callback
+# non istantanei. depth 5 = ~1 s a 5 Hz
+IMAGE_SUB_QOS = QoSProfile(
+    reliability=ReliabilityPolicy.BEST_EFFORT,
+    history=HistoryPolicy.KEEP_LAST,
+    depth=5,
+    durability=DurabilityPolicy.VOLATILE,
+)
 DETECTION_QOS = get_qos('/stereo_down/targets', 'publisher')
 DEBUG_QOS     = get_qos('/stereo_down/timings', 'publisher')
+ENHANCED_PUB_QOS = get_qos('/stereo/lx/image_enhanced', 'publisher')

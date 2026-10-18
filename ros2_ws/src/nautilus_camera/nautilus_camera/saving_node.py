@@ -8,7 +8,7 @@ from sensor_msgs.msg import Image
 from std_srvs.srv import SetBool
 from cv_bridge import CvBridge
 from message_filters import Subscriber, ApproximateTimeSynchronizer
-from nautilus_common.qos_profiles import IMAGE_QOS
+from nautilus_common.qos_profiles import IMAGE_SUB_QOS
 
 
 class SavingNode(Node):
@@ -77,8 +77,8 @@ class SavingNode(Node):
         right_topic = self.get_parameter('right_topic').value
         qsize = self.get_parameter('queue_size').value
 
-        self.left_sub = Subscriber(self, Image, left_topic, qos_profile=IMAGE_QOS)
-        self.right_sub = Subscriber(self, Image, right_topic, qos_profile=IMAGE_QOS)
+        self.left_sub = Subscriber(self, Image, left_topic, qos_profile=IMAGE_SUB_QOS)
+        self.right_sub = Subscriber(self, Image, right_topic, qos_profile=IMAGE_SUB_QOS)
         
         self.ts = ApproximateTimeSynchronizer(
             [self.left_sub, self.right_sub], queue_size=qsize, slop=self.sync_slop
