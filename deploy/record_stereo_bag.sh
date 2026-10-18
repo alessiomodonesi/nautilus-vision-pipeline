@@ -36,7 +36,8 @@ exec ros2 bag record \
   --max-bag-size 2147483648 \
   --qos-profile-overrides "$QOS_YAML" \
   --output "$OUT" \
-  /stereo/lx/camera/image_raw/compressed \
-  /stereo/rx/camera/image_raw/compressed \
-  /stereo/lx/camera/camera_info \
-  /stereo/rx/camera/camera_info
+  --topics \
+    /stereo/lx/camera/image_raw/compressed \
+    /stereo/rx/camera/image_raw/compressed \
+    /stereo/lx/camera/camera_info \
+    /stereo/rx/camera/camera_info

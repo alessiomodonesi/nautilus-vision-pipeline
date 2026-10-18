@@ -1,23 +1,28 @@
 # deploy/bag_qos.yaml
-- topic: /stereo/lx/camera/image_raw/compressed
+# formato richiesto da `ros2 bag record --qos-profile-overrides`:
+# dict top-level {topic_name: {reliability, durability, history, depth}}.
+# NON è lo stesso formato di nautilus_common/config/qos_overrides.yaml
+# (quello è per i nodi, con /**/ros__parameters/qos_overrides/...).
+
+/stereo/lx/camera/image_raw/compressed:
   reliability: best_effort
   durability: volatile
   history: keep_last
   depth: 1
 
-- topic: /stereo/rx/camera/image_raw/compressed
+/stereo/rx/camera/image_raw/compressed:
   reliability: best_effort
   durability: volatile
   history: keep_last
   depth: 1
 
-- topic: /stereo/lx/camera/camera_info
+/stereo/lx/camera/camera_info:
   reliability: reliable
   durability: transient_local
   history: keep_last
   depth: 1
 
-- topic: /stereo/rx/camera/camera_info
+/stereo/rx/camera/camera_info:
   reliability: reliable
   durability: transient_local
   history: keep_last
