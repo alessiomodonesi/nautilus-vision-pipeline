@@ -6,6 +6,10 @@ from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
+qos_yaml = os.path.join(
+    get_package_share_directory('nautilus_common'),
+    'config', 'qos_overrides.yaml',
+)
 
 def generate_launch_description():
     pkg_share   = get_package_share_directory('nautilus_camera')
@@ -32,7 +36,7 @@ def generate_launch_description():
         executable='camera_node',
         name='camera',
         namespace='stereo/lx',
-        parameters=[config_file],
+        parameters=[qos_yaml, config_file],
         output='screen',
     )
     rx_camera = Node(
@@ -40,7 +44,7 @@ def generate_launch_description():
         executable='camera_node',
         name='camera',
         namespace='stereo/rx',
-        parameters=[config_file],
+        parameters=[qos_yaml, config_file],
         output='screen',
     )
 

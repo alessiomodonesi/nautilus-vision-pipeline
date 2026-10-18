@@ -1,0 +1,81 @@
+# QoS overrides for the Nautilus stack.
+#
+#   * high-rate sensor streams -> best_effort, keep_last, depth 1..5
+#   * state / commands -> reliable, keep_last, small depth
+#   * things that must not be missed on late join -> transient_local
+
+/**:
+  ros__parameters:
+    qos_overrides:
+
+      # ============================================================
+      # === Nautilus Vision Pipeline — topic correnti (Pi)       ===
+      # ============================================================
+
+      # --- Stereo raw (camera_ros) --------------------------------
+      /stereo/lx/camera/image_raw:
+        publisher: {reliability: best_effort, history: keep_last, depth: 1, durability: volatile}
+      /stereo/rx/camera/image_raw:
+        publisher: {reliability: best_effort, history: keep_last, depth: 1, durability: volatile}
+
+      # --- Stereo raw compressed (image_transport, per rosbag) ----
+      /stereo/lx/camera/image_raw/compressed:
+        publisher: {reliability: best_effort, history: keep_last, depth: 1, durability: volatile}
+      /stereo/rx/camera/image_raw/compressed:
+        publisher: {reliability: best_effort, history: keep_last, depth: 1, durability: volatile}
+
+      # --- CameraInfo -------------------------------------------
+      /stereo/lx/camera/camera_info:
+        publisher: {reliability: reliable, history: keep_last, depth: 1, durability: transient_local}
+      /stereo/rx/camera/camera_info:
+        publisher: {reliability: reliable, history: keep_last, depth: 1, durability: transient_local}
+
+      # --- Enhanced (enhancement_node) --------------------------
+      /stereo/lx/image_enhanced:
+        publisher: {reliability: best_effort, history: keep_last, depth: 1, durability: volatile}
+      /stereo/rx/image_enhanced:
+        publisher: {reliability: best_effort, history: keep_last, depth: 1, durability: volatile}
+
+      # --- Detection outputs (detection_node) -------------------
+      /stereo_down/targets:
+        publisher: {reliability: reliable, history: keep_last, depth: 10, durability: volatile}
+      /stereo_down/timings:
+        publisher: {reliability: best_effort, history: keep_last, depth: 10, durability: volatile}
+
+      # ============================================================
+      # === Master repo — topic condivisi con il resto dello stack
+      # ============================================================
+
+      # ---- Stereo images over WiFi -------------------------------------
+      /stereo_front/left/image_raw:
+        publisher: {reliability: best_effort history: keep_last depth: 1 durability: volatile}
+      /stereo_front/right/image_raw:
+        publisher: {reliability: best_effort history: keep_last depth: 1 durability: volatile}
+      /stereo_down/left/image_raw:
+        publisher: {reliability: best_effort history: keep_last depth: 1 durability: volatile}
+      /stereo_down/right/image_raw:
+        publisher: {reliability: best_effort history: keep_last depth: 1 durability: volatile}
+
+      # ---- CameraInfo ---------------------------------------------------
+      /stereo_front/left/camera_info:
+        publisher: {reliability: reliable, history: keep_last, depth: 1, durability: transient_local}
+      /stereo_front/right/camera_info:
+        publisher: {reliability: reliable, history: keep_last, depth: 1, durability: transient_local}
+      /stereo_down/left/camera_info:
+        publisher: {reliability: reliable, history: keep_last, depth: 1, durability: transient_local}
+      /stereo_down/right/camera_info:
+        publisher: {reliability: reliable, history: keep_last, depth: 1, durability: transient_local}
+
+      # ---- Lidar (local, Ethernet) --------------------------------------
+      /livox/lidar:
+        publisher: {reliability: best_effort, history: keep_last, depth: 5, durability: volatile}
+      /livox/imu:
+        publisher: {reliability: best_effort, history: keep_last, depth: 10, durability: volatile}
+      /scan:
+        publisher: {reliability: best_effort, history: keep_last, depth: 5, durability: volatile}
+
+      # ---- Control path --------------------------------------------------
+      /arm/command:
+        publisher: {reliability: reliable, history: keep_last, depth: 10, durability: volatile}
+      /arm/state:
+        publisher: {reliability: reliable, history: keep_last, depth: 10, durability: volatile}
