@@ -226,6 +226,7 @@ ros2 launch nautilus_camera stereo_camera.launch.py \
 ros2 launch nautilus_perception pipeline.launch.py \
   include_stereo_camera:=true \
   enable_enhancement:=false enable_detection:=true \
+  input_type_override:=raw \
   enable_saving:=false enable_metrics:=true enable_debug:=false \
   model_filename_override:=yolov8n_640_fp32_openvino_model \
   half_res_override:=false imgsz_override:=640
@@ -237,6 +238,7 @@ ros2 launch nautilus_perception pipeline.launch.py \
 ros2 launch nautilus_perception pipeline.launch.py \
   include_stereo_camera:=true \
   enable_enhancement:=true enable_detection:=true \
+  input_type_override:=enhanced \
   enable_saving:=false enable_metrics:=true enable_debug:=false \
   model_filename_override:=yolov8n_640_fp32_openvino_model \
   half_res_override:=false imgsz_override:=640
@@ -261,7 +263,8 @@ ros2 topic list | grep -E "stereo.*image|stereo_down"
 #   ... + /stereo/rx/image_enhanced
 
 ros2 topic hz /stereo_down/targets
-# Atteso: ~2.7 Hz con .pt, ~3.2 Hz con OpenVINO FP32 (senza OC)
+# Atteso Fase A: ~0.7–1.0 Hz con .pt, ~TBD con OpenVINO FP32/INT8
+#                 (da misurare, stima ottimistica precedente ~2.7/3.2 Hz)
 ```
 
 ---
@@ -272,12 +275,12 @@ ros2 topic hz /stereo_down/targets
 | --- | --- | --- | --- | --- |
 | A_baseline | raw | ~600 | 5.00 | baseline camera_ros |
 | B1_pt | raw | ~600 | 5.00 | camera continua a 5 Hz |
-| B1_pt | targets | ~330 | **~2.7** | inferenza PyTorch ~350 ms/frame |
+| B1_pt | targets | ~TBD | ~0.7–1.0 | YOLOv8n CPU ARM, half_res=true, imgsz=640 (osservato 18/10/2026) |
 | B2_ov_fp32 | raw | ~600 | 5.00 | |
-| B2_ov_fp32 | targets | ~380 | **~3.2** | OpenVINO FP32 ~250 ms/frame |
+| B2_ov_fp32 | targets | ~TBD | **~TBD** | da misurare (prediction ~4 Hz ottimistica, da confermare) |
 | C_full | raw | ~600 | 5.00 | |
 | C_full | enhanced | ~550 | ~4.5 | enhancement ~65 ms/frame |
-| C_full | targets | ~300 | **~2.5** | |
+| C_full | targets | ~TBD | ~0.7–1.0 | enhancement ~65-100 ms + detection ~1000 ms |
 | B3_ov_int8_640 | targets | ~TBD | **~TBD** | da misurare (INT8) |
 | B4_ov_int8_416 | targets | ~TBD | **~TBD** | da misurare (INT8 + imgsz ridotto) |
 
@@ -289,6 +292,11 @@ interviene entro i 120 s di benchmark, il guadagno si annulla.
 è l'inferenza YOLO su CPU ARM. Il `metrics_node` continuerà a mostrare 5 Hz
 sul topic `image_raw` (le camere non rallentano), ma `/stereo_down/targets`
 avrà rate inferiore: frame droppati dal `message_filters` a valle.
+
+Valori misurati il 18/10/2026 con `yolov8n.pt` (half_res=true, imgsz=640):
+**~0.7–1.0 Hz** su `/stereo_down/targets` (YOLOv8n CPU ARM ~1000 ms/frame).
+La stima precedente (~2.7 Hz) era ottimistica. I valori OpenVINO FP32/INT8
+sono da misurare in Fase A e verranno sostituiti qui.
 
 ⚠️ Skew stereo misurato il 15/10/2026: **~6.6–7.9 ms** (storico documentato
 in `DEBUG.md`: ~1.5 ms). Da annotare nel metadata; da indagare post-Fase 6.

@@ -156,11 +156,6 @@ Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato 
     ColourGains: [1.5, 1.5]
     AfMode: 0
     LensPosition: 2.6
-    qos_overrides:
-      /stereo/lx/camera/image_raw:
-        publisher:
-          reliability: best_effort
-          depth: 5
 
 /stereo/rx/camera:
   ros__parameters:
@@ -174,11 +169,6 @@ Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato 
     ColourGains: [1.5, 1.5]
     AfMode: 0
     LensPosition: 1.5
-    qos_overrides:
-      /stereo/rx/camera/image_raw:
-        publisher:
-          reliability: best_effort
-          depth: 5
 
 # 2) parametri del nodo di benchmark
 /**/metrics_node:
@@ -210,11 +200,37 @@ Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato 
 
 ## Allineamento QoS (Quality of Service)
 
-Per garantire la massima reattività e ridurre la latenza di rete, il driver `camera_ros` (scritto in C++) è configurato per pubblicare i flussi video con QoS `BEST_EFFORT` e profondità 5.
+Tutti i profili QoS della pipeline sono definiti in un unico file,
+`nautilus_common/config/qos_overrides.yaml`, che è la **single source of
+truth**. Vedi [`nautilus_common/README.md`](../nautilus_common/README.md)
+per l'architettura completa (SSOT + loader + `--params-file` per i C++).
 
-Questo allineamento viene forzato tramite il blocco `qos_overrides` all'interno del file `config/nautilus_camera.yaml`, che sovrascrive i default del driver. 
+Nel contesto di `nautilus_camera`:
 
-Tutti i nodi Python di sottoscrizione (`metrics_node`, `saving_node`, `enhancement_node`, `detection_node`) utilizzano lo stesso profilo `IMAGE_QOS` importato dal pacchetto [`nautilus_common`](../nautilus_common/README.md). Questa uniformità evita disallineamenti silenziosi (in cui un publisher e un subscriber non si vedono) e impedisce che il driver C++ sprechi risorse in attese di conferma (ACK) tipiche del protocollo `RELIABLE`.
+* **`camera_ros`** (C++, lx + rx): pubblica i flussi raw e `camera_info` con
+  la QoS definita nel YAML. Il file viene passato a `camera_ros` dal launch
+  `stereo_camera.launch.py` come `--params-file` aggiuntivo
+  (`parameters=[qos_yaml, config_file]`). Non esiste più una sezione
+  `qos_overrides` in `config/nautilus_camera.yaml`: è stata rimossa per
+  evitare due fonti che possono divergere.
+
+* **`metrics_node`** (Python): sottoscrive `image_raw` lx/rx con
+  `IMAGE_SUB_QOS` (`best_effort`, `depth 5`). Il `depth 5` dà margine
+  all'`ApproximateTimeSynchronizer` per accoppiare i frame stereo anche
+  in presenza di jitter.
+
+* **`saving_node`** (Python): sottoscrive `image_raw` lx/rx con
+  `IMAGE_SUB_QOS` (`best_effort`, `depth 5`). La stessa motivazione:
+  bufferizzare qualche frame in più evita di perdere coppie stereo da
+  scrivere su disco quando il thread di I/O è occupato.
+
+QoS effettive verificate sul campo (2026-10-18) con `ros2 topic info -v`:
+
+| Topic | Reliability | Depth | Durability |
+| --- | --- | --- | --- |
+| `/stereo/{lx,rx}/camera/image_raw` | `BEST_EFFORT` | 1 | `VOLATILE` |
+| `/stereo/{lx,rx}/camera/image_raw/compressed` | `BEST_EFFORT` | 1 | `VOLATILE` |
+| `/stereo/{lx,rx}/camera/camera_info` | `RELIABLE` | 1 | `TRANSIENT_LOCAL` |
 
 ### Perché i parametri fotometrici sono nel YAML
 
@@ -241,6 +257,10 @@ Configurazione di riferimento: Pi 5, due Pi Camera v3 in box, 720p @ 5 FPS.
 | FPS | 5.00 ± 0.05 | allineato a `FrameDurationLimits` |
 | Jitter (sx) | ~0.3 ms | flusso pulito su bus CSI |
 | Skew (sx-dx) | 1.0 – 2.0 ms | sincronizzazione timestamp ottima |
+
+**QoS verificata** (2026-10-18): `camera_ros` pubblica `best_effort depth 1`
+su raw e compressed, `reliable depth 1 transient_local` su `camera_info`.
+Verificato con `ros2 topic info /stereo/lx/camera/image_raw -v`.
 
 **Nota**: `camera_ros` emette warning iniziali relativi a `camera_info` mancante (file di calibrazione assente). La mancanza di calibrazione geometrica **non influisce** sull'acquisizione `image_raw` né sui benchmark di FPS/jitter/skew.
 

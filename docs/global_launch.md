@@ -154,6 +154,12 @@ Tutti i parametri di acquisizione, benchmark e salvataggio vivono in un unico fi
     sync_slop_sec: 0.05
 ```
 
+> **Nota QoS**: le entry `qos_overrides` **non** sono più in questo file.
+> Sono centralizzate in `nautilus_common/config/qos_overrides.yaml` (SSOT)
+> e passate a `camera_ros` dal launch `stereo_camera.launch.py` come
+> `--params-file` aggiuntivo. Vedi `nautilus_common/README.md` per
+> l'architettura completa.
+
 ### Note importanti sui parametri
 
 - **`FrameDurationLimits`**: valori in microsecondi; `[200000, 200000]` forza 5 FPS stabili. Non modificare senza aggiornare i benchmark attesi.
@@ -196,6 +202,29 @@ Quindi, per modificare uno di questi cinque valori, o si aggiornano i default in
 
 - **`num_threads`**: è cruciale per i benchmark termici e prestazionali sul Raspberry Pi 5. Il nodo legge questo parametro e imposta le variabili di sistema `OMP_NUM_THREADS` e `MKL_NUM_THREADS` *prima* di caricare il modello, garantendo che le risorse CPU non vengano saturate in modo incontrollato.
 - **`sync_slop_sec`**: allineato a 50 ms per evitare che in caso di frame drop su un canale vengano associati fotogrammi a intervalli temporali diversi (t con t+200 ms), falsando disparità e stima di profondità.
+
+#### Override manuale dell'input
+
+`pipeline.launch.py` espone anche `input_type_override` (default vuoto).
+Se passato, forza `input_type` e vince sulla logica automatica
+`enable_enhancement → enhanced/raw`. Utile quando si vuole lanciare
+l'enhancement esternamente e fare detection su enhanced **senza**
+duplicare l'enhancement:
+
+```bash
+# terminale 1: enhancement esterno
+ros2 launch nautilus_perception enhancement.launch.py
+
+# terminale 2: solo detection, ma su enhanced
+ros2 launch nautilus_perception pipeline.launch.py \
+    enable_enhancement:=false \
+    enable_detection:=true \
+    input_type_override:=enhanced
+```
+
+Senza `input_type_override`, l'unico modo per avere detection su
+`image_enhanced` è `enable_enhancement:=true`, che però rilancerebbe
+una seconda coppia di `enhancement_node` → nodo duplicato sul topic.
 
 ## 5. Come Compilare e Avviare
 

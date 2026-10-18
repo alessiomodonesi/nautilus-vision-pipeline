@@ -45,7 +45,7 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 ### 📊 Benchmark & Validation (`benchmarks/`)
 
 * **[Benchmark Overview](benchmarks/README.md)** — Metodologia dei test prestazionali e termici (Fase 6 e 7), configurazioni di pipeline, metriche raccolte (latenza p50/p95, CPU, RAM, temperatura, mAP) e linee guida di riproducibilità.
-* **[Configurazioni di Test](benchmarks/CONFIGS.md)** — Le 5 config ufficiali (`A_baseline`, `B_pt`, `B_ov_fp32`, `C_pt`, `C_ov_int8_640`) + 4 di ottimizzazione, prerequisiti, valori attesi e batch di run.
+* **[Configurazioni di Test](benchmarks/CONFIGS.md)** — 11 config di test (Fase A: 6 config senza OC; Fase B: 5 config con OC), con modello/half_res/imgsz, prerequisiti, valori attesi e comandi batch per i run.
 * **[Script di Lancio](benchmarks/)** — `run_benchmark.sh`.
 * **[Script di Benchmark](benchmarks/scripts/)** — `benchmark_pipeline.py`, `system_monitor.py`, `evaluate_map.py`, `plot_results.py`, `model_benchmark.py`, `check_imgsz.py`.
 * **[Dataset di Test](benchmarks/datasets/)** — Immagini e video stereo di test, dataset grezzi annotati, dataset COCO128 per mAP e tool di pulizia (`clean_dataset.py`).
@@ -193,6 +193,13 @@ ros2 launch nautilus_perception pipeline.launch.py \
 | `/saving_node/set_saving` | `std_srvs/SetBool` *(Service)* | `saving_node` | Client esterno / operatore | Abilita/disabilita salvataggio a runtime |
 | `/stereo/{lx,rx}/camera/set_parameters` | `rcl_interfaces/SetParameters` *(Service)* | `camera_ros` | `lock_cameras.py` | Riapplica parametri fotometrici via `lock_cameras.py` |
 
+> **QoS dei topic**: i profili QoS effettivi di ogni topic (reliability,
+> depth, durability) sono definiti in un'unica fonte di verità,
+> `ros2_ws/src/nautilus_common/config/qos_overrides.yaml`. I nodi Python
+> li leggono via `qos_profiles.py`, i nodi C++ via `--params-file`. Vedi
+> [`nautilus_common/README.md`](ros2_ws/src/nautilus_common/README.md).
+> Verifica sul campo: `ros2 topic info <topic> -v`.
+
 ---
 
 ## 🛠️ Stack Tecnologico e Requisiti
@@ -235,7 +242,7 @@ Per i comandi più usati durante lo sviluppo vedi [`docs/ros2-cmds.md`](docs/ros
 | **Fase 2** | Nodo di Enhancement (WaterNet / CLAHE) | ✅ Completata | `nautilus_perception/enhancement_node` |
 | **Fase 3** | Nodo di Salvataggio su MicroSD (Anti-RTC, Service) | ✅ Completata | `nautilus_camera/saving_node` |
 | **Fase 4** | Nodo di Detection (YOLO/OpenVINO + Stereovisione) | ✅ Completata | `nautilus_perception/detection_node`, `detection_params.yaml` |
-| **Fase 5** | Calibrazione stereo 720p (RMS 0.125 px, Z validata) | ✅ Completata | `nautilus_perception/detection/calibration/`, `stereo_calib_720p.npz`, `config.py` |
+| **Fase 5** | Calibrazione stereo 720p (RMS 0.125 px, Z validata, errore < 1 cm su 0.6–0.9 m) | ✅ Completata | `nautilus_perception/detection/calibration/`, `stereo_calib_720p.npz`, `config.py` |
 | **Fase 6** | Benchmark comparativo (latenza p50/p95, CPU, FPS, mAP) | 🔄 Prossima | `benchmarks/`, `pipeline.launch.py`, `run_benchmark.sh` |
 | **Fase 7** | Stress test termico (1 h a box chiusa, throttling) | ⏳ Pianificata | `benchmarks/scripts/system_monitor.py`, `vcgencmd` |
 | **Fase 8** | Integrazione con Stack Nautilus & Jetson (Chrony) | ⏳ Pianificata | CycloneDDS, sincronizzazione `chrony` |

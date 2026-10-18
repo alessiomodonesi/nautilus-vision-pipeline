@@ -104,11 +104,57 @@ ros2 launch nautilus_perception pipeline.launch.py \
 
 ## Sistema di QoS (Quality of Service)
 
-I nodi di questo pacchetto (`enhancement_node` e `detection_node`) utilizzano i profili QoS centralizzati definiti nel pacchetto [`nautilus_common`](../nautilus_common/README.md) per garantire l'allineamento con il resto della pipeline.
+Tutti i profili QoS della pipeline sono definiti in un unico file,
+`nautilus_common/config/qos_overrides.yaml`, che è la **single source of
+truth**. Vedi [`nautilus_common/README.md`](../nautilus_common/README.md)
+per l'architettura completa (SSOT + loader + `--params-file` per i C++).
 
-* **Immagini (`IMAGE_QOS`)**: Iscrizioni e pubblicazioni dei flussi video usano `BEST_EFFORT` (depth 5). Questo previene colli di bottiglia di rete e garantisce che l'enhancement e la detection non siano bloccati da logiche di ritrasmissione dei frame persi.
-* **Target (`DETECTION_QOS`)**: Il topic `/stereo_down/targets` usa `RELIABLE` (depth 10). Poiché rappresenta l'output finale per la logica di bordo, un target rilevato non deve mai andare perso.
-* **Telemetria (`DEBUG_QOS`)**: Il topic `/stereo_down/timings` usa `BEST_EFFORT`. I dati sulle prestazioni (pre/inferenza/post) sono diagnostici e la loro eventuale perdita non deve impattare la pipeline.
+Nel contesto di `nautilus_perception`, ogni nodo usa le costanti esposte
+da `nautilus_common.qos_profiles`:
+
+### `enhancement_node`
+
+* **Subscriber** su `/stereo/{lx,rx}/camera/image_raw`: `IMAGE_PUB_QOS`
+  (`BEST_EFFORT`, depth 1).
+  Motivo: `enhancement_node` vuole **scartare** i frame vecchi, non
+  bufferizzarli. CLAHE + sharpening costano ~65 ms per frame e accumulare
+  ritardo peggiorerebbe solo la freschezza dell'output. `depth 1`
+  garantisce che il callback processi sempre il frame più recente.
+
+* **Publisher** su `/stereo/{lx,rx}/image_enhanced`: `ENHANCED_PUB_QOS`
+  (`BEST_EFFORT`, depth 1).
+  Motivo: l'output va direttamente a `detection_node`, che a sua volta
+  vuole il frame più recente (il matcher stereo deve operare su coppie
+  appena acquisite, non su frame vecchi).
+
+### `detection_node`
+
+* **Subscriber** su `/stereo/{lx,rx}/(camera/image_raw | image_enhanced)`:
+  `IMAGE_SUB_QOS` (`BEST_EFFORT`, depth 5).
+  Motivo: `message_filters.ApproximateTimeSynchronizer` ha bisogno di un
+  piccolo buffer per accoppiare i frame lx/rx quando c'è jitter o drop
+  su un solo canale. `depth 5` = ~1 s di margine a 5 Hz, sufficiente per
+  non perdere coppie stereo.
+
+* **Publisher** su `/stereo_down/targets`: `DETECTION_QOS`
+  (`RELIABLE`, depth 10).
+  Motivo: un target rilevato è il dato utile per la logica di bordo
+  (navigazione, log per i biologi). Perderlo non è accettabile, quindi
+  `RELIABLE` con buffer di 10.
+
+* **Publisher** su `/stereo_down/timings`: `DEBUG_QOS`
+  (`BEST_EFFORT`, depth 10).
+  Motivo: dati diagnostici (pre/inferenza/post in ms). Se un campione
+  viene perso per congestione, il sistema non deve rallentare per
+  ritrasmetterlo.
+
+QoS effettive verificate sul campo (2026-10-18):
+
+| Topic | Reliability | Depth | Durability |
+| --- | --- | --- | --- |
+| `/stereo/{lx,rx}/image_enhanced` | `BEST_EFFORT` | 1 | `VOLATILE` |
+| `/stereo_down/targets` | `RELIABLE` | 10 | `VOLATILE` |
+| `/stereo_down/timings` | `BEST_EFFORT` | 10 | `VOLATILE` |
 
 ---
 
@@ -200,41 +246,3 @@ Per visualizzare in tempo reale i messaggi strutturati (`vision_msgs/Detection2D
 ```bash
 ros2 topic echo /stereo_down/targets
 ```
-
----
-
-## Riepilogo delle correzioni
-
-**`global_launch.md`:**
-
-* Sezione 1: chiarito che solo acquisizione (+ salvataggio opzionale) parte al boot.
-* Sezione 2: rimosso il riferimento a `ENABLE_ENHANCEMENT` / `ENABLE_DETECTION` / `ENABLE_METRICS`. Ora c'è solo `ENABLE_SAVING`. Aggiunto blocco che mostra cosa fa `start_pipeline.sh`.
-* Sezione 3: aggiornato il YAML con i parametri fotometrici mancanti. Aggiornato `save_directory`.
-* Sezione 4: aggiunta nota sul doppio livello di override (YAML + launch sempre attivo sui 5 parametri).
-* Sezione 5: aggiunti esempi per `pipeline.launch.py` con `include_stereo_camera`, con spiegazione del perché di default è `false`.
-* Sezione 6: riscritta per includere `lock-cameras.service` e spiegare come `lock_cameras.py` legge il YAML.
-* Sezione 7: aggiornati gli esempi di test (niente più riferimenti a env var inesistenti).
-* Sezione 9: aggiunte due righe di troubleshooting ("node already exists", lens position non applicata).
-
-**`ros2_ws/README.md`:**
-
-* Aggiunta sezione "Cosa parte automaticamente al boot".
-* Aggiunto PyYAML tra le dipendenze.
-* Chiarito che WaterNet è disabilitata di default e perché.
-* Corretto l'esempio di avvio.
-
-**`nautilus_camera/README.md`:**
-
-* Corretto `enable_metrics` default: `false` (non `true`).
-* Corretto `save_directory` default: `/home/nautilus/nautilus_data` (non `/home/pi/...`).
-* Aggiunti i parametri fotometrici nel YAML di esempio.
-* Aggiunta sezione "Perché i parametri fotometrici sono nel YAML" con riferimento a `lock_cameras.py`.
-* Aggiunta riga di troubleshooting per lens position.
-
-**`nautilus_perception/README.md`:**
-
-* Cambiato il default di WaterNet da `auto` a `force_off` con spiegazione.
-* Rimossa la menzione a `WATERNET_MODE` (variabile inesistente in `enhancement.launch.py`): il launch arg è `waternet_mode`.
-* Aggiunta sezione "Default" per chiarire che il valore è coerente in tre file.
-* Aggiunta nota sul doppio livello di override in detection.
-* Aggiunto warning di non rilanciare `stereo_camera.launch.py` se le camere sono già attive dal boot.
