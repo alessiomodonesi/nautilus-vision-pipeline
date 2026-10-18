@@ -1,4 +1,4 @@
-# deploy/nautilus-bag.service
+# deploy/bag/nautilus-bag.service
 [Unit]
 Description=Nautilus Stereo Rosbag Recorder (MCAP, optional via ENABLE_BAG)
 After=nautilus-vision.service
@@ -17,7 +17,7 @@ Environment="NAUTILUS_BAG_DIR=/home/nautilus/nautilus_bags"
 # robusto a 'export ENABLE_BAG=true', spazi e commenti.
 ExecCondition=/bin/bash -c 'set -a; . /home/nautilus/nautilus-vision-pipeline/pipeline_config.env; set +a; [ "${ENABLE_BAG:-false}" = "true" ]'
 
-ExecStart=/bin/bash /home/nautilus/nautilus-vision-pipeline/deploy/record_stereo_bag.sh
+ExecStart=/bin/bash /home/nautilus/nautilus-vision-pipeline/deploy/bag/record_stereo_bag.sh
 
 # SIGINT è il segnale che ros2 bag record attende per finalizzare MCAP.
 KillSignal=SIGINT

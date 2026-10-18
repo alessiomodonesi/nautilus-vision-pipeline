@@ -25,7 +25,7 @@ NAME="${1:-stereo}"
 BAG_DIR="${NAUTILUS_BAG_DIR:-/home/nautilus/nautilus_bags}"
 STAMP="$(date +%Y%m%d_%H%M%S)"
 OUT="$BAG_DIR/${STAMP}_${NAME}"
-QOS_YAML="/home/nautilus/nautilus-vision-pipeline/deploy/bag_qos.yaml"
+QOS_YAML="/home/nautilus/nautilus-vision-pipeline/deploy/bag/bag_qos.yaml"
 
 mkdir -p "$BAG_DIR"
 
