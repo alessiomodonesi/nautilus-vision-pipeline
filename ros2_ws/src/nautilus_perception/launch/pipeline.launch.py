@@ -55,11 +55,16 @@ def generate_launch_description():
         'include_stereo_camera', default_value='false',
         description='Avvia anche camera_ros (true solo se le camere non sono già attive)'
     )
-
-    # determina l'input_type dinamicamente in base ad enable_enhancement
-    dynamic_input_type = PythonExpression(
-        ["'enhanced' if '", LaunchConfiguration('enable_enhancement'), "' == 'true' else 'raw'"]
+    input_type_override_arg = DeclareLaunchArgument(
+        'input_type_override', default_value='',
+        description='Se non vuoto, forza input_type (raw|enhanced) ignorando enable_enhancement'
     )
+    # determina l'input_type dinamicamente in base ad enable_enhancement
+    dynamic_input_type = PythonExpression([
+        "'", LaunchConfiguration('input_type_override'), "' "
+        "if '", LaunchConfiguration('input_type_override'), "' != '' "
+        "else ('enhanced' if '", LaunchConfiguration('enable_enhancement'), "' == 'true' else 'raw')"
+    ])
     model_filename_arg = DeclareLaunchArgument(
         'model_filename_override', default_value='yolov8n.pt',
         description='Nome modello in data/weights/'
@@ -114,6 +119,7 @@ def generate_launch_description():
         params_file_arg,
         waternet_mode_arg,
         include_stereo_camera_arg,
+        input_type_override_arg,
         model_filename_arg,
         half_res_arg,
         imgsz_arg,

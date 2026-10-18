@@ -30,7 +30,9 @@ def _load_overrides():
         'config', 'qos_overrides.yaml',
     )
     with open(path, 'r') as f:
-        return yaml.safe_load(f).get('qos_overrides', {})
+        data = yaml.safe_load(f)
+    # struttura ROS: /**: {ros__parameters: {qos_overrides: {...}}}
+    return data.get('/**', {}).get('ros__parameters', {}).get('qos_overrides', {})
 
 
 _OVERRIDES = _load_overrides()

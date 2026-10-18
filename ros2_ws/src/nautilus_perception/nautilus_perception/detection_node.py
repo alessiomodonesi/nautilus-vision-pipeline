@@ -257,8 +257,7 @@ def main(args=None):
         node.get_logger().info("Shutting down detection node...")
     finally:
         node.destroy_node()
-        if rclpy.ok():
-            rclpy.shutdown()
+        rclpy.try_shutdown()
         cv2.destroyAllWindows()
 
 if __name__ == '__main__':
