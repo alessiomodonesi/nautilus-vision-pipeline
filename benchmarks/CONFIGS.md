@@ -32,7 +32,10 @@ ros2 node list
 
 Durante i benchmark:
 
-- **`enable_saving` sempre a `false`** — l'I/O su MicroSD introduce jitter
+- **Nessun salvataggio attivo** — `saving_node` non è più nel launch di
+  produzione e `nautilus-bag.service` viene fermato da `systemctl stop
+  nautilus-vision.service` a inizio benchmark. Nessun I/O continuativo
+  su MicroSD durante le misure.
 - **`enable_metrics` sempre a `true`** — controprova FPS dal nodo metriche
 - **`enable_debug` sempre a `false`** — nessuna finestra OpenCV
 
@@ -214,7 +217,7 @@ I CSV finiscono in `benchmarks/results/csv/` con naming:
 
 ```bash
 ros2 launch nautilus_camera stereo_camera.launch.py \
-  enable_saving:=false enable_metrics:=true
+  enable_metrics:=true
 ```
 
 ### Lancio manuale di B2_ov_fp32 (OpenVINO FP32 640)
@@ -227,7 +230,7 @@ ros2 launch nautilus_perception pipeline.launch.py \
   include_stereo_camera:=true \
   enable_enhancement:=false enable_detection:=true \
   input_type_override:=raw \
-  enable_saving:=false enable_metrics:=true enable_debug:=false \
+  enable_metrics:=true enable_debug:=false \
   model_filename_override:=yolov8n_640_fp32_openvino_model \
   half_res_override:=false imgsz_override:=640
 ```
@@ -239,7 +242,7 @@ ros2 launch nautilus_perception pipeline.launch.py \
   include_stereo_camera:=true \
   enable_enhancement:=true enable_detection:=true \
   input_type_override:=enhanced \
-  enable_saving:=false enable_metrics:=true enable_debug:=false \
+  enable_metrics:=true enable_debug:=false \
   model_filename_override:=yolov8n_640_fp32_openvino_model \
   half_res_override:=false imgsz_override:=640
 ```
@@ -368,7 +371,6 @@ config,B2_ov_fp32
 run,1
 enable_enhancement,false
 enable_detection,true
-enable_saving,false
 enable_metrics,true
 model_filename,yolov8n_openvino_640_fp32
 half_res,false

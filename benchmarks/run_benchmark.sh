@@ -124,7 +124,6 @@ ros2 launch nautilus_perception pipeline.launch.py \
     include_stereo_camera:=true \
     enable_enhancement:=$ENH \
     enable_detection:=$DET \
-    enable_saving:=false \
     enable_metrics:=true \
     enable_debug:=false \
     "${OVERRIDES[@]}" \
@@ -192,7 +191,6 @@ config,$CONFIG
 run,$RUN_N
 enable_enhancement,$ENH
 enable_detection,$DET
-enable_saving,false
 enable_metrics,true
 model_filename,$MODEL
 half_res,$HALF_RES

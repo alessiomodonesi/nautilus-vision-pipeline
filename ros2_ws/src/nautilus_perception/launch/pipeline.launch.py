@@ -21,10 +21,6 @@ def generate_launch_description():
         'enable_detection', default_value='true',
         description='Set to true to launch the detection node'
     )
-    enable_saving_arg = DeclareLaunchArgument(
-        'enable_saving', default_value='true',
-        description='Enable saving to disk'
-    )
     enable_metrics_arg = DeclareLaunchArgument(
         'enable_metrics', default_value='false',
         description='Enable the benchmark node'
@@ -35,7 +31,7 @@ def generate_launch_description():
     )
     params_file_arg = DeclareLaunchArgument(
         'params_file', default_value='detection_params.yaml',
-        description='Nome file params detection (detection_params_pt.yaml | detection_params_ov.yaml)'
+        description='Nome file params detection'
     )
 
     # modalità waternet: default 'force_off', allineato a enhancement.launch.py
@@ -81,7 +77,6 @@ def generate_launch_description():
     stereo_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(camera_pkg, 'launch', 'stereo_camera.launch.py')),
         launch_arguments={
-            'enable_saving':  LaunchConfiguration('enable_saving'),
             'enable_metrics': LaunchConfiguration('enable_metrics'),
         }.items(),
         condition=IfCondition(LaunchConfiguration('include_stereo_camera'))
@@ -113,7 +108,6 @@ def generate_launch_description():
     return LaunchDescription([
         enable_enhancement_arg,
         enable_detection_arg,
-        enable_saving_arg,
         enable_metrics_arg,
         enable_debug_arg,
         params_file_arg,

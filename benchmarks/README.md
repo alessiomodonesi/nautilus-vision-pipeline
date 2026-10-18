@@ -270,9 +270,7 @@ run è da scartare.
 
 - Tutti gli script sono **headless** (nessuna GUI). Il wrapper lancia sempre
   con `enable_debug:=false` per non falsare le latenze con l'overhead di
-  `cv2.imshow`.
-- Il salvataggio su MicroSD è **disabilitato** durante i benchmark
-  (`enable_saving:=false`): l'I/O introduce jitter e falsa le misure.
+  `cv2.imshow`.re.
 - ⚠️ La detection YOLOv8n su Pi 5 **non tiene i 5 FPS** a 720p. Il rate
   effettivo di `/stereo_down/targets` è ~2.7 Hz con `.pt` e ~3.2 Hz con
   OpenVINO FP32 (senza OC). Questo è il collo di bottiglia documentato
