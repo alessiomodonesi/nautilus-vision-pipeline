@@ -4,7 +4,7 @@
 
       export CYCLONEDDS_URI=file:///path/to/nautilus_ros2/config/cyclonedds.xml
       export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-      export ROS_DOMAIN_ID=42        # TODO: confirm, see docs/network.md
+      export ROS_DOMAIN_ID=42 # TODO: confirm, see docs/network.md
 
   All four hosts must agree on ROS_DOMAIN_ID *and* on the RMW implementation.
 -->
@@ -16,7 +16,9 @@
 
     <General>
       <Interfaces>
-        <NetworkInterface autodetermine="true" priority="default" multicast="default" />
+        <NetworkInterface name="wlan0"/>
+        <NetworkInterface name="lo"/>
+        <!-- <NetworkInterface autodetermine="true" priority="default" multicast="default" /> -->
       </Interfaces>
       <AllowMulticast>false</AllowMulticast>
       <!-- WiFi MTU is 1500, keep fragments below it to avoid IP fragmentation. -->
@@ -28,11 +30,11 @@
       <ParticipantIndex>auto</ParticipantIndex>
       <!-- Static peer list -->
       <Peers>
-        <Peer address="127.0.0.1"/>     <!-- Loopback   -->
-        <Peer address="192.168.2.10"/>  <!-- TODO Jetson -->
-        <Peer address="192.168.2.11"/>  <!-- TODO RPi 1 (stereo_front) -->
-        <Peer address="192.168.2.12"/>  <!-- TODO RPi 2 (stereo_down) -->
-        <Peer address="192.168.2.2"/>   <!-- TODO BlueBoat / BlueOS -->
+        <Peer address="127.0.0.1"/>               <!-- Loopback -->
+        <!-- <Peer address="192.168.2.10"/> -->   <!-- TODO Jetson -->
+        <!-- <Peer address="192.168.2.11"/> -->   <!-- TODO RPi 1 (stereo_front) -->
+        <!-- <Peer address="192.168.2.12"/> -->   <!-- TODO RPi 2 (stereo_down) -->
+        <!-- <Peer address="192.168.2.2"/> -->    <!-- TODO BlueBoat / BlueOS -->
       </Peers>
       <MaxAutoParticipantIndex>10</MaxAutoParticipantIndex>
     </Discovery>
@@ -41,7 +43,7 @@
       <Watermarks>
         <WhcHigh>2MB</WhcHigh>
       </Watermarks>
-      <MinimumSocketReceiveBufferSize>4MB</MinimumSocketReceiveBufferSize>
+      <SocketReceiveBufferSize min="4MB"/>
     </Internal>
 
     <Tracing>

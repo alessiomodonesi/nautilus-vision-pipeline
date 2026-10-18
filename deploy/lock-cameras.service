@@ -7,8 +7,8 @@ PartOf=nautilus-vision.service
 Type=oneshot
 User=nautilus
 Environment="RMW_IMPLEMENTATION=rmw_cyclonedds_cpp"
-Environment="CYCLONEDDS_URI=file:///home/nautilus/.ros/cyclonedds.xml"
-Environment="ROS_DOMAIN_ID=0"
+Environment="CYCLONEDDS_URI=file:///home/nautilus/nautilus-vision-pipeline/deploy/cyclonedds.xml"
+Environment="ROS_DOMAIN_ID=42"
 ExecStart=/bin/bash -c 'source /opt/ros/jazzy/setup.bash && source /home/nautilus/nautilus-vision-pipeline/ros2_ws/install/setup.bash && exec /usr/bin/python3 /home/nautilus/nautilus-vision-pipeline/deploy/lock_cameras.py'
 RemainAfterExit=yes
 
