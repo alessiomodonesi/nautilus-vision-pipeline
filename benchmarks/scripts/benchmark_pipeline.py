@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Benchmark end-to-end pipeline Nautilus Vision."""
+"""Benchmark end-to-end pipeline Nautilus Vision.
+
+Osservatore passivo: non pubblica nulla, non scrive sul flusso.
+Usa BEST_EFFORT su tutte le subscription per non introdurre ACK
+che distorcerebbero la latenza misurata della pipeline.
+"""
 import argparse
 import csv
 import time
@@ -11,7 +16,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image
 from vision_msgs.msg import Detection2DArray
 from std_msgs.msg import Float32MultiArray
-from nautilus_common.qos_profiles import IMAGE_QOS, DETECTION_QOS, DEBUG_QOS
+from nautilus_common.qos_profiles import IMAGE_SUB_QOS, DEBUG_QOS
 
 
 class TopicStats:
@@ -60,46 +65,65 @@ class StageStats:
                 "p95":  float(np.percentile(col, 95)),
             }
         return {
-            "n":            len(self.rows),
-            "pre":          _s(a[:, 0]),
-            "infer":        _s(a[:, 1]),
-            "post":         _s(a[:, 2]),
-            "total":        _s(a[:, 3]),
+            "n":     len(self.rows),
+            "pre":   _s(a[:, 0]),
+            "infer": _s(a[:, 1]),
+            "post":  _s(a[:, 2]),
+            "total": _s(a[:, 3]),
         }
-        
+
 
 class Benchmark(Node):
     def __init__(self, raw, enhanced, targets, stages=None):
         super().__init__("benchmark_pipeline")
         self.stats = {}
         self.stages = None
+
+        # nota: questo nodo è un osservatore. tutte le subscription usano
+        # BEST_EFFORT per non introdurre handshake di ACK che distorcerebbero
+        # le latenze misurate della pipeline. DEBUG_QOS è BEST_EFFORT depth 10
+        # (telemetria), perfetto per un osservatore.
+        # IMAGE_SUB_QOS è depth 5 (buffer per non perdere frame su jitter),
+        # adatto a ricevere sia raw che enhanced a 5 Hz.
         if raw:
             self.stats["raw"] = TopicStats(raw)
             self.create_subscription(Image, raw,
-                lambda m: self._img("raw", m), IMAGE_QOS)
+                lambda m: self._img("raw", m), IMAGE_SUB_QOS)
         if enhanced:
             self.stats["enhanced"] = TopicStats(enhanced)
             self.create_subscription(Image, enhanced,
-                lambda m: self._img("enhanced", m), IMAGE_QOS)
+                lambda m: self._img("enhanced", m), IMAGE_SUB_QOS)
         if targets:
             self.stats["targets"] = TopicStats(targets)
             self.create_subscription(Detection2DArray, targets,
-                lambda m: self._tgt("targets", m), DETECTION_QOS)
+                lambda m: self._tgt("targets", m), DEBUG_QOS)
         if stages:
             self.stages = StageStats()
             self.create_subscription(Float32MultiArray, stages,
                 lambda m: self.stages.add(m.data), DEBUG_QOS)
 
     def _lat_ms(self, header):
+        # guard: publisher che non setta lo stamp → il confronto sarebbe
+        # (now - 0) = ore. Salta il campione.
+        if header.stamp.sec == 0 and header.stamp.nanosec == 0:
+            return None
         now = self.get_clock().now()
         stamp = rclpy.time.Time.from_msg(header.stamp)
-        return (now - stamp).nanoseconds / 1e6
+        lat = (now - stamp).nanoseconds / 1e6
+        # guard: salto di clock (NTP sync, cambio ora) → scarta il campione
+        if lat < 0:
+            return None
+        return lat
 
     def _img(self, key, msg):
-        self.stats[key].add(self._lat_ms(msg.header), time.perf_counter())
+        lat = self._lat_ms(msg.header)
+        if lat is not None:
+            self.stats[key].add(lat, time.perf_counter())
 
     def _tgt(self, key, msg):
-        self.stats[key].add(self._lat_ms(msg.header), time.perf_counter())
+        lat = self._lat_ms(msg.header)
+        if lat is not None:
+            self.stats[key].add(lat, time.perf_counter())
 
     def live(self):
         parts = []
@@ -112,25 +136,32 @@ class Benchmark(Node):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", required=True)
-    ap.add_argument("--duration", type=int, default=60)
-    ap.add_argument("--raw-topic", default="/stereo/lx/camera/image_raw")
-    ap.add_argument("--enhanced-topic", default="/stereo/lx/image_enhanced")
-    ap.add_argument("--targets-topic", default="/stereo_down/targets")
-    ap.add_argument("--print-interval", type=float, default=2.0)
-    ap.add_argument("--stages-topic", default="")
-    ap.add_argument("--stages-out", default="")
+    ap.add_argument("--out", required=True,
+                    help="Percorso CSV di output (crea le directory mancanti)")
+    ap.add_argument("--duration", type=int, default=60,
+                    help="Durata test in secondi")
+    ap.add_argument("--raw-topic", default="/stereo/lx/camera/image_raw",
+                    help="Topic raw da osservare (stringa vuota per disabilitare)")
+    ap.add_argument("--enhanced-topic", default="/stereo/lx/image_enhanced",
+                    help="Topic enhanced da osservare (stringa vuota per disabilitare)")
+    ap.add_argument("--targets-topic", default="/stereo_down/targets",
+                    help="Topic targets da osservare (stringa vuota per disabilitare)")
+    ap.add_argument("--print-interval", type=float, default=2.0,
+                    help="Intervallo stampa live (secondi)")
+    ap.add_argument("--stages-topic", default="",
+                    help="Topic timings del detection node (stringa vuota per disabilitare)")
+    ap.add_argument("--stages-out", default="",
+                    help="Path CSV per lo stage breakdown (default: <out stem>_stages.csv)")
     args = ap.parse_args()
 
     rclpy.init()
-    node = Benchmark(args.raw_topic, args.enhanced_topic,
-                 args.targets_topic, args.stages_topic or None)
+    node = Benchmark(args.raw_topic, args.enhanced_topic, args.targets_topic, args.stages_topic or None)
     print(f"Duration: {args.duration}s")
-    print(f"  raw:      {args.raw_topic}")
-    print(f"  enhanced: {args.enhanced_topic}")
-    print(f"  targets:  {args.targets_topic}\n")
+    print(f"  raw:      {args.raw_topic or '(disabled)'}")
+    print(f"  enhanced: {args.enhanced_topic or '(disabled)'}")
+    print(f"  targets:  {args.targets_topic or '(disabled)'}")
+    print(f"  observer QoS: BEST_EFFORT (no ACK bias on measured pipeline)\n")
 
-    # timer per stampa live
     t0 = time.time()
 
     def print_live():
@@ -184,7 +215,7 @@ def main():
                 w.writerow([k, s["n"],
                             f"{v['mean']:.3f}", f"{v['p50']:.3f}", f"{v['p95']:.3f}"])
         print(f"\nStage breakdown saved: {out}")
-        
+
     print("\nSummary")
     for key, s in summaries.items():
         print(f"{key:>9s}: n={s['n']:>5d}  "
@@ -205,7 +236,6 @@ def main():
         print(f"  detection stage:   {tgt - enh:>7.1f} ms")
     elif tgt is not None and raw is not None:
         print(f"  detection stage:   {tgt - raw:>7.1f} ms")
-
 
     print(f"\nSaved: {out_path}")
     try:
