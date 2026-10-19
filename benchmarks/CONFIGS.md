@@ -57,10 +57,10 @@ altro che aggiungere rumore termico.
 | --- | --- | --- | --- | --- | --- |
 | 1 | `A_baseline` | solo camera | — | — | — |
 | 2 | `B1_pt` | camera + detection | `yolov8n.pt` | True | 640 |
-| 3 | `B2_ov_fp32` | camera + detection | `yolov8n_openvino_640_fp32` | False | 640 |
-| 4 | `B3_ov_int8_640` | camera + detection | `yolov8n_openvino_640_int8` | False | 640 |
-| 5 | `B4_ov_int8_416` | camera + detection | `yolov8n_openvino_416_int8` | False | 416 |
-| 6 | `C_full` | camera + enh + detection | `yolov8n_openvino_640_fp32` | False | 640 |
+| 3 | `B2_ov_fp32` | camera + detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
+| 4 | `B3_ov_int8_640` | camera + detection | `yolov8n_640_int8_openvino_model` | False | 640 |
+| 5 | `B4_ov_int8_416` | camera + detection | `yolov8n_416_int8_openvino_model` | False | 416 |
+| 6 | `C_full` | camera + enh + detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
 
 ### Fase B — con overclock (senza baseline)
 
@@ -74,10 +74,10 @@ Ogni config ha la stessa parametrizzazione della Fase A ma con suffisso
 | # | ID | Config | Modello | half_res | imgsz |
 | --- | --- | --- | --- | --- | --- |
 | 1 | `B1_pt_oc` | camera + detection | `yolov8n.pt` | True | 640 |
-| 2 | `B2_ov_fp32_oc` | camera + detection | `yolov8n_openvino_640_fp32` | False | 640 |
-| 3 | `B3_ov_int8_640_oc` | camera + detection | `yolov8n_openvino_640_int8` | False | 640 |
-| 4 | `B4_ov_int8_416_oc` | camera + detection | `yolov8n_openvino_416_int8` | False | 416 |
-| 5 | `C_full_oc` | camera + enh + detection | `yolov8n_openvino_640_fp32` | False | 640 |
+| 2 | `B2_ov_fp32_oc` | camera + detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
+| 3 | `B3_ov_int8_640_oc` | camera + detection | `yolov8n_640_int8_openvino_model` | False | 640 |
+| 4 | `B4_ov_int8_416_oc` | camera + detection | `yolov8n_416_int8_openvino_model` | False | 416 |
+| 5 | `C_full_oc` | camera + enh + detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
 
 ### Totale run
 
@@ -372,7 +372,7 @@ run,1
 enable_enhancement,false
 enable_detection,true
 enable_metrics,true
-model_filename,yolov8n_openvino_640_fp32
+model_filename,yolov8n_640_fp32_openvino_model
 half_res,false
 imgsz,640
 soc_temp_initial_c,47.5

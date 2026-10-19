@@ -51,10 +51,10 @@ risoluzione).
 | --- | --- | --- | --- | --- | --- |
 | 1 | `A_baseline` | solo camera | — | — | — |
 | 2 | `B1_pt` | camera + detection | `yolov8n.pt` | True | 640 |
-| 3 | `B2_ov_fp32` | camera + detection | `yolov8n_openvino_640_fp32` | False | 640 |
-| 4 | `B3_ov_int8_640` | camera + detection | `yolov8n_openvino_640_int8` | False | 640 |
-| 5 | `B4_ov_int8_416` | camera + detection | `yolov8n_openvino_416_int8` | False | 416 |
-| 6 | `C_full` | camera + enh + detection | `yolov8n_openvino_640_fp32` | False | 640 |
+| 3 | `B2_ov_fp32` | camera + detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
+| 4 | `B3_ov_int8_640` | camera + detection | `yolov8n_640_int8_openvino_model` | False | 640 |
+| 5 | `B4_ov_int8_416` | camera + detection | `yolov8n_416_int8_openvino_model` | False | 416 |
+| 6 | `C_full` | camera + enh + detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
 
 ### Fase B — con overclock (2800 MHz)
 
@@ -65,10 +65,10 @@ non è la CPU e l'overclock sprecherebbe solo budget termico.
 | # | ID | Config | Modello | half_res | imgsz |
 | --- | --- | --- | --- | --- | --- |
 | 1 | `B1_pt_oc` | camera + detection | `yolov8n.pt` | True | 640 |
-| 2 | `B2_ov_fp32_oc` | camera + detection | `yolov8n_openvino_640_fp32` | False | 640 |
-| 3 | `B3_ov_int8_640_oc` | camera + detection | `yolov8n_openvino_640_int8` | False | 640 |
-| 4 | `B4_ov_int8_416_oc` | camera + detection | `yolov8n_openvino_416_int8` | False | 416 |
-| 5 | `C_full_oc` | camera + enh + detection | `yolov8n_openvino_640_fp32` | False | 640 |
+| 2 | `B2_ov_fp32_oc` | camera + detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
+| 3 | `B3_ov_int8_640_oc` | camera + detection | `yolov8n_640_int8_openvino_model` | False | 640 |
+| 4 | `B4_ov_int8_416_oc` | camera + detection | `yolov8n_416_int8_openvino_model` | False | 416 |
+| 5 | `C_full_oc` | camera + enh + detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
 
 ### Totale
 
@@ -200,7 +200,7 @@ python3 benchmarks/scripts/evaluate_map.py \
     --imgsz 640 --tag yolov8n_pt \
     --out benchmarks/results/csv/map_yolov8n_pt.csv
 
-# yolov8n_openvino_640_fp32
+# yolov8n_640_fp32_openvino_model
 python3 benchmarks/scripts/evaluate_map.py \
     --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n_640_fp32_openvino_model \
     --data benchmarks/datasets/coco128.yaml \

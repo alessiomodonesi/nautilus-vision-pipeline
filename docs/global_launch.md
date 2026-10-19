@@ -179,7 +179,7 @@ I parametri specifici dell'algoritmo di visione risiedono in questo file separat
 ```yaml
 detection_node:
   ros__parameters:
-    model_filename: 'yolov8n.pt' # o directory 'yolov8n_openvino_640_fp32'
+    model_filename: 'yolov8n.pt' # o directory 'yolov8n_640_fp32_openvino_model'
     conf_threshold: 0.4
     input_type: 'raw'            # fallback (sovrascritto dinamicamente dal launch)
     enable_debug: False

@@ -120,28 +120,28 @@ CALIB_SUBSEA=benchmarks/datasets/subsea_calib.yaml
 
 ```bash
 yolo export model=$WEIGHTS/yolov8n.pt format=openvino imgsz=640
-mv $WEIGHTS/yolov8n_openvino_model $WEIGHTS/yolov8n_openvino_640_fp32
+mv $WEIGHTS/yolov8n_openvino_model $WEIGHTS/yolov8n_640_fp32_openvino_model
 ```
 
 ### 3.2 yolov8n INT8 @ 640
 
 ```bash
 yolo export model=$WEIGHTS/yolov8n.pt format=openvino int8=True imgsz=640 data=$CALIB_COCO
-mv $WEIGHTS/yolov8n_int8_openvino_model $WEIGHTS/yolov8n_openvino_640_int8
+mv $WEIGHTS/yolov8n_int8_openvino_model $WEIGHTS/yolov8n_640_int8_openvino_model
 ```
 
 ### 3.3 yolov8n INT8 @ 416
 
 ```bash
 yolo export model=$WEIGHTS/yolov8n.pt format=openvino int8=True imgsz=416 data=$CALIB_COCO
-mv $WEIGHTS/yolov8n_int8_openvino_model $WEIGHTS/yolov8n_openvino_416_int8
+mv $WEIGHTS/yolov8n_int8_openvino_model $WEIGHTS/yolov8n_416_int8_openvino_model
 ```
 
 ### 3.4 best FP32 @ 416
 
 ```bash
 yolo export model=$WEIGHTS/best.pt format=openvino imgsz=416
-mv $WEIGHTS/best_openvino_model $WEIGHTS/best_openvino_416_fp32
+mv $WEIGHTS/best_openvino_model $WEIGHTS/best_416_fp32_openvino_model
 ```
 
 ### 3.5 best INT8 @ 416
@@ -152,7 +152,7 @@ passo e usare solo FP32.
 
 ```bash
 yolo export model=$WEIGHTS/best.pt format=openvino int8=True imgsz=416 data=$CALIB_SUBSEA
-mv $WEIGHTS/best_int8_openvino_model $WEIGHTS/best_openvino_416_int8
+mv $WEIGHTS/best_int8_openvino_model $WEIGHTS/best_416_int8_openvino_model
 ```
 
 **Fallback (sconsigliato):** se mancano frame subacquei e si vuole
@@ -169,11 +169,11 @@ ls -d $WEIGHTS/*openvino* 2>/dev/null
 
 | Cartella | Modello | imgsz | Quantizzazione | Dim. ~ |
 | --- | --- | --- | --- | --- |
-| `yolov8n_openvino_640_fp32/` | yolov8n | 640 | FP32 | 12 MB |
-| `yolov8n_openvino_640_int8/` | yolov8n | 640 | INT8 | 3.6 MB |
-| `yolov8n_openvino_416_int8/` | yolov8n | 416 | INT8 | 3.6 MB |
-| `best_openvino_416_fp32/` | best | 416 | FP32 | 12 MB |
-| `best_openvino_416_int8/` | best | 416 | INT8 | 3.6 MB |
+| `yolov8n_640_fp32_openvino_model/` | yolov8n | 640 | FP32 | 12 MB |
+| `yolov8n_640_int8_openvino_model/` | yolov8n | 640 | INT8 | 3.6 MB |
+| `yolov8n_416_int8_openvino_model/` | yolov8n | 416 | INT8 | 3.6 MB |
+| `best_416_fp32_openvino_model/` | best | 416 | FP32 | 12 MB |
+| `best_416_int8_openvino_model/` | best | 416 | INT8 | 3.6 MB |
 
 Disattivare il venv:
 
@@ -206,11 +206,10 @@ for d in sorted(WEIGHTS.glob('*_openvino_*')):
 Output atteso:
 
 ```text
-best_openvino_416_fp32              input=[1, 3, 416, 416] type=<Type.f32: 'f32'>
-best_openvino_416_int8              input=[1, 3, 416, 416] type=<Type.f32: 'f32'>
-yolov8n_openvino_416_int8           input=[1, 3, 416, 416] type=<Type.f32: 'f32'>
-yolov8n_openvino_640_fp32           input=[1, 3, 640, 640] type=<Type.f32: 'f32'>
-yolov8n_openvino_640_int8           input=[1, 3, 640, 640] type=<Type.f32: 'f32'>
+best_416_fp32_openvino_model        input=[1, 3, 416, 416] type=<Type.f32: 'f32'>
+yolov8n_416_int8_openvino_model     input=[1, 3, 416, 416] type=<Type.f32: 'f32'>
+yolov8n_640_fp32_openvino_model     input=[1, 3, 640, 640] type=<Type.f32: 'f32'>
+yolov8n_640_int8_openvino_model     input=[1, 3, 640, 640] type=<Type.f32: 'f32'>
 ```
 
 L'input resta `f32` anche per i modelli INT8: OpenVINO quantizza i pesi
@@ -298,7 +297,7 @@ Creare un YAML per ogni combinazione modello + imgsz. Esempi:
 ```yaml
 detection_node:
   ros__parameters:
-    model_filename: 'yolov8n_openvino_416_int8'
+    model_filename: 'yolov8n_416_int8_openvino_model'
     conf_threshold: 0.4
     input_type: 'raw'
     enable_debug: False
@@ -313,7 +312,7 @@ detection_node:
 ```yaml
 detection_node:
   ros__parameters:
-    model_filename: 'yolov8n_openvino_640_int8'
+    model_filename: 'yolov8n_640_int8_openvino_model'
     conf_threshold: 0.4
     input_type: 'raw'
     enable_debug: False
@@ -323,12 +322,12 @@ detection_node:
     sync_slop_sec: 0.05
 ```
 
-**`detection_params_best_int8_416.yaml`**
+**`detection_params_best_416.yaml`**
 
 ```yaml
 detection_node:
   ros__parameters:
-    model_filename: 'best_openvino_416_int8'
+    model_filename: 'best_416_fp32_openvino_model'
     conf_threshold: 0.4
     input_type: 'raw'
     enable_debug: False
@@ -351,9 +350,8 @@ from pathlib import Path
 W = Path('ros2_ws/src/nautilus_perception/nautilus_perception/data/weights')
 core = ov.Core()
 
-for name in ['yolov8n_openvino_640_fp32', 'yolov8n_openvino_640_int8',
-             'yolov8n_openvino_416_int8', 'best_openvino_416_fp32',
-             'best_openvino_416_int8']:
+for name in ['yolov8n_640_fp32_openvino_model', 'yolov8n_640_int8_openvino_model',
+             'yolov8n_416_int8_openvino_model', 'best_416_fp32_openvino_model']:
     d = W / name
     if not d.exists():
         print(f'{name}: MISSING'); continue
