@@ -1,12 +1,37 @@
 detection_node:
   ros__parameters:
-    # questi sono i DEFAULT, sovrascrivibili a runtime via launch args:
-    # model_filename_override, half_res_override, imgsz_override, input_type_override, enable_debug
-    model_filename: 'yolov8n.pt'
-    conf_threshold: 0.4
-    input_type: 'raw'
-    enable_debug: False
-    half_res: True
+    # parametri di default per detection_node.
+    # hanno la priorità se il launch viene eseguito senza argomenti.
+    # sovrascrivibili da terminale via launch args (es. debug:=true, model_filename:=..., half_res:=false, imgsz:=...)
+
+    # --- modelli disponibili in data/weights/ ---
+    # 1. openvino fp32 640 (default consigliato: veloce e accurato)
+    model_filename: 'yolov8n_640_fp32_openvino_model'
+    half_res: False
     imgsz: 640
-    num_threads: 2
-    sync_slop_sec: 0.05
+
+    # 2. pytorch baseline (richiede half_res: True per alleggerire la cpu)
+    # model_filename: 'yolov8n.pt'
+    # half_res: True
+    # imgsz: 640
+
+    # 3. openvino int8 640
+    # model_filename: 'yolov8n_640_int8_openvino_model'
+    # half_res: False
+    # imgsz: 640
+
+    # 4. openvino int8 416 (massimo framerate)
+    # model_filename: 'yolov8n_416_int8_openvino_model'
+    # half_res: False
+    # imgsz: 416
+
+    # 5. modello subacqueo di manuel (4 classi marine @ 416)
+    # model_filename: 'best_openvino_416_fp32'
+    # half_res: False
+    # imgsz: 416
+
+    conf_threshold: 0.4
+    input_type: 'raw'            # 'raw' o 'enhanced'
+    enable_debug: False          # true apre la finestra opencv di debug
+    num_threads: 2               # thread cpu per inferenza (2 lascia core liberi alle camere)
+    sync_slop_sec: 0.05          # tolleranza sincronizzazione stereo (secondi)
