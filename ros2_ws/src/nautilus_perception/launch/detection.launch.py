@@ -2,74 +2,98 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.actions import DeclareLaunchArgument, OpaqueFunction
+from launch.substitutions import LaunchConfiguration
 
 
-def generate_launch_description():
+def launch_setup(context, *args, **kwargs):
     pkg_dir = get_package_share_directory('nautilus_perception')
+    params_file = LaunchConfiguration('params_file').perform(context)
+    params_path = os.path.join(pkg_dir, 'config', params_file)
 
-    params_file_arg = DeclareLaunchArgument(
-        'params_file', default_value='detection_params.yaml',
-        description='Nome del file params in config/'
-    )
-    input_type_arg = DeclareLaunchArgument(
-        'input_type_override', default_value='raw',
-        description="Override input_type: 'raw' | 'enhanced'"
-    )
-    enable_debug_arg = DeclareLaunchArgument(
-        'enable_debug', default_value='false',
-        description='OpenCV debug window (true/false)'
-    )
-    model_filename_arg = DeclareLaunchArgument(
-        'model_filename_override', default_value='yolov8n.pt',
-        description='Nome cartella OpenVINO o file .pt in data/weights/'
-    )
-    half_res_arg = DeclareLaunchArgument(
-        'half_res_override', default_value='true',
-        description='Dimezza il frame prima di YOLO (solo PyTorch)'
-    )
-    imgsz_arg = DeclareLaunchArgument(
-        'imgsz_override', default_value='640',
-        description='Risoluzione di inferenza, deve combaciare con export'
-    )
-    params_path = PathJoinSubstitution(
-        [pkg_dir, 'config', LaunchConfiguration('params_file')]
-    )
-    
+    # dizionario degli override: solo gli argomenti esplicitamente passati
+    # a riga di comando (non vuoti) sovrascrivono il file YAML.
+    overrides = {}
+
+    def _check_param(arg_names, param_key):
+        for name in arg_names:
+            val = LaunchConfiguration(name).perform(context).strip()
+            if val != '':
+                overrides[param_key] = val
+                break
+
+    _check_param(['enable_debug', 'debug'], 'enable_debug')
+    _check_param(['input_type_override', 'input_type'], 'input_type')
+    _check_param(['model_filename_override', 'model_filename'], 'model_filename')
+    _check_param(['half_res_override', 'half_res'], 'half_res')
+    _check_param(['imgsz_override', 'imgsz'], 'imgsz')
+
+    node_params = [params_path]
+    if overrides:
+        node_params.append(overrides)
+
     # nodo di detection
-    # NB: i parametri qui sotto (input_type, enable_debug,
-    # model_filename, half_res, imgsz) vengono SEMPRE sovrascritti dal
-    # launch, anche quando l'utente non passa gli argomenti: i default
-    # di DeclareLaunchArgument vincono sul YAML. se modifichi questi
-    # valori in detection_params.yaml, devi anche aggiornare i default
-    # qui sopra oppure passare gli override espliciti a riga di comando.
-    # gli altri parametri (conf_threshold, num_threads, sync_slop_sec)
-    # non hanno override di lancio e restano quelli del YAML.
+    # i parametri del file YAML hanno la priorità nel caso non vengano specificati argomenti di lancio.
+    # gli argomenti di lancio sovrascrivono il file YAML solo se esplicitati nel comando.
     detection_node = Node(
         package='nautilus_perception',
         executable='detection_node',
         name='detection_node',
         output='screen',
-        parameters=[
-            params_path,
-            {
-                'input_type': LaunchConfiguration('input_type_override'),
-                'enable_debug': LaunchConfiguration('enable_debug'),
-                'model_filename': LaunchConfiguration('model_filename_override'),
-                'half_res': LaunchConfiguration('half_res_override'),
-                'imgsz': LaunchConfiguration('imgsz_override'),
-            }
-        ]
+        parameters=node_params
     )
 
-    return LaunchDescription([
-        params_file_arg,
-        input_type_arg,
-        enable_debug_arg,
-        model_filename_arg,
-        half_res_arg,
-        imgsz_arg,
-        detection_node,
-    ])
+    return [detection_node]
+
+
+def generate_launch_description():
+    declared_arguments = [
+        DeclareLaunchArgument(
+            'params_file', default_value='detection_params.yaml',
+            description='nome del file params in config/'
+        ),
+        DeclareLaunchArgument(
+            'enable_debug', default_value='',
+            description='finestra di debug OpenCV (default: usa valore YAML)'
+        ),
+        DeclareLaunchArgument(
+            'debug', default_value='',
+            description='alias per enable_debug'
+        ),
+        DeclareLaunchArgument(
+            'model_filename_override', default_value='',
+            description='nome cartella OpenVINO o file .pt (default: usa valore YAML)'
+        ),
+        DeclareLaunchArgument(
+            'model_filename', default_value='',
+            description='alias per model_filename_override'
+        ),
+        DeclareLaunchArgument(
+            'half_res_override', default_value='',
+            description='dimezza il frame prima di YOLO (default: usa valore YAML)'
+        ),
+        DeclareLaunchArgument(
+            'half_res', default_value='',
+            description='alias per half_res_override'
+        ),
+        DeclareLaunchArgument(
+            'imgsz_override', default_value='',
+            description='risoluzione di inferenza (default: usa valore YAML)'
+        ),
+        DeclareLaunchArgument(
+            'imgsz', default_value='',
+            description='alias per imgsz_override'
+        ),
+        DeclareLaunchArgument(
+            'input_type_override', default_value='',
+            description="override input_type: 'raw' | 'enhanced' (default: usa valore YAML)"
+        ),
+        DeclareLaunchArgument(
+            'input_type', default_value='',
+            description='alias per input_type_override'
+        ),
+        OpaqueFunction(function=launch_setup)
+    ]
+
+    return LaunchDescription(declared_arguments)
     

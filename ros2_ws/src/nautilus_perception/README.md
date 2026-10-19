@@ -176,7 +176,7 @@ Il nodo legge i parametri di configurazione dal file `config/detection_params.ya
 * `half_res`: dimezza il frame prima di YOLO. Deve essere `false` per OpenVINO.
 * `imgsz`: risoluzione di inferenza, deve combaciare con l'export del modello.
 
-**Nota sui default**: il launch file `detection.launch.py` sovrascrive **sempre** `input_type`, `enable_debug`, `model_filename`, `half_res`, `imgsz` con i propri `DeclareLaunchArgument`. Per modificare questi valori, o si aggiornano i default in `detection.launch.py`, o si passano come argomenti al lancio. Gli altri parametri (`conf_threshold`, `num_threads`, `sync_slop_sec`) restano invece quelli del YAML.
+**Priorità dei parametri**: il file YAML `config/detection_params.yaml` ha la **piena priorità** di default. Se avvii il nodo con `ros2 launch nautilus_perception detection.launch.py` senza argomenti, tutti i parametri provengono direttamente dal YAML. Se invece passi argomenti al lancio (es. `debug:=true`, `model_filename:=best.pt`, `half_res:=false`, `imgsz:=416`), solo le chiavi esplicitate sovrascriveranno il YAML per quella sessione.
 
 ---
 
@@ -185,7 +185,7 @@ Il nodo legge i parametri di configurazione dal file `config/detection_params.ya
 Per verificare in tempo reale l'efficacia del rilevamento e la correttezza della calibrazione stereo (evitando che riflessi o materiali trasparenti falsino la stima della distanza), è integrata una finestra grafica OpenCV di debug.
 
 * **Cosa mostra:** l'immagine rettificata della camera sinistra con i bounding box arancioni di YOLO, il punto di campionamento verde e l'etichetta con la confidenza e la distanza metrica in metri (Z).
-* **Come attivarla:** tramite l'argomento di lancio `enable_debug:=true` nel file di lancio della detection.
+* **Come attivarla:** impostando `enable_debug: True` in `config/detection_params.yaml` oppure passando l'argomento al comando di lancio: `enable_debug:=true` (o semplicemente `debug:=true`).
 
 ---
 
@@ -195,9 +195,11 @@ Di seguito trovi l'elenco completo dei comandi ROS 2 per compilare, avviare e te
 
 ### Compilazione del Workspace
 
+Compilare sempre con `--symlink-install` per fare in modo che qualsiasi modifica a YAML o launch file sia immediatamente attiva senza dover ricompilare:
+
 ```bash
 cd ~/nautilus-vision-pipeline/ros2_ws
-colcon build --packages-select nautilus_perception
+colcon build --symlink-install --packages-select nautilus_perception
 source install/setup.bash
 ```
 

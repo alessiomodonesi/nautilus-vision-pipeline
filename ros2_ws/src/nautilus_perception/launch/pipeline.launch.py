@@ -26,8 +26,8 @@ def generate_launch_description():
         description='Enable the benchmark node'
     )
     enable_debug_arg = DeclareLaunchArgument(
-        'enable_debug', default_value='false',
-        description='Enable OpenCV debug window in detection node (false for benchmarks)'
+        'enable_debug', default_value='',
+        description='Enable OpenCV debug window in detection node (default: usa YAML detection)'
     )
     params_file_arg = DeclareLaunchArgument(
         'params_file', default_value='detection_params.yaml',
@@ -59,17 +59,19 @@ def generate_launch_description():
     dynamic_input_type = PythonExpression([
         "'", LaunchConfiguration('input_type_override'), "' "
         "if '", LaunchConfiguration('input_type_override'), "' != '' "
-        "else ('enhanced' if '", LaunchConfiguration('enable_enhancement'), "' == 'true' else 'raw')"
+        "else ('enhanced' if '", LaunchConfiguration('enable_enhancement'), "' == 'true' else '')"
     ])
     model_filename_arg = DeclareLaunchArgument(
-        'model_filename_override', default_value='yolov8n.pt',
-        description='Nome modello in data/weights/'
+        'model_filename_override', default_value='',
+        description='Nome modello in data/weights/ (default: usa YAML detection)'
     )
     half_res_arg = DeclareLaunchArgument(
-        'half_res_override', default_value='true',
+        'half_res_override', default_value='',
+        description='Dimezza il frame prima di YOLO (default: usa YAML detection)'
     )
     imgsz_arg = DeclareLaunchArgument(
-        'imgsz_override', default_value='640',
+        'imgsz_override', default_value='',
+        description='Risoluzione di inferenza (default: usa YAML detection)'
     )
 
     # nodo di acquisizione (condizionale)

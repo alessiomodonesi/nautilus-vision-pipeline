@@ -30,14 +30,14 @@ Solo il blocco di acquisizione (`nautilus_camera/stereo_camera.launch.py`) parte
 
 ## Compilazione
 
-Per compilare i nodi del sistema visivo, spostati nella root del workspace ed esegui `colcon`:
+Per compilare i nodi del sistema visivo, spostati nella root del workspace ed esegui `colcon` con `--symlink-install` (raccomandato per fare in modo che le modifiche ai file di launch e ai file YAML in `src/` abbiano effetto immediato senza problemi di cache):
 
 ```bash
 # entra nel workspace
 cd ros2_ws
 
-# compila tutti i pacchetti (oppure usa --packages-select per pacchetti specifici)
-colcon build
+# compila tutti i pacchetti con symlink per i file dati e python
+colcon build --symlink-install
 
 # rendi disponibili i binari e i package nel path corrente
 source install/setup.bash
@@ -58,14 +58,17 @@ systemd e con `pipeline_config.env`. In caso di divergenza, i nodi su domini
 DDS diversi non si vedono. Vedi `deploy/cyclonedds.xml` per la configurazione
 del trasporto (peer statici, MTU ridotto per WiFi, fragment size).
 
-### Configurazione tramite YAML
+### Configurazione tramite YAML e priorità parametri
 
 I parametri operativi sono distribuiti su due file YAML, uno per pacchetto:
 
 * `nautilus_camera/config/nautilus_camera.yaml` — parametri camera_ros, metrics_node, saving_node.
 * `nautilus_perception/config/detection_params.yaml` — parametri detection (modello, soglia, threads, sync).
 
-I parametri passati come launch argument sovrascrivono i valori YAML per la singola run, senza modificare il file.
+**Regola di priorità**:
+
+1. Se il nodo viene avviato **senza argomenti da riga di comando**, i file YAML hanno la **piena priorità**: qualsiasi modifica a `detection_params.yaml` o `nautilus_camera.yaml` viene caricata fedelmente.
+2. Se vengono passati **argomenti al comando di lancio** (es. `debug:=true`, `model_filename:=best.pt`, `display:=true`), solo le chiavi specificate sovrascrivono il YAML per quella specifica esecuzione.
 
 ### Avvio della Pipeline
 

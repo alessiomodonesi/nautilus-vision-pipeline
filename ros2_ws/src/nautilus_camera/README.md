@@ -49,28 +49,27 @@ I parametri hardware di `camera_ros` **non vengono ripetuti** nel launch file: s
 
 **Argomenti di lancio:**
 
-| Argomento          | Default | Descrizione                                    |
-|--------------------|---------|------------------------------------------------|
-| `enable_metrics`   | `false` | Avvia il nodo di benchmark                     |
-| `enable_saving`    | `true`  | Avvia il nodo di salvataggio su disco          |
-| `enable_display`   | `false` | Apre finestra OpenCV del `metrics_node`        |
+| Argomento | Default | Descrizione |
+|---|---|---|
+| `params_file` | `nautilus_camera.yaml` | Nome del file di configurazione in `config/` |
+| `enable_metrics` (alias: `metrics`) | `false` | Avvia il nodo di benchmark (`metrics_node`) |
+| `enable_display` (alias: `display`) | `''` (vuoto) | Apre finestra OpenCV del `metrics_node` (se vuoto, usa valore di `nautilus_camera.yaml`) |
+
+**Regola di priorità:**
+Se `enable_display` non viene specificato da riga di comando, il nodo prende il valore del parametro `display` direttamente da `config/nautilus_camera.yaml`. L'argomento da riga di comando ha effetto solo se esplicitato.
 
 **Esempi:**
 
 ```bash
-# Acquisizione + salvataggio (configurazione di produzione)
+# Solo acquisizione (default)
 ros2 launch nautilus_camera stereo_camera.launch.py
 
-# Solo acquisizione (zero I/O)
-ros2 launch nautilus_camera stereo_camera.launch.py enable_saving:=false
+# Acquisizione + benchmark (run di test, prende display da YAML)
+ros2 launch nautilus_camera stereo_camera.launch.py enable_metrics:=true
 
-# Acquisizione + benchmark (run di test)
+# Con finestra video forzata da CLI (richiede GUI attiva)
 ros2 launch nautilus_camera stereo_camera.launch.py \
-    enable_saving:=false enable_metrics:=true
-
-# Con finestra video (richiede GUI attiva)
-ros2 launch nautilus_camera stereo_camera.launch.py \
-    enable_metrics:=true enable_display:=true
+    metrics:=true display:=true
 ```
 
 ## Nodi
