@@ -60,13 +60,20 @@ def main():
 
     dummy = np.zeros((720, 1280, 3), dtype=np.uint8)
 
+    def find_model(*names):
+        for n in names:
+            p = WEIGHTS / n
+            if p.exists():
+                return p
+        return WEIGHTS / names[0]
+
     pairs = [
-        ("yolov8n_pt",        WEIGHTS / "yolov8n.pt",                    640),
-        ("yolov8n_fp32_640",  WEIGHTS / "yolov8n_openvino_640_fp32",     640),
-        ("yolov8n_int8_640",  WEIGHTS / "yolov8n_openvino_640_int8",     640),
-        ("yolov8n_int8_416",  WEIGHTS / "yolov8n_openvino_416_int8",     416),
-        ("best_pt",           WEIGHTS / "best.pt",                       416),
-        ("best_fp32_416",     WEIGHTS / "best_openvino_416_fp32",        416),
+        ("yolov8n_pt",        WEIGHTS / "yolov8n.pt", 640),
+        ("yolov8n_fp32_640",  find_model("yolov8n_640_fp32_openvino_model", "yolov8n_openvino_640_fp32"), 640),
+        ("yolov8n_int8_640",  find_model("yolov8n_640_int8_openvino_model", "yolov8n_openvino_640_int8"), 640),
+        ("yolov8n_int8_416",  find_model("yolov8n_416_int8_openvino_model", "yolov8n_openvino_416_int8"), 416),
+        ("best_pt",           WEIGHTS / "best.pt", 416),
+        ("best_fp32_416",     find_model("best_openvino_416_fp32", "best_416_fp32_openvino_model"), 416),
     ]
 
     results = []
@@ -82,11 +89,13 @@ def main():
         return
 
     print("\n\n== Riepilogo ==")
-    print(f"{'label':<14}{'imgsz':>7}{'mean':>9}{'p50':>9}{'p95':>9}{'fps':>8}")
+    print(f"{'label':<18}{'imgsz':>7}{'mean':>10}{'p50':>10}{'p95':>10}{'fps':>8}")
     for r in results:
-        print(f"{r['label']:<14}{r['imgsz']:>7}"
-              f"{r['mean_ms']:>8.1f}m{r['p50_ms']:>8.1f}m"
-              f"{r['p95_ms']:>8.1f}m{r['fps']:>7.2f}")
+        print(f"{r['label']:<18}{r['imgsz']:>7}"
+              f"{r['mean_ms']:>8.1f}ms"
+              f"{r['p50_ms']:>8.1f}ms"
+              f"{r['p95_ms']:>8.1f}ms"
+              f"{r['fps']:>8.2f}")
 
     # boost OpenVINO per ogni coppia .pt/.ov
     by_label = {r["label"]: r for r in results}
