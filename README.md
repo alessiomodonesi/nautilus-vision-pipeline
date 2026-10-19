@@ -19,7 +19,6 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 * **[Cheat-Sheet Comandi ROS 2](docs/ros2-cmds.md)** — Raccolta di comandi essenziali per build (`colcon`), launch, ispezione nodi/topic e registrazione bag.
 * **[Dipendenze Raspberry Pi](docs/requirements_pi.txt)** — Elenco dei pacchetti Python e di sistema per l'ambiente Pi.
 * **[Dipendenze Virtual Environment](docs/requirements_venv.txt)** — Pacchetti Python per il venv di sviluppo (export OpenVINO, calibrazione, benchmark).
-* **[Accesso al Pi](docs/pi_access.txt)** — Credenziali, IP statici e note di accesso SSH.
 
 ### 📦 Workspace e Pacchetti ROS 2 (`ros2_ws/`)
 
