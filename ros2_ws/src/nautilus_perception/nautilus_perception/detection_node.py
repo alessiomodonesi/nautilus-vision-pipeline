@@ -72,12 +72,18 @@ class DetectionNode(Node):
         pkg_share = get_package_share_directory('nautilus_perception')
         model_path = os.path.join(pkg_share, 'data', 'weights', model_filename)
 
-        # ultralytics non riconosce le directory OpenVINO se
-        # non terminano con '_openvino_model'
+        # Ultralytics riconosce i modelli OpenVINO solo se si passa la directory
+        # il cui nome termina con '_openvino_model'. Non accetta il file .xml.
         if os.path.isdir(model_path):
-            xmls = glob.glob(os.path.join(model_path, '*.xml'))
-            if xmls:
-                model_path = xmls[0]
+            if not model_path.rstrip(os.sep).endswith('_openvino_model'):
+                self.get_logger().fatal(
+                    f"OpenVINO model directory must end with '_openvino_model': {model_path}"
+                )
+                raise ValueError(
+                    f"Invalid OpenVINO directory name: {model_path}. "
+                    f"Rename it to '<name>_openvino_model' or pass a different model_filename."
+                )
+            # directory valida: lascia model_path invariato
                 
         self.get_logger().info(f"Initializing YOLOv8 with model: {model_path}")
         self.get_logger().info(f"OpenCV visual debugging: {'ENABLED' if self.enable_debug else 'DISABLED'}")
@@ -146,6 +152,7 @@ class DetectionNode(Node):
         return param.value
 
     def stereo_callback(self, left_msg: Image, right_msg: Image):
+        # self.get_logger().info("CALLBACK FIRED")
         t0 = time.perf_counter()
 
         # pre-processing

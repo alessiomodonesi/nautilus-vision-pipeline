@@ -6,14 +6,14 @@ detection_node:
 
     # --- modelli disponibili in data/weights/ ---
     # 1. pytorch baseline (richiede half_res: true per alleggerire la cpu)
-    model_filename: 'yolov8n.pt'
-    half_res: True
-    imgsz: 640
+    # model_filename: 'yolov8n.pt'
+    # half_res: True
+    # imgsz: 640
 
     # 2. openvino fp32 640 (default consigliato: veloce e accurato)
-    # model_filename: 'yolov8n_640_fp32_openvino_model'
-    # half_res: False
-    # imgsz: 640
+    model_filename: 'yolov8n_640_fp32_openvino_model'
+    half_res: False
+    imgsz: 640
 
     # 3. openvino int8 640
     # model_filename: 'yolov8n_640_int8_openvino_model'
