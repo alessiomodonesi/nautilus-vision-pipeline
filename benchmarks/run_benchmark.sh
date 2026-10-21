@@ -129,26 +129,46 @@ source "$WS/install/setup.bash"
 sudo -n systemctl stop nautilus-bag.service    2>/dev/null || true
 sudo -n systemctl stop nautilus-vision.service 2>/dev/null || true
 sudo -n systemctl stop lock-cameras.service    2>/dev/null || true
+
+sleep 1
+if systemctl is-active --quiet nautilus-vision.service; then
+    echo "ERRORE: nautilus-vision.service ancora attivo dopo 'systemctl stop'."
+    systemctl status --no-pager nautilus-vision.service 2>&1 | head -5 | sed 's/^/    /'
+    exit 1
+fi
+
 pkill -f "ros2 bag record" 2>/dev/null || true
 cleanup_camera_nodes
 
+# ── reset cache discovery ──────────────────────────────────────────────
+# dopo un kill, CycloneDDS tiene il nodo in cache per 60-90 s. senza
+# reset, il check pre-launch 1 può abortire per un fantasma anche se
+# /dev/video* è libero.
+ros2 daemon stop 2>/dev/null || true
+ros2 daemon start 2>/dev/null || true
+sleep 2
+
 # ── check pre-launch 1: nessun nodo della pipeline già attivo ──────────
-# se un servizio systemd è ripartito o un launch manuale è rimasto su,
-# camera_ros fallirà con "camera is not free" e il benchmark misurerà un
-# ibrido (frame dal processo esterno) o produrrà 120 s di CSV vuoti.
 STALE_NODES=$(ros2 node list 2>/dev/null | grep -E "^/stereo/|^/detection_node$|^/metrics_node$" || true)
 if [ -n "$STALE_NODES" ]; then
-    echo "ERRORE: nodi ROS 2 già attivi prima del launch:"
-    echo "$STALE_NODES" | sed 's/^/  /'
-    echo ""
-    echo "  Chi tiene /dev/video0 e /dev/video1:"
-    fuser -v /dev/video0 /dev/video1 2>&1 | sed 's/^/    /' || echo "    (nessuno)"
-    echo ""
-    echo "  Ferma i processi con:"
-    echo "    sudo systemctl stop nautilus-vision.service"
-    echo "    sudo systemctl disable nautilus-vision.service"
-    echo "    pkill -9 -f camera_node"
-    exit 1
+    # distinguere nodo vivo da fantasma: se /dev/video* è libero,
+    # i nodi sono fantasmi del discovery e possiamo procedere.
+    if fuser /dev/video0 /dev/video1 > /dev/null 2>&1; then
+        echo "ERRORE: nodi ROS 2 già attivi e /dev/video* occupato:"
+        echo "$STALE_NODES" | sed 's/^/  /'
+        fuser -v /dev/video0 /dev/video1 2>&1 | sed 's/^/    /'
+        exit 1
+    fi
+    # device liberi ma discovery mostra nodi: fantasmi, attendi e riprova
+    echo "WARN: nodi fantasma nel discovery (device libero), attendo 5 s..."
+    sleep 5
+    STALE_NODES=$(ros2 node list 2>/dev/null | grep -E "^/stereo/|^/detection_node$|^/metrics_node$" || true)
+    if [ -n "$STALE_NODES" ]; then
+        echo "ERRORE: nodi ancora visibili dopo reset daemon:"
+        echo "$STALE_NODES" | sed 's/^/  /'
+        echo "  Device /dev/video*: libero. Forza con: ros2 daemon stop; ros2 daemon start"
+        exit 1
+    fi
 fi
 
 # ── check pre-launch 2: nessun publisher già attivo sui topic raw ──────
@@ -242,6 +262,15 @@ sleep 2
 if ! ros2 node list 2>/dev/null | grep -q "^/stereo/lx/camera$"; then
     echo "ERRORE: /stereo/lx/camera non attivo. Controlla $LAUNCH_LOG"
     echo "  (causa tipica: camera occupata da un altro processo)"
+    kill $LAUNCH_PID 2>/dev/null || true
+    cleanup_camera_nodes
+    sleep 2
+    exit 1
+fi
+
+# verifica che anche rx sia attivo (parte 3 s dopo lx per via del TimerAction)
+if ! ros2 node list 2>/dev/null | grep -q "^/stereo/rx/camera$"; then
+    echo "ERRORE: /stereo/rx/camera non attivo dopo 7 s. Controlla $LAUNCH_LOG"
     kill $LAUNCH_PID 2>/dev/null || true
     cleanup_camera_nodes
     sleep 2
