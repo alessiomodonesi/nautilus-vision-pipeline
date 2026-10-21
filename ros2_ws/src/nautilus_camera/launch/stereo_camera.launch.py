@@ -1,7 +1,7 @@
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, OpaqueFunction
+from launch.actions import DeclareLaunchArgument, OpaqueFunction, TimerAction
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -29,6 +29,9 @@ def launch_setup(context, *args, **kwargs):
         parameters=[qos_yaml, config_file], output='screen',
     )
 
+    # delay 3 sec tra camera lx e rx
+    rx_delayed = TimerAction(period=3.0, actions=[rx_camera])
+    
     # nodo di benchmark
     # raccoglie eventuali override per metrics_node solo se passati da CLI
     metrics_overrides = {}
@@ -54,7 +57,7 @@ def launch_setup(context, *args, **kwargs):
             metrics_flag = True
             break
 
-    nodes = [lx_camera, rx_camera]
+    nodes = [lx_camera, rx_delayed]
     if metrics_flag:
         metrics_node = Node(
             package='nautilus_camera', executable='metrics_node',
