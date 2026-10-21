@@ -1,0 +1,291 @@
+[INFO] [launch]: All log files can be found below /home/nautilus/.ros/log/2026-10-21-20-32-49-839368-nautilus-pi-4228
+[INFO] [launch]: Default logging verbosity is set to INFO
+[WARNING] [launch_ros.actions.node]: Parameter file path is not a file: /home/nautilus/nautilus-vision-pipeline/ros2_ws/install/nautilus_perception/share/nautilus_perception/config/nautilus_camera.yaml
+[INFO] [camera_node-1]: process started with pid [4232]
+[INFO] [metrics_node-2]: process started with pid [4233]
+[INFO] [detection_node-3]: process started with pid [4234]
+[camera_node-1] [0:13:13.957206680] [4232]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817
+[camera_node-1] [0:13:14.000121060] [4249]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-1] [0:13:14.124517772] [4249]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-1] [0:13:14.175554809] [4249]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-1] [0:13:14.175673762] [4249]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@88000/imx708@1a to CFE device /dev/media0 and ISP device /dev/media2 using PiSP variant BCM2712_D0
+[camera_node-1] [0:13:14.176712734] [4249]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-1] [0:13:14.272928967] [4249]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-1] [0:13:14.310285222] [4249]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@80000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-1] [0:13:14.310367937] [4249]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@80000/imx708@1a to CFE device /dev/media1 and ISP device /dev/media3 using PiSP variant BCM2712_D0
+[camera_node-1] [0:13:14.312886881] [4249]  WARN V4L2 v4l2_pixelformat.cpp:346 Unsupported V4L2 pixel format RPBP
+[camera_node-1] [INFO] [1792607570.490980025] [stereo.lx.camera]: 
+[camera_node-1] >> stream formats:
+[camera_node-1]    - R8 (32x32 - 4608x2592)
+[camera_node-1]    - R16 (32x32 - 4608x2592)
+[camera_node-1]    - MONO_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - NV21 (32x32 - 4608x2592)
+[camera_node-1]    - SBGGR8 (32x32 - 4608x2592)
+[camera_node-1]    - SBGGR16 (32x32 - 4608x2592)
+[camera_node-1]    - BGGR_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - XBGR8888 (32x32 - 4608x2592)
+[camera_node-1]    - BGR888 (32x32 - 4608x2592)
+[camera_node-1]    - RGB888 (32x32 - 4608x2592)
+[camera_node-1]    - XRGB8888 (32x32 - 4608x2592)
+[camera_node-1]    - SGBRG16 (32x32 - 4608x2592)
+[camera_node-1]    - GBRG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - SGRBG16 (32x32 - 4608x2592)
+[camera_node-1]    - GRBG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - SRGGB16 (32x32 - 4608x2592)
+[camera_node-1]    - RGGB_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - BGR161616 (32x32 - 4608x2592)
+[camera_node-1]    - RGB161616 (32x32 - 4608x2592)
+[camera_node-1]    - SRGGB8 (32x32 - 4608x2592)
+[camera_node-1]    - SGRBG8 (32x32 - 4608x2592)
+[camera_node-1]    - SGBRG8 (32x32 - 4608x2592)
+[camera_node-1]    - YUYV (32x32 - 4608x2592)
+[camera_node-1]    - UYVY (32x32 - 4608x2592)
+[camera_node-1] [WARN] [1792607570.491209802] [stereo.lx.camera]: no pixel format selected, auto-selecting: "XRGB8888"
+[camera_node-1] [WARN] [1792607570.491248059] [stereo.lx.camera]: set parameter 'format' to silence this warning
+[camera_node-1] [INFO] [1792607570.491446672] [stereo.lx.camera]: 
+[camera_node-1] >> XRGB8888 format sizes:
+[camera_node-1]    - 160x120
+[camera_node-1]    - 240x160
+[camera_node-1]    - 320x240
+[camera_node-1]    - 400x240
+[camera_node-1]    - 480x320
+[camera_node-1]    - 640x360
+[camera_node-1]    - 640x480
+[camera_node-1]    - 720x480
+[camera_node-1]    - 768x480
+[camera_node-1]    - 854x480
+[camera_node-1]    - 720x576
+[camera_node-1]    - 800x600
+[camera_node-1]    - 960x540
+[camera_node-1]    - 1024x576
+[camera_node-1]    - 960x640
+[camera_node-1]    - 1024x600
+[camera_node-1]    - 1024x768
+[camera_node-1]    - 1280x720
+[camera_node-1]    - 1152x864
+[camera_node-1]    - 1280x800
+[camera_node-1]    - 1360x768
+[camera_node-1]    - 1366x768
+[camera_node-1]    - 1440x900
+[camera_node-1]    - 1280x1024
+[camera_node-1]    - 1536x864
+[camera_node-1]    - 1280x1080
+[camera_node-1]    - 1600x900
+[camera_node-1]    - 1400x1050
+[camera_node-1]    - 1680x1050
+[camera_node-1]    - 1600x1200
+[camera_node-1]    - 1920x1080
+[camera_node-1]    - 2048x1080
+[camera_node-1]    - 1920x1200
+[camera_node-1]    - 2160x1080
+[camera_node-1]    - 2048x1152
+[camera_node-1]    - 2560x1080
+[camera_node-1]    - 2048x1536
+[camera_node-1]    - 2560x1440
+[camera_node-1]    - 2560x1600
+[camera_node-1]    - 3840x1080
+[camera_node-1]    - 2960x1440
+[camera_node-1]    - 3440x1440
+[camera_node-1]    - 2560x2048
+[camera_node-1]    - 3200x1800
+[camera_node-1]    - 3840x1600
+[camera_node-1]    - 3200x2048
+[camera_node-1]    - 3200x2400
+[camera_node-1]    - 3840x2160
+[camera_node-1]    - 4096x2160
+[camera_node-1]    - 3840x2400
+[camera_node-1] [0:13:14.315354293] [4232]  INFO Camera camera.cpp:1216 configuring streams: (0) 1280x720-XRGB8888/sRGB
+[camera_node-1] [0:13:14.316412355] [4249]  INFO RPI pisp.cpp:1502 Sensor: /base/axi/pcie@120000/rp1/i2c@88000/imx708@1a - Selected sensor format: 1536x864-SBGGR10_1X10/RAW - Selected CFE format: 1536x864-PC1B/RAW
+[camera_node-1] [INFO] [1792607570.495865611] [stereo.lx.camera]: camera "/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a" configured with 1280x720-XRGB8888/sRGB stream
+[camera_node-1] [INFO] [1792607570.496245617] [stereo.lx.camera]: using default calibration URL
+[camera_node-1] [INFO] [1792607570.496289336] [stereo.lx.camera]: camera calibration URL: file:///home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_88000_imx708_1a_1280x720.yaml
+[camera_node-1] [ERROR] [1792607570.496373070] [camera_calibration_parsers]: Unable to open camera calibration file [/home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_88000_imx708_1a_1280x720.yaml]
+[camera_node-1] [WARN] [1792607570.496431472] [stereo.lx.camera]: Camera calibration file /home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_88000_imx708_1a_1280x720.yaml not found
+[camera_node-1] [WARN] [1792607570.497589471] [stereo.lx.camera]: unsupported control: AfWindows (37)
+[camera_node-1] [WARN] [1792607570.499070518] [stereo.lx.camera]: resolve overrides: ExposureTimeMode and ExposureTime must not be enabled at the same time. 'ExposureTimeMode' will be set to off.
+[camera_node-1] [0:13:14.333538081] [4265]  WARN IPARPI ipa_base.cpp:1385 Could not set AF_PAUSE - no AF algorithm or not Continuous
+[camera_node-1] [0:13:14.333791560] [4265]  WARN IPARPI ipa_base.cpp:1402 Could not set AF_TRIGGER - no AF algorithm or not Auto
+[metrics_node-2] [INFO] [1792607570.901907570] [metrics_node]: MetricsNode avviato | left=/stereo/lx/camera/image_raw right=/stereo/rx/camera/image_raw | slop=50.0 ms | window=30
+[detection_node-3] [FATAL] [1792607570.908781199] [detection_node]: CRITICAL: Parameter 'conf_threshold' is missing in the YAML file!
+[detection_node-3] Traceback (most recent call last):
+[detection_node-3]   File "/home/nautilus/nautilus-vision-pipeline/ros2_ws/install/nautilus_perception/lib/nautilus_perception/detection_node", line 33, in <module>
+[detection_node-3]     sys.exit(load_entry_point('nautilus-perception', 'console_scripts', 'detection_node')())
+[detection_node-3]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[detection_node-3]   File "/home/nautilus/nautilus-vision-pipeline/ros2_ws/build/nautilus_perception/nautilus_perception/detection_node.py", line 260, in main
+[detection_node-3]     node = DetectionNode()
+[detection_node-3]            ^^^^^^^^^^^^^^^
+[detection_node-3]   File "/home/nautilus/nautilus-vision-pipeline/ros2_ws/build/nautilus_perception/nautilus_perception/detection_node.py", line 55, in __init__
+[detection_node-3]     conf           = float(self._get_param_strict('conf_threshold'))
+[detection_node-3]                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[detection_node-3]   File "/home/nautilus/nautilus-vision-pipeline/ros2_ws/build/nautilus_perception/nautilus_perception/detection_node.py", line 151, in _get_param_strict
+[detection_node-3]     raise ValueError(f"Incomplete configuration: parameter '{name}' is missing.")
+[detection_node-3] ValueError: Incomplete configuration: parameter 'conf_threshold' is missing.
+[ERROR] [detection_node-3]: process has died [pid 4234, exit code 1, cmd '/home/nautilus/nautilus-vision-pipeline/ros2_ws/install/nautilus_perception/lib/nautilus_perception/detection_node --ros-args -r __node:=detection_node --params-file /tmp/launch_params_oja_m8_r'].
+[camera_node-1] [0:13:16.114609496] [4265]  WARN IPARPI ipa_base.cpp:1385 Could not set AF_PAUSE - no AF algorithm or not Continuous
+[camera_node-1] [0:13:16.114764465] [4265]  WARN IPARPI ipa_base.cpp:1402 Could not set AF_TRIGGER - no AF algorithm or not Auto
+[camera_node-1] [WARN] [1792607574.915961940] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   AeEnable: false
+[camera_node-1] 
+[camera_node-1] [WARN] [1792607574.918251760] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   AwbEnable: false
+[camera_node-1] 
+[camera_node-1] [WARN] [1792607574.922921782] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   ColourGains: [ 1.500000, 1.500000 ]
+[camera_node-1] 
+[camera_node-1] [WARN] [1792607574.923774012] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   AfMode: 0
+[camera_node-1] 
+[INFO] [camera_node-4]: process started with pid [4302]
+[camera_node-4] [0:13:19.913086627] [4302]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817
+[camera_node-4] [0:13:19.953184784] [4314]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-4] [0:13:19.959656190] [4314] ERROR V4L2 v4l2_device.cpp:410 'imx708': Unable to set controls: Device or resource busy
+[camera_node-4] [0:13:19.977560268] [4314]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-4] [0:13:20.017576616] [4314]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-4] [0:13:20.017638815] [4314]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@88000/imx708@1a to CFE device /dev/media0 and ISP device /dev/media2 using PiSP variant BCM2712_D0
+[camera_node-4] [0:13:20.017931311] [4314]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-4] [0:13:20.034776045] [4314]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-4] [0:13:20.067544898] [4314]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@80000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-4] [0:13:20.067607393] [4314]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@80000/imx708@1a to CFE device /dev/media1 and ISP device /dev/media3 using PiSP variant BCM2712_D0
+[camera_node-4] [0:13:20.069181105] [4314]  WARN V4L2 v4l2_pixelformat.cpp:346 Unsupported V4L2 pixel format RPBP
+[camera_node-4] [INFO] [1792607576.246737683] [stereo.rx.camera]: 
+[camera_node-4] >> stream formats:
+[camera_node-4]    - R8 (32x32 - 4608x2592)
+[camera_node-4]    - R16 (32x32 - 4608x2592)
+[camera_node-4]    - MONO_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-4]    - NV21 (32x32 - 4608x2592)
+[camera_node-4]    - SBGGR8 (32x32 - 4608x2592)
+[camera_node-4]    - SBGGR16 (32x32 - 4608x2592)
+[camera_node-4]    - BGGR_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-4]    - XBGR8888 (32x32 - 4608x2592)
+[camera_node-4]    - BGR888 (32x32 - 4608x2592)
+[camera_node-4]    - RGB888 (32x32 - 4608x2592)
+[camera_node-4]    - XRGB8888 (32x32 - 4608x2592)
+[camera_node-4]    - SGBRG16 (32x32 - 4608x2592)
+[camera_node-4]    - GBRG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-4]    - SGRBG16 (32x32 - 4608x2592)
+[camera_node-4]    - GRBG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-4]    - SRGGB16 (32x32 - 4608x2592)
+[camera_node-4]    - RGGB_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-4]    - BGR161616 (32x32 - 4608x2592)
+[camera_node-4]    - RGB161616 (32x32 - 4608x2592)
+[camera_node-4]    - SRGGB8 (32x32 - 4608x2592)
+[camera_node-4]    - SGRBG8 (32x32 - 4608x2592)
+[camera_node-4]    - SGBRG8 (32x32 - 4608x2592)
+[camera_node-4]    - YUYV (32x32 - 4608x2592)
+[camera_node-4]    - UYVY (32x32 - 4608x2592)
+[camera_node-4] [WARN] [1792607576.246866154] [stereo.rx.camera]: no pixel format selected, auto-selecting: "XRGB8888"
+[camera_node-4] [WARN] [1792607576.246885301] [stereo.rx.camera]: set parameter 'format' to silence this warning
+[camera_node-4] [INFO] [1792607576.246991293] [stereo.rx.camera]: 
+[camera_node-4] >> XRGB8888 format sizes:
+[camera_node-4]    - 160x120
+[camera_node-4]    - 240x160
+[camera_node-4]    - 320x240
+[camera_node-4]    - 400x240
+[camera_node-4]    - 480x320
+[camera_node-4]    - 640x360
+[camera_node-4]    - 640x480
+[camera_node-4]    - 720x480
+[camera_node-4]    - 768x480
+[camera_node-4]    - 854x480
+[camera_node-4]    - 720x576
+[camera_node-4]    - 800x600
+[camera_node-4]    - 960x540
+[camera_node-4]    - 1024x576
+[camera_node-4]    - 960x640
+[camera_node-4]    - 1024x600
+[camera_node-4]    - 1024x768
+[camera_node-4]    - 1280x720
+[camera_node-4]    - 1152x864
+[camera_node-4]    - 1280x800
+[camera_node-4]    - 1360x768
+[camera_node-4]    - 1366x768
+[camera_node-4]    - 1440x900
+[camera_node-4]    - 1280x1024
+[camera_node-4]    - 1536x864
+[camera_node-4]    - 1280x1080
+[camera_node-4]    - 1600x900
+[camera_node-4]    - 1400x1050
+[camera_node-4]    - 1680x1050
+[camera_node-4]    - 1600x1200
+[camera_node-4]    - 1920x1080
+[camera_node-4]    - 2048x1080
+[camera_node-4]    - 1920x1200
+[camera_node-4]    - 2160x1080
+[camera_node-4]    - 2048x1152
+[camera_node-4]    - 2560x1080
+[camera_node-4]    - 2048x1536
+[camera_node-4]    - 2560x1440
+[camera_node-4]    - 2560x1600
+[camera_node-4]    - 3840x1080
+[camera_node-4]    - 2960x1440
+[camera_node-4]    - 3440x1440
+[camera_node-4]    - 2560x2048
+[camera_node-4]    - 3200x1800
+[camera_node-4]    - 3840x1600
+[camera_node-4]    - 3200x2048
+[camera_node-4]    - 3200x2400
+[camera_node-4]    - 3840x2160
+[camera_node-4]    - 4096x2160
+[camera_node-4]    - 3840x2400
+[camera_node-4] [0:13:20.070577367] [4302]  INFO Camera camera.cpp:1216 configuring streams: (0) 1280x720-XRGB8888/sRGB
+[camera_node-4] [0:13:20.071161174] [4314]  INFO RPI pisp.cpp:1502 Sensor: /base/axi/pcie@120000/rp1/i2c@80000/imx708@1a - Selected sensor format: 1536x864-SBGGR10_1X10/RAW - Selected CFE format: 1536x864-PC1B/RAW
+[camera_node-4] [INFO] [1792607576.249563205] [stereo.rx.camera]: camera "/base/axi/pcie@120000/rp1/i2c@80000/imx708@1a" configured with 1280x720-XRGB8888/sRGB stream
+[camera_node-4] [INFO] [1792607576.249837425] [stereo.rx.camera]: using default calibration URL
+[camera_node-4] [INFO] [1792607576.249881754] [stereo.rx.camera]: camera calibration URL: file:///home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_80000_imx708_1a_1280x720.yaml
+[camera_node-4] [ERROR] [1792607576.249960785] [camera_calibration_parsers]: Unable to open camera calibration file [/home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_80000_imx708_1a_1280x720.yaml]
+[camera_node-4] [WARN] [1792607576.250021929] [stereo.rx.camera]: Camera calibration file /home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_80000_imx708_1a_1280x720.yaml not found
+[camera_node-4] [WARN] [1792607576.251411766] [stereo.rx.camera]: unsupported control: AfWindows (37)
+[camera_node-4] [WARN] [1792607576.253047398] [stereo.rx.camera]: resolve overrides: ExposureTimeMode and ExposureTime must not be enabled at the same time. 'ExposureTimeMode' will be set to off.
+[camera_node-4] [0:13:20.084308286] [4323]  WARN IPARPI ipa_base.cpp:1385 Could not set AF_PAUSE - no AF algorithm or not Continuous
+[camera_node-4] [0:13:20.084488587] [4323]  WARN IPARPI ipa_base.cpp:1402 Could not set AF_TRIGGER - no AF algorithm or not Auto
+[camera_node-4] [WARN] [1792607576.400012286] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-4]   Brightness: 0.000000
+[camera_node-4]   AfRange: 0
+[camera_node-4]   AeMeteringMode: 0
+[camera_node-4]   ColourGains: [ 1.500000, 1.500000 ]
+[camera_node-4]   StatsOutputEnable: false
+[camera_node-4]   AnalogueGainMode: 0
+[camera_node-4]   AfPause: 0
+[camera_node-4]   Sharpness: 1.000000
+[camera_node-4]   AwbMode: 0
+[camera_node-4]   AeExposureMode: 0
+[camera_node-4]   HdrMode: 0
+[camera_node-4]   SyncMode: 0
+[camera_node-4]   AeConstraintMode: 0
+[camera_node-4]   AfMode: 0
+[camera_node-4]   AnalogueGain: 1.122807
+[camera_node-4]   AfTrigger: 0
+[camera_node-4]   ExposureValue: 0.000000
+[camera_node-4]   AfSpeed: 0
+[camera_node-4]   ExposureTimeMode: 1
+[camera_node-4]   ScalerCrop: (768, 432)/3072x1728
+[camera_node-4]   SyncFrames: 1000
+[camera_node-4]   ExposureTime: 20000
+[camera_node-4]   AfMetering: 0
+[camera_node-4]   Saturation: 1.000000
+[camera_node-4]   AeEnable: false
+[camera_node-4]   FrameDurationLimits: [ 200000, 200000 ]
+[camera_node-4]   NoiseReductionMode: 0
+[camera_node-4]   Contrast: 1.000000
+[camera_node-4]   AwbEnable: false
+[camera_node-4]   CnnEnableInputTensor: false
+[camera_node-4]   AeFlickerMode: 0
+[camera_node-4]   LensPosition: 1.500000
+[camera_node-4] 
+[camera_node-4] [WARN] [1792607576.400508340] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-4]   AeEnable: false
+[camera_node-4] 
+[camera_node-4] [WARN] [1792607576.400825334] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-4]   AwbEnable: false
+[camera_node-4] 
+[camera_node-4] [WARN] [1792607576.401125793] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-4]   ExposureTime: 20000
+[camera_node-4] 
+[camera_node-4] [WARN] [1792607576.401384736] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-4]   ColourGains: [ 1.500000, 1.500000 ]
+[camera_node-4] 
+[camera_node-4] [WARN] [1792607576.401653918] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-4]   AfMode: 0
+[camera_node-4] 
+eo/rx/camera
+Lock completed on both cameras.
