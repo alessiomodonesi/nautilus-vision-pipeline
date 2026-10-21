@@ -1,5 +1,5 @@
 #!/bin/bash
-# uso: ./run_benchmark.sh <config> <run_n>
+# usage: ./run_benchmark.sh <config> <run_n>
 
 set -e
 
@@ -7,7 +7,7 @@ CONFIG="$1"
 RUN_N="$2"
 
 if [ -z "$CONFIG" ] || [ -z "$RUN_N" ]; then
-    echo "Uso: $0 <config> <run_n>"
+    echo "Usage: $0 <config> <run_n>"
     exit 1
 fi
 
@@ -29,7 +29,7 @@ case "$CONFIG" in
     B3_ov_int8_640_oc)   ENH="false"; DET="true";  MODEL="yolov8n_640_int8_openvino_model"; HALF_RES="false"; IMGSZ="640"; NOTE="OV INT8 640 OC" ;;
     B4_ov_int8_416_oc)   ENH="false"; DET="true";  MODEL="yolov8n_416_int8_openvino_model"; HALF_RES="false"; IMGSZ="416"; NOTE="OV INT8 416 OC" ;;
     C_full_oc)           ENH="true";  DET="true";  MODEL="yolov8n_640_fp32_openvino_model"; HALF_RES="false"; IMGSZ="640"; NOTE="full OC" ;;
-    *) echo "Config non valida: $CONFIG"; exit 1 ;;
+    *) echo "Invalid config: $CONFIG"; exit 1 ;;
 esac
 
 cleanup_camera_nodes() {
@@ -43,19 +43,19 @@ cleanup_camera_nodes() {
 TEMP=$(vcgencmd measure_temp | sed "s/temp=//;s/'C//")
 TEMP_INT=${TEMP%.*}
 if [ "$TEMP_INT" -gt 55 ]; then
-    echo "ERRORE: temperatura SoC ${TEMP}°C > 55°C. Aspetta prima di iniziare."
+    echo "ERROR: SoC temperature ${TEMP}°C > 55°C. Please wait before starting."
     exit 1
 fi
 echo "== ${CONFIG} run ${RUN_N} =="
-echo "Temperatura SoC iniziale: ${TEMP}°C"
+echo "Initial SoC temperature: ${TEMP}°C"
 
 CUR_GOV=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
 if [ "$CUR_GOV" != "performance" ]; then
-    echo "Imposto governor CPU: ${CUR_GOV} -> performance"
+    echo "Setting CPU governor: ${CUR_GOV} -> performance"
     echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor > /dev/null 2>&1 || true
     sleep 1
 fi
-echo "Governor CPU: $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)"
+echo "CPU governor: $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)"
 
 THR_START=$(vcgencmd get_throttled | cut -d= -f2)
 CLK_START=$(vcgencmd measure_clock arm | cut -d= -f2)
@@ -67,7 +67,6 @@ if [ -f "$HOME/nautilus-vision-pipeline/pipeline_config.env" ]; then
     source "$HOME/nautilus-vision-pipeline/pipeline_config.env"
 fi
 
-# Stop servizi più stringente, rimosso il -n per evitare fallimenti silenziosi
 sudo systemctl stop nautilus-bag.service 2>/dev/null || true
 sudo systemctl stop nautilus-vision.service 2>/dev/null || true
 sudo systemctl stop lock-cameras.service 2>/dev/null || true
@@ -90,8 +89,8 @@ if [ -n "$HALF_RES" ]; then OVERRIDES+=("half_res_override:=$HALF_RES"); fi
 if [ -n "$IMGSZ" ]; then OVERRIDES+=("imgsz_override:=$IMGSZ"); fi
 if [ "$ENH" = "true" ]; then OVERRIDES+=("input_type_override:=enhanced"); else OVERRIDES+=("input_type_override:=raw"); fi
 
-# ── Sblocco hardware brutale ───────────────────────────────────────────
-echo "Sblocco brutale hardware camere (ignora eventuali errori)..."
+# ── Hardware unlock ───────────────────────────────────────────
+echo "Unlocking camera hardware..."
 sudo fuser -k -9 /dev/video0 /dev/video1 2>/dev/null || true
 sleep 1
 # ───────────────────────────────────────────────────────────────────────
@@ -110,9 +109,8 @@ LAUNCH_PID=$!
 sleep 5
 python3 "$ROOT/deploy/lock_cameras.py" >> "$LAUNCH_LOG" 2>&1 || true
 
-# Controlli post-launch convertiti in semplici avvisi (nessun exit 1)
 if grep -qE "is not a supported model format|stereo_callback failed|failed to acquire camera" "$LAUNCH_LOG" 2>/dev/null; then
-    echo "AVVISO: trovati errori nel launch log, procedo comunque..."
+    echo "WARNING: errors found in launch log, proceeding anyway..."
 fi
 
 echo "Warmup 30s..."
@@ -127,7 +125,7 @@ STG_TOPIC=""
 if [ "$DET" = "true" ]; then TGT_TOPIC="/stereo_down/targets"; STG_TOPIC="/stereo_down/timings"; fi
 if [ "$ENH" = "true" ]; then ENH_TOPIC="/stereo/lx/image_enhanced"; fi
 
-echo "Benchmark latenze 120s..."
+echo "Latency benchmark 120s..."
 python3 "$ROOT/benchmarks/scripts/benchmark_pipeline.py" \
     --duration 120 \
     --out "$LAT_CSV" \
@@ -142,7 +140,7 @@ kill -9 $LAUNCH_PID 2>/dev/null || true
 cleanup_camera_nodes
 
 TEMP_END=$(vcgencmd measure_temp | sed "s/temp=//;s/'C//")
-echo "Temperatura SoC finale: ${TEMP_END}°C"
+echo "Final SoC temperature: ${TEMP_END}°C"
 
 THR_END=$(vcgencmd get_throttled | cut -d= -f2)
 CLK_END=$(vcgencmd measure_clock arm | cut -d= -f2)
@@ -170,4 +168,4 @@ EOF
 
 echo "Cooldown 10s..."
 sleep 10
-echo "Pronto per il prossimo run."
+echo "Ready for the next run."
