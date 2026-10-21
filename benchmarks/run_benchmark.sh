@@ -43,6 +43,27 @@ case "$CONFIG" in
     *) echo "Config non valida: $CONFIG"; exit 1 ;;
 esac
 
+# cleanup condiviso dei nodi camera/detection/enhancement/metrics.
+# libcamera può impiegare 3–5 s a rilasciare /dev/video* dopo SIGTERM:
+# senza retry il camera_ros del launch successivo fallisce con
+# "camera is not free" e il check post-launch abortisce la run.
+# se dopo 8 s il processo è ancora vivo, SIGKILL di fallback.
+cleanup_camera_nodes() {
+    pkill -f camera_node      2>/dev/null || true
+    pkill -f detection_node   2>/dev/null || true
+    pkill -f enhancement_node 2>/dev/null || true
+    pkill -f metrics_node     2>/dev/null || true
+    for _ in 1 2 3 4 5 6 7 8; do
+        if ! pgrep -f camera_node > /dev/null 2>&1; then
+            return 0
+        fi
+        sleep 1
+    done
+    echo "WARN: camera_node ancora vivo dopo 8 s, invio SIGKILL"
+    pkill -9 -f camera_node 2>/dev/null || true
+    sleep 2
+}
+
 # check temperatura
 TEMP=$(vcgencmd measure_temp | sed "s/temp=//;s/'C//")
 TEMP_INT=${TEMP%.*}   # 52.1 -> 52
@@ -56,10 +77,17 @@ echo "Temperatura SoC iniziale: ${TEMP}°C"
 # forza il governor 'performance' su tutti i core per evitare che la CPU
 # scali dinamicamente di frequenza durante il benchmark (default: powersave).
 # va fatto prima di leggere il clock, altrimenti leggiamo 1600 MHz a idle.
+# sudo -n: fallisce subito se NOPASSWD non è configurato, invece di
+# restare appeso su un prompt in una sessione tmux detached.
 CUR_GOV=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
 if [ "$CUR_GOV" != "performance" ]; then
     echo "Imposto governor CPU: ${CUR_GOV} -> performance"
-    echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor > /dev/null
+    if ! echo performance | sudo -n tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor > /dev/null 2>&1; then
+        echo "ERRORE: impossibile cambiare governor (sudo -n fallito)."
+        echo "  Verifica /etc/sudoers.d/ per NOPASSWD dell'utente nautilus."
+        echo "  Comandi richiesti: tee, systemctl"
+        exit 1
+    fi
     sleep 1
 fi
 echo "Governor CPU: $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)"
@@ -97,15 +125,12 @@ source "$WS/install/setup.bash"
 # nautilus-bag.service è PartOf/Requires=nautilus-vision.service, quindi
 # lo stop cascada; lo esplicitiamo perché un recorder avviato a mano
 # (start_pipeline.sh + ros2 bag record) non viene fermato dalla gerarchia.
-sudo systemctl stop nautilus-bag.service 2>/dev/null || true
-sudo systemctl stop nautilus-vision.service 2>/dev/null || true
-sudo systemctl stop lock-cameras.service 2>/dev/null || true
-pkill -f camera_node 2>/dev/null || true
-pkill -f detection_node 2>/dev/null || true
-pkill -f enhancement_node 2>/dev/null || true
-pkill -f metrics_node 2>/dev/null || true
+# sudo -n per non bloccare il loop in tmux detached.
+sudo -n systemctl stop nautilus-bag.service    2>/dev/null || true
+sudo -n systemctl stop nautilus-vision.service 2>/dev/null || true
+sudo -n systemctl stop lock-cameras.service    2>/dev/null || true
 pkill -f "ros2 bag record" 2>/dev/null || true
-sleep 2
+cleanup_camera_nodes
 
 # ── check pre-launch 1: nessun nodo della pipeline già attivo ──────────
 # se un servizio systemd è ripartito o un launch manuale è rimasto su,
@@ -116,10 +141,13 @@ if [ -n "$STALE_NODES" ]; then
     echo "ERRORE: nodi ROS 2 già attivi prima del launch:"
     echo "$STALE_NODES" | sed 's/^/  /'
     echo ""
+    echo "  Chi tiene /dev/video0 e /dev/video1:"
+    fuser -v /dev/video0 /dev/video1 2>&1 | sed 's/^/    /' || echo "    (nessuno)"
+    echo ""
     echo "  Ferma i processi con:"
     echo "    sudo systemctl stop nautilus-vision.service"
     echo "    sudo systemctl disable nautilus-vision.service"
-    echo "    pkill -f camera_node; pkill -f detection_node; pkill -f enhancement_node"
+    echo "    pkill -9 -f camera_node"
     exit 1
 fi
 
@@ -131,7 +159,7 @@ for topic in /stereo/lx/camera/image_raw /stereo/rx/camera/image_raw; do
         echo "ERRORE: publisher già attivo su $topic"
         echo "  Un processo esterno sta usando le camere (servizio systemd"
         echo "  ripartito o launch manuale dimenticato). Fermalo con:"
-        echo "    pkill -f camera_node"
+        echo "    pkill -9 -f camera_node"
         exit 1
     fi
 done
@@ -200,11 +228,12 @@ python3 "$ROOT/deploy/lock_cameras.py" >> "$LAUNCH_LOG" 2>&1 || true
 if grep -qE "is not a supported model format|stereo_callback failed|failed to acquire camera" "$LAUNCH_LOG" 2>/dev/null; then
     echo "ERRORE: errori fatali nel launch log:"
     grep -E "is not a supported model format|stereo_callback failed|failed to acquire camera" "$LAUNCH_LOG" | head -3 | sed 's/^/  /'
+    echo ""
+    echo "  Chi tiene /dev/video0 e /dev/video1:"
+    fuser -v /dev/video0 /dev/video1 2>&1 | sed 's/^/    /' || echo "    (nessuno)"
     kill $LAUNCH_PID 2>/dev/null || true
-    pkill -f camera_node 2>/dev/null || true
-    pkill -f detection_node 2>/dev/null || true
-    pkill -f enhancement_node 2>/dev/null || true
-    pkill -f metrics_node 2>/dev/null || true
+    cleanup_camera_nodes
+    sleep 2
     exit 1
 fi
 
@@ -214,10 +243,8 @@ if ! ros2 node list 2>/dev/null | grep -q "^/stereo/lx/camera$"; then
     echo "ERRORE: /stereo/lx/camera non attivo. Controlla $LAUNCH_LOG"
     echo "  (causa tipica: camera occupata da un altro processo)"
     kill $LAUNCH_PID 2>/dev/null || true
-    pkill -f camera_node 2>/dev/null || true
-    pkill -f detection_node 2>/dev/null || true
-    pkill -f enhancement_node 2>/dev/null || true
-    pkill -f metrics_node 2>/dev/null || true
+    cleanup_camera_nodes
+    sleep 2
     exit 1
 fi
 
@@ -252,10 +279,8 @@ if [ "$RAW_INT" -lt "$LOW" ] || [ "$RAW_INT" -gt "$HIGH" ]; then
     echo "    ros2 topic info /stereo/lx/camera/image_raw -v"
     echo "  Controlla $LAUNCH_LOG per 'failed to acquire camera'."
     kill $LAUNCH_PID 2>/dev/null || true
-    pkill -f camera_node 2>/dev/null || true
-    pkill -f detection_node 2>/dev/null || true
-    pkill -f enhancement_node 2>/dev/null || true
-    pkill -f metrics_node 2>/dev/null || true
+    cleanup_camera_nodes
+    sleep 2
     exit 1
 fi
 echo "Camera OK: raw ~${RAW_INT} Hz (atteso ~${EXPECTED_FPS} Hz, range ${LOW}-${HIGH})"
@@ -276,10 +301,8 @@ if [ "$DET" = "true" ]; then
         echo "ERRORE: /detection_node non attivo dopo 5 s di attesa."
         echo "  Controlla $LAUNCH_LOG per errori di caricamento modello."
         kill $LAUNCH_PID 2>/dev/null || true
-        pkill -f camera_node 2>/dev/null || true
-        pkill -f detection_node 2>/dev/null || true
-        pkill -f enhancement_node 2>/dev/null || true
-        pkill -f metrics_node 2>/dev/null || true
+        cleanup_camera_nodes
+        sleep 2
         exit 1
     fi
 fi
@@ -319,10 +342,7 @@ wait $MON_PID 2>/dev/null || true
 # cleanup pipeline
 kill $LAUNCH_PID 2>/dev/null || true
 sleep 3
-pkill -f camera_node 2>/dev/null || true
-pkill -f detection_node 2>/dev/null || true
-pkill -f enhancement_node 2>/dev/null || true
-pkill -f metrics_node 2>/dev/null || true
+cleanup_camera_nodes
 
 # temperatura finale
 TEMP_END=$(vcgencmd measure_temp | sed "s/temp=//;s/'C//")
