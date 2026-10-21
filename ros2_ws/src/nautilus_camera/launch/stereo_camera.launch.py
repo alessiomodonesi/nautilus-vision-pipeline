@@ -73,7 +73,7 @@ def launch_setup(context, *args, **kwargs):
 def generate_launch_description():
     declared_arguments = [
         DeclareLaunchArgument(
-            'params_file', default_value='nautilus_camera.yaml',
+            'params_file', default_value='camera_params.yaml',
             description='nome del file params in config/'
         ),
         DeclareLaunchArgument(

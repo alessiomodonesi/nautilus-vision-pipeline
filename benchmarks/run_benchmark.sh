@@ -101,7 +101,7 @@ ros2 launch nautilus_perception pipeline.launch.py \
     enable_detection:=$DET \
     enable_metrics:=true \
     enable_debug:=false \
-    params_file:=nautilus_camera.yaml \
+    params_file:=detection_params.yaml \
     "${OVERRIDES[@]}" \
     > "$LAUNCH_LOG" 2>&1 &
 LAUNCH_PID=$!
