@@ -29,8 +29,8 @@ def launch_setup(context, *args, **kwargs):
         parameters=[qos_yaml, config_file], output='screen',
     )
 
-    # delay 3 sec tra camera lx e rx
-    rx_delayed = TimerAction(period=3.0, actions=[rx_camera])
+    # delay 6 sec tra camera lx e rx
+    rx_delayed = TimerAction(period=6.0, actions=[rx_camera])
     
     # nodo di benchmark
     # raccoglie eventuali override per metrics_node solo se passati da CLI

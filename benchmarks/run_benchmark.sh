@@ -117,6 +117,11 @@ echo "Clock CPU: ${CLK_MHZ} MHz (atteso ${EXPECT_CLOCK})"
 source /opt/ros/jazzy/setup.bash
 source "$WS/install/setup.bash"
 
+# eredita CycloneDDS e ROS_DOMAIN_ID come fa start_pipeline.sh
+if [ -f "$HOME/nautilus-vision-pipeline/pipeline_config.env" ]; then
+    source "$HOME/nautilus-vision-pipeline/pipeline_config.env"
+fi
+
 # stop servizi + cleanup
 # nota: lo stop deve precedere il pkill, altrimenti systemd interpreta la
 # morte dei processi come crash e riavvia nautilus-vision.service a metà
@@ -146,7 +151,7 @@ cleanup_camera_nodes
 # /dev/video* è libero.
 ros2 daemon stop 2>/dev/null || true
 ros2 daemon start 2>/dev/null || true
-sleep 2
+sleep 6  # per garantire il rilascio dell'hardware dal kernel
 
 # ── check pre-launch 1: nessun nodo della pipeline già attivo ──────────
 STALE_NODES=$(ros2 node list 2>/dev/null | grep -E "^/stereo/|^/detection_node$|^/metrics_node$" || true)
