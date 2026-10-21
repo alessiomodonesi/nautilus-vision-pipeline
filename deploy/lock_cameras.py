@@ -31,7 +31,7 @@ CAMERA_YAML_KEYS = {
 
 
 def load_lock_params(config_path):
-    """Estrae i parametri lockabili da nautilus_camera.yaml"""
+    """Estrae i parametri lockabili da camera_params.yaml"""
     with open(config_path, 'r') as f:
         cfg = yaml.safe_load(f)
 
@@ -84,7 +84,7 @@ def main() -> int:
     try:
         # risolve il percorso del yaml tramite ament index
         pkg_share = get_package_share_directory('nautilus_camera')
-        config_path = os.path.join(pkg_share, 'config', 'nautilus_camera.yaml')
+        config_path = os.path.join(pkg_share, 'config', 'camera_params.yaml')
 
         try:
             lock_params = load_lock_params(config_path)
