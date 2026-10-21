@@ -45,7 +45,8 @@ esac
 
 # check temperatura
 TEMP=$(vcgencmd measure_temp | sed "s/temp=//;s/'C//")
-if (( $(echo "$TEMP > 55" | bc -l) )); then
+TEMP_INT=${TEMP%.*}   # 52.1 -> 52
+if [ "$TEMP_INT" -gt 55 ]; then
     echo "ERRORE: temperatura SoC ${TEMP}°C > 55°C. Aspetta prima di iniziare."
     exit 1
 fi
@@ -89,13 +90,62 @@ source /opt/ros/jazzy/setup.bash
 source "$WS/install/setup.bash"
 
 # stop servizi + cleanup
+# nota: lo stop deve precedere il pkill, altrimenti systemd interpreta la
+# morte dei processi come crash e riavvia nautilus-vision.service a metà
+# run (Restart=on-failure, RestartSec=5). è esattamente ciò che ha
+# invalidato i primi run del 20/10/2026.
+# nautilus-bag.service è PartOf/Requires=nautilus-vision.service, quindi
+# lo stop cascada; lo esplicitiamo perché un recorder avviato a mano
+# (start_pipeline.sh + ros2 bag record) non viene fermato dalla gerarchia.
+sudo systemctl stop nautilus-bag.service 2>/dev/null || true
 sudo systemctl stop nautilus-vision.service 2>/dev/null || true
 sudo systemctl stop lock-cameras.service 2>/dev/null || true
 pkill -f camera_node 2>/dev/null || true
 pkill -f detection_node 2>/dev/null || true
 pkill -f enhancement_node 2>/dev/null || true
 pkill -f metrics_node 2>/dev/null || true
+pkill -f "ros2 bag record" 2>/dev/null || true
 sleep 2
+
+# ── check pre-launch 1: nessun nodo della pipeline già attivo ──────────
+# se un servizio systemd è ripartito o un launch manuale è rimasto su,
+# camera_ros fallirà con "camera is not free" e il benchmark misurerà un
+# ibrido (frame dal processo esterno) o produrrà 120 s di CSV vuoti.
+STALE_NODES=$(ros2 node list 2>/dev/null | grep -E "^/stereo/|^/detection_node$|^/metrics_node$" || true)
+if [ -n "$STALE_NODES" ]; then
+    echo "ERRORE: nodi ROS 2 già attivi prima del launch:"
+    echo "$STALE_NODES" | sed 's/^/  /'
+    echo ""
+    echo "  Ferma i processi con:"
+    echo "    sudo systemctl stop nautilus-vision.service"
+    echo "    sudo systemctl disable nautilus-vision.service"
+    echo "    pkill -f camera_node; pkill -f detection_node; pkill -f enhancement_node"
+    exit 1
+fi
+
+# ── check pre-launch 2: nessun publisher già attivo sui topic raw ──────
+# anche se i nodi non compaiono nella lista (fase di shutdown, discovery
+# in ritardo), un publisher attivo impedisce a camera_ros di acquisire.
+for topic in /stereo/lx/camera/image_raw /stereo/rx/camera/image_raw; do
+    if ros2 topic info "$topic" 2>/dev/null | grep -qE "Publisher count: [1-9]"; then
+        echo "ERRORE: publisher già attivo su $topic"
+        echo "  Un processo esterno sta usando le camere (servizio systemd"
+        echo "  ripartito o launch manuale dimenticato). Fermalo con:"
+        echo "    pkill -f camera_node"
+        exit 1
+    fi
+done
+
+# ── check pre-launch 3: nessun recorder bag attivo ─────────────────────
+# un ros2 bag record attivo durante il benchmark consuma I/O su MicroSD
+# e falsa le misure di latenza degli stage che scrivono su disco.
+if pgrep -f "ros2 bag record" > /dev/null 2>&1; then
+    echo "ERRORE: processo 'ros2 bag record' ancora attivo."
+    echo "  Il recorder consuma I/O e falsa le misure di latenza."
+    echo "  Fermalo con:"
+    echo "    pkill -f 'ros2 bag record'"
+    exit 1
+fi
 
 # output paths
 LAT_CSV="$CSV_DIR/${DATE}_${CONFIG}_run${RUN_N}_latency.csv"
@@ -105,6 +155,10 @@ META="$CSV_DIR/${DATE}_${CONFIG}_run${RUN_N}_metadata.csv"
 
 # costruzione argomenti di override: vanno passati SOLO se non vuoti,
 # altrimenti ros2 launch esce con "malformed launch argument".
+# input_type_override è sempre passato esplicitamente (raw per B*, enhanced
+# per C_full) per non dipendere dal valore di input_type nel YAML: se lo
+# cambi per un test manuale, le B* si romperebbero silenziosamente
+# (subscriber su un topic senza publisher).
 OVERRIDES=()
 if [ -n "$MODEL" ]; then
     OVERRIDES+=("model_filename_override:=$MODEL")
@@ -114,6 +168,11 @@ if [ -n "$HALF_RES" ]; then
 fi
 if [ -n "$IMGSZ" ]; then
     OVERRIDES+=("imgsz_override:=$IMGSZ")
+fi
+if [ "$ENH" = "true" ]; then
+    OVERRIDES+=("input_type_override:=enhanced")
+else
+    OVERRIDES+=("input_type_override:=raw")
 fi
 
 # lancio pipeline in background
@@ -133,6 +192,97 @@ LAUNCH_PID=$!
 # attesa boot + lock fotometrico
 sleep 5
 python3 "$ROOT/deploy/lock_cameras.py" >> "$LAUNCH_LOG" 2>&1 || true
+
+# ── check post-launch 1: nessun errore fatale nel launch log ───────────
+# il launch gira in background: un crash di detection_node (es. modello
+# OpenVINO passato come .xml invece che come directory) non propaga
+# l'errore al wrapper. lo intercettiamo qui prima di sprecare 120 s.
+if grep -qE "is not a supported model format|stereo_callback failed|failed to acquire camera" "$LAUNCH_LOG" 2>/dev/null; then
+    echo "ERRORE: errori fatali nel launch log:"
+    grep -E "is not a supported model format|stereo_callback failed|failed to acquire camera" "$LAUNCH_LOG" | head -3 | sed 's/^/  /'
+    kill $LAUNCH_PID 2>/dev/null || true
+    pkill -f camera_node 2>/dev/null || true
+    pkill -f detection_node 2>/dev/null || true
+    pkill -f enhancement_node 2>/dev/null || true
+    pkill -f metrics_node 2>/dev/null || true
+    exit 1
+fi
+
+# ── check post-launch 2: camera node attivo ────────────────────────────
+sleep 2
+if ! ros2 node list 2>/dev/null | grep -q "^/stereo/lx/camera$"; then
+    echo "ERRORE: /stereo/lx/camera non attivo. Controlla $LAUNCH_LOG"
+    echo "  (causa tipica: camera occupata da un altro processo)"
+    kill $LAUNCH_PID 2>/dev/null || true
+    pkill -f camera_node 2>/dev/null || true
+    pkill -f detection_node 2>/dev/null || true
+    pkill -f enhancement_node 2>/dev/null || true
+    pkill -f metrics_node 2>/dev/null || true
+    exit 1
+fi
+
+# ── check post-launch 3: rate raw coerente con FrameDurationLimits ─────
+# se il rate misurato è ~30 Hz invece di ~5 Hz, i frame vengono da un
+# processo esterno che pubblica sullo stesso topic (servizio systemd
+# ripartito durante lo stop, launch manuale). il check pre-launch 2
+# dovrebbe intercettarlo, ma questo è una seconda linea di difesa: il
+# rate viene misurato sul flusso effettivo, non sulla discovery.
+CAM_YAML="$WS/install/nautilus_camera/share/nautilus_camera/config/nautilus_camera.yaml"
+FDL_US=$(python3 -c "
+import yaml
+try:
+    with open('$CAM_YAML') as f:
+        cfg = yaml.safe_load(f)
+    print(int(cfg['/stereo/lx/camera']['ros__parameters']['FrameDurationLimits'][0]))
+except Exception:
+    print(200000)
+" 2>/dev/null || echo "200000")
+EXPECTED_FPS=$(( 1000000 / FDL_US ))
+LOW=$(( EXPECTED_FPS * 7 / 10 ))
+HIGH=$(( EXPECTED_FPS * 13 / 10 ))
+
+RAW_INT=$(timeout 8 ros2 topic hz /stereo/lx/camera/image_raw 2>/dev/null \
+          | grep -oE "average rate: [0-9.]+" | tail -1 \
+          | grep -oE "[0-9]+" | head -1) || RAW_INT="0"
+RAW_INT=${RAW_INT:-0}
+
+if [ "$RAW_INT" -lt "$LOW" ] || [ "$RAW_INT" -gt "$HIGH" ]; then
+    echo "ERRORE: rate raw ${RAW_INT} Hz, atteso ~${EXPECTED_FPS} Hz (range ${LOW}-${HIGH})"
+    echo "  Se il rate è ~30 Hz, i frame vengono da un processo esterno:"
+    echo "    ros2 topic info /stereo/lx/camera/image_raw -v"
+    echo "  Controlla $LAUNCH_LOG per 'failed to acquire camera'."
+    kill $LAUNCH_PID 2>/dev/null || true
+    pkill -f camera_node 2>/dev/null || true
+    pkill -f detection_node 2>/dev/null || true
+    pkill -f enhancement_node 2>/dev/null || true
+    pkill -f metrics_node 2>/dev/null || true
+    exit 1
+fi
+echo "Camera OK: raw ~${RAW_INT} Hz (atteso ~${EXPECTED_FPS} Hz, range ${LOW}-${HIGH})"
+
+# ── check post-launch 4: detection node attivo (se DET=true) ───────────
+# il nodo detection carica il modello YOLO in __init__ (0.5–2 s): diamo
+# 10 retry * 0.5 s = 5 s di margine oltre ai ~8 s già trascorsi.
+if [ "$DET" = "true" ]; then
+    DET_UP=0
+    for _ in 1 2 3 4 5 6 7 8 9 10; do
+        if ros2 node list 2>/dev/null | grep -q "^/detection_node$"; then
+            DET_UP=1
+            break
+        fi
+        sleep 0.5
+    done
+    if [ "$DET_UP" -ne 1 ]; then
+        echo "ERRORE: /detection_node non attivo dopo 5 s di attesa."
+        echo "  Controlla $LAUNCH_LOG per errori di caricamento modello."
+        kill $LAUNCH_PID 2>/dev/null || true
+        pkill -f camera_node 2>/dev/null || true
+        pkill -f detection_node 2>/dev/null || true
+        pkill -f enhancement_node 2>/dev/null || true
+        pkill -f metrics_node 2>/dev/null || true
+        exit 1
+    fi
+fi
 
 # warmup (30 s)
 echo "Warmup 30s..."

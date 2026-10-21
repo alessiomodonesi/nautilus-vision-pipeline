@@ -14,20 +14,46 @@ stessa scena e la stessa illuminazione, per valutare la varianza.
 Prima di ogni sessione:
 
 ```bash
+# 1. stop (systemd sa che è volontario → non riavvia)
+sudo systemctl stop nautilus-bag.service
 sudo systemctl stop nautilus-vision.service
 sudo systemctl stop lock-cameras.service
+
+# 2. disable (impedisce la ripartenza al prossimo boot — utile in Fase B
+#    dove si riavvia per l'overclock)
+sudo systemctl disable nautilus-bag.service
+sudo systemctl disable nautilus-vision.service
+sudo systemctl disable lock-cameras.service
+
+# 3. conferma
+systemctl is-active nautilus-vision.service   # atteso: inactive
+systemctl is-enabled nautilus-vision.service  # atteso: disabled
+
+# 4. SOLO ORA puoi uccidere i residui. Se lo fai prima dello stop,
+#    systemd interpreta la morte come crash e riavvia il servizio
+#    (Restart=on-failure, RestartSec=5) — è ciò che ha invalidato i
+#    primi run del 20/10/2026.
+pkill -f "ros2 launch nautilus_camera" || true
+pkill -f camera_node || true
+pkill -f detection_node || true
+pkill -f enhancement_node || true
+pkill -f "ros2 bag record" || true
+sleep 3
+
+# 4b. verifica che il pkill abbia funzionato (facoltativo ma utile
+#     prima di un batch: il wrapper fa gli stessi check ad ogni run,
+#     ma se il primo abortisce vuoi sapere subito cosa è attivo)
+ps aux | grep -E "camera_node|detection_node|enhancement_node|ros2 bag record" | grep -v grep
+# non deve stampare nulla
+ros2 node list
+# non deve stampare nulla (o solo /rosout)
+ros2 topic info /stereo/lx/camera/image_raw -v
+# atteso: "Publisher count: 0"
+
+# 5. source ambiente
 source /opt/ros/jazzy/setup.bash
 source ~/nautilus-vision-pipeline/ros2_ws/install/setup.bash
 ls ~/nautilus-vision-pipeline/ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/
-```
-
-Sessione pulita:
-
-```bash
-ps aux | grep -E "camera_node|metrics_node|detection_node|enhancement_node" | grep -v grep
-# Non deve stampare nulla
-ros2 node list
-# Non deve stampare nulla (o solo /rosout)
 ```
 
 Durante i benchmark:
@@ -38,6 +64,12 @@ Durante i benchmark:
   su MicroSD durante le misure.
 - **`enable_metrics` sempre a `true`** — controprova FPS dal nodo metriche
 - **`enable_debug` sempre a `false`** — nessuna finestra OpenCV
+
+**Nota su `systemctl mask`**: se i file unit sono stati copiati con `sudo cp`,
+`systemctl mask` fallisce con `File … already exists.` In quel caso
+`disable` + `stop` è sufficiente per la sessione di benchmark. Per un mask
+vero occorre spostare prima i file `.service` in `.service.bak`,
+`daemon-reload`, poi `mask`. Non necessario per i benchmark.
 
 ---
 
@@ -200,15 +232,21 @@ cd ~/nautilus-vision-pipeline
 
 Lo script gestisce automaticamente:
 
-- stop dei servizi e cleanup processi
-- check temperatura < 55 °C
-- lancio pipeline con `include_stereo_camera:=true` e gli override corretti
+- check temperatura < 55 °C, governor CPU, clock atteso (2400/2800 MHz)
+- stop di `nautilus-bag.service`, `nautilus-vision.service`, `lock-cameras.service`
+- `pkill` di `camera_node`, `detection_node`, `enhancement_node`, `metrics_node`, `ros2 bag record`
+- **check pre-launch**: nessun nodo `/stereo/*`, `/detection_node`, `/metrics_node` già attivo; nessun publisher sui topic raw; nessun `ros2 bag record` in esecuzione
+- lancio pipeline con `include_stereo_camera:=true`, `input_type_override` esplicito e gli override del modello
 - attesa 5 s + `lock_cameras.py`
+- **check post-launch**: nessun errore fatale nel log, `/stereo/lx/camera` attivo, rate raw entro ±30% del valore atteso da `FrameDurationLimits`, `/detection_node` attivo entro 5 s (se `DET=true`)
 - warmup 30 s
 - `system_monitor.py --duration 300` in background
 - `benchmark_pipeline.py --duration 120` in foreground
 - scrittura metadata CSV
 - cooldown 30 s
+
+Se uno dei check fallisce, la run viene abortita con `exit 1` e i CSV
+non vengono prodotti: nessun run "verde" senza validazione.
 
 I CSV finiscono in `benchmarks/results/csv/` con naming:
 `<data>_<config>_run<N>_{latency,system,metadata}.csv`
@@ -276,7 +314,7 @@ ros2 topic hz /stereo_down/targets
 
 | Config | Stage | n | fps | Note |
 | --- | --- | --- | --- | --- |
-| A_baseline | raw | ~600 | 5.00 | baseline camera_ros |
+| A_baseline | raw | ~600 | 5.00 | baseline camera_ros (`FrameDurationLimits` verificato 2026-10-21: 5.003 Hz) |
 | B1_pt | raw | ~600 | 5.00 | camera continua a 5 Hz |
 | B1_pt | targets | ~TBD | ~0.7–1.0 | YOLOv8n CPU ARM, half_res=true, imgsz=640 (osservato 18/10/2026) |
 | B2_ov_fp32 | raw | ~600 | 5.00 | |
@@ -286,6 +324,22 @@ ros2 topic hz /stereo_down/targets
 | C_full | targets | ~TBD | ~0.7–1.0 | enhancement ~65-100 ms + detection ~1000 ms |
 | B3_ov_int8_640 | targets | ~TBD | **~TBD** | da misurare (INT8) |
 | B4_ov_int8_416 | targets | ~TBD | **~TBD** | da misurare (INT8 + imgsz ridotto) |
+
+✅ **`FrameDurationLimits: [200000, 200000]` funziona** (verificato 2026-10-21:
+`ros2 topic hz` → 5.003 Hz con `camera_ros` lanciato da solo).
+⚠️ Se durante un run il rate raw è ~30 Hz, **non** è un bug del driver: i
+frame vengono da un processo esterno (servizio systemd ripartito durante lo
+stop, launch manuale dimenticato) che pubblica sullo stesso topic. Il
+wrapper `run_benchmark.sh` ora abortisce se trova:
+
+- nodi `/stereo/*`, `/detection_node`, `/metrics_node` già attivi
+- publisher sui topic raw
+- rate raw fuori da ±30% del valore atteso (letto da `FrameDurationLimits`)
+- processi `ros2 bag record` attivi
+- errori fatali nel launch log (`is not a supported model format`,
+  `stereo_callback failed`, `failed to acquire camera`)
+- `/detection_node` non attivo dopo 5 s (quando `DET=true`)
+Se vedi un'uscita prematura, controlla `<run>_launch.log`.
 
 Per la Fase B (OC), i valori attesi sono **superiori** se il throttling
 non morde: tipicamente +10–20% sugli FPS di detection. Se il throttling
@@ -455,3 +509,9 @@ Serve un validation set subacqueo con lo stesso schema di classi del training.
 - **Verifica il clock all'inizio di ogni run**: se sei in Fase A ma il Pi
   è ancora overclockato (o viceversa), tutti i dati sono invalidi. Un
   check rapido è `vcgencmd measure_clock arm` prima di lanciare.
+- **Nessun salvataggio attivo** — `saving_node` è stato rimosso. La
+  registrazione dati avviene via `nautilus-bag.service` (MCAP, controllato
+  da `ENABLE_BAG` in `pipeline_config.env`), fermato dallo `stop` di
+  `nautilus-vision.service` (`PartOf`) e dal wrapper con `systemctl stop
+  nautilus-bag.service` + `pkill -f "ros2 bag record"`. Nessun I/O
+  continuativo su MicroSD durante le misure.

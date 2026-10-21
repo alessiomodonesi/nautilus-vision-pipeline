@@ -258,23 +258,39 @@ Il wrapper `run_benchmark.sh` genera automaticamente per ogni run un
 
 Senza questi metadati i dati non sono confrontabili tra sessioni.
 
-**Nota sul clock CPU**: il metadata NON registra il clock attivo al boot.
-Va verificato manualmente con `vcgencmd measure_clock arm` prima di ogni
-sessione, oppure controllato a posteriori nella colonna `cpu_clock_mhz`
-del CSV `_system.csv`. Se il clock non corrisponde alla fase attesa, la
-run è da scartare.
+**Nota sul clock CPU**: il wrapper registra `cpu_clock_initial_mhz` e
+`cpu_clock_final_mhz` nel metadata, e la colonna `cpu_clock_mhz` nel CSV
+`_system.csv` ha il valore per ogni campione. Se una di queste scende
+sotto il valore nominale della fase (2400 per A, 2800 per B) o se uno dei
+bit `16`-`19` di `throttled` è settato, la run è da scartare. Verifica
+comunque a mano con `vcgencmd measure_clock arm` prima di ogni sessione:
+il wrapper controlla solo all'inizio e alla fine, non durante.
 
 ---
 
 ## Note operative
 
+- ⚠️ **Sessione pulita obbligatoria**: prima di ogni sessione fermare i
+  servizi con `systemctl stop`, poi `systemctl disable`, poi `pkill`
+  (in quest'ordine). `pkill` senza `stop` fa ripartire il servizio via
+  `Restart=on-failure` (RestartSec=5), che produce misure ibride (frame
+  da un `camera_node` esterno, non da quello lanciato dal wrapper). I
+  servizi da fermare sono: `nautilus-bag.service`, `nautilus-vision.service`,
+  `lock-cameras.service`.
+- ⚠️ **Il wrapper verifica la pipeline dopo il launch**: se `/stereo/lx/camera`
+  non è attivo, il topic raw non pubblica, il rate è fuori da ±30% del
+  valore atteso da `FrameDurationLimits`, o compare un errore fatale nel
+  launch log, la run viene abortita con exit 1 e i CSV non vengono
+  prodotti. Se vedi un'uscita prematura, controlla `<run>_launch.log` per
+  `failed to acquire camera` o `is not a supported model format`.
 - Tutti gli script sono **headless** (nessuna GUI). Il wrapper lancia sempre
   con `enable_debug:=false` per non falsare le latenze con l'overhead di
-  `cv2.imshow`.re.
+  `cv2.imshow`.
 - ⚠️ La detection YOLOv8n su Pi 5 **non tiene i 5 FPS** a 720p. Il rate
-  effettivo di `/stereo_down/targets` è ~2.7 Hz con `.pt` e ~3.2 Hz con
-  OpenVINO FP32 (senza OC). Questo è il collo di bottiglia documentato
-  dalla Fase 6.
+  effettivo di `/stereo_down/targets` è **~0.7–1.0 Hz con `.pt`**
+  (misurato 18/10/2026, half_res=true, imgsz=640: YOLOv8n CPU ARM
+  ~1000 ms/frame). I valori OpenVINO FP32/INT8 sono da misurare in
+  Fase A. La stima precedente (~2.7 / ~3.2 Hz) era ottimistica.
 - ⚠️ Skew stereo misurato il 15/10/2026: **~6.6–7.9 ms** (storico: ~1.5 ms
   in `DEBUG.md`). Da indagare post-Fase 6, non blocca i run.
 - ⚠️ Con OC attivo (2800 MHz), verifica `vcgencmd get_throttled` sui CSV
