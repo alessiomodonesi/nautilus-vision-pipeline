@@ -23,8 +23,7 @@ setup(
     license='Apache-2.0',
     entry_points={
         'console_scripts': [
-            'metrics_node = nautilus_camera.metrics_node:main',
-            'saving_node  = nautilus_camera.saving_node:main',
+            'metrics_node = nautilus_camera.metrics_node:main'
         ],
     },
 )

@@ -122,7 +122,7 @@ def main():
     print()
     print("Passo successivo: aggiorna i valori in produzione:")
     print("  - deploy/lock_cameras.py")
-    print("  - nautilus_camera/config/nautilus_camera.yaml")
+    print("  - nautilus_camera/config/camera_params.yaml")
     print("  - nautilus_perception/.../detection/DEBUG.md")
     print(f"  - poi calibra con: --lens-left {best_lp_l:.2f} --lens-right {best_lp_r:.2f}")
 

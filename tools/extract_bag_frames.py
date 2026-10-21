@@ -38,7 +38,7 @@ except ImportError:
     )
 
 
-# topic della pipeline Nautilus (path assoluti, come in nautilus_camera.yaml)
+# topic della pipeline Nautilus (path assoluti, come in camera_params.yaml)
 TOPIC_LX = "/stereo/lx/camera/image_raw/compressed"
 TOPIC_RX = "/stereo/rx/camera/image_raw/compressed"
 TOPIC_INFO_LX = "/stereo/lx/camera/camera_info"

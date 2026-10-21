@@ -195,7 +195,7 @@ Node(
 
 L'ordine conta: se `config_file` contiene `qos_overrides` locali per gli
 stessi topic, questi **sovrascrivono** quelli globali. Per questo
-`nautilus_camera.yaml` **non** contiene più `qos_overrides`: la SSOT è una
+`camera_params.yaml` **non** contiene più `qos_overrides`: la SSOT è una
 sola.
 
 ---

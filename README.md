@@ -24,7 +24,7 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 
 * **[Workspace Overview](ros2_ws/README.md)** — Struttura generale del workspace, istruzioni di build e configurazione CycloneDDS.
 * **[Package `nautilus_common`](ros2_ws/src/nautilus_common/README.md)** — Utility condivise, costanti e profili QoS centralizzati per garantire l'allineamento della comunicazione DDS tra tutti i nodi (sia Python che C++).
-* **[Package `nautilus_camera`](ros2_ws/src/nautilus_camera/README.md)** — Acquisizione hardware 720p @ 5 FPS, nodo di benchmark (`metrics_node`), nodo di salvataggio immagini su MicroSD (`saving_node`) con gestione crash e assenza RTC. Configurazione centralizzata in `nautilus_camera.yaml`.
+* **[Package `nautilus_camera`](ros2_ws/src/nautilus_camera/README.md)** — Acquisizione hardware 720p @ 5 FPS, nodo di benchmark (`metrics_node`), nodo di salvataggio immagini su MicroSD (`saving_node`) con gestione crash e assenza RTC. Configurazione centralizzata in `camera_params.yaml`.
 * **[Package `nautilus_perception`](ros2_ws/src/nautilus_perception/README.md)** — Modulo core di elaborazione visiva: nodo di enhancement (WaterNet/CLAHE, default `force_off`) e nodo di detection IA + stereovisione.
   * **[Sottomodulo Detection](ros2_ws/src/nautilus_perception/nautilus_perception/detection/README.md)** — Dettagli su architettura *Detect-Then-Range*, calibrazione stereo ChArUco e matching epipolare.
   * **[Debug & Status](ros2_ws/src/nautilus_perception/nautilus_perception/detection/DEBUG.md)** — Problemi noti/risolti, lock fotometrico (`lock_cameras.py`), workflow operativo e checklist di stato del modulo.
@@ -36,7 +36,7 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 * **[Script Avvio Pipeline](deploy/start_pipeline.sh)** — Entry point di boot invocato da systemd: avvia **solo** acquisizione + salvataggio opzionale. Enhancement, detection e metriche non partono mai automaticamente.
 * **[Servizio Systemd Pipeline](deploy/nautilus-vision.service)** — Unit file per l'avvio automatico al boot (trigger reed switch).
 * **[Servizio Systemd Lock Cameras](deploy/lock-cameras.service)** — Unit file che lancia `lock_cameras.py` subito dopo l'avvio delle camere per riapplicare i parametri fotometrici.
-* **[Script Lock Fotometrico](deploy/lock_cameras.py)** — Rilegge `nautilus_camera.yaml` e riapplica lens position, autofocus, exposure e colour gains via `set_parameters`. Necessario perché `camera_ros` rifiuta `AfMode`/`LensPosition` su IMX708 al boot.
+* **[Script Lock Fotometrico](deploy/lock_cameras.py)** — Rilegge `camera_params.yaml` e riapplica lens position, autofocus, exposure e colour gains via `set_parameters`. Necessario perché `camera_ros` rifiuta `AfMode`/`LensPosition` su IMX708 al boot.
 * **[Configurazione Ambiente](pipeline_config.env)** — Unico flag: `ENABLE_SAVING` (true/false). Enhancement, detection e metriche si lanciano sempre a mano.
 * **[Configurazione CycloneDDS](deploy/cyclonedds.xml)** — Profilo DDS usato da tutti i nodi per la comunicazione su rete.
 * **[Disabilitazione WiFi Power Save](deploy/wifi-powersave-off.service)** — Unit systemd opzionale per ridurre jitter di rete.
@@ -142,7 +142,7 @@ La pipeline adotta una distinzione netta tra **cosa parte al boot** e **cosa si 
   * **Acquisizione:** obbligatoria (`camera_ros` sempre attivi).
   * **Salvataggio:** opzionale, governato da `ENABLE_SAVING=true/false`.
   * **Metriche:** **mai** (forzato `enable_metrics:=false`).
-* **Post-avvio:** [`lock-cameras.service`](deploy/lock-cameras.service) parte dopo `nautilus-vision.service` e invoca [`lock_cameras.py`](deploy/lock_cameras.py), che rilegge `nautilus_camera.yaml` e riapplica i parametri fotometrici via `set_parameters`.
+* **Post-avvio:** [`lock-cameras.service`](deploy/lock-cameras.service) parte dopo `nautilus-vision.service` e invoca [`lock_cameras.py`](deploy/lock_cameras.py), che rilegge `camera_params.yaml` e riapplica i parametri fotometrici via `set_parameters`.
 * **Obiettivo:** zero consumo di risorse per modelli di deep learning pesanti all'avvio; batteria, RAM e termica sono riservate all'acquisizione scientifica.
 
 ### 2. Avvio manuale di enhancement e detection
@@ -237,7 +237,7 @@ Per i comandi più usati durante lo sviluppo vedi [`docs/ros2-cmds.md`](docs/ros
 
 | Fase | Descrizione | Stato | Componenti Coinvolti |
 | --- | --- | --- | --- |
-| **Fase 1** | Acquisizione ROS 2 (720p @ 5 FPS, metrics) | ✅ Completata | `camera_ros`, `nautilus_camera/metrics_node`, `nautilus_camera.yaml` |
+| **Fase 1** | Acquisizione ROS 2 (720p @ 5 FPS, metrics) | ✅ Completata | `camera_ros`, `nautilus_camera/metrics_node`, `camera_params.yaml` |
 | **Fase 2** | Nodo di Enhancement (WaterNet / CLAHE) | ✅ Completata | `nautilus_perception/enhancement_node` |
 | **Fase 3** | Nodo di Salvataggio su MicroSD (Anti-RTC, Service) | ✅ Completata | `nautilus_camera/saving_node` |
 | **Fase 4** | Nodo di Detection (YOLO/OpenVINO + Stereovisione) | ✅ Completata | `nautilus_perception/detection_node`, `detection_params.yaml` |

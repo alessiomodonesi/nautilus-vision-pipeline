@@ -8,7 +8,7 @@ Il sistema di lancio è **modulare**: il pacchetto `nautilus_camera` gestisce l'
 
 La pipeline completa è composta da quattro blocchi principali:
 
-1. **Acquisizione (`nautilus_camera/stereo_camera.launch.py`):** sempre attiva. Avvia i due driver `camera_ros` (camera sinistra e destra) a 720p @ 5 FPS tramite `config/nautilus_camera.yaml`. È l'unico blocco che parte in automatico al boot del Raspberry Pi.
+1. **Acquisizione (`nautilus_camera/stereo_camera.launch.py`):** sempre attiva. Avvia i due driver `camera_ros` (camera sinistra e destra) a 720p @ 5 FPS tramite `config/camera_params.yaml`. È l'unico blocco che parte in automatico al boot del Raspberry Pi.
 2. **Salvataggio (`saving_node`):** opzionale. Salva i frame stereo su disco locale (JPEG/PNG) con naming incrementale (nessun RTC richiesto). Si attiva al boot solo se `ENABLE_SAVING=true` in `pipeline_config.env`. Espone anche un ROS 2 Service per attivarlo/disattivarlo a runtime.
 3. **Benchmark (`metrics_node`):** mai automatico. Misura FPS reali, jitter e skew stereo. Si lancia a mano durante i test.
 4. **Enhancement + Detection (`nautilus_perception/pipeline.launch.py`):** mai automatici. Migliorano le immagini e calcolano la stereovisione. Si lanciano a mano quando servono.
@@ -95,7 +95,7 @@ Questo previene deadlock in cui il nodo di detection attenderebbe topic inesiste
 
 Tutti i parametri di acquisizione, benchmark e salvataggio vivono in un unico file YAML. Lo stesso file è letto anche da `lock_cameras.py` (sezione 6) per riapplicare i parametri fotometrici a runtime.
 
-**Percorso:** `ros2_ws/src/nautilus_camera/config/nautilus_camera.yaml`
+**Percorso:** `ros2_ws/src/nautilus_camera/config/camera_params.yaml`
 
 ```yaml
 # parametri hardware per camera_ros - camera sinistra (lx)
@@ -336,7 +336,7 @@ journalctl -u lock-cameras.service -f
 
 ### Come funziona `lock_cameras.py`
 
-1. legge `nautilus_camera.yaml` dal package share di `nautilus_camera`
+1. legge `camera_params.yaml` dal package share di `nautilus_camera`
 2. estrae i parametri della whitelist (`AeEnable`, `AwbEnable`, `ExposureTime`, `ColourGains`, `AfMode`, `LensPosition`) per i due namespace
 3. attende che il service `/stereo/{lx,rx}/camera/set_parameters` sia disponibile (fino a 30 s)
 4. chiama `set_parameters` con i valori del YAML

@@ -62,12 +62,12 @@ del trasporto (peer statici, MTU ridotto per WiFi, fragment size).
 
 I parametri operativi sono distribuiti su due file YAML, uno per pacchetto:
 
-* `nautilus_camera/config/nautilus_camera.yaml` — parametri camera_ros, metrics_node, saving_node.
+* `nautilus_camera/config/camera_params.yaml` — parametri camera_ros, metrics_node, saving_node.
 * `nautilus_perception/config/detection_params.yaml` — parametri detection (modello, soglia, threads, sync).
 
 **Regola di priorità**:
 
-1. Se il nodo viene avviato **senza argomenti da riga di comando**, i file YAML hanno la **piena priorità**: qualsiasi modifica a `detection_params.yaml` o `nautilus_camera.yaml` viene caricata fedelmente.
+1. Se il nodo viene avviato **senza argomenti da riga di comando**, i file YAML hanno la **piena priorità**: qualsiasi modifica a `detection_params.yaml` o `camera_params.yaml` viene caricata fedelmente.
 2. Se vengono passati **argomenti al comando di lancio** (es. `debug:=true`, `model_filename:=best.pt`, `display:=true`), solo le chiavi specificate sovrascrivono il YAML per quella specifica esecuzione.
 
 ### Avvio della Pipeline

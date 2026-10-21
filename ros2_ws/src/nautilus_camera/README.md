@@ -12,14 +12,14 @@ Questo pacchetto si appoggia a [`camera_ros`](https://github.com/christianrauch/
 
 Il blocco di acquisizione è l'unico che parte automaticamente al boot del Raspberry Pi (tramite `nautilus-vision.service`). Il salvataggio è opzionale, controllato da `ENABLE_SAVING` in `pipeline_config.env`. Il benchmark non parte mai da solo.
 
-Lo stesso `nautilus_camera.yaml` è letto anche da `lock_cameras.py` (deploy esterno), che riapplica i parametri fotometrici via `set_parameters` subito dopo il boot: così la fonte di verità è unica e non ci sono duplicazioni.
+Lo stesso `camera_params.yaml` è letto anche da `lock_cameras.py` (deploy esterno), che riapplica i parametri fotometrici via `set_parameters` subito dopo il boot: così la fonte di verità è unica e non ci sono duplicazioni.
 
 ## Struttura del Pacchetto
 
 ```text
 nautilus_camera/
 ├── config/
-│   └── nautilus_camera.yaml          # unico file di configurazione
+│   └── camera_params.yaml          # unico file di configurazione
 ├── launch/
 │   └── stereo_camera.launch.py       # camera_ros + metrics + saving
 ├── nautilus_camera/
@@ -45,18 +45,18 @@ Fa partire in un colpo solo:
 * `metrics_node` (opzionale);
 * `saving_node` (opzionale).
 
-I parametri hardware di `camera_ros` **non vengono ripetuti** nel launch file: sono letti direttamente dai blocchi `/stereo/lx/camera` e `/stereo/rx/camera` di `config/nautilus_camera.yaml`. Questo evita duplicazioni e drift di configurazione.
+I parametri hardware di `camera_ros` **non vengono ripetuti** nel launch file: sono letti direttamente dai blocchi `/stereo/lx/camera` e `/stereo/rx/camera` di `config/camera_params.yaml`. Questo evita duplicazioni e drift di configurazione.
 
 **Argomenti di lancio:**
 
 | Argomento | Default | Descrizione |
 |---|---|---|
-| `params_file` | `nautilus_camera.yaml` | Nome del file di configurazione in `config/` |
+| `params_file` | `camera_params.yaml` | Nome del file di configurazione in `config/` |
 | `enable_metrics` (alias: `metrics`) | `false` | Avvia il nodo di benchmark (`metrics_node`) |
-| `enable_display` (alias: `display`) | `''` (vuoto) | Apre finestra OpenCV del `metrics_node` (se vuoto, usa valore di `nautilus_camera.yaml`) |
+| `enable_display` (alias: `display`) | `''` (vuoto) | Apre finestra OpenCV del `metrics_node` (se vuoto, usa valore di `camera_params.yaml`) |
 
 **Regola di priorità:**
-Se `enable_display` non viene specificato da riga di comando, il nodo prende il valore del parametro `display` direttamente da `config/nautilus_camera.yaml`. L'argomento da riga di comando ha effetto solo se esplicitato.
+Se `enable_display` non viene specificato da riga di comando, il nodo prende il valore del parametro `display` direttamente da `config/camera_params.yaml`. L'argomento da riga di comando ha effetto solo se esplicitato.
 
 **Esempi:**
 
@@ -84,7 +84,7 @@ Nodo di benchmark: si sottoscrive ai due flussi immagine di `camera_ros`, li sin
 
 È un **puro osservatore**: non pubblica nulla, non scrive su disco. Può essere spento senza impattare il resto della pipeline.
 
-**Parametri principali** (vedi `config/nautilus_camera.yaml`):
+**Parametri principali** (vedi `config/camera_params.yaml`):
 
 * `left_topic`, `right_topic` — topic di input
 * `sync_slop_sec` — tolleranza di sincronizzazione (default 0.05 s)
@@ -139,7 +139,7 @@ Utile per passare rapidamente da modalità produzione a modalità benchmark senz
 
 ## Configurazione
 
-Tutto è centralizzato in `config/nautilus_camera.yaml`. Il file è organizzato in tre sezioni, ciascuna con il proprio match di nodo/namespace:
+Tutto è centralizzato in `config/camera_params.yaml`. Il file è organizzato in tre sezioni, ciascuna con il proprio match di nodo/namespace:
 
 ```yaml
 # 1) parametri hardware camera_ros
@@ -210,7 +210,7 @@ Nel contesto di `nautilus_camera`:
   la QoS definita nel YAML. Il file viene passato a `camera_ros` dal launch
   `stereo_camera.launch.py` come `--params-file` aggiuntivo
   (`parameters=[qos_yaml, config_file]`). Non esiste più una sezione
-  `qos_overrides` in `config/nautilus_camera.yaml`: è stata rimossa per
+  `qos_overrides` in `config/camera_params.yaml`: è stata rimossa per
   evitare due fonti che possono divergere.
 
 * **`metrics_node`** (Python): sottoscrive `image_raw` lx/rx con

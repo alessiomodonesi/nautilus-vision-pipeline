@@ -1,6 +1,6 @@
 [INFO] [launch]: All log files can be found below /home/nautilus/.ros/log/2026-10-21-20-32-49-839368-nautilus-pi-4228
 [INFO] [launch]: Default logging verbosity is set to INFO
-[WARNING] [launch_ros.actions.node]: Parameter file path is not a file: /home/nautilus/nautilus-vision-pipeline/ros2_ws/install/nautilus_perception/share/nautilus_perception/config/nautilus_camera.yaml
+[WARNING] [launch_ros.actions.node]: Parameter file path is not a file: /home/nautilus/nautilus-vision-pipeline/ros2_ws/install/nautilus_perception/share/nautilus_perception/config/camera_params.yaml
 [INFO] [camera_node-1]: process started with pid [4232]
 [INFO] [metrics_node-2]: process started with pid [4233]
 [INFO] [detection_node-3]: process started with pid [4234]
