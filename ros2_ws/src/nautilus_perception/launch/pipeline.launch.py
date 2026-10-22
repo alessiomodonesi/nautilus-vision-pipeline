@@ -27,10 +27,10 @@ def generate_launch_description():
     )
     enable_debug_arg = DeclareLaunchArgument(
         'enable_debug', default_value='',
-        description='Enable OpenCV debug window in detection node (default: usa YAML detection)'
+        description='Enable OpenCV debug window in detection node'
     )
-    params_file_arg = DeclareLaunchArgument(
-        'params_file', default_value='detection_params.yaml',
+    detection_params_file_arg = DeclareLaunchArgument(
+        'detection_params_file', default_value='detection_params.yaml',
         description='Nome file params detection'
     )
 
@@ -39,7 +39,7 @@ def generate_launch_description():
     # perché è utile solo in post-produzione e non alla navigazione.
     waternet_mode_arg = DeclareLaunchArgument(
         'waternet_mode', default_value='force_off',
-        description="auto | force_on | force_off (force_off = solo OpenCV: CLAHE + sharpening)"
+        description="auto | force_on | force_off"
     )
 
     # include_stereo_camera: di default false, perché sulla barca le camere
@@ -49,11 +49,11 @@ def generate_launch_description():
     # se invece vuoi fare un test da zero passa include_stereo_camera:=true.
     include_stereo_camera_arg = DeclareLaunchArgument(
         'include_stereo_camera', default_value='false',
-        description='Avvia anche camera_ros (true solo se le camere non sono già attive)'
+        description='Avvia anche camera_ros'
     )
     input_type_override_arg = DeclareLaunchArgument(
         'input_type_override', default_value='',
-        description='Se non vuoto, forza input_type (raw|enhanced) ignorando enable_enhancement'
+        description='Se non vuoto, forza input_type (raw|enhanced)'
     )
     # determina l'input_type dinamicamente in base ad enable_enhancement
     dynamic_input_type = PythonExpression([
@@ -63,15 +63,15 @@ def generate_launch_description():
     ])
     model_filename_arg = DeclareLaunchArgument(
         'model_filename_override', default_value='',
-        description='Nome modello in data/weights/ (default: usa YAML detection)'
+        description='Nome modello in data/weights/'
     )
     half_res_arg = DeclareLaunchArgument(
         'half_res_override', default_value='',
-        description='Dimezza il frame prima di YOLO (default: usa YAML detection)'
+        description='Dimezza il frame prima di YOLO'
     )
     imgsz_arg = DeclareLaunchArgument(
         'imgsz_override', default_value='',
-        description='Risoluzione di inferenza (default: usa YAML detection)'
+        description='Risoluzione di inferenza'
     )
 
     # nodo di acquisizione (condizionale)
@@ -80,6 +80,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(os.path.join(camera_pkg, 'launch', 'stereo_camera.launch.py')),
         launch_arguments={
             'enable_metrics': LaunchConfiguration('enable_metrics'),
+            'params_file': 'camera_params.yaml',
         }.items(),
         condition=IfCondition(LaunchConfiguration('include_stereo_camera'))
     )
@@ -99,7 +100,7 @@ def generate_launch_description():
         launch_arguments={
             'input_type_override': dynamic_input_type,
             'enable_debug': LaunchConfiguration('enable_debug'),
-            'params_file': LaunchConfiguration('params_file'),
+            'params_file': LaunchConfiguration('detection_params_file'),
             'model_filename_override': LaunchConfiguration('model_filename_override'),
             'half_res_override': LaunchConfiguration('half_res_override'),
             'imgsz_override': LaunchConfiguration('imgsz_override'),
@@ -112,7 +113,7 @@ def generate_launch_description():
         enable_detection_arg,
         enable_metrics_arg,
         enable_debug_arg,
-        params_file_arg,
+        detection_params_file_arg,
         waternet_mode_arg,
         include_stereo_camera_arg,
         input_type_override_arg,
