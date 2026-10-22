@@ -48,12 +48,12 @@ Obiettivo: un nodo in `nautilus_perception` che legge le immagini e pubblica i t
 
 Obiettivo: un confronto equo e riproducibile eseguito sul Pi.
 
-- [ ] Tre configurazioni di pipeline: solo acquisizione, acquisizione + detection, acquisizione + enhancement + detection.
-- [ ] Vedi te i modelli che vuoi testare, secondo me ha senso OpenVino e il modello di Manuel ma non so se sono comparabili.
-- [ ] Latenza media, p50 e p95 con `perf_counter`, separata in pre-processing, inferenza e post-processing.
-- [ ] FPS, CPU%, RAM, temperatura e `vcgencmd get_throttled`.
-- [ ] mAP sul validation set per ogni variante, per quantificare quanta accuratezza costano.
-- [ ] Output CSV e grafici generati da qualche script.
+- [x] Tre configurazioni di pipeline: solo acquisizione, acquisizione + detection, acquisizione + enhancement + detection.
+- [x] Vedi te i modelli che vuoi testare, secondo me ha senso OpenVino e il modello di Manuel ma non so se sono comparabili.
+- [x] Latenza media, p50 e p95 con `perf_counter`, separata in pre-processing, inferenza e post-processing.
+- [x] FPS, CPU%, RAM, temperatura e `vcgencmd get_throttled`.
+- [x] mAP sul validation set per ogni variante, per quantificare quanta accuratezza costano.
+- [x] Output CSV e grafici generati da qualche script.
 
 ## Fase 7 — Stress test termico
 

@@ -1,0 +1,17 @@
+field,value
+commit_hash,5b562161ce3735bd1e3d1f9168941bec8517024e
+config,B3_ov_int8_640
+run,1
+enable_enhancement,false
+enable_detection,true
+enable_metrics,true
+model_filename,yolov8n_640_int8_openvino_model
+half_res,false
+imgsz,640
+soc_temp_initial_c,51.6
+soc_temp_final_c,56.0
+throttled_initial,0x0
+throttled_final,0x0
+cpu_clock_initial_mhz,2400
+cpu_clock_final_mhz,2400
+notes,OV INT8 640

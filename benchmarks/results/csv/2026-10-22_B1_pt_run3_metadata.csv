@@ -1,0 +1,17 @@
+field,value
+commit_hash,1d03372c75cedea5f247b83cfee551b5105b0d5f
+config,B1_pt
+run,3
+enable_enhancement,false
+enable_detection,true
+enable_metrics,true
+model_filename,yolov8n.pt
+half_res,true
+imgsz,640
+soc_temp_initial_c,49.4
+soc_temp_final_c,53.8
+throttled_initial,0x0
+throttled_final,0x0
+cpu_clock_initial_mhz,2400
+cpu_clock_final_mhz,2400
+notes,yolov8n.pt

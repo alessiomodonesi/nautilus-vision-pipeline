@@ -1,0 +1,1371 @@
+[INFO] [launch]: All log files can be found below /home/nautilus/.ros/log/2026-10-22-16-20-22-367824-nautilus-pi-100650
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [camera_node-1]: process started with pid [100654]
+[INFO] [metrics_node-2]: process started with pid [100655]
+[INFO] [detection_node-3]: process started with pid [100656]
+[camera_node-1] [3:15:35.854867739] [100654]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817
+[camera_node-1] [3:15:35.892807520] [100671]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-1] [3:15:35.994884349] [100671]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-1] [3:15:36.037294955] [100671]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-1] [3:15:36.037408584] [100671]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@88000/imx708@1a to CFE device /dev/media0 and ISP device /dev/media1 using PiSP variant BCM2712_D0
+[camera_node-1] [3:15:36.037799843] [100671]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-1] [3:15:36.136159734] [100671]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-1] [3:15:36.170985835] [100671]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@80000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-1] [3:15:36.171076613] [100671]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@80000/imx708@1a to CFE device /dev/media2 and ISP device /dev/media3 using PiSP variant BCM2712_D0
+[camera_node-1] [3:15:36.173104109] [100671]  WARN V4L2 v4l2_pixelformat.cpp:346 Unsupported V4L2 pixel format RPBP
+[camera_node-1] [INFO] [1792678822.970189895] [stereo.lx.camera]: 
+[camera_node-1] >> stream formats:
+[camera_node-1]    - R8 (32x32 - 4608x2592)
+[camera_node-1]    - R16 (32x32 - 4608x2592)
+[camera_node-1]    - MONO_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - NV21 (32x32 - 4608x2592)
+[camera_node-1]    - SBGGR8 (32x32 - 4608x2592)
+[camera_node-1]    - SBGGR16 (32x32 - 4608x2592)
+[camera_node-1]    - BGGR_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - XBGR8888 (32x32 - 4608x2592)
+[camera_node-1]    - BGR888 (32x32 - 4608x2592)
+[camera_node-1]    - RGB888 (32x32 - 4608x2592)
+[camera_node-1]    - XRGB8888 (32x32 - 4608x2592)
+[camera_node-1]    - SGBRG16 (32x32 - 4608x2592)
+[camera_node-1]    - GBRG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - SGRBG16 (32x32 - 4608x2592)
+[camera_node-1]    - GRBG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - SRGGB16 (32x32 - 4608x2592)
+[camera_node-1]    - RGGB_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - BGR161616 (32x32 - 4608x2592)
+[camera_node-1]    - RGB161616 (32x32 - 4608x2592)
+[camera_node-1]    - SRGGB8 (32x32 - 4608x2592)
+[camera_node-1]    - SGRBG8 (32x32 - 4608x2592)
+[camera_node-1]    - SGBRG8 (32x32 - 4608x2592)
+[camera_node-1]    - YUYV (32x32 - 4608x2592)
+[camera_node-1]    - UYVY (32x32 - 4608x2592)
+[camera_node-1] [WARN] [1792678822.970355154] [stereo.lx.camera]: no pixel format selected, auto-selecting: "XRGB8888"
+[camera_node-1] [WARN] [1792678822.970389839] [stereo.lx.camera]: set parameter 'format' to silence this warning
+[camera_node-1] [INFO] [1792678822.970550654] [stereo.lx.camera]: 
+[camera_node-1] >> XRGB8888 format sizes:
+[camera_node-1]    - 160x120
+[camera_node-1]    - 240x160
+[camera_node-1]    - 320x240
+[camera_node-1]    - 400x240
+[camera_node-1]    - 480x320
+[camera_node-1]    - 640x360
+[camera_node-1]    - 640x480
+[camera_node-1]    - 720x480
+[camera_node-1]    - 768x480
+[camera_node-1]    - 854x480
+[camera_node-1]    - 720x576
+[camera_node-1]    - 800x600
+[camera_node-1]    - 960x540
+[camera_node-1]    - 1024x576
+[camera_node-1]    - 960x640
+[camera_node-1]    - 1024x600
+[camera_node-1]    - 1024x768
+[camera_node-1]    - 1280x720
+[camera_node-1]    - 1152x864
+[camera_node-1]    - 1280x800
+[camera_node-1]    - 1360x768
+[camera_node-1]    - 1366x768
+[camera_node-1]    - 1440x900
+[camera_node-1]    - 1280x1024
+[camera_node-1]    - 1536x864
+[camera_node-1]    - 1280x1080
+[camera_node-1]    - 1600x900
+[camera_node-1]    - 1400x1050
+[camera_node-1]    - 1680x1050
+[camera_node-1]    - 1600x1200
+[camera_node-1]    - 1920x1080
+[camera_node-1]    - 2048x1080
+[camera_node-1]    - 1920x1200
+[camera_node-1]    - 2160x1080
+[camera_node-1]    - 2048x1152
+[camera_node-1]    - 2560x1080
+[camera_node-1]    - 2048x1536
+[camera_node-1]    - 2560x1440
+[camera_node-1]    - 2560x1600
+[camera_node-1]    - 3840x1080
+[camera_node-1]    - 2960x1440
+[camera_node-1]    - 3440x1440
+[camera_node-1]    - 2560x2048
+[camera_node-1]    - 3200x1800
+[camera_node-1]    - 3840x1600
+[camera_node-1]    - 3200x2048
+[camera_node-1]    - 3200x2400
+[camera_node-1]    - 3840x2160
+[camera_node-1]    - 4096x2160
+[camera_node-1]    - 3840x2400
+[camera_node-1] [3:15:36.175185013] [100654]  INFO Camera camera.cpp:1216 configuring streams: (0) 1280x720-XRGB8888/sRGB
+[camera_node-1] [3:15:36.176120937] [100671]  INFO RPI pisp.cpp:1502 Sensor: /base/axi/pcie@120000/rp1/i2c@88000/imx708@1a - Selected sensor format: 1536x864-SBGGR10_1X10/RAW - Selected CFE format: 1536x864-PC1B/RAW
+[camera_node-1] [INFO] [1792678822.974451776] [stereo.lx.camera]: camera "/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a" configured with 1280x720-XRGB8888/sRGB stream
+[camera_node-1] [INFO] [1792678822.974742720] [stereo.lx.camera]: using default calibration URL
+[camera_node-1] [INFO] [1792678822.974779016] [stereo.lx.camera]: camera calibration URL: file:///home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_88000_imx708_1a_1280x720.yaml
+[camera_node-1] [ERROR] [1792678822.974852609] [camera_calibration_parsers]: Unable to open camera calibration file [/home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_88000_imx708_1a_1280x720.yaml]
+[camera_node-1] [WARN] [1792678822.974912886] [stereo.lx.camera]: Camera calibration file /home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_88000_imx708_1a_1280x720.yaml not found
+[camera_node-1] [WARN] [1792678822.976009588] [stereo.lx.camera]: unsupported control: AfWindows (37)
+[camera_node-1] [WARN] [1792678822.977380326] [stereo.lx.camera]: resolve overrides: ExposureTimeMode and ExposureTime must not be enabled at the same time. 'ExposureTimeMode' will be set to off.
+[camera_node-1] [3:15:36.192178814] [100687]  WARN IPARPI ipa_base.cpp:1385 Could not set AF_PAUSE - no AF algorithm or not Continuous
+[camera_node-1] [3:15:36.192431203] [100687]  WARN IPARPI ipa_base.cpp:1402 Could not set AF_TRIGGER - no AF algorithm or not Auto
+[metrics_node-2] [INFO] [1792678823.339123020] [metrics_node]: MetricsNode avviato | left=/stereo/lx/camera/image_raw right=/stereo/rx/camera/image_raw | slop=50.0 ms | window=30
+[detection_node-3] [INFO] [1792678823.353709603] [detection_node]: Set OMP_NUM_THREADS and MKL_NUM_THREADS to 2
+[detection_node-3] [INFO] [1792678823.358225965] [detection_node]: Initializing YOLOv8 with model: /home/nautilus/nautilus-vision-pipeline/ros2_ws/install/nautilus_perception/share/nautilus_perception/data/weights/yolov8n.pt
+[detection_node-3] [INFO] [1792678823.358898112] [detection_node]: OpenCV visual debugging: DISABLED
+[detection_node-3] [INFO] [1792678823.359534778] [detection_node]: Half resolution inference: ENABLED
+[camera_node-1] [3:15:37.964566249] [100687]  WARN IPARPI ipa_base.cpp:1385 Could not set AF_PAUSE - no AF algorithm or not Continuous
+[camera_node-1] [3:15:37.964712823] [100687]  WARN IPARPI ipa_base.cpp:1402 Could not set AF_TRIGGER - no AF algorithm or not Auto
+[detection_node-3] 16:20:25 [INFO] stereo: YOLO inference engine mapped to device: cpu
+[detection_node-3] [INFO] [1792678825.520105956] [detection_node]: Calibration matrices loaded successfully.
+[detection_node-3] [INFO] [1792678825.591976968] [detection_node]: Detection node started. Listening on /stereo/lx/camera/image_raw and /stereo/rx/camera/image_raw
+[camera_node-1] [WARN] [1792678827.458772498] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   AeEnable: false
+[camera_node-1] 
+[camera_node-1] [WARN] [1792678827.459109609] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   AwbEnable: false
+[camera_node-1] 
+[camera_node-1] [WARN] [1792678827.459419238] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   ExposureTime: 20000
+[camera_node-1] 
+[camera_node-1] [WARN] [1792678827.459705867] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   ColourGains: [ 1.500000, 1.500000 ]
+[camera_node-1] 
+[camera_node-1] [WARN] [1792678827.459953885] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   AfMode: 0
+[camera_node-1] 
+[INFO] [camera_node-4]: process started with pid [100727]
+[camera_node-4] [3:15:41.827071707] [100727]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817
+[camera_node-4] [3:15:41.860719069] [100739]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-4] [3:15:41.867343427] [100739] ERROR V4L2 v4l2_device.cpp:410 'imx708': Unable to set controls: Device or resource busy
+[camera_node-4] [3:15:41.885465633] [100739]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-4] [3:15:41.925169501] [100739]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-4] [3:15:41.925225908] [100739]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@88000/imx708@1a to CFE device /dev/media0 and ISP device /dev/media1 using PiSP variant BCM2712_D0
+[camera_node-4] [3:15:41.925491556] [100739]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-4] [3:15:41.942297487] [100739]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-4] [3:15:41.975621571] [100739]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@80000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-4] [3:15:41.975688960] [100739]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@80000/imx708@1a to CFE device /dev/media2 and ISP device /dev/media3 using PiSP variant BCM2712_D0
+[camera_node-4] [3:15:41.977853326] [100739]  WARN V4L2 v4l2_pixelformat.cpp:346 Unsupported V4L2 pixel format RPBP
+[camera_node-4] [INFO] [1792678828.775202963] [stereo.rx.camera]: 
+[camera_node-4] >> stream formats:
+[camera_node-4]    - R8 (32x32 - 4608x2592)
+[camera_node-4]    - R16 (32x32 - 4608x2592)
+[camera_node-4]    - MONO_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-4]    - NV21 (32x32 - 4608x2592)
+[camera_node-4]    - SBGGR8 (32x32 - 4608x2592)
+[camera_node-4]    - SBGGR16 (32x32 - 4608x2592)
+[camera_node-4]    - BGGR_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-4]    - XBGR8888 (32x32 - 4608x2592)
+[camera_node-4]    - BGR888 (32x32 - 4608x2592)
+[camera_node-4]    - RGB888 (32x32 - 4608x2592)
+[camera_node-4]    - XRGB8888 (32x32 - 4608x2592)
+[camera_node-4]    - SGBRG16 (32x32 - 4608x2592)
+[camera_node-4]    - GBRG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-4]    - SGRBG16 (32x32 - 4608x2592)
+[camera_node-4]    - GRBG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-4]    - SRGGB16 (32x32 - 4608x2592)
+[camera_node-4]    - RGGB_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-4]    - BGR161616 (32x32 - 4608x2592)
+[camera_node-4]    - RGB161616 (32x32 - 4608x2592)
+[camera_node-4]    - SRGGB8 (32x32 - 4608x2592)
+[camera_node-4]    - SGRBG8 (32x32 - 4608x2592)
+[camera_node-4]    - SGBRG8 (32x32 - 4608x2592)
+[camera_node-4]    - YUYV (32x32 - 4608x2592)
+[camera_node-4]    - UYVY (32x32 - 4608x2592)
+[camera_node-4] [WARN] [1792678828.775341907] [stereo.rx.camera]: no pixel format selected, auto-selecting: "XRGB8888"
+[camera_node-4] [WARN] [1792678828.775363926] [stereo.rx.camera]: set parameter 'format' to silence this warning
+[camera_node-4] [INFO] [1792678828.775487574] [stereo.rx.camera]: 
+[camera_node-4] >> XRGB8888 format sizes:
+[camera_node-4]    - 160x120
+[camera_node-4]    - 240x160
+[camera_node-4]    - 320x240
+[camera_node-4]    - 400x240
+[camera_node-4]    - 480x320
+[camera_node-4]    - 640x360
+[camera_node-4]    - 640x480
+[camera_node-4]    - 720x480
+[camera_node-4]    - 768x480
+[camera_node-4]    - 854x480
+[camera_node-4]    - 720x576
+[camera_node-4]    - 800x600
+[camera_node-4]    - 960x540
+[camera_node-4]    - 1024x576
+[camera_node-4]    - 960x640
+[camera_node-4]    - 1024x600
+[camera_node-4]    - 1024x768
+[camera_node-4]    - 1280x720
+[camera_node-4]    - 1152x864
+[camera_node-4]    - 1280x800
+[camera_node-4]    - 1360x768
+[camera_node-4]    - 1366x768
+[camera_node-4]    - 1440x900
+[camera_node-4]    - 1280x1024
+[camera_node-4]    - 1536x864
+[camera_node-4]    - 1280x1080
+[camera_node-4]    - 1600x900
+[camera_node-4]    - 1400x1050
+[camera_node-4]    - 1680x1050
+[camera_node-4]    - 1600x1200
+[camera_node-4]    - 1920x1080
+[camera_node-4]    - 2048x1080
+[camera_node-4]    - 1920x1200
+[camera_node-4]    - 2160x1080
+[camera_node-4]    - 2048x1152
+[camera_node-4]    - 2560x1080
+[camera_node-4]    - 2048x1536
+[camera_node-4]    - 2560x1440
+[camera_node-4]    - 2560x1600
+[camera_node-4]    - 3840x1080
+[camera_node-4]    - 2960x1440
+[camera_node-4]    - 3440x1440
+[camera_node-4]    - 2560x2048
+[camera_node-4]    - 3200x1800
+[camera_node-4]    - 3840x1600
+[camera_node-4]    - 3200x2048
+[camera_node-4]    - 3200x2400
+[camera_node-4]    - 3840x2160
+[camera_node-4]    - 4096x2160
+[camera_node-4]    - 3840x2400
+[camera_node-4] [3:15:41.979929674] [100727]  INFO Camera camera.cpp:1216 configuring streams: (0) 1280x720-XRGB8888/sRGB
+[camera_node-4] [3:15:41.981255523] [100739]  INFO RPI pisp.cpp:1502 Sensor: /base/axi/pcie@120000/rp1/i2c@80000/imx708@1a - Selected sensor format: 1536x864-SBGGR10_1X10/RAW - Selected CFE format: 1536x864-PC1B/RAW
+[camera_node-4] [INFO] [1792678828.779264696] [stereo.rx.camera]: camera "/base/axi/pcie@120000/rp1/i2c@80000/imx708@1a" configured with 1280x720-XRGB8888/sRGB stream
+[camera_node-4] [INFO] [1792678828.779527640] [stereo.rx.camera]: using default calibration URL
+[camera_node-4] [INFO] [1792678828.779569825] [stereo.rx.camera]: camera calibration URL: file:///home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_80000_imx708_1a_1280x720.yaml
+[camera_node-4] [ERROR] [1792678828.779637307] [camera_calibration_parsers]: Unable to open camera calibration file [/home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_80000_imx708_1a_1280x720.yaml]
+[camera_node-4] [WARN] [1792678828.779696418] [stereo.rx.camera]: Camera calibration file /home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_80000_imx708_1a_1280x720.yaml not found
+[camera_node-4] [WARN] [1792678828.781067804] [stereo.rx.camera]: unsupported control: AfWindows (37)
+[camera_node-4] [WARN] [1792678828.783519170] [stereo.rx.camera]: resolve overrides: ExposureTimeMode and ExposureTime must not be enabled at the same time. 'ExposureTimeMode' will be set to off.
+[camera_node-4] [3:15:41.997362344] [100748]  WARN IPARPI ipa_base.cpp:1385 Could not set AF_PAUSE - no AF algorithm or not Continuous
+[camera_node-4] [3:15:41.998126232] [100748]  WARN IPARPI ipa_base.cpp:1402 Could not set AF_TRIGGER - no AF algorithm or not Auto
+[camera_node-4] [WARN] [1792678828.936363562] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-4]   Brightness: 0.000000
+[camera_node-4]   AfRange: 0
+[camera_node-4]   AeMeteringMode: 0
+[camera_node-4]   ColourGains: [ 1.500000, 1.500000 ]
+[camera_node-4]   StatsOutputEnable: false
+[camera_node-4]   AnalogueGainMode: 0
+[camera_node-4]   AfPause: 0
+[camera_node-4]   Sharpness: 1.000000
+[camera_node-4]   AwbMode: 0
+[camera_node-4]   AeExposureMode: 0
+[camera_node-4]   HdrMode: 0
+[camera_node-4]   SyncMode: 0
+[camera_node-4]   AeConstraintMode: 0
+[camera_node-4]   AfMode: 0
+[camera_node-4]   AnalogueGain: 1.122807
+[camera_node-4]   AfTrigger: 0
+[camera_node-4]   ExposureValue: 0.000000
+[camera_node-4]   AfSpeed: 0
+[camera_node-4]   ExposureTimeMode: 1
+[camera_node-4]   ScalerCrop: (768, 432)/3072x1728
+[camera_node-4]   SyncFrames: 1000
+[camera_node-4]   ExposureTime: 20000
+[camera_node-4]   AfMetering: 0
+[camera_node-4]   Saturation: 1.000000
+[camera_node-4]   AeEnable: false
+[camera_node-4]   FrameDurationLimits: [ 200000, 200000 ]
+[camera_node-4]   NoiseReductionMode: 0
+[camera_node-4]   Contrast: 1.000000
+[camera_node-4]   AwbEnable: false
+[camera_node-4]   CnnEnableInputTensor: false
+[camera_node-4]   AeFlickerMode: 0
+[camera_node-4]   LensPosition: 1.500000
+[camera_node-4] 
+[camera_node-4] [WARN] [1792678828.936788728] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-4]   AeEnable: false
+[camera_node-4] 
+[camera_node-4] [WARN] [1792678828.937121894] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-4]   AwbEnable: false
+[camera_node-4] 
+[camera_node-4] [WARN] [1792678828.937432245] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-4]   ExposureTime: 20000
+[camera_node-4] 
+[camera_node-4] [WARN] [1792678828.937721171] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-4]   ColourGains: [ 1.500000, 1.500000 ]
+[camera_node-4] 
+[camera_node-4] [WARN] [1792678828.938006207] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-4]   AfMode: 0
+[camera_node-4] 
+[metrics_node-2] [INFO] [1792678829.029597198] [metrics_node]: FPS:  0.18 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg  6.14 / max  6.14 ms
+[detection_node-3] [INFO] [1792678829.040523418] [detection_node]: Image shape: (720, 1280, 3) | map1x shape: (720, 1280) | map2x shape: (720, 1280)
+[metrics_node-2] [INFO] [1792678830.224567508] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg  6.14 / max  6.14 ms
+[metrics_node-2] [INFO] [1792678831.228497011] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg  6.14 / max  6.15 ms
+[detection_node-3] [INFO] [1792678831.614373725] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678832.088937378] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678832.244691037] [metrics_node]: FPS:  4.92 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg  6.15 / max  6.20 ms
+[detection_node-3] [INFO] [1792678832.525339342] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=169, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678832.935104821] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=169, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678833.251476109] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.15 / max  6.20 ms
+[detection_node-3] [INFO] [1792678833.340892045] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678833.750067429] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678834.173014693] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678834.439526780] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.15 / max  6.20 ms
+[detection_node-3] [INFO] [1792678834.580464354] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678835.042210668] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678835.440205994] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.16 / max  6.20 ms
+[detection_node-3] [INFO] [1792678835.473328225] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678835.902236952] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678836.300961273] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678836.445443949] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.16 / max  6.20 ms
+[detection_node-3] [INFO] [1792678836.711798792] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678837.099019986] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.92 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678837.449235177] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.17 / max  6.21 ms
+[detection_node-3] [INFO] [1792678837.503126829] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=172, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678837.905922694] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.80 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678838.304790101] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.83 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678838.646437158] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.18 / max  6.21 ms
+[detection_node-3] [INFO] [1792678838.701034049] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678839.106317589] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678839.506682267] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678839.647246670] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.18 / max  6.21 ms
+[detection_node-3] [INFO] [1792678839.904025524] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678840.311093315] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678840.711559304] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678840.860668726] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.19 / max  6.21 ms
+[detection_node-3] [INFO] [1792678841.114722620] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.83 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678841.514915698] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678841.930692634] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.83 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678842.042555741] [metrics_node]: FPS:  5.08 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.20 / max  6.30 ms
+[detection_node-3] [INFO] [1792678842.331301709] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678842.725524556] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678843.110277236] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.81 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678843.244188999] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.20 / max  6.30 ms
+[detection_node-3] [INFO] [1792678843.503919913] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678843.914313038] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678844.306648272] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678844.441062793] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.21 / max  6.30 ms
+[detection_node-3] [INFO] [1792678844.707573913] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678845.111518288] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678845.512008278] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678845.681180560] [metrics_node]: FPS:  4.84 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.22 / max  6.30 ms
+[detection_node-3] [INFO] [1792678845.926288370] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678846.329681167] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678846.724996572] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.81 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678846.863301138] [metrics_node]: FPS:  5.08 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.23 / max  6.30 ms
+[detection_node-3] [INFO] [1792678847.138661105] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678847.536246503] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678847.940594904] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678848.052325154] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.23 / max  6.28 ms
+[detection_node-3] [INFO] [1792678848.338170688] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678848.735118361] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.91 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678849.055727211] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.23 / max  6.28 ms
+[detection_node-3] [INFO] [1792678849.136483339] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678849.540958197] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678849.940983212] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.81 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678850.263893424] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.24 / max  6.28 ms
+[detection_node-3] [INFO] [1792678850.336695993] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678850.737776910] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678851.139302122] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678851.445784346] [metrics_node]: FPS:  5.07 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.24 / max  6.28 ms
+[detection_node-3] [INFO] [1792678851.537512968] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.83 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678851.938425030] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678852.335503876] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678852.452515517] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.25 / max  6.28 ms
+[detection_node-3] [INFO] [1792678852.741426295] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.78 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678853.133690316] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678853.455037115] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.25 / max  6.28 ms
+[detection_node-3] [INFO] [1792678853.533604837] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678853.536052628] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=64, y=427, w=338, h=172 | Conf: 0.40 | Distance (Z): 1.040 m
+[detection_node-3] [INFO] [1792678853.937864312] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678854.337383831] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678854.632927053] [metrics_node]: FPS:  5.10 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.26 / max  6.30 ms
+[detection_node-3] [INFO] [1792678854.716645356] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678855.110254793] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678855.512770858] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678855.642020507] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.27 / max  6.30 ms
+[detection_node-3] [INFO] [1792678855.911200320] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678856.327239149] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678856.640626976] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.28 / max  6.30 ms
+[detection_node-3] [INFO] [1792678856.734500497] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678857.133280065] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678857.532854370] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.82 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678857.835775661] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.28 / max  6.31 ms
+[detection_node-3] [INFO] [1792678857.928822572] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678858.332990827] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678858.725329774] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678859.035470473] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.30 / max  6.33 ms
+[detection_node-3] [INFO] [1792678859.125682148] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678859.695394651] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678860.048056866] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.30 / max  6.33 ms
+[detection_node-3] [INFO] [1792678860.279145992] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678860.834301374] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678861.057842442] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.31 / max  6.36 ms
+[detection_node-3] [INFO] [1792678861.310917665] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678861.750672981] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678862.171054782] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.82 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678862.266492202] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.32 / max  6.36 ms
+[detection_node-3] [INFO] [1792678862.627496094] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678863.118857625] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678863.267902111] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.33 / max  6.42 ms
+[detection_node-3] [INFO] [1792678863.564268421] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678864.027898936] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678864.458704872] [metrics_node]: FPS:  5.04 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.34 / max  6.42 ms
+[detection_node-3] [INFO] [1792678864.492642130] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678864.941819543] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678865.361055780] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678865.468228671] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.34 / max  6.42 ms
+[detection_node-3] [INFO] [1792678865.831930308] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678866.319202242] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678866.476596892] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.35 / max  6.42 ms
+[detection_node-3] [INFO] [1792678866.751717186] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=169, w=171, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678867.168997996] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=491 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678867.598760850] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678867.674055681] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.36 / max  6.42 ms
+[detection_node-3] [INFO] [1792678868.071086830] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678868.521052098] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678868.863903347] [metrics_node]: FPS:  5.04 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.36 / max  6.42 ms
+[detection_node-3] [INFO] [1792678868.952763425] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678869.364505517] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.92 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678869.778447992] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.82 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678870.050648101] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.37 / max  6.39 ms
+[detection_node-3] [INFO] [1792678870.257853022] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678870.701503501] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678871.054721461] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.37 / max  6.40 ms
+[detection_node-3] [INFO] [1792678871.141030951] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.81 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678871.569731127] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678872.020684382] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678872.089575132] [metrics_node]: FPS:  4.83 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.38 / max  6.41 ms
+[detection_node-3] [INFO] [1792678872.501715102] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.83 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678872.941542453] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678873.245828499] [metrics_node]: FPS:  5.19 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.38 / max  6.41 ms
+[detection_node-3] [INFO] [1792678873.356516043] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678873.775693085] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=485 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678874.267668516] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.81 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678874.465825284] [metrics_node]: FPS:  4.92 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.39 / max  6.43 ms
+[detection_node-3] [INFO] [1792678874.722404492] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678875.149941548] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.79 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678875.572766706] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.83 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678875.662479907] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.40 / max  6.43 ms
+[detection_node-3] [INFO] [1792678875.985207906] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678876.453225271] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.83 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678876.694794788] [metrics_node]: FPS:  4.85 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.41 / max  6.44 ms
+[detection_node-3] [INFO] [1792678876.943156696] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678877.373599497] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678877.830824975] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.84 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678877.876724314] [metrics_node]: FPS:  5.09 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.41 / max  6.45 ms
+[detection_node-3] [INFO] [1792678878.303123935] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678878.765603546] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678879.043520382] [metrics_node]: FPS:  5.13 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.42 / max  6.45 ms
+[detection_node-3] [INFO] [1792678879.234138086] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678879.711625344] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678880.055357468] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.43 / max  6.46 ms
+[detection_node-3] [INFO] [1792678880.143630207] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.85 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678880.556176149] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678880.960860666] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.88 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678881.076290414] [metrics_node]: FPS:  4.91 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.43 / max  6.46 ms
+[detection_node-3] [INFO] [1792678881.398908676] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678881.863858215] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678882.093219306] [metrics_node]: FPS:  4.90 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.43 / max  6.46 ms
+[detection_node-3] [INFO] [1792678882.326281628] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678882.748796949] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678883.101591655] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.44 / max  6.47 ms
+[detection_node-3] [INFO] [1792678883.167873461] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678883.573751633] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678884.061361814] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678884.271478409] [metrics_node]: FPS:  5.13 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.45 / max  6.47 ms
+[detection_node-3] [INFO] [1792678884.512140635] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678884.942170006] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678885.287907962] [metrics_node]: FPS:  4.92 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.45 / max  6.48 ms
+[detection_node-3] [INFO] [1792678885.377788823] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678885.857321331] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678886.316951496] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678886.481987399] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.46 / max  6.49 ms
+[detection_node-3] [INFO] [1792678886.752686661] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678887.168236725] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678887.581416162] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678887.672000390] [metrics_node]: FPS:  5.04 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.47 / max  6.52 ms
+[detection_node-3] [INFO] [1792678888.032411158] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=169, w=172, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678888.513089616] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678888.677310444] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.48 / max  6.52 ms
+[detection_node-3] [INFO] [1792678888.966703657] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678889.407355856] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678889.855475444] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.85 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678889.895206274] [metrics_node]: FPS:  4.93 | Jitter(sx):   0.55 ms | Skew(sx-dx): avg  6.42 / max  6.55 ms
+[detection_node-3] [INFO] [1792678890.345684910] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678890.829894093] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678891.057798264] [metrics_node]: FPS:  5.16 | Jitter(sx):   0.55 ms | Skew(sx-dx): avg  6.43 / max  6.55 ms
+[detection_node-3] [INFO] [1792678891.293555564] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678891.741305646] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=485 | Conf: 0.76 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678892.160089001] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678892.277855752] [metrics_node]: FPS:  4.93 | Jitter(sx):   0.55 ms | Skew(sx-dx): avg  6.43 / max  6.55 ms
+[detection_node-3] [INFO] [1792678892.608961225] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678893.065894189] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=491 | Conf: 0.82 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678893.462706092] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.55 ms | Skew(sx-dx): avg  6.44 / max  6.55 ms
+[detection_node-3] [INFO] [1792678893.518389512] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.80 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678893.958778976] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678894.361107066] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678894.465252756] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.55 ms | Skew(sx-dx): avg  6.45 / max  6.55 ms
+[detection_node-3] [INFO] [1792678894.768004979] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.74 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678895.167610594] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678895.471481682] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.52 / max  6.56 ms
+[detection_node-3] [INFO] [1792678895.618850376] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678896.104685369] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=491 | Conf: 0.78 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678896.488273667] [metrics_node]: FPS:  4.91 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.53 / max  6.56 ms
+[detection_node-3] [INFO] [1792678896.547233040] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678896.964435384] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=491 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678897.397243984] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678897.667747168] [metrics_node]: FPS:  5.09 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.53 / max  6.56 ms
+[detection_node-3] [INFO] [1792678897.881410326] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678898.340620617] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678898.689188569] [metrics_node]: FPS:  4.90 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.54 / max  6.57 ms
+[detection_node-3] [INFO] [1792678898.780683639] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678899.254728686] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678899.720919974] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.86 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678899.878675360] [metrics_node]: FPS:  5.04 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.55 / max  6.57 ms
+[detection_node-3] [INFO] [1792678900.160021142] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=485 | Conf: 0.87 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678900.585718249] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678901.053850676] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678901.082950288] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.55 / max  6.58 ms
+[detection_node-3] [INFO] [1792678901.534451383] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678901.967338469] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678902.272814593] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.56 / max  6.59 ms
+[detection_node-3] [INFO] [1792678902.410584471] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678902.896189995] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678903.346005829] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678903.474371025] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.57 / max  6.60 ms
+[detection_node-3] [INFO] [1792678903.758822385] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678904.200966718] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.82 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678904.665811491] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.58 / max  6.62 ms
+[detection_node-3] [INFO] [1792678904.667789912] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678905.135549714] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678905.564363316] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.87 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678905.667397908] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.58 / max  6.62 ms
+[detection_node-3] [INFO] [1792678906.004666870] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.77 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678906.476514786] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678906.715968642] [metrics_node]: FPS:  4.77 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.59 / max  6.64 ms
+[detection_node-3] [INFO] [1792678906.952115526] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678907.396386990] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=485 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678907.868273661] [metrics_node]: FPS:  5.21 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.59 / max  6.64 ms
+[detection_node-3] [INFO] [1792678907.871113598] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678908.326556920] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678908.750379025] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678908.876697981] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.60 / max  6.65 ms
+[detection_node-3] [INFO] [1792678909.167682275] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678909.578432189] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=170, w=170, h=488 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678910.039990509] [metrics_node]: FPS:  5.16 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.61 / max  6.65 ms
+[detection_node-3] [INFO] [1792678910.066544996] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678910.508269698] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678910.946543111] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.82 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678911.051434657] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.62 / max  6.65 ms
+[detection_node-3] [INFO] [1792678911.355731486] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678911.765179489] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678912.206377465] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678912.252336828] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.62 / max  6.65 ms
+[detection_node-3] [INFO] [1792678912.696913349] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=490 | Conf: 0.80 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678913.132549558] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678913.459569028] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.63 / max  6.67 ms
+[detection_node-3] [INFO] [1792678913.550426386] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.81 | Distance (Z): 0.597 m
+[detection_node-3] [INFO] [1792678913.951072980] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678914.356894891] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678914.469193026] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.64 / max  6.67 ms
+[detection_node-3] [INFO] [1792678914.770882892] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678915.184882707] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678915.647857485] [metrics_node]: FPS:  5.08 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.65 / max  6.68 ms
+[detection_node-3] [INFO] [1792678915.653193064] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678916.110868336] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.88 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678916.543601227] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678916.665822353] [metrics_node]: FPS:  4.92 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.65 / max  6.70 ms
+[detection_node-3] [INFO] [1792678916.951905256] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678917.401869821] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678917.853760769] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678917.877010949] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.66 / max  6.70 ms
+[detection_node-3] [INFO] [1792678918.321069453] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.80 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678918.749061813] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678919.060512274] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.67 / max  6.75 ms
+[detection_node-3] [INFO] [1792678919.153329586] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=492 | Conf: 0.83 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678919.644988368] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678920.085899505] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678920.247376672] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.67 / max  6.75 ms
+[detection_node-3] [INFO] [1792678920.531688775] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678920.948125733] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.79 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678921.261147499] [metrics_node]: FPS:  4.92 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.68 / max  6.77 ms
+[detection_node-3] [INFO] [1792678921.368507271] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678921.798853560] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678922.270540145] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.69 / max  6.77 ms
+[detection_node-3] [INFO] [1792678922.279972898] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678922.740306586] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=490 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678923.150353535] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678923.458219310] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.70 / max  6.77 ms
+[detection_node-3] [INFO] [1792678923.581001836] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678924.007211278] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678924.458383891] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.70 / max  6.77 ms
+[detection_node-3] [INFO] [1792678924.469393473] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678924.939046518] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=491 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678925.348334462] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.84 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678925.693681855] [metrics_node]: FPS:  4.86 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.71 / max  6.77 ms
+[detection_node-3] [INFO] [1792678925.767930379] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678926.176134584] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678926.665693051] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=488 | Conf: 0.83 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678926.865011425] [metrics_node]: FPS:  5.12 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.71 / max  6.75 ms
+[detection_node-3] [INFO] [1792678927.121702459] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678927.554902555] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678927.958283324] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678928.056283875] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.72 / max  6.77 ms
+[detection_node-3] [INFO] [1792678928.365412395] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678928.797620306] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.83 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678929.252932134] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.73 / max  6.86 ms
+[detection_node-3] [INFO] [1792678929.261964795] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678929.713638483] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=172, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678930.149225658] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678930.266403027] [metrics_node]: FPS:  4.93 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.73 / max  6.86 ms
+[detection_node-3] [INFO] [1792678930.571697404] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678931.036649553] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.89 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678931.440120033] [metrics_node]: FPS:  5.11 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.74 / max  6.86 ms
+[detection_node-3] [INFO] [1792678931.495254309] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678931.944390591] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678932.365888334] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678932.460296114] [metrics_node]: FPS:  4.90 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.75 / max  6.86 ms
+[detection_node-3] [INFO] [1792678932.773421652] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678933.172510158] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678933.472830802] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.75 / max  6.86 ms
+[detection_node-3] [INFO] [1792678933.657681483] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678934.114056904] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=488 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678934.540746960] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678934.656444329] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.76 / max  6.79 ms
+[detection_node-3] [INFO] [1792678934.953168333] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=490 | Conf: 0.82 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678935.369880598] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678935.659861693] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.76 / max  6.79 ms
+[detection_node-3] [INFO] [1792678935.837619576] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678936.292929715] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678936.727052837] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678936.874877524] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.77 / max  6.80 ms
+[detection_node-3] [INFO] [1792678937.156648878] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.90 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678937.569510019] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=491 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678938.000246943] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678938.062317438] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.78 / max  6.89 ms
+[detection_node-3] [INFO] [1792678938.473302081] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678938.952592388] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.80 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678939.077618338] [metrics_node]: FPS:  4.92 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.79 / max  6.89 ms
+[detection_node-3] [INFO] [1792678939.384422600] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678939.858261122] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678940.241205764] [metrics_node]: FPS:  5.16 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.80 / max  6.89 ms
+[detection_node-3] [INFO] [1792678940.303652331] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.92 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678940.747136156] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678941.172830659] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678941.242487280] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.81 / max  6.89 ms
+[detection_node-3] [INFO] [1792678941.666715970] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678942.124199585] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678942.253238337] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.82 / max  6.89 ms
+[detection_node-3] [INFO] [1792678942.548660013] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678943.009355432] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678943.255631891] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.82 / max  6.88 ms
+[detection_node-3] [INFO] [1792678943.496843513] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678943.945331852] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678944.282187779] [metrics_node]: FPS:  4.87 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.82 / max  6.88 ms
+[detection_node-3] [INFO] [1792678944.400893428] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.85 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678944.860797305] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678945.289779416] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.83 / max  6.87 ms
+[detection_node-3] [INFO] [1792678945.320649681] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678945.746021931] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678946.174808188] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=485 | Conf: 0.82 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678946.441447178] [metrics_node]: FPS:  5.21 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.84 / max  6.87 ms
+[detection_node-3] [INFO] [1792678946.587752581] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678947.081160728] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.82 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678947.468049284] [metrics_node]: FPS:  4.87 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.84 / max  6.88 ms
+[detection_node-3] [INFO] [1792678947.533836783] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678947.964460957] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678948.429069235] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678948.657054367] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.85 / max  6.88 ms
+[detection_node-3] [INFO] [1792678948.904311612] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678949.350559847] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=172, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678949.688264223] [metrics_node]: FPS:  4.85 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.85 / max  6.88 ms
+[detection_node-3] [INFO] [1792678949.758885504] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678950.233909377] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.80 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678950.726378366] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678950.864370326] [metrics_node]: FPS:  5.10 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.86 / max  6.90 ms
+[detection_node-3] [INFO] [1792678951.142709885] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678951.550458149] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678951.956898880] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678952.071334016] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.87 / max  6.92 ms
+[detection_node-3] [INFO] [1792678952.404383676] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678952.873218670] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678953.070338125] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.88 / max  6.92 ms
+[detection_node-3] [INFO] [1792678953.331305100] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678953.749173922] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678954.162473830] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678954.265376961] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.89 / max  6.97 ms
+[detection_node-3] [INFO] [1792678954.590572787] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678955.065432368] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.90 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678955.442494580] [metrics_node]: FPS:  5.09 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.90 / max  6.97 ms
+[detection_node-3] [INFO] [1792678955.511499400] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678955.950052971] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678956.352349571] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678956.449363717] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.90 / max  6.97 ms
+[detection_node-3] [INFO] [1792678956.762473722] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678957.189813507] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678957.643735621] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.91 / max  6.97 ms
+[detection_node-3] [INFO] [1792678957.664729579] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.88 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678958.108184427] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678958.548279781] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678958.650231931] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.91 / max  6.97 ms
+[detection_node-3] [INFO] [1792678958.949392305] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=169, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678959.364343378] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=493 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678959.658348543] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.91 / max  6.94 ms
+[detection_node-3] [INFO] [1792678959.778322732] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678960.174999635] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=490 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678960.646215782] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678960.854017103] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.92 / max  6.96 ms
+[detection_node-3] [INFO] [1792678961.088902438] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.92 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678961.523665003] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678961.861744073] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.93 / max  6.96 ms
+[detection_node-3] [INFO] [1792678961.949451354] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678962.360427727] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.597 m
+[detection_node-3] [INFO] [1792678962.833695252] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678962.872884081] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.93 / max  6.96 ms
+[detection_node-3] [INFO] [1792678963.310960021] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678963.762156014] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.81 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678963.885403912] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.94 / max  6.98 ms
+[detection_node-3] [INFO] [1792678964.231553860] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=172, h=489 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678964.720296962] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678965.051101138] [metrics_node]: FPS:  5.16 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.95 / max  6.98 ms
+[detection_node-3] [INFO] [1792678965.145303898] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678965.573902359] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678966.020284120] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678966.054542796] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  6.95 / max  6.98 ms
+[detection_node-3] [INFO] [1792678966.494499925] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678966.935150274] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678967.061282716] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  6.96 / max  6.98 ms
+[detection_node-3] [INFO] [1792678967.347801499] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678967.777894783] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678968.225984698] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678968.247550504] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  6.96 / max  6.99 ms
+[detection_node-3] [INFO] [1792678968.709361674] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678969.151997973] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678969.260184670] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  6.97 / max  6.99 ms
+[detection_node-3] [INFO] [1792678969.569461326] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678970.017522940] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678970.259509961] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  6.97 / max  7.00 ms
+[detection_node-3] [INFO] [1792678970.488301021] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.84 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678970.931069870] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.82 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678971.266190705] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  6.98 / max  7.01 ms
+[detection_node-3] [INFO] [1792678971.348476793] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678971.752196330] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678972.158038582] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678972.463747798] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  6.99 / max  7.03 ms
+[detection_node-3] [INFO] [1792678972.569507963] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678973.017761253] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678973.488498473] [metrics_node]: FPS:  4.88 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.00 / max  7.04 ms
+[detection_node-3] [INFO] [1792678973.491301298] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678973.930718927] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678974.342513506] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.89 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678974.658507892] [metrics_node]: FPS:  5.13 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.01 / max  7.21 ms
+[detection_node-3] [INFO] [1792678974.761506731] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678975.168305064] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678975.581687562] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.83 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678975.858804506] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.02 / max  7.21 ms
+[detection_node-3] [INFO] [1792678976.058374498] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678976.509569157] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678976.938615494] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678977.081917450] [metrics_node]: FPS:  4.90 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.03 / max  7.21 ms
+[detection_node-3] [INFO] [1792678977.363685581] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678977.792909673] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678978.243532403] [metrics_node]: FPS:  5.18 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.04 / max  7.21 ms
+[detection_node-3] [INFO] [1792678978.274625976] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678978.721209291] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.83 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678979.144773582] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678979.246685699] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.05 / max  7.21 ms
+[detection_node-3] [INFO] [1792678979.548432450] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678979.953185482] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678980.252107741] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.04 / max  7.09 ms
+[detection_node-3] [INFO] [1792678980.441986756] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678980.882823379] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678981.308184288] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=485 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678981.437060470] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.05 / max  7.09 ms
+[detection_node-3] [INFO] [1792678981.698489951] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678982.094681707] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678982.488273450] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678982.633587025] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.06 / max  7.09 ms
+[detection_node-3] [INFO] [1792678982.890296390] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678983.287288806] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=169, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678983.684203352] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678983.838260399] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.06 / max  7.10 ms
+[detection_node-3] [INFO] [1792678984.087384748] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678984.494471463] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678984.895040902] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678985.063469015] [metrics_node]: FPS:  4.89 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.07 / max  7.19 ms
+[detection_node-3] [INFO] [1792678985.294214233] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=169, w=171, h=489 | Conf: 0.84 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678985.701814592] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=490 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678986.103800987] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678986.245463458] [metrics_node]: FPS:  5.08 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.08 / max  7.19 ms
+[detection_node-3] [INFO] [1792678986.495427707] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678986.897498804] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678987.296188945] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678987.432588395] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.09 / max  7.19 ms
+[detection_node-3] [INFO] [1792678987.693021407] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678988.093089432] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678988.491049554] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678988.634203390] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.10 / max  7.19 ms
+[detection_node-3] [INFO] [1792678988.895994451] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678989.286566076] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678989.686487801] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.83 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678989.843937147] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.10 / max  7.19 ms
+[detection_node-3] [INFO] [1792678990.089401034] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=172, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678990.491656342] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678990.889481423] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678991.040065492] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.11 / max  7.14 ms
+[detection_node-3] [INFO] [1792678991.286339653] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678991.684630378] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678992.082462326] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678992.239469355] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.11 / max  7.16 ms
+[detection_node-3] [INFO] [1792678992.483844502] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678992.892513007] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678993.290870171] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=490 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678993.441217795] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.12 / max  7.16 ms
+[detection_node-3] [INFO] [1792678993.688582597] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678993.691023108] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=66, y=427, w=336, h=165 | Conf: 0.42 | Distance (Z): 0.986 m
+[detection_node-3] [INFO] [1792678994.092379244] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678994.481831137] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678994.650654109] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.13 / max  7.17 ms
+[detection_node-3] [INFO] [1792678994.888853420] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678995.289922275] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678995.694723173] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678995.829756195] [metrics_node]: FPS:  5.09 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.14 / max  7.17 ms
+[detection_node-3] [INFO] [1792678996.086807537] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.87 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678996.497417248] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.84 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678996.898312841] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=491 | Conf: 0.82 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678997.039352917] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.14 / max  7.17 ms
+[detection_node-3] [INFO] [1792678997.297719493] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678997.690953275] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678998.095047688] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792678998.231258055] [metrics_node]: FPS:  5.04 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.15 / max  7.17 ms
+[detection_node-3] [INFO] [1792678998.480325029] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792678998.887487080] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792678999.247573851] [metrics_node]: FPS:  4.91 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.16 / max  7.19 ms
+[detection_node-3] [INFO] [1792678999.291073917] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792678999.693407572] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679000.101815690] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679000.423737004] [metrics_node]: FPS:  5.10 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.16 / max  7.19 ms
+[detection_node-3] [INFO] [1792679000.489869499] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679000.883694790] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679001.294790025] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679001.435560412] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.17 / max  7.21 ms
+[detection_node-3] [INFO] [1792679001.690120734] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679002.087751899] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679002.492584669] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679002.660821338] [metrics_node]: FPS:  4.89 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.18 / max  7.21 ms
+[detection_node-3] [INFO] [1792679002.889639964] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.92 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679003.289167526] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679003.691865652] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679003.871240489] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.19 / max  7.32 ms
+[detection_node-3] [INFO] [1792679004.094551278] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679004.501369055] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=485 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679004.905389804] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679005.049367381] [metrics_node]: FPS:  5.10 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.20 / max  7.32 ms
+[detection_node-3] [INFO] [1792679005.305084028] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679005.702005834] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679006.093162436] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679006.230305126] [metrics_node]: FPS:  5.08 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.20 / max  7.32 ms
+[detection_node-3] [INFO] [1792679006.489274057] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679006.891824361] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679007.233049675] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.21 / max  7.32 ms
+[detection_node-3] [INFO] [1792679007.298287448] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.79 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679007.690053840] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.84 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679008.083342485] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679008.237623508] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.22 / max  7.32 ms
+[detection_node-3] [INFO] [1792679008.492658652] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679008.883030176] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679009.283183444] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679009.436996727] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.22 / max  7.32 ms
+[detection_node-3] [INFO] [1792679009.690410578] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679010.094406555] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679010.499173880] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=485 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679010.645010280] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.23 / max  7.26 ms
+[detection_node-3] [INFO] [1792679010.894068921] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679011.289375515] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679011.687574896] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=169, w=171, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679011.839324572] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.23 / max  7.26 ms
+[detection_node-3] [INFO] [1792679012.086451607] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.83 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679012.488481028] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679012.890436153] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679013.029235759] [metrics_node]: FPS:  5.04 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.24 / max  7.27 ms
+[detection_node-3] [INFO] [1792679013.287747588] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679013.694398677] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.92 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679014.081991345] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679014.244919613] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.25 / max  7.28 ms
+[detection_node-3] [INFO] [1792679014.484773815] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679014.880792973] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=491 | Conf: 0.83 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679015.277485035] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679015.441582797] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.26 / max  7.37 ms
+[detection_node-3] [INFO] [1792679015.683861842] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679016.083778133] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679016.491895710] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679016.633874432] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.27 / max  7.37 ms
+[detection_node-3] [INFO] [1792679016.902174891] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679017.297420230] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679017.697632053] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679017.839944940] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.27 / max  7.37 ms
+[detection_node-3] [INFO] [1792679018.103040654] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679018.482334487] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.84 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679018.890640836] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679018.892978273] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=64, y=426, w=337, h=167 | Conf: 0.42 | Distance (Z): 0.992 m
+[metrics_node-2] [INFO] [1792679019.026070097] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.28 / max  7.37 ms
+[detection_node-3] [INFO] [1792679019.285728894] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679019.684947548] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679020.026949094] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.29 / max  7.37 ms
+[detection_node-3] [INFO] [1792679020.081637451] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679020.489961684] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679020.889395725] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679021.041730687] [metrics_node]: FPS:  4.93 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.29 / max  7.37 ms
+[detection_node-3] [INFO] [1792679021.294137894] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679021.699261839] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679022.091381900] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=490 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679022.247203943] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.30 / max  7.32 ms
+[detection_node-3] [INFO] [1792679022.492348024] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679022.894633457] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679023.293968251] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679023.464811742] [metrics_node]: FPS:  4.93 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.31 / max  7.33 ms
+[detection_node-3] [INFO] [1792679023.703250103] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679024.105229609] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679024.506913132] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.83 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679024.635718077] [metrics_node]: FPS:  5.12 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.31 / max  7.33 ms
+[detection_node-3] [INFO] [1792679024.900179536] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679025.300667321] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679025.695930696] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679025.832025523] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  7.32 / max  7.34 ms
+[detection_node-3] [INFO] [1792679026.094921022] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.85 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679026.490921689] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679026.897290359] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679027.030254455] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  7.33 / max  7.35 ms
+[detection_node-3] [INFO] [1792679027.294161707] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679027.688750544] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679028.084808245] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679028.227007920] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  7.33 / max  7.37 ms
+[detection_node-3] [INFO] [1792679028.480503001] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679028.886156836] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679029.285989410] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679029.430789853] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.34 / max  7.38 ms
+[detection_node-3] [INFO] [1792679029.689159454] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.88 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679030.080587462] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679030.480315089] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679030.656937629] [metrics_node]: FPS:  4.90 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.35 / max  7.38 ms
+[detection_node-3] [INFO] [1792679030.889434611] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.77 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679031.283640385] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679031.677499511] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679031.831622828] [metrics_node]: FPS:  5.11 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.36 / max  7.38 ms
+[detection_node-3] [INFO] [1792679032.082111989] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679032.482975460] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679032.883828153] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679033.044230374] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.37 / max  7.38 ms
+[detection_node-3] [INFO] [1792679033.283985661] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679033.686460346] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679034.087781053] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679034.231512681] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.37 / max  7.40 ms
+[detection_node-3] [INFO] [1792679034.493484188] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=169, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679034.888855858] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679035.282195607] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679035.431045309] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.38 / max  7.41 ms
+[detection_node-3] [INFO] [1792679035.683782401] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679036.078975402] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.88 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679036.489434998] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679036.637625627] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.38 / max  7.42 ms
+[detection_node-3] [INFO] [1792679036.884049351] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679037.286750008] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679037.683850184] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679037.836013021] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.39 / max  7.42 ms
+[detection_node-3] [INFO] [1792679038.081898115] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=490 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679038.485901135] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679038.898110980] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679039.046185089] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.40 / max  7.48 ms
+[detection_node-3] [INFO] [1792679039.293360584] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679039.693246338] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=490 | Conf: 0.78 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679040.096971764] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679040.231411307] [metrics_node]: FPS:  5.07 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.41 / max  7.48 ms
+[detection_node-3] [INFO] [1792679040.491826440] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=488 | Conf: 0.70 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679040.881921559] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.91 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679041.273753540] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=493 | Conf: 0.81 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679041.439810419] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.42 / max  7.48 ms
+[detection_node-3] [INFO] [1792679041.683122258] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679042.078603170] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679042.478065901] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679042.637322561] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.43 / max  7.48 ms
+[detection_node-3] [INFO] [1792679042.888399464] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679043.286580457] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679043.680055687] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679043.826307946] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.43 / max  7.48 ms
+[detection_node-3] [INFO] [1792679044.082289183] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679044.484645417] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679044.893368889] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.82 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679045.031539009] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.44 / max  7.46 ms
+[detection_node-3] [INFO] [1792679045.287755872] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679045.682929906] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679046.087406353] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679046.230509825] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.45 / max  7.47 ms
+[detection_node-3] [INFO] [1792679046.489175141] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679046.888267345] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679047.244398029] [metrics_node]: FPS:  4.93 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.45 / max  7.48 ms
+[detection_node-3] [INFO] [1792679047.290244315] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679047.682107431] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679048.086371041] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679048.418850803] [metrics_node]: FPS:  5.11 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.46 / max  7.49 ms
+[detection_node-3] [INFO] [1792679048.481066181] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679048.875644989] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679049.274746484] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.82 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679049.439037954] [metrics_node]: FPS:  4.90 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.47 / max  7.49 ms
+[detection_node-3] [INFO] [1792679049.675837841] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.83 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679050.086842756] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679050.490784694] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679050.637428614] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.47 / max  7.50 ms
+[detection_node-3] [INFO] [1792679050.889244484] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679051.291829203] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.79 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679051.637248452] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.48 / max  7.51 ms
+[detection_node-3] [INFO] [1792679051.690836433] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679052.096392752] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679052.489085798] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679052.642584340] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.48 / max  7.51 ms
+[detection_node-3] [INFO] [1792679052.890772350] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679053.290824962] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679053.693008029] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679053.827519229] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.49 / max  7.52 ms
+[detection_node-3] [INFO] [1792679054.091107702] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679054.486424087] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679054.836021594] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.50 / max  7.52 ms
+[detection_node-3] [INFO] [1792679054.883985686] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679055.282731706] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.91 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679055.688703663] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.81 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679056.019949268] [metrics_node]: FPS:  5.07 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg  7.51 / max  7.53 ms
+[detection_node-3] [INFO] [1792679056.089863117] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679056.483397226] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679056.882495556] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679057.031637406] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.51 / max  7.53 ms
+[detection_node-3] [INFO] [1792679057.281342756] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679057.681740580] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679058.085637409] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679058.243663708] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.52 / max  7.54 ms
+[detection_node-3] [INFO] [1792679058.484633365] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.83 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679058.888520952] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.92 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679059.289857972] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679059.436345588] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.53 / max  7.62 ms
+[detection_node-3] [INFO] [1792679059.681967487] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679060.085764460] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679060.484541413] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679060.648598115] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.54 / max  7.62 ms
+[detection_node-3] [INFO] [1792679060.889931027] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679061.293251388] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.84 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679061.688275851] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=491 | Conf: 0.89 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679061.831218534] [metrics_node]: FPS:  5.07 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.54 / max  7.62 ms
+[detection_node-3] [INFO] [1792679062.088235260] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679062.488399129] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679062.888766571] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679063.043545507] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.55 / max  7.62 ms
+[detection_node-3] [INFO] [1792679063.285346358] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679063.682097552] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679064.080192222] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=487 | Conf: 0.88 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679064.238875143] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.56 / max  7.62 ms
+[detection_node-3] [INFO] [1792679064.487422469] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679064.887042873] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679065.282014014] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679065.447463188] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.56 / max  7.61 ms
+[detection_node-3] [INFO] [1792679065.686975119] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679066.081092169] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=491 | Conf: 0.79 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679066.485900439] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679066.624330022] [metrics_node]: FPS:  5.09 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.57 / max  7.61 ms
+[detection_node-3] [INFO] [1792679066.879625192] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=171, w=171, h=485 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679067.280613141] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=170, h=485 | Conf: 0.85 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679067.683276601] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=485 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679067.835376377] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.58 / max  7.61 ms
+[detection_node-3] [INFO] [1792679068.086030320] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679068.493320762] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679068.897660233] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679069.050211450] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.59 / max  7.61 ms
+[detection_node-3] [INFO] [1792679069.298074105] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=170, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679069.697550369] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=171, w=172, h=486 | Conf: 0.79 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679070.088986828] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.81 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679070.246035268] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.59 / max  7.62 ms
+[detection_node-3] [INFO] [1792679070.485377471] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679070.892043188] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679071.289964954] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679071.442341762] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.60 / max  7.62 ms
+[detection_node-3] [INFO] [1792679071.694424733] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679072.096349224] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679072.485689481] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679072.644470691] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.61 / max  7.64 ms
+[detection_node-3] [INFO] [1792679072.887327619] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679073.285482287] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679073.690730504] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=494 | Conf: 0.86 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679073.836595259] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.61 / max  7.64 ms
+[detection_node-3] [INFO] [1792679074.081602345] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679074.491942596] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679074.891813589] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679075.033710913] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.62 / max  7.65 ms
+[detection_node-3] [INFO] [1792679075.285843397] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=486 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679075.679668039] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679076.034855301] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.63 / max  7.67 ms
+[detection_node-3] [INFO] [1792679076.090055491] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.92 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679076.489784221] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679076.887962900] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679077.221049405] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.63 / max  7.67 ms
+[detection_node-3] [INFO] [1792679077.291159338] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679077.692257449] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679078.088481152] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679078.245115902] [metrics_node]: FPS:  4.88 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.64 / max  7.67 ms
+[detection_node-3] [INFO] [1792679078.496005146] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679078.900212855] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=490 | Conf: 0.83 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679079.290566835] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679079.427339452] [metrics_node]: FPS:  5.08 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.65 / max  7.68 ms
+[detection_node-3] [INFO] [1792679079.687656271] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679080.085771130] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679080.489074134] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679080.635039236] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.66 / max  7.68 ms
+[detection_node-3] [INFO] [1792679080.887126861] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679081.282061524] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679081.678473089] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679081.854034564] [metrics_node]: FPS:  4.92 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.66 / max  7.70 ms
+[detection_node-3] [INFO] [1792679082.088622159] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679082.485994162] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679082.890885527] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679083.038978138] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.67 / max  7.70 ms
+[detection_node-3] [INFO] [1792679083.288866379] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.86 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679083.682979540] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.87 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679084.093530882] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679084.241002068] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.68 / max  7.77 ms
+[detection_node-3] [INFO] [1792679084.492267469] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679084.888274158] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679085.292694760] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679085.430097852] [metrics_node]: FPS:  5.04 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.69 / max  7.77 ms
+[detection_node-3] [INFO] [1792679085.686787380] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679086.083006844] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=490 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679086.482850367] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679086.627447191] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.70 / max  7.77 ms
+[detection_node-3] [INFO] [1792679086.877938278] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679087.282269431] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679087.677343896] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679087.851115057] [metrics_node]: FPS:  4.90 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.71 / max  7.77 ms
+[detection_node-3] [INFO] [1792679088.080989699] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=490 | Conf: 0.83 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679088.477835951] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679088.879247261] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679089.041614241] [metrics_node]: FPS:  5.04 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.71 / max  7.77 ms
+[detection_node-3] [INFO] [1792679089.283414596] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=485 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679089.691108251] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679090.085728749] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679090.228421115] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.72 / max  7.77 ms
+[detection_node-3] [INFO] [1792679090.483223921] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679090.885177891] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679091.235219347] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.72 / max  7.77 ms
+[detection_node-3] [INFO] [1792679091.293053912] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679091.692524630] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=487 | Conf: 0.88 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679092.080710759] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679092.420942563] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.73 / max  7.84 ms
+[detection_node-3] [INFO] [1792679092.483333445] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679092.890062727] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679093.287736392] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679093.452257620] [metrics_node]: FPS:  4.86 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.73 / max  7.84 ms
+[detection_node-3] [INFO] [1792679093.689202099] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679094.091994485] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679094.485097684] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679094.637994342] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.74 / max  7.84 ms
+[detection_node-3] [INFO] [1792679094.883237030] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679095.280674340] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679095.682828929] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679095.860018608] [metrics_node]: FPS:  4.91 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.75 / max  7.84 ms
+[detection_node-3] [INFO] [1792679096.081705567] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=172, h=488 | Conf: 0.87 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679096.480134890] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=491 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679096.889367895] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679097.038238010] [metrics_node]: FPS:  5.09 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.76 / max  7.84 ms
+[detection_node-3] [INFO] [1792679097.285782094] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679097.687298421] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679098.090510669] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=490 | Conf: 0.81 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679098.238586656] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.76 / max  7.78 ms
+[detection_node-3] [INFO] [1792679098.487194938] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679098.876175107] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.92 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679099.284119426] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=486 | Conf: 0.87 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679099.474531941] [metrics_node]: FPS:  4.86 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.77 / max  7.80 ms
+[detection_node-3] [INFO] [1792679099.688110888] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679100.084941563] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679100.482493973] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=490 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679100.623032469] [metrics_node]: FPS:  5.22 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.78 / max  7.80 ms
+[detection_node-3] [INFO] [1792679100.876286972] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679101.277200591] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=490 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679101.694285093] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679101.832282931] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.78 / max  7.83 ms
+[detection_node-3] [INFO] [1792679102.084707565] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679102.483605744] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679102.833561328] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.79 / max  7.83 ms
+[detection_node-3] [INFO] [1792679102.879237399] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.597 m
+[detection_node-3] [INFO] [1792679103.279761256] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679103.686699866] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=489 | Conf: 0.89 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679104.016773004] [metrics_node]: FPS:  5.07 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.80 / max  7.83 ms
+[detection_node-3] [INFO] [1792679104.088447273] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.83 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679104.483122020] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.82 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679104.884599963] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679105.023282019] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.80 / max  7.83 ms
+[detection_node-3] [INFO] [1792679105.285828480] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679105.680837594] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679106.083350513] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.82 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679106.222146085] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.81 / max  7.83 ms
+[detection_node-3] [INFO] [1792679106.484828841] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679106.886397429] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679107.227168520] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.82 / max  7.85 ms
+[detection_node-3] [INFO] [1792679107.289103381] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679107.689064361] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679108.090675538] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=490 | Conf: 0.88 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679108.232101099] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.82 / max  7.86 ms
+[detection_node-3] [INFO] [1792679108.485823053] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679108.888336096] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679109.284640475] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=487 | Conf: 0.79 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679109.419970762] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.83 / max  7.86 ms
+[detection_node-3] [INFO] [1792679109.674932266] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=172, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679110.080225092] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679110.421398788] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.84 / max  7.87 ms
+[detection_node-3] [INFO] [1792679110.474712587] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679110.877927327] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679111.284911310] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679111.609548752] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.85 / max  7.88 ms
+[detection_node-3] [INFO] [1792679111.674432100] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679112.079131887] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679112.477947843] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679112.622645445] [metrics_node]: FPS:  4.93 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.85 / max  7.88 ms
+[detection_node-3] [INFO] [1792679112.878024758] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679113.270435829] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679113.679388134] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679113.841029930] [metrics_node]: FPS:  4.93 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.86 / max  7.89 ms
+[detection_node-3] [INFO] [1792679114.084682489] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=169, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679114.485016954] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679114.883012484] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=491 | Conf: 0.87 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679115.032317825] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.87 / max  7.89 ms
+[detection_node-3] [INFO] [1792679115.281422992] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.77 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679115.680068369] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679116.085238276] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.86 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679116.223308066] [metrics_node]: FPS:  5.04 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.87 / max  7.92 ms
+[detection_node-3] [INFO] [1792679116.481440845] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679116.878408634] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679117.228482452] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.88 / max  7.92 ms
+[detection_node-3] [INFO] [1792679117.286988840] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679117.684847790] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679118.083229609] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=169, w=172, h=488 | Conf: 0.86 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679118.236637321] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.88 / max  7.92 ms
+[detection_node-3] [INFO] [1792679118.488169530] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679118.894581742] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=490 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679119.294354440] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679119.427459674] [metrics_node]: FPS:  5.04 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.89 / max  7.92 ms
+[detection_node-3] [INFO] [1792679119.681724704] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679120.079048874] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679120.473405795] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679120.635761286] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.90 / max  7.93 ms
+[detection_node-3] [INFO] [1792679120.870113577] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679121.270992749] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.87 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679121.685299555] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=491 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679121.826677626] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.90 / max  7.93 ms
+[detection_node-3] [INFO] [1792679122.094461842] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.83 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679122.491471712] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679122.888141379] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679123.039635003] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.91 / max  7.94 ms
+[detection_node-3] [INFO] [1792679123.293285031] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=489 | Conf: 0.88 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679123.688977941] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679124.091331992] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679124.239326831] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.92 / max  7.95 ms
+[detection_node-3] [INFO] [1792679124.483309969] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679124.872446606] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679125.269537507] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679125.447843952] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.93 / max  7.95 ms
+[detection_node-3] [INFO] [1792679125.675713669] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=171, w=172, h=486 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679126.076841499] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=487 | Conf: 0.84 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679126.479290951] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679126.630144000] [metrics_node]: FPS:  5.08 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.93 / max  7.96 ms
+[detection_node-3] [INFO] [1792679126.879869762] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.92 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679127.286402697] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=497 | Conf: 0.78 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679127.681632342] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.83 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679127.823927442] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.94 / max  7.96 ms
+[detection_node-3] [INFO] [1792679128.082214688] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679128.483347771] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679128.874018450] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679129.030724438] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  7.95 / max  7.97 ms
+[detection_node-3] [INFO] [1792679129.279308294] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=169, w=171, h=488 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679129.686416815] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=489 | Conf: 0.86 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679130.078238006] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679130.223055150] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.96 / max  7.99 ms
+[detection_node-3] [INFO] [1792679130.479299233] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.82 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679130.884013725] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679131.274234993] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679131.430599258] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.97 / max  8.03 ms
+[detection_node-3] [INFO] [1792679131.669286946] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679132.070948465] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679132.475679916] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679132.626863515] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.98 / max  8.10 ms
+[detection_node-3] [INFO] [1792679132.881969101] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.92 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679133.284353874] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679133.688193418] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679133.834896386] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.99 / max  8.10 ms
+[detection_node-3] [INFO] [1792679134.086378559] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679134.484604882] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679134.883237001] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=487 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679135.024375749] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  7.99 / max  8.10 ms
+[detection_node-3] [INFO] [1792679135.279179517] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679135.680769474] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.90 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679136.080087866] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.92 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679136.245153019] [metrics_node]: FPS:  4.92 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.00 / max  8.10 ms
+[detection_node-3] [INFO] [1792679136.473599371] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.92 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679136.885921839] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679137.281477650] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.89 | Distance (Z): 0.597 m
+[metrics_node-2] [INFO] [1792679137.424918072] [metrics_node]: FPS:  5.08 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.00 / max  8.10 ms
+[detection_node-3] [INFO] [1792679137.687336475] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679138.086309975] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679138.427259182] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.01 / max  8.10 ms
+[detection_node-3] [INFO] [1792679138.483086409] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679138.885365394] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.92 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679139.278427729] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=490 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679139.620387856] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.01 / max  8.04 ms
+[detection_node-3] [INFO] [1792679139.692770740] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679140.084398358] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679140.484842773] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=172, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679140.620486112] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.02 / max  8.05 ms
+[detection_node-3] [INFO] [1792679140.883033215] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=490 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679141.277459875] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.86 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679141.638341258] [metrics_node]: FPS:  4.91 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.02 / max  8.05 ms
+[detection_node-3] [INFO] [1792679141.674192876] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=171, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679142.093209031] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679142.487536392] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=172, h=491 | Conf: 0.84 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679142.823103743] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  8.03 / max  8.12 ms
+[detection_node-3] [INFO] [1792679142.887523250] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679143.288789805] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679143.682001502] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.81 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679144.025905689] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  8.04 / max  8.12 ms
+[detection_node-3] [INFO] [1792679144.088838441] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679144.481253992] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679144.872524306] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679145.031878698] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.05 / max  8.12 ms
+[detection_node-3] [INFO] [1792679145.272911638] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679145.678536005] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679146.076836752] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679146.230052630] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.06 / max  8.12 ms
+[detection_node-3] [INFO] [1792679146.478919539] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679146.876291270] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679147.278790034] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679147.429599699] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.07 / max  8.12 ms
+[detection_node-3] [INFO] [1792679147.681917593] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.92 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679148.086836347] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=487 | Conf: 0.92 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679148.487699560] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679148.621723105] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.08 / max  8.12 ms
+[detection_node-3] [INFO] [1792679148.881021970] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679149.271712149] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=490 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679149.682182452] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679149.824458093] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.08 / max  8.19 ms
+[detection_node-3] [INFO] [1792679150.075780266] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=170, h=486 | Conf: 0.84 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679150.470663499] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679150.868158241] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679151.028496995] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.09 / max  8.19 ms
+[detection_node-3] [INFO] [1792679151.265734370] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679151.673749179] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679152.028541958] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.09 / max  8.19 ms
+[detection_node-3] [INFO] [1792679152.083248852] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=171, w=171, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679152.483804967] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679152.883976361] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=486 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679153.211179025] [metrics_node]: FPS:  5.07 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.10 / max  8.19 ms
+[detection_node-3] [INFO] [1792679153.278301685] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679153.680839030] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679154.081245773] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679154.236341194] [metrics_node]: FPS:  4.88 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.10 / max  8.19 ms
+[detection_node-3] [INFO] [1792679154.485496888] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679154.885397817] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.83 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679155.279387749] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679155.416440185] [metrics_node]: FPS:  5.09 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  8.11 / max  8.20 ms
+[detection_node-3] [INFO] [1792679155.678841177] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.83 | Distance (Z): 0.598 m
+[detection_node-3] [INFO] [1792679156.083610955] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=489 | Conf: 0.86 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679156.423720933] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.12 / max  8.20 ms
+[detection_node-3] [INFO] [1792679156.481573591] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679156.881443664] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679157.278353674] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.84 | Distance (Z): 0.598 m
+[metrics_node-2] [INFO] [1792679157.427296728] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.12 / max  8.20 ms
+[detection_node-3] [INFO] [1792679157.673865003] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679158.076030139] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=490 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679158.484906284] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679158.631753216] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.13 / max  8.20 ms
+[detection_node-3] [INFO] [1792679158.882911417] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=929, y=170, w=171, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679159.281293602] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-3] [INFO] [1792679159.683261847] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=171, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792679159.825528593] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  8.14 / max  8.20 ms
+[detection_node-3] [INFO] [1792679160.072263291] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=171, h=488 | Conf: 0.86 | Distance (Z): 0.599 m

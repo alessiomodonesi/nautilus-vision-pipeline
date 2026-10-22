@@ -1,0 +1,17 @@
+field,value
+commit_hash,5b562161ce3735bd1e3d1f9168941bec8517024e
+config,C_full
+run,1
+enable_enhancement,true
+enable_detection,true
+enable_metrics,true
+model_filename,yolov8n_640_fp32_openvino_model
+half_res,false
+imgsz,640
+soc_temp_initial_c,48.3
+soc_temp_final_c,54.9
+throttled_initial,0x0
+throttled_final,0x0
+cpu_clock_initial_mhz,2400
+cpu_clock_final_mhz,2400
+notes,full

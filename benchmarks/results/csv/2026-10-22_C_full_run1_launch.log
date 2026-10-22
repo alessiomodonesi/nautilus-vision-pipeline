@@ -1,0 +1,1398 @@
+[INFO] [launch]: All log files can be found below /home/nautilus/.ros/log/2026-10-22-14-23-40-412888-nautilus-pi-43825
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [camera_node-1]: process started with pid [43829]
+[INFO] [metrics_node-2]: process started with pid [43830]
+[INFO] [enhancement_node-3]: process started with pid [43831]
+[INFO] [enhancement_node-4]: process started with pid [43832]
+[INFO] [detection_node-5]: process started with pid [43833]
+[camera_node-1] [1:18:53.995653974] [43829]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817
+[camera_node-1] [1:18:54.041152691] [43848]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-1] [1:18:54.164667019] [43848]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-1] [1:18:54.243988784] [43848]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-1] [1:18:54.244622796] [43848]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@88000/imx708@1a to CFE device /dev/media0 and ISP device /dev/media1 using PiSP variant BCM2712_D0
+[camera_node-1] [1:18:54.245318420] [43848]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-1] [1:18:54.359460953] [43848]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-1] [1:18:54.448716996] [43848]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@80000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-1] [1:18:54.448831554] [43848]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@80000/imx708@1a to CFE device /dev/media2 and ISP device /dev/media3 using PiSP variant BCM2712_D0
+[camera_node-1] [1:18:54.454720480] [43848]  WARN V4L2 v4l2_pixelformat.cpp:346 Unsupported V4L2 pixel format RPBP
+[camera_node-1] [INFO] [1792671821.251814047] [stereo.lx.camera]: 
+[camera_node-1] >> stream formats:
+[camera_node-1]    - R8 (32x32 - 4608x2592)
+[camera_node-1]    - R16 (32x32 - 4608x2592)
+[camera_node-1]    - MONO_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - NV21 (32x32 - 4608x2592)
+[camera_node-1]    - SBGGR8 (32x32 - 4608x2592)
+[camera_node-1]    - SBGGR16 (32x32 - 4608x2592)
+[camera_node-1]    - BGGR_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - XBGR8888 (32x32 - 4608x2592)
+[camera_node-1]    - BGR888 (32x32 - 4608x2592)
+[camera_node-1]    - RGB888 (32x32 - 4608x2592)
+[camera_node-1]    - XRGB8888 (32x32 - 4608x2592)
+[camera_node-1]    - SGBRG16 (32x32 - 4608x2592)
+[camera_node-1]    - GBRG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - SGRBG16 (32x32 - 4608x2592)
+[camera_node-1]    - GRBG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - SRGGB16 (32x32 - 4608x2592)
+[camera_node-1]    - RGGB_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - BGR161616 (32x32 - 4608x2592)
+[camera_node-1]    - RGB161616 (32x32 - 4608x2592)
+[camera_node-1]    - SRGGB8 (32x32 - 4608x2592)
+[camera_node-1]    - SGRBG8 (32x32 - 4608x2592)
+[camera_node-1]    - SGBRG8 (32x32 - 4608x2592)
+[camera_node-1]    - YUYV (32x32 - 4608x2592)
+[camera_node-1]    - UYVY (32x32 - 4608x2592)
+[camera_node-1] [WARN] [1792671821.251971587] [stereo.lx.camera]: no pixel format selected, auto-selecting: "XRGB8888"
+[camera_node-1] [WARN] [1792671821.251996217] [stereo.lx.camera]: set parameter 'format' to silence this warning
+[camera_node-1] [INFO] [1792671821.252150405] [stereo.lx.camera]: 
+[camera_node-1] >> XRGB8888 format sizes:
+[camera_node-1]    - 160x120
+[camera_node-1]    - 240x160
+[camera_node-1]    - 320x240
+[camera_node-1]    - 400x240
+[camera_node-1]    - 480x320
+[camera_node-1]    - 640x360
+[camera_node-1]    - 640x480
+[camera_node-1]    - 720x480
+[camera_node-1]    - 768x480
+[camera_node-1]    - 854x480
+[camera_node-1]    - 720x576
+[camera_node-1]    - 800x600
+[camera_node-1]    - 960x540
+[camera_node-1]    - 1024x576
+[camera_node-1]    - 960x640
+[camera_node-1]    - 1024x600
+[camera_node-1]    - 1024x768
+[camera_node-1]    - 1280x720
+[camera_node-1]    - 1152x864
+[camera_node-1]    - 1280x800
+[camera_node-1]    - 1360x768
+[camera_node-1]    - 1366x768
+[camera_node-1]    - 1440x900
+[camera_node-1]    - 1280x1024
+[camera_node-1]    - 1536x864
+[camera_node-1]    - 1280x1080
+[camera_node-1]    - 1600x900
+[camera_node-1]    - 1400x1050
+[camera_node-1]    - 1680x1050
+[camera_node-1]    - 1600x1200
+[camera_node-1]    - 1920x1080
+[camera_node-1]    - 2048x1080
+[camera_node-1]    - 1920x1200
+[camera_node-1]    - 2160x1080
+[camera_node-1]    - 2048x1152
+[camera_node-1]    - 2560x1080
+[camera_node-1]    - 2048x1536
+[camera_node-1]    - 2560x1440
+[camera_node-1]    - 2560x1600
+[camera_node-1]    - 3840x1080
+[camera_node-1]    - 2960x1440
+[camera_node-1]    - 3440x1440
+[camera_node-1]    - 2560x2048
+[camera_node-1]    - 3200x1800
+[camera_node-1]    - 3840x1600
+[camera_node-1]    - 3200x2048
+[camera_node-1]    - 3200x2400
+[camera_node-1]    - 3840x2160
+[camera_node-1]    - 4096x2160
+[camera_node-1]    - 3840x2400
+[camera_node-1] [1:18:54.456719018] [43829]  INFO Camera camera.cpp:1216 configuring streams: (0) 1280x720-XRGB8888/sRGB
+[camera_node-1] [1:18:54.460469182] [43848]  INFO RPI pisp.cpp:1502 Sensor: /base/axi/pcie@120000/rp1/i2c@88000/imx708@1a - Selected sensor format: 1536x864-SBGGR10_1X10/RAW - Selected CFE format: 1536x864-PC1B/RAW
+[camera_node-1] [INFO] [1792671821.265624401] [stereo.lx.camera]: camera "/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a" configured with 1280x720-XRGB8888/sRGB stream
+[camera_node-1] [INFO] [1792671821.266453898] [stereo.lx.camera]: using default calibration URL
+[camera_node-1] [INFO] [1792671821.266547789] [stereo.lx.camera]: camera calibration URL: file:///home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_88000_imx708_1a_1280x720.yaml
+[camera_node-1] [ERROR] [1792671821.266681940] [camera_calibration_parsers]: Unable to open camera calibration file [/home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_88000_imx708_1a_1280x720.yaml]
+[camera_node-1] [WARN] [1792671821.266822590] [stereo.lx.camera]: Camera calibration file /home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_88000_imx708_1a_1280x720.yaml not found
+[camera_node-1] [WARN] [1792671821.271573847] [stereo.lx.camera]: unsupported control: AfWindows (37)
+[camera_node-1] [WARN] [1792671821.272973466] [stereo.lx.camera]: resolve overrides: ExposureTimeMode and ExposureTime must not be enabled at the same time. 'ExposureTimeMode' will be set to off.
+[camera_node-1] [1:18:54.505981581] [43874]  WARN IPARPI ipa_base.cpp:1385 Could not set AF_PAUSE - no AF algorithm or not Continuous
+[camera_node-1] [1:18:54.508483758] [43874]  WARN IPARPI ipa_base.cpp:1402 Could not set AF_TRIGGER - no AF algorithm or not Auto
+[metrics_node-2] [INFO] [1792671822.023440352] [metrics_node]: MetricsNode avviato | left=/stereo/lx/camera/image_raw right=/stereo/rx/camera/image_raw | slop=50.0 ms | window=30
+[detection_node-5] [INFO] [1792671822.075288350] [detection_node]: Set OMP_NUM_THREADS and MKL_NUM_THREADS to 2
+[detection_node-5] [INFO] [1792671822.081620118] [detection_node]: Initializing YOLOv8 with model: /home/nautilus/nautilus-vision-pipeline/ros2_ws/install/nautilus_perception/share/nautilus_perception/data/weights/yolov8n_640_fp32_openvino_model
+[detection_node-5] [INFO] [1792671822.082521024] [detection_node]: OpenCV visual debugging: DISABLED
+[detection_node-5] [INFO] [1792671822.083400392] [detection_node]: Half resolution inference: DISABLED
+[camera_node-1] [1:18:56.322226801] [43874]  WARN IPARPI ipa_base.cpp:1385 Could not set AF_PAUSE - no AF algorithm or not Continuous
+[camera_node-1] [1:18:56.322535806] [43874]  WARN IPARPI ipa_base.cpp:1402 Could not set AF_TRIGGER - no AF algorithm or not Auto
+[detection_node-5] 14:23:45 [INFO] stereo: YOLO inference engine mapped to device: cpu
+[detection_node-5] [INFO] [1792671825.133168560] [detection_node]: Calibration matrices loaded successfully.
+[detection_node-5] [INFO] [1792671825.253951842] [detection_node]: Detection node started. Listening on /stereo/lx/image_enhanced and /stereo/rx/image_enhanced
+[camera_node-1] [WARN] [1792671825.657628813] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   AeEnable: false
+[camera_node-1] 
+[camera_node-1] [WARN] [1792671825.658514126] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   AwbEnable: false
+[camera_node-1] 
+[camera_node-1] [WARN] [1792671825.658998839] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   ExposureTime: 20000
+[camera_node-1] 
+[camera_node-1] [WARN] [1792671825.661855392] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   ColourGains: [ 1.500000, 1.500000 ]
+[camera_node-1] 
+[camera_node-1] [WARN] [1792671825.662435236] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   AfMode: 0
+[camera_node-1] 
+[enhancement_node-3] [INFO] [1792671826.017713114] [stereo.lx.enhancement_node]: FPS: 4.8 | Delay in-exit: 50.43 ms
+[INFO] [camera_node-6]: process started with pid [43939]
+[camera_node-6] [1:18:59.931067248] [43939]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817
+[camera_node-6] [1:18:59.985802845] [43951]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-6] [1:18:59.996937331] [43951] ERROR V4L2 v4l2_device.cpp:410 'imx708': Unable to set controls: Device or resource busy
+[camera_node-6] [1:19:00.021234581] [43951]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-6] [1:19:00.064644874] [43951]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-6] [1:19:00.065254478] [43951]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@88000/imx708@1a to CFE device /dev/media0 and ISP device /dev/media1 using PiSP variant BCM2712_D0
+[camera_node-6] [1:19:00.065560520] [43951]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-6] [1:19:00.082366927] [43951]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-6] [1:19:00.115208096] [43951]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@80000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-6] [1:19:00.115254930] [43951]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@80000/imx708@1a to CFE device /dev/media2 and ISP device /dev/media3 using PiSP variant BCM2712_D0
+[camera_node-6] [1:19:00.116778051] [43951]  WARN V4L2 v4l2_pixelformat.cpp:346 Unsupported V4L2 pixel format RPBP
+[camera_node-6] [INFO] [1792671826.913576464] [stereo.rx.camera]: 
+[camera_node-6] >> stream formats:
+[camera_node-6]    - R8 (32x32 - 4608x2592)
+[camera_node-6]    - R16 (32x32 - 4608x2592)
+[camera_node-6]    - MONO_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-6]    - NV21 (32x32 - 4608x2592)
+[camera_node-6]    - SBGGR8 (32x32 - 4608x2592)
+[camera_node-6]    - SBGGR16 (32x32 - 4608x2592)
+[camera_node-6]    - BGGR_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-6]    - XBGR8888 (32x32 - 4608x2592)
+[camera_node-6]    - BGR888 (32x32 - 4608x2592)
+[camera_node-6]    - RGB888 (32x32 - 4608x2592)
+[camera_node-6]    - XRGB8888 (32x32 - 4608x2592)
+[camera_node-6]    - SGBRG16 (32x32 - 4608x2592)
+[camera_node-6]    - GBRG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-6]    - SGRBG16 (32x32 - 4608x2592)
+[camera_node-6]    - GRBG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-6]    - SRGGB16 (32x32 - 4608x2592)
+[camera_node-6]    - RGGB_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-6]    - BGR161616 (32x32 - 4608x2592)
+[camera_node-6]    - RGB161616 (32x32 - 4608x2592)
+[camera_node-6]    - SRGGB8 (32x32 - 4608x2592)
+[camera_node-6]    - SGRBG8 (32x32 - 4608x2592)
+[camera_node-6]    - SGBRG8 (32x32 - 4608x2592)
+[camera_node-6]    - YUYV (32x32 - 4608x2592)
+[camera_node-6]    - UYVY (32x32 - 4608x2592)
+[camera_node-6] [WARN] [1792671826.913705985] [stereo.rx.camera]: no pixel format selected, auto-selecting: "XRGB8888"
+[camera_node-6] [WARN] [1792671826.913725152] [stereo.rx.camera]: set parameter 'format' to silence this warning
+[camera_node-6] [INFO] [1792671826.913830135] [stereo.rx.camera]: 
+[camera_node-6] >> XRGB8888 format sizes:
+[camera_node-6]    - 160x120
+[camera_node-6]    - 240x160
+[camera_node-6]    - 320x240
+[camera_node-6]    - 400x240
+[camera_node-6]    - 480x320
+[camera_node-6]    - 640x360
+[camera_node-6]    - 640x480
+[camera_node-6]    - 720x480
+[camera_node-6]    - 768x480
+[camera_node-6]    - 854x480
+[camera_node-6]    - 720x576
+[camera_node-6]    - 800x600
+[camera_node-6]    - 960x540
+[camera_node-6]    - 1024x576
+[camera_node-6]    - 960x640
+[camera_node-6]    - 1024x600
+[camera_node-6]    - 1024x768
+[camera_node-6]    - 1280x720
+[camera_node-6]    - 1152x864
+[camera_node-6]    - 1280x800
+[camera_node-6]    - 1360x768
+[camera_node-6]    - 1366x768
+[camera_node-6]    - 1440x900
+[camera_node-6]    - 1280x1024
+[camera_node-6]    - 1536x864
+[camera_node-6]    - 1280x1080
+[camera_node-6]    - 1600x900
+[camera_node-6]    - 1400x1050
+[camera_node-6]    - 1680x1050
+[camera_node-6]    - 1600x1200
+[camera_node-6]    - 1920x1080
+[camera_node-6]    - 2048x1080
+[camera_node-6]    - 1920x1200
+[camera_node-6]    - 2160x1080
+[camera_node-6]    - 2048x1152
+[camera_node-6]    - 2560x1080
+[camera_node-6]    - 2048x1536
+[camera_node-6]    - 2560x1440
+[camera_node-6]    - 2560x1600
+[camera_node-6]    - 3840x1080
+[camera_node-6]    - 2960x1440
+[camera_node-6]    - 3440x1440
+[camera_node-6]    - 2560x2048
+[camera_node-6]    - 3200x1800
+[camera_node-6]    - 3840x1600
+[camera_node-6]    - 3200x2048
+[camera_node-6]    - 3200x2400
+[camera_node-6]    - 3840x2160
+[camera_node-6]    - 4096x2160
+[camera_node-6]    - 3840x2400
+[camera_node-6] [1:19:00.118188559] [43939]  INFO Camera camera.cpp:1216 configuring streams: (0) 1280x720-XRGB8888/sRGB
+[camera_node-6] [1:19:00.118756014] [43951]  INFO RPI pisp.cpp:1502 Sensor: /base/axi/pcie@120000/rp1/i2c@80000/imx708@1a - Selected sensor format: 1536x864-SBGGR10_1X10/RAW - Selected CFE format: 1536x864-PC1B/RAW
+[camera_node-6] [INFO] [1792671826.916421721] [stereo.rx.camera]: camera "/base/axi/pcie@120000/rp1/i2c@80000/imx708@1a" configured with 1280x720-XRGB8888/sRGB stream
+[camera_node-6] [INFO] [1792671826.916690133] [stereo.rx.camera]: using default calibration URL
+[camera_node-6] [INFO] [1792671826.916733208] [stereo.rx.camera]: camera calibration URL: file:///home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_80000_imx708_1a_1280x720.yaml
+[camera_node-6] [ERROR] [1792671826.916810450] [camera_calibration_parsers]: Unable to open camera calibration file [/home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_80000_imx708_1a_1280x720.yaml]
+[camera_node-6] [WARN] [1792671826.916879563] [stereo.rx.camera]: Camera calibration file /home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_80000_imx708_1a_1280x720.yaml not found
+[camera_node-6] [WARN] [1792671826.918487593] [stereo.rx.camera]: unsupported control: AfWindows (37)
+[camera_node-6] [WARN] [1792671826.920264700] [stereo.rx.camera]: resolve overrides: ExposureTimeMode and ExposureTime must not be enabled at the same time. 'ExposureTimeMode' will be set to off.
+[camera_node-6] [1:19:00.134674775] [43960]  WARN IPARPI ipa_base.cpp:1385 Could not set AF_PAUSE - no AF algorithm or not Continuous
+[camera_node-6] [1:19:00.134863352] [43960]  WARN IPARPI ipa_base.cpp:1402 Could not set AF_TRIGGER - no AF algorithm or not Auto
+[enhancement_node-3] [INFO] [1792671827.019374569] [stereo.lx.enhancement_node]: FPS: 5.0 | Delay in-exit: 48.25 ms
+[camera_node-6] [WARN] [1792671827.082021607] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-6]   Brightness: 0.000000
+[camera_node-6]   AfRange: 0
+[camera_node-6]   AeMeteringMode: 0
+[camera_node-6]   ColourGains: [ 1.500000, 1.500000 ]
+[camera_node-6]   StatsOutputEnable: false
+[camera_node-6]   AnalogueGainMode: 0
+[camera_node-6]   AfPause: 0
+[camera_node-6]   Sharpness: 1.000000
+[camera_node-6]   AwbMode: 0
+[camera_node-6]   AeExposureMode: 0
+[camera_node-6]   HdrMode: 0
+[camera_node-6]   SyncMode: 0
+[camera_node-6]   AeConstraintMode: 0
+[camera_node-6]   AfMode: 0
+[camera_node-6]   AnalogueGain: 1.122807
+[camera_node-6]   AfTrigger: 0
+[camera_node-6]   ExposureValue: 0.000000
+[camera_node-6]   AfSpeed: 0
+[camera_node-6]   ExposureTimeMode: 1
+[camera_node-6]   ScalerCrop: (768, 432)/3072x1728
+[camera_node-6]   SyncFrames: 1000
+[camera_node-6]   ExposureTime: 20000
+[camera_node-6]   AfMetering: 0
+[camera_node-6]   Saturation: 1.000000
+[camera_node-6]   AeEnable: false
+[camera_node-6]   FrameDurationLimits: [ 200000, 200000 ]
+[camera_node-6]   NoiseReductionMode: 0
+[camera_node-6]   Contrast: 1.000000
+[camera_node-6]   AwbEnable: false
+[camera_node-6]   CnnEnableInputTensor: false
+[camera_node-6]   AeFlickerMode: 0
+[camera_node-6]   LensPosition: 1.500000
+[camera_node-6] 
+[camera_node-6] [WARN] [1792671827.082476838] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-6]   AeEnable: false
+[camera_node-6] 
+[camera_node-6] [WARN] [1792671827.082785547] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-6]   AwbEnable: false
+[camera_node-6] 
+[camera_node-6] [WARN] [1792671827.083071015] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-6]   ExposureTime: 20000
+[camera_node-6] 
+[camera_node-6] [WARN] [1792671827.083352447] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-6]   ColourGains: [ 1.500000, 1.500000 ]
+[camera_node-6] 
+[camera_node-6] [WARN] [1792671827.083611711] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-6]   AfMode: 0
+[camera_node-6] 
+[metrics_node-2] [INFO] [1792671827.209860359] [metrics_node]: FPS:  0.19 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg  5.65 / max  5.65 ms
+[enhancement_node-4] [INFO] [1792671827.523394312] [stereo.rx.enhancement_node]: FPS: 0.4 | Delay in-exit: 312.04 ms
+[detection_node-5] [INFO] [1792671827.590921866] [detection_node]: Image shape: (720, 1280, 3) | map1x shape: (720, 1280) | map2x shape: (720, 1280)
+[detection_node-5] Loading /home/nautilus/nautilus-vision-pipeline/ros2_ws/install/nautilus_perception/share/nautilus_perception/data/weights/yolov8n_640_fp32_openvino_model for OpenVINO inference...
+[enhancement_node-3] [INFO] [1792671828.183234226] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 105.52 ms
+[metrics_node-2] [INFO] [1792671828.309889560] [metrics_node]: FPS:  4.54 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.65 / max  5.67 ms
+[enhancement_node-4] [INFO] [1792671828.583745297] [stereo.rx.enhancement_node]: FPS: 5.7 | Delay in-exit: 94.73 ms
+[enhancement_node-3] [INFO] [1792671829.347197907] [stereo.lx.enhancement_node]: FPS: 5.2 | Delay in-exit: 104.44 ms
+[detection_node-5] Using OpenVINO LATENCY mode for batch=1 inference on CPU...
+[metrics_node-2] [INFO] [1792671829.488249095] [metrics_node]: FPS:  5.09 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.65 / max  5.67 ms
+[enhancement_node-4] [INFO] [1792671829.752547788] [stereo.rx.enhancement_node]: FPS: 5.1 | Delay in-exit: 127.39 ms
+[enhancement_node-3] [INFO] [1792671830.504065259] [stereo.lx.enhancement_node]: FPS: 5.2 | Delay in-exit: 73.51 ms
+[metrics_node-2] [INFO] [1792671830.631213756] [metrics_node]: FPS:  5.28 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.64 / max  5.67 ms
+[enhancement_node-4] [INFO] [1792671830.927576935] [stereo.rx.enhancement_node]: FPS: 5.1 | Delay in-exit: 65.14 ms
+[enhancement_node-3] [INFO] [1792671831.697298082] [stereo.lx.enhancement_node]: FPS: 5.0 | Delay in-exit: 79.51 ms
+[metrics_node-2] [INFO] [1792671831.814020565] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.64 / max  5.67 ms
+[enhancement_node-4] [INFO] [1792671832.103324797] [stereo.rx.enhancement_node]: FPS: 5.1 | Delay in-exit: 78.34 ms
+[enhancement_node-3] [INFO] [1792671832.716617971] [stereo.lx.enhancement_node]: FPS: 4.9 | Delay in-exit: 67.37 ms
+[metrics_node-2] [INFO] [1792671832.838208723] [metrics_node]: FPS:  4.90 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  5.64 / max  5.67 ms
+[enhancement_node-4] [INFO] [1792671833.124822704] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 73.38 ms
+[enhancement_node-3] [INFO] [1792671833.893124020] [stereo.lx.enhancement_node]: FPS: 5.1 | Delay in-exit: 81.40 ms
+[metrics_node-2] [INFO] [1792671834.030068175] [metrics_node]: FPS:  5.03 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  5.64 / max  5.67 ms
+[enhancement_node-4] [INFO] [1792671834.465549037] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 191.54 ms
+[enhancement_node-3] [INFO] [1792671835.034731340] [stereo.lx.enhancement_node]: FPS: 3.5 | Delay in-exit: 218.79 ms
+[metrics_node-2] [INFO] [1792671835.288353830] [metrics_node]: FPS:  4.02 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  5.63 / max  5.67 ms
+[detection_node-5] [INFO] [1792671835.380935554] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=168, h=487 | Conf: 0.88 | Distance (Z): 0.000 m
+[enhancement_node-4] [INFO] [1792671835.489677349] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 197.25 ms
+[enhancement_node-3] [INFO] [1792671836.155728251] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 230.25 ms
+[metrics_node-2] [INFO] [1792671836.391830317] [metrics_node]: FPS:  5.36 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  5.62 / max  5.66 ms
+[enhancement_node-4] [INFO] [1792671836.656509810] [stereo.rx.enhancement_node]: FPS: 5.1 | Delay in-exit: 190.91 ms
+[detection_node-5] [INFO] [1792671836.771248024] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.88 | Distance (Z): 0.600 m
+[detection_node-5] [INFO] [1792671836.780243132] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=66, y=427, w=336, h=172 | Conf: 0.41 | Distance (Z): 0.930 m
+[enhancement_node-3] [INFO] [1792671837.209442417] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 208.74 ms
+[metrics_node-2] [INFO] [1792671837.465878543] [metrics_node]: FPS:  4.65 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  5.62 / max  5.66 ms
+[enhancement_node-4] [INFO] [1792671837.762522527] [stereo.rx.enhancement_node]: FPS: 5.4 | Delay in-exit: 155.85 ms
+[enhancement_node-3] [INFO] [1792671838.242835843] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 177.75 ms
+[detection_node-5] [INFO] [1792671838.244987401] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.86 | Distance (Z): 0.600 m
+[metrics_node-2] [INFO] [1792671838.662290049] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  5.61 / max  5.66 ms
+[enhancement_node-4] [INFO] [1792671839.031211451] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 201.22 ms
+[enhancement_node-3] [INFO] [1792671839.336704619] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 187.37 ms
+[metrics_node-2] [INFO] [1792671839.664513375] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.61 / max  5.66 ms
+[detection_node-5] [INFO] [1792671839.720187378] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=487 | Conf: 0.83 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671840.055290836] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 128.67 ms
+[enhancement_node-3] [INFO] [1792671840.475047874] [stereo.lx.enhancement_node]: FPS: 4.4 | Delay in-exit: 255.43 ms
+[metrics_node-2] [INFO] [1792671840.846950701] [metrics_node]: FPS:  5.14 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.60 / max  5.66 ms
+[enhancement_node-4] [INFO] [1792671841.150813835] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 159.40 ms
+[detection_node-5] [INFO] [1792671841.184231489] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.84 | Distance (Z): 0.600 m
+[enhancement_node-3] [INFO] [1792671841.619556914] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 211.98 ms
+[metrics_node-2] [INFO] [1792671841.853964797] [metrics_node]: FPS:  4.88 | Jitter(sx):   0.04 ms | Skew(sx-dx): avg  5.60 / max  5.66 ms
+[enhancement_node-4] [INFO] [1792671842.417769261] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 323.64 ms
+[detection_node-5] [INFO] [1792671842.746408037] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.600 m
+[enhancement_node-3] [INFO] [1792671842.773805748] [stereo.lx.enhancement_node]: FPS: 5.2 | Delay in-exit: 139.45 ms
+[metrics_node-2] [INFO] [1792671842.916829783] [metrics_node]: FPS:  4.71 | Jitter(sx):   0.05 ms | Skew(sx-dx): avg  5.60 / max  5.68 ms
+[enhancement_node-4] [INFO] [1792671843.480053946] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 141.88 ms
+[metrics_node-2] [INFO] [1792671843.917469104] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.05 ms | Skew(sx-dx): avg  5.59 / max  5.68 ms
+[enhancement_node-3] [INFO] [1792671844.066883243] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 257.39 ms
+[detection_node-5] [INFO] [1792671844.305692224] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.87 | Distance (Z): 0.600 m
+[enhancement_node-4] [INFO] [1792671844.539541413] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 239.45 ms
+[metrics_node-2] [INFO] [1792671845.064839810] [metrics_node]: FPS:  5.27 | Jitter(sx):   0.05 ms | Skew(sx-dx): avg  5.58 / max  5.68 ms
+[enhancement_node-3] [INFO] [1792671845.257547110] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 244.05 ms
+[enhancement_node-4] [INFO] [1792671845.633765123] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 227.87 ms
+[detection_node-5] [INFO] [1792671845.661624727] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671846.251640567] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.05 ms | Skew(sx-dx): avg  5.57 / max  5.68 ms
+[enhancement_node-3] [INFO] [1792671846.336896424] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 147.32 ms
+[enhancement_node-4] [INFO] [1792671846.678657087] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 166.51 ms
+[detection_node-5] [INFO] [1792671847.144873718] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671847.270606061] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.04 ms | Skew(sx-dx): avg  5.56 / max  5.68 ms
+[enhancement_node-3] [INFO] [1792671847.394266219] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 197.17 ms
+[enhancement_node-4] [INFO] [1792671847.761073453] [stereo.rx.enhancement_node]: FPS: 5.6 | Delay in-exit: 150.37 ms
+[metrics_node-2] [INFO] [1792671848.440698728] [metrics_node]: FPS:  5.09 | Jitter(sx):   0.04 ms | Skew(sx-dx): avg  5.55 / max  5.68 ms
+[detection_node-5] [INFO] [1792671848.529012278] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.88 | Distance (Z): 0.600 m
+[enhancement_node-3] [INFO] [1792671848.553911289] [stereo.lx.enhancement_node]: FPS: 3.5 | Delay in-exit: 288.28 ms
+[enhancement_node-4] [INFO] [1792671848.771488830] [stereo.rx.enhancement_node]: FPS: 5.0 | Delay in-exit: 140.15 ms
+[enhancement_node-3] [INFO] [1792671849.617220885] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 182.11 ms
+[metrics_node-2] [INFO] [1792671849.681736718] [metrics_node]: FPS:  4.88 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.54 / max  5.59 ms
+[enhancement_node-4] [INFO] [1792671849.936691180] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 218.43 ms
+[detection_node-5] [INFO] [1792671850.118724564] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671850.816887729] [metrics_node]: FPS:  5.25 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.53 / max  5.59 ms
+[enhancement_node-3] [INFO] [1792671850.849886435] [stereo.lx.enhancement_node]: FPS: 4.8 | Delay in-exit: 239.83 ms
+[enhancement_node-4] [INFO] [1792671851.165660549] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 187.36 ms
+[detection_node-5] [INFO] [1792671851.542981837] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=491 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671851.862106502] [metrics_node]: FPS:  4.79 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.53 / max  5.59 ms
+[enhancement_node-3] [INFO] [1792671852.084026693] [stereo.lx.enhancement_node]: FPS: 4.1 | Delay in-exit: 251.43 ms
+[enhancement_node-4] [INFO] [1792671852.239596485] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 172.54 ms
+[detection_node-5] [INFO] [1792671852.801045875] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671852.986803432] [metrics_node]: FPS:  5.29 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.51 / max  5.59 ms
+[enhancement_node-3] [INFO] [1792671853.230043233] [stereo.lx.enhancement_node]: FPS: 3.5 | Delay in-exit: 209.42 ms
+[enhancement_node-4] [INFO] [1792671853.275784080] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 248.71 ms
+[metrics_node-2] [INFO] [1792671854.023168770] [metrics_node]: FPS:  4.89 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.51 / max  5.59 ms
+[detection_node-5] [INFO] [1792671854.094091364] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=168, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671854.291797756] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 128.31 ms
+[enhancement_node-3] [INFO] [1792671854.396376301] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 167.14 ms
+[metrics_node-2] [INFO] [1792671855.214888041] [metrics_node]: FPS:  5.04 | Jitter(sx):   0.05 ms | Skew(sx-dx): avg  5.50 / max  5.59 ms
+[enhancement_node-4] [INFO] [1792671855.354771818] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 300.22 ms
+[enhancement_node-3] [INFO] [1792671855.553570867] [stereo.lx.enhancement_node]: FPS: 5.2 | Delay in-exit: 189.88 ms
+[detection_node-5] [INFO] [1792671855.681631255] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671856.266383690] [metrics_node]: FPS:  4.74 | Jitter(sx):   0.05 ms | Skew(sx-dx): avg  5.50 / max  5.59 ms
+[enhancement_node-4] [INFO] [1792671856.409964764] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 137.31 ms
+[enhancement_node-3] [INFO] [1792671856.628862537] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 213.17 ms
+[metrics_node-2] [INFO] [1792671857.266909820] [metrics_node]: FPS:  4.92 | Jitter(sx):   0.05 ms | Skew(sx-dx): avg  5.50 / max  5.59 ms
+[detection_node-5] [INFO] [1792671857.347722980] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=168, h=490 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671857.480895721] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 155.40 ms
+[enhancement_node-3] [INFO] [1792671857.689011577] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 232.43 ms
+[metrics_node-2] [INFO] [1792671858.303033082] [metrics_node]: FPS:  4.89 | Jitter(sx):   0.05 ms | Skew(sx-dx): avg  5.49 / max  5.59 ms
+[enhancement_node-4] [INFO] [1792671858.516503075] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 133.37 ms
+[enhancement_node-3] [INFO] [1792671858.826823182] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 291.99 ms
+[detection_node-5] [INFO] [1792671859.098264862] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671859.508469300] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.05 ms | Skew(sx-dx): avg  5.49 / max  5.57 ms
+[enhancement_node-4] [INFO] [1792671859.667728619] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 286.80 ms
+[enhancement_node-3] [INFO] [1792671860.007019611] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 164.05 ms
+[metrics_node-2] [INFO] [1792671860.659565582] [metrics_node]: FPS:  5.23 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.48 / max  5.54 ms
+[detection_node-5] [INFO] [1792671860.843483645] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.91 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671860.846796146] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 232.76 ms
+[enhancement_node-3] [INFO] [1792671861.009807428] [stereo.lx.enhancement_node]: FPS: 5.0 | Delay in-exit: 116.45 ms
+[metrics_node-2] [INFO] [1792671861.768674591] [metrics_node]: FPS:  4.52 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.48 / max  5.54 ms
+[enhancement_node-4] [INFO] [1792671861.992780546] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 190.43 ms
+[enhancement_node-3] [INFO] [1792671862.211778164] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 252.50 ms
+[detection_node-5] [INFO] [1792671862.794069776] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=169, h=489 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671862.830376296] [metrics_node]: FPS:  4.72 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.47 / max  5.54 ms
+[enhancement_node-4] [INFO] [1792671863.085337404] [stereo.rx.enhancement_node]: FPS: 5.5 | Delay in-exit: 126.99 ms
+[enhancement_node-3] [INFO] [1792671863.239814279] [stereo.lx.enhancement_node]: FPS: 2.9 | Delay in-exit: 328.21 ms
+[metrics_node-2] [INFO] [1792671864.018962670] [metrics_node]: FPS:  4.15 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.46 / max  5.54 ms
+[enhancement_node-4] [INFO] [1792671864.126971425] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 197.42 ms
+[enhancement_node-3] [INFO] [1792671864.422618454] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 226.28 ms
+[detection_node-5] [INFO] [1792671864.867740340] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671865.115428744] [metrics_node]: FPS:  4.59 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.46 / max  5.54 ms
+[enhancement_node-4] [INFO] [1792671865.203810129] [stereo.rx.enhancement_node]: FPS: 2.8 | Delay in-exit: 271.21 ms
+[enhancement_node-3] [INFO] [1792671865.712240069] [stereo.lx.enhancement_node]: FPS: 3.1 | Delay in-exit: 309.85 ms
+[metrics_node-2] [INFO] [1792671866.183830552] [metrics_node]: FPS:  4.70 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.45 / max  5.52 ms
+[enhancement_node-4] [INFO] [1792671866.214365969] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 156.55 ms
+[detection_node-5] [INFO] [1792671866.599132398] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671866.884555357] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 242.21 ms
+[enhancement_node-4] [INFO] [1792671867.299428996] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 313.47 ms
+[metrics_node-2] [INFO] [1792671867.313004740] [metrics_node]: FPS:  4.43 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.44 / max  5.52 ms
+[enhancement_node-3] [INFO] [1792671867.978571983] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 184.97 ms
+[enhancement_node-4] [INFO] [1792671868.457008558] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 181.33 ms
+[metrics_node-2] [INFO] [1792671868.535620027] [metrics_node]: FPS:  3.29 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  5.43 / max  5.52 ms
+[detection_node-5] [INFO] [1792671868.888278609] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671869.219417288] [stereo.lx.enhancement_node]: FPS: 3.2 | Delay in-exit: 247.31 ms
+[enhancement_node-4] [INFO] [1792671869.542716776] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 265.71 ms
+[metrics_node-2] [INFO] [1792671869.544063761] [metrics_node]: FPS:  3.92 | Jitter(sx):  49.89 ms | Skew(sx-dx): avg  5.42 / max  5.49 ms
+[enhancement_node-3] [INFO] [1792671870.359227985] [stereo.lx.enhancement_node]: FPS: 3.5 | Delay in-exit: 225.64 ms
+[enhancement_node-4] [INFO] [1792671870.645739222] [stereo.rx.enhancement_node]: FPS: 3.6 | Delay in-exit: 123.65 ms
+[metrics_node-2] [INFO] [1792671870.834996672] [metrics_node]: FPS:  3.88 | Jitter(sx):  49.89 ms | Skew(sx-dx): avg  5.42 / max  5.49 ms
+[detection_node-5] [INFO] [1792671871.106099465] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=494 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671871.492637608] [stereo.lx.enhancement_node]: FPS: 3.5 | Delay in-exit: 160.61 ms
+[enhancement_node-4] [INFO] [1792671871.670566400] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 226.28 ms
+[metrics_node-2] [INFO] [1792671871.939518428] [metrics_node]: FPS:  4.52 | Jitter(sx):  49.89 ms | Skew(sx-dx): avg  5.42 / max  5.49 ms
+[enhancement_node-3] [INFO] [1792671872.692399146] [stereo.lx.enhancement_node]: FPS: 3.3 | Delay in-exit: 259.14 ms
+[enhancement_node-4] [INFO] [1792671872.719540905] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 237.39 ms
+[metrics_node-2] [INFO] [1792671873.113814225] [metrics_node]: FPS:  3.40 | Jitter(sx):  49.89 ms | Skew(sx-dx): avg  5.41 / max  5.48 ms
+[detection_node-5] [INFO] [1792671873.186837010] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792671873.205414054] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=67, y=426, w=335, h=175 | Conf: 0.47 | Distance (Z): 1.062 m
+[enhancement_node-3] [INFO] [1792671873.735636561] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 209.55 ms
+[enhancement_node-4] [INFO] [1792671873.825619400] [stereo.rx.enhancement_node]: FPS: 3.6 | Delay in-exit: 288.63 ms
+[metrics_node-2] [INFO] [1792671874.207487458] [metrics_node]: FPS:  4.63 | Jitter(sx):  60.00 ms | Skew(sx-dx): avg  5.41 / max  5.48 ms
+[enhancement_node-4] [INFO] [1792671874.874926025] [stereo.rx.enhancement_node]: FPS: 2.8 | Delay in-exit: 314.54 ms
+[enhancement_node-3] [INFO] [1792671875.011947199] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 274.29 ms
+[metrics_node-2] [INFO] [1792671875.291966225] [metrics_node]: FPS:  4.57 | Jitter(sx):  67.98 ms | Skew(sx-dx): avg  5.40 / max  5.48 ms
+[detection_node-5] [INFO] [1792671875.633565657] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.82 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671876.017493498] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 174.78 ms
+[enhancement_node-3] [INFO] [1792671876.031465039] [stereo.lx.enhancement_node]: FPS: 2.9 | Delay in-exit: 327.27 ms
+[metrics_node-2] [INFO] [1792671876.545550246] [metrics_node]: FPS:  3.99 | Jitter(sx):  59.99 ms | Skew(sx-dx): avg  5.39 / max  5.48 ms
+[detection_node-5] [INFO] [1792671877.223162681] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671877.284184073] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 217.05 ms
+[enhancement_node-3] [INFO] [1792671877.410141957] [stereo.lx.enhancement_node]: FPS: 2.9 | Delay in-exit: 340.99 ms
+[metrics_node-2] [INFO] [1792671877.660040489] [metrics_node]: FPS:  3.57 | Jitter(sx):  67.97 ms | Skew(sx-dx): avg  5.38 / max  5.48 ms
+[enhancement_node-4] [INFO] [1792671878.410379704] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 230.93 ms
+[enhancement_node-3] [INFO] [1792671878.525620947] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 328.13 ms
+[metrics_node-2] [INFO] [1792671878.807540797] [metrics_node]: FPS:  4.38 | Jitter(sx):  74.53 ms | Skew(sx-dx): avg  5.36 / max  5.43 ms
+[detection_node-5] [INFO] [1792671879.540662249] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671879.578826824] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 178.59 ms
+[enhancement_node-4] [INFO] [1792671879.711436229] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 247.11 ms
+[metrics_node-2] [INFO] [1792671879.967885823] [metrics_node]: FPS:  3.43 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.36 / max  5.43 ms
+[enhancement_node-3] [INFO] [1792671880.652975965] [stereo.lx.enhancement_node]: FPS: 3.7 | Delay in-exit: 206.45 ms
+[enhancement_node-4] [INFO] [1792671880.743286206] [stereo.rx.enhancement_node]: FPS: 2.9 | Delay in-exit: 349.39 ms
+[metrics_node-2] [INFO] [1792671881.098871313] [metrics_node]: FPS:  4.45 | Jitter(sx):  84.58 ms | Skew(sx-dx): avg  5.34 / max  5.42 ms
+[detection_node-5] [INFO] [1792671881.291051970] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671881.753217320] [stereo.rx.enhancement_node]: FPS: 2.9 | Delay in-exit: 212.40 ms
+[enhancement_node-3] [INFO] [1792671881.792814099] [stereo.lx.enhancement_node]: FPS: 4.4 | Delay in-exit: 176.27 ms
+[metrics_node-2] [INFO] [1792671882.195685699] [metrics_node]: FPS:  3.66 | Jitter(sx):  84.58 ms | Skew(sx-dx): avg  5.33 / max  5.39 ms
+[enhancement_node-3] [INFO] [1792671882.887911166] [stereo.lx.enhancement_node]: FPS: 3.7 | Delay in-exit: 237.73 ms
+[enhancement_node-4] [INFO] [1792671882.892625981] [stereo.rx.enhancement_node]: FPS: 3.5 | Delay in-exit: 355.11 ms
+[metrics_node-2] [INFO] [1792671883.350721321] [metrics_node]: FPS:  4.33 | Jitter(sx):  80.00 ms | Skew(sx-dx): avg  5.33 / max  5.39 ms
+[detection_node-5] [INFO] [1792671883.463552961] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671883.907696482] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 230.86 ms
+[enhancement_node-3] [INFO] [1792671884.046548625] [stereo.lx.enhancement_node]: FPS: 3.5 | Delay in-exit: 318.14 ms
+[metrics_node-2] [INFO] [1792671884.642065591] [metrics_node]: FPS:  3.86 | Jitter(sx):  88.44 ms | Skew(sx-dx): avg  5.32 / max  5.39 ms
+[enhancement_node-4] [INFO] [1792671884.920037280] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 261.02 ms
+[detection_node-5] [INFO] [1792671885.163544510] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671885.319205203] [stereo.lx.enhancement_node]: FPS: 3.2 | Delay in-exit: 302.92 ms
+[metrics_node-2] [INFO] [1792671885.771536163] [metrics_node]: FPS:  4.41 | Jitter(sx):  88.44 ms | Skew(sx-dx): avg  5.32 / max  5.39 ms
+[enhancement_node-4] [INFO] [1792671886.099963907] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 187.44 ms
+[enhancement_node-3] [INFO] [1792671886.548576121] [stereo.lx.enhancement_node]: FPS: 4.0 | Delay in-exit: 233.49 ms
+[metrics_node-2] [INFO] [1792671886.881869857] [metrics_node]: FPS:  3.58 | Jitter(sx):  84.58 ms | Skew(sx-dx): avg  5.32 / max  5.39 ms
+[enhancement_node-4] [INFO] [1792671887.169543849] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 133.27 ms
+[detection_node-5] [INFO] [1792671887.595909823] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671887.887589095] [stereo.lx.enhancement_node]: FPS: 2.2 | Delay in-exit: 438.34 ms
+[metrics_node-2] [INFO] [1792671887.920878950] [metrics_node]: FPS:  4.83 | Jitter(sx):  88.43 ms | Skew(sx-dx): avg  5.32 / max  5.39 ms
+[enhancement_node-4] [INFO] [1792671888.381344089] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 262.76 ms
+[metrics_node-2] [INFO] [1792671888.996064021] [metrics_node]: FPS:  3.75 | Jitter(sx):  84.58 ms | Skew(sx-dx): avg  5.32 / max  5.36 ms
+[enhancement_node-3] [INFO] [1792671889.058942482] [stereo.lx.enhancement_node]: FPS: 2.6 | Delay in-exit: 325.98 ms
+[detection_node-5] [INFO] [1792671889.172004057] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671889.517943684] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 172.38 ms
+[metrics_node-2] [INFO] [1792671890.225041386] [metrics_node]: FPS:  4.84 | Jitter(sx):  84.58 ms | Skew(sx-dx): avg  5.30 / max  5.36 ms
+[enhancement_node-3] [INFO] [1792671890.413357124] [stereo.lx.enhancement_node]: FPS: 2.9 | Delay in-exit: 344.74 ms
+[enhancement_node-4] [INFO] [1792671890.645926252] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 166.13 ms
+[detection_node-5] [INFO] [1792671891.083686933] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671891.327941768] [metrics_node]: FPS:  3.62 | Jitter(sx):  84.58 ms | Skew(sx-dx): avg  5.30 / max  5.34 ms
+[enhancement_node-3] [INFO] [1792671891.428266506] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 188.56 ms
+[enhancement_node-4] [INFO] [1792671891.660426766] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 244.38 ms
+[metrics_node-2] [INFO] [1792671892.348662346] [metrics_node]: FPS:  3.93 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.29 / max  5.34 ms
+[enhancement_node-3] [INFO] [1792671892.635749924] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 177.34 ms
+[enhancement_node-4] [INFO] [1792671892.902785451] [stereo.rx.enhancement_node]: FPS: 3.2 | Delay in-exit: 304.80 ms
+[detection_node-5] [INFO] [1792671893.175623838] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671893.375355355] [metrics_node]: FPS:  3.92 | Jitter(sx):  84.58 ms | Skew(sx-dx): avg  5.29 / max  5.34 ms
+[enhancement_node-3] [INFO] [1792671893.824795196] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 209.49 ms
+[enhancement_node-4] [INFO] [1792671894.094648602] [stereo.rx.enhancement_node]: FPS: 5.0 | Delay in-exit: 149.63 ms
+[metrics_node-2] [INFO] [1792671894.522600999] [metrics_node]: FPS:  4.37 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.28 / max  5.34 ms
+[enhancement_node-3] [INFO] [1792671895.107678116] [stereo.lx.enhancement_node]: FPS: 3.1 | Delay in-exit: 404.91 ms
+[enhancement_node-4] [INFO] [1792671895.266844180] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 185.14 ms
+[detection_node-5] [INFO] [1792671895.635591578] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.78 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671895.684837368] [metrics_node]: FPS:  4.29 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.28 / max  5.34 ms
+[enhancement_node-3] [INFO] [1792671896.292631186] [stereo.lx.enhancement_node]: FPS: 2.6 | Delay in-exit: 410.22 ms
+[enhancement_node-4] [INFO] [1792671896.403665545] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 188.34 ms
+[metrics_node-2] [INFO] [1792671896.761528446] [metrics_node]: FPS:  4.63 | Jitter(sx):  84.58 ms | Skew(sx-dx): avg  5.26 / max  5.34 ms
+[enhancement_node-3] [INFO] [1792671897.285117823] [stereo.lx.enhancement_node]: FPS: 3.0 | Delay in-exit: 208.03 ms
+[detection_node-5] [INFO] [1792671897.403629198] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671897.506627579] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 405.42 ms
+[metrics_node-2] [INFO] [1792671897.827007449] [metrics_node]: FPS:  3.79 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.26 / max  5.34 ms
+[enhancement_node-3] [INFO] [1792671898.332815029] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 267.97 ms
+[enhancement_node-4] [INFO] [1792671898.583171657] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 244.00 ms
+[metrics_node-2] [INFO] [1792671898.912824023] [metrics_node]: FPS:  4.57 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.25 / max  5.31 ms
+[detection_node-5] [INFO] [1792671899.502995110] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671899.574984290] [stereo.lx.enhancement_node]: FPS: 3.2 | Delay in-exit: 355.05 ms
+[enhancement_node-4] [INFO] [1792671899.650825381] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 262.85 ms
+[metrics_node-2] [INFO] [1792671899.918130438] [metrics_node]: FPS:  3.97 | Jitter(sx):  80.00 ms | Skew(sx-dx): avg  5.25 / max  5.31 ms
+[enhancement_node-3] [INFO] [1792671900.591971185] [stereo.lx.enhancement_node]: FPS: 3.0 | Delay in-exit: 224.23 ms
+[enhancement_node-4] [INFO] [1792671900.678385561] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 211.66 ms
+[metrics_node-2] [INFO] [1792671900.936994382] [metrics_node]: FPS:  3.91 | Jitter(sx):  74.54 ms | Skew(sx-dx): avg  5.24 / max  5.30 ms
+[detection_node-5] [INFO] [1792671901.086963656] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671901.679535870] [stereo.lx.enhancement_node]: FPS: 3.7 | Delay in-exit: 183.79 ms
+[enhancement_node-4] [INFO] [1792671901.774490370] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 197.13 ms
+[metrics_node-2] [INFO] [1792671902.137041086] [metrics_node]: FPS:  3.39 | Jitter(sx):  80.00 ms | Skew(sx-dx): avg  5.24 / max  5.29 ms
+[enhancement_node-3] [INFO] [1792671902.740981518] [stereo.lx.enhancement_node]: FPS: 2.9 | Delay in-exit: 270.19 ms
+[enhancement_node-4] [INFO] [1792671902.838368550] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 217.27 ms
+[metrics_node-2] [INFO] [1792671903.206207067] [metrics_node]: FPS:  4.59 | Jitter(sx):  80.00 ms | Skew(sx-dx): avg  5.23 / max  5.29 ms
+[detection_node-5] [INFO] [1792671903.389497414] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671903.890102627] [stereo.lx.enhancement_node]: FPS: 3.5 | Delay in-exit: 251.79 ms
+[enhancement_node-4] [INFO] [1792671903.910208076] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 232.04 ms
+[metrics_node-2] [INFO] [1792671904.339608229] [metrics_node]: FPS:  5.31 | Jitter(sx):  84.59 ms | Skew(sx-dx): avg  5.23 / max  5.29 ms
+[enhancement_node-3] [INFO] [1792671904.890529188] [stereo.lx.enhancement_node]: FPS: 3.0 | Delay in-exit: 225.30 ms
+[enhancement_node-4] [INFO] [1792671905.085213785] [stereo.rx.enhancement_node]: FPS: 3.4 | Delay in-exit: 236.09 ms
+[detection_node-5] [INFO] [1792671905.216954221] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671905.551612705] [metrics_node]: FPS:  4.12 | Jitter(sx):  84.59 ms | Skew(sx-dx): avg  5.22 / max  5.29 ms
+[enhancement_node-3] [INFO] [1792671905.983030384] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 167.61 ms
+[enhancement_node-4] [INFO] [1792671906.343556329] [stereo.rx.enhancement_node]: FPS: 3.2 | Delay in-exit: 283.95 ms
+[metrics_node-2] [INFO] [1792671906.637655531] [metrics_node]: FPS:  3.72 | Jitter(sx):  80.00 ms | Skew(sx-dx): avg  5.21 / max  5.26 ms
+[enhancement_node-3] [INFO] [1792671907.205024192] [stereo.lx.enhancement_node]: FPS: 3.3 | Delay in-exit: 293.93 ms
+[enhancement_node-4] [INFO] [1792671907.387323010] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 189.70 ms
+[detection_node-5] [INFO] [1792671907.408560823] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671907.895173962] [metrics_node]: FPS:  3.96 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.20 / max  5.26 ms
+[enhancement_node-3] [INFO] [1792671908.322780902] [stereo.lx.enhancement_node]: FPS: 2.7 | Delay in-exit: 321.17 ms
+[enhancement_node-4] [INFO] [1792671908.473200132] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 184.80 ms
+[metrics_node-2] [INFO] [1792671908.903065582] [metrics_node]: FPS:  3.94 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.19 / max  5.26 ms
+[detection_node-5] [INFO] [1792671908.935812878] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.90 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671909.471889924] [stereo.lx.enhancement_node]: FPS: 2.6 | Delay in-exit: 314.33 ms
+[enhancement_node-4] [INFO] [1792671909.617972399] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 214.70 ms
+[metrics_node-2] [INFO] [1792671909.954957468] [metrics_node]: FPS:  4.74 | Jitter(sx):  84.59 ms | Skew(sx-dx): avg  5.19 / max  5.25 ms
+[enhancement_node-3] [INFO] [1792671910.566126864] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 264.92 ms
+[enhancement_node-4] [INFO] [1792671910.629808146] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 255.82 ms
+[metrics_node-2] [INFO] [1792671911.220664604] [metrics_node]: FPS:  3.99 | Jitter(sx):  74.54 ms | Skew(sx-dx): avg  5.17 / max  5.23 ms
+[detection_node-5] [INFO] [1792671911.470547485] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671911.824100840] [stereo.rx.enhancement_node]: FPS: 3.3 | Delay in-exit: 223.83 ms
+[enhancement_node-3] [INFO] [1792671911.848392971] [stereo.lx.enhancement_node]: FPS: 3.1 | Delay in-exit: 286.54 ms
+[metrics_node-2] [INFO] [1792671912.454072701] [metrics_node]: FPS:  4.02 | Jitter(sx):  74.54 ms | Skew(sx-dx): avg  5.17 / max  5.23 ms
+[enhancement_node-4] [INFO] [1792671912.874033652] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 208.58 ms
+[enhancement_node-3] [INFO] [1792671912.896754353] [stereo.lx.enhancement_node]: FPS: 2.9 | Delay in-exit: 245.88 ms
+[detection_node-5] [INFO] [1792671913.078026297] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671913.480286696] [metrics_node]: FPS:  3.99 | Jitter(sx):  80.01 ms | Skew(sx-dx): avg  5.17 / max  5.23 ms
+[enhancement_node-4] [INFO] [1792671914.118851048] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 277.61 ms
+[enhancement_node-3] [INFO] [1792671914.141741730] [stereo.lx.enhancement_node]: FPS: 4.0 | Delay in-exit: 227.64 ms
+[metrics_node-2] [INFO] [1792671914.503052724] [metrics_node]: FPS:  3.82 | Jitter(sx):  84.60 ms | Skew(sx-dx): avg  5.17 / max  5.23 ms
+[detection_node-5] [INFO] [1792671915.098534093] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671915.135056915] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 188.70 ms
+[enhancement_node-3] [INFO] [1792671915.167483215] [stereo.lx.enhancement_node]: FPS: 2.9 | Delay in-exit: 306.95 ms
+[metrics_node-2] [INFO] [1792671915.601064603] [metrics_node]: FPS:  3.68 | Jitter(sx):  84.60 ms | Skew(sx-dx): avg  5.16 / max  5.23 ms
+[enhancement_node-3] [INFO] [1792671916.184597826] [stereo.lx.enhancement_node]: FPS: 2.9 | Delay in-exit: 276.06 ms
+[enhancement_node-4] [INFO] [1792671916.214970021] [stereo.rx.enhancement_node]: FPS: 2.8 | Delay in-exit: 390.15 ms
+[detection_node-5] [INFO] [1792671916.457780412] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.83 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671916.675408497] [metrics_node]: FPS:  4.63 | Jitter(sx): 102.41 ms | Skew(sx-dx): avg  5.16 / max  5.20 ms
+[enhancement_node-3] [INFO] [1792671917.239479043] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 242.28 ms
+[enhancement_node-4] [INFO] [1792671917.447478573] [stereo.rx.enhancement_node]: FPS: 2.4 | Delay in-exit: 347.87 ms
+[metrics_node-2] [INFO] [1792671917.674543469] [metrics_node]: FPS:  3.98 | Jitter(sx): 102.41 ms | Skew(sx-dx): avg  5.15 / max  5.20 ms
+[detection_node-5] [INFO] [1792671918.067148915] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671918.400813765] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 253.79 ms
+[enhancement_node-4] [INFO] [1792671918.500662708] [stereo.rx.enhancement_node]: FPS: 2.9 | Delay in-exit: 163.56 ms
+[metrics_node-2] [INFO] [1792671918.704991177] [metrics_node]: FPS:  4.85 | Jitter(sx): 102.41 ms | Skew(sx-dx): avg  5.14 / max  5.20 ms
+[enhancement_node-4] [INFO] [1792671919.560555963] [stereo.rx.enhancement_node]: FPS: 2.8 | Delay in-exit: 303.89 ms
+[enhancement_node-3] [INFO] [1792671919.575464175] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 252.38 ms
+[detection_node-5] [INFO] [1792671919.735047443] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671919.802836018] [metrics_node]: FPS:  3.64 | Jitter(sx): 102.41 ms | Skew(sx-dx): avg  5.13 / max  5.19 ms
+[enhancement_node-4] [INFO] [1792671920.640528694] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 165.84 ms
+[enhancement_node-3] [INFO] [1792671920.779594702] [stereo.lx.enhancement_node]: FPS: 2.5 | Delay in-exit: 386.75 ms
+[metrics_node-2] [INFO] [1792671920.824129204] [metrics_node]: FPS:  4.94 | Jitter(sx):  99.10 ms | Skew(sx-dx): avg  5.12 / max  5.19 ms
+[detection_node-5] [INFO] [1792671921.478622458] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=170, w=169, h=487 | Conf: 0.92 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671921.650045158] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 174.42 ms
+[enhancement_node-3] [INFO] [1792671921.897974808] [stereo.lx.enhancement_node]: FPS: 2.7 | Delay in-exit: 261.62 ms
+[metrics_node-2] [INFO] [1792671921.900060579] [metrics_node]: FPS:  4.61 | Jitter(sx):  95.21 ms | Skew(sx-dx): avg  5.12 / max  5.31 ms
+[enhancement_node-4] [INFO] [1792671922.872976304] [stereo.rx.enhancement_node]: FPS: 4.1 | Delay in-exit: 235.14 ms
+[metrics_node-2] [INFO] [1792671923.035598741] [metrics_node]: FPS:  5.31 | Jitter(sx):  67.99 ms | Skew(sx-dx): avg  5.11 / max  5.31 ms
+[enhancement_node-3] [INFO] [1792671923.196725596] [stereo.lx.enhancement_node]: FPS: 3.1 | Delay in-exit: 289.56 ms
+[detection_node-5] [INFO] [1792671923.538002221] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=491 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671924.190698915] [metrics_node]: FPS:  4.34 | Jitter(sx):  60.00 ms | Skew(sx-dx): avg  5.11 / max  5.31 ms
+[enhancement_node-4] [INFO] [1792671924.212952448] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 219.44 ms
+[enhancement_node-3] [INFO] [1792671924.221659292] [stereo.lx.enhancement_node]: FPS: 2.9 | Delay in-exit: 343.25 ms
+[detection_node-5] [INFO] [1792671925.037316263] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671925.329941717] [metrics_node]: FPS:  3.48 | Jitter(sx):  49.89 ms | Skew(sx-dx): avg  5.11 / max  5.31 ms
+[enhancement_node-4] [INFO] [1792671925.429561644] [stereo.rx.enhancement_node]: FPS: 4.1 | Delay in-exit: 224.13 ms
+[enhancement_node-3] [INFO] [1792671925.447715305] [stereo.lx.enhancement_node]: FPS: 3.3 | Delay in-exit: 199.99 ms
+[metrics_node-2] [INFO] [1792671926.428977257] [metrics_node]: FPS:  4.58 | Jitter(sx):  49.89 ms | Skew(sx-dx): avg  5.10 / max  5.31 ms
+[enhancement_node-4] [INFO] [1792671926.670225483] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 347.42 ms
+[enhancement_node-3] [INFO] [1792671926.687288702] [stereo.lx.enhancement_node]: FPS: 3.2 | Delay in-exit: 249.81 ms
+[detection_node-5] [INFO] [1792671927.221042913] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671927.502614244] [metrics_node]: FPS:  3.76 | Jitter(sx):  60.00 ms | Skew(sx-dx): avg  5.10 / max  5.31 ms
+[enhancement_node-3] [INFO] [1792671927.711786774] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 143.12 ms
+[enhancement_node-4] [INFO] [1792671927.823332099] [stereo.rx.enhancement_node]: FPS: 5.2 | Delay in-exit: 147.01 ms
+[metrics_node-2] [INFO] [1792671928.659667335] [metrics_node]: FPS:  3.41 | Jitter(sx):  59.99 ms | Skew(sx-dx): avg  5.08 / max  5.14 ms
+[enhancement_node-3] [INFO] [1792671928.806802443] [stereo.lx.enhancement_node]: FPS: 3.7 | Delay in-exit: 221.03 ms
+[enhancement_node-4] [INFO] [1792671929.170902710] [stereo.rx.enhancement_node]: FPS: 3.0 | Delay in-exit: 307.52 ms
+[detection_node-5] [INFO] [1792671929.187399104] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.90 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671929.832251602] [metrics_node]: FPS:  4.27 | Jitter(sx):  74.53 ms | Skew(sx-dx): avg  5.07 / max  5.14 ms
+[enhancement_node-3] [INFO] [1792671930.065863689] [stereo.lx.enhancement_node]: FPS: 3.2 | Delay in-exit: 225.83 ms
+[enhancement_node-4] [INFO] [1792671930.470064150] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 377.52 ms
+[metrics_node-2] [INFO] [1792671931.040996992] [metrics_node]: FPS:  4.97 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.07 / max  5.14 ms
+[detection_node-5] [INFO] [1792671931.118304828] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671931.138278491] [stereo.lx.enhancement_node]: FPS: 2.8 | Delay in-exit: 281.33 ms
+[enhancement_node-4] [INFO] [1792671931.655174051] [stereo.rx.enhancement_node]: FPS: 3.4 | Delay in-exit: 220.77 ms
+[metrics_node-2] [INFO] [1792671932.161669759] [metrics_node]: FPS:  4.57 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.06 / max  5.11 ms
+[enhancement_node-3] [INFO] [1792671932.482187302] [stereo.lx.enhancement_node]: FPS: 3.0 | Delay in-exit: 397.91 ms
+[enhancement_node-4] [INFO] [1792671932.739808041] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 243.83 ms
+[detection_node-5] [INFO] [1792671932.743580482] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671933.332825216] [metrics_node]: FPS:  4.16 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.05 / max  5.11 ms
+[enhancement_node-3] [INFO] [1792671933.642739101] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 223.21 ms
+[enhancement_node-4] [INFO] [1792671933.838815417] [stereo.rx.enhancement_node]: FPS: 3.6 | Delay in-exit: 278.98 ms
+[metrics_node-2] [INFO] [1792671934.376578795] [metrics_node]: FPS:  3.86 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.04 / max  5.08 ms
+[detection_node-5] [INFO] [1792671934.641903228] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671934.809896933] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 248.99 ms
+[enhancement_node-4] [INFO] [1792671935.001546515] [stereo.rx.enhancement_node]: FPS: 3.4 | Delay in-exit: 267.53 ms
+[metrics_node-2] [INFO] [1792671935.442310032] [metrics_node]: FPS:  4.72 | Jitter(sx):  80.00 ms | Skew(sx-dx): avg  5.04 / max  5.08 ms
+[enhancement_node-3] [INFO] [1792671935.996983274] [stereo.lx.enhancement_node]: FPS: 2.5 | Delay in-exit: 291.97 ms
+[enhancement_node-4] [INFO] [1792671936.052778490] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 191.86 ms
+[detection_node-5] [INFO] [1792671936.219779501] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671936.544099262] [metrics_node]: FPS:  3.62 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.03 / max  5.08 ms
+[enhancement_node-3] [INFO] [1792671937.087462844] [stereo.lx.enhancement_node]: FPS: 2.7 | Delay in-exit: 345.96 ms
+[enhancement_node-4] [INFO] [1792671937.218636310] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 179.90 ms
+[metrics_node-2] [INFO] [1792671937.760288442] [metrics_node]: FPS:  4.11 | Jitter(sx):  67.98 ms | Skew(sx-dx): avg  5.02 / max  5.08 ms
+[detection_node-5] [INFO] [1792671937.987374309] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671938.293672302] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 332.72 ms
+[enhancement_node-3] [INFO] [1792671938.301711892] [stereo.lx.enhancement_node]: FPS: 3.3 | Delay in-exit: 185.07 ms
+[metrics_node-2] [INFO] [1792671938.914301099] [metrics_node]: FPS:  5.22 | Jitter(sx):  74.53 ms | Skew(sx-dx): avg  5.01 / max  5.07 ms
+[enhancement_node-4] [INFO] [1792671939.490768302] [stereo.rx.enhancement_node]: FPS: 3.3 | Delay in-exit: 211.46 ms
+[enhancement_node-3] [INFO] [1792671939.805253076] [stereo.lx.enhancement_node]: FPS: 3.3 | Delay in-exit: 351.44 ms
+[detection_node-5] [INFO] [1792671939.890396973] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671940.027146094] [metrics_node]: FPS:  3.59 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  5.01 / max  5.07 ms
+[enhancement_node-4] [INFO] [1792671940.670937166] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 184.48 ms
+[enhancement_node-3] [INFO] [1792671940.996624539] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 231.25 ms
+[metrics_node-2] [INFO] [1792671941.224223393] [metrics_node]: FPS:  3.33 | Jitter(sx):  74.53 ms | Skew(sx-dx): avg  5.00 / max  5.06 ms
+[detection_node-5] [INFO] [1792671941.477055434] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=489 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671941.825614912] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 333.00 ms
+[enhancement_node-3] [INFO] [1792671942.073020470] [stereo.lx.enhancement_node]: FPS: 2.8 | Delay in-exit: 271.19 ms
+[metrics_node-2] [INFO] [1792671942.326381211] [metrics_node]: FPS:  4.52 | Jitter(sx):  84.59 ms | Skew(sx-dx): avg  4.99 / max  5.06 ms
+[enhancement_node-4] [INFO] [1792671942.927218215] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 223.44 ms
+[enhancement_node-3] [INFO] [1792671943.235955105] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 236.75 ms
+[detection_node-5] [INFO] [1792671943.326588170] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671943.447807213] [metrics_node]: FPS:  3.59 | Jitter(sx):  84.59 ms | Skew(sx-dx): avg  4.99 / max  5.06 ms
+[enhancement_node-4] [INFO] [1792671944.054140726] [stereo.rx.enhancement_node]: FPS: 3.6 | Delay in-exit: 212.58 ms
+[enhancement_node-3] [INFO] [1792671944.369239109] [stereo.lx.enhancement_node]: FPS: 3.5 | Delay in-exit: 254.57 ms
+[metrics_node-2] [INFO] [1792671944.638198978] [metrics_node]: FPS:  3.39 | Jitter(sx): 102.41 ms | Skew(sx-dx): avg  4.99 / max  5.05 ms
+[detection_node-5] [INFO] [1792671945.089813634] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=489 | Conf: 0.84 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671945.112691730] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 144.40 ms
+[enhancement_node-3] [INFO] [1792671945.580961829] [stereo.lx.enhancement_node]: FPS: 2.5 | Delay in-exit: 335.44 ms
+[metrics_node-2] [INFO] [1792671945.679576344] [metrics_node]: FPS:  3.77 | Jitter(sx): 117.18 ms | Skew(sx-dx): avg  4.98 / max  5.05 ms
+[enhancement_node-4] [INFO] [1792671946.410561221] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 278.91 ms
+[metrics_node-2] [INFO] [1792671946.690720121] [metrics_node]: FPS:  3.00 | Jitter(sx): 119.25 ms | Skew(sx-dx): avg  4.97 / max  5.05 ms
+[detection_node-5] [INFO] [1792671946.820002681] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671946.863969681] [stereo.lx.enhancement_node]: FPS: 3.1 | Delay in-exit: 335.00 ms
+[enhancement_node-4] [INFO] [1792671947.583408758] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 273.27 ms
+[metrics_node-2] [INFO] [1792671947.929524487] [metrics_node]: FPS:  4.00 | Jitter(sx): 119.25 ms | Skew(sx-dx): avg  4.96 / max  5.05 ms
+[enhancement_node-3] [INFO] [1792671947.950580558] [stereo.lx.enhancement_node]: FPS: 2.7 | Delay in-exit: 305.26 ms
+[detection_node-5] [INFO] [1792671948.456614999] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671948.793644114] [stereo.rx.enhancement_node]: FPS: 4.1 | Delay in-exit: 218.75 ms
+[metrics_node-2] [INFO] [1792671949.052499824] [metrics_node]: FPS:  3.57 | Jitter(sx): 119.25 ms | Skew(sx-dx): avg  4.96 / max  5.03 ms
+[enhancement_node-3] [INFO] [1792671949.241842088] [stereo.lx.enhancement_node]: FPS: 3.1 | Delay in-exit: 295.31 ms
+[enhancement_node-4] [INFO] [1792671949.814097437] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 211.75 ms
+[detection_node-5] [INFO] [1792671949.930002640] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671950.098762542] [metrics_node]: FPS:  3.84 | Jitter(sx): 120.92 ms | Skew(sx-dx): avg  4.95 / max  4.99 ms
+[enhancement_node-3] [INFO] [1792671950.332246776] [stereo.lx.enhancement_node]: FPS: 2.8 | Delay in-exit: 275.00 ms
+[enhancement_node-4] [INFO] [1792671951.076877302] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 281.68 ms
+[metrics_node-2] [INFO] [1792671951.361537480] [metrics_node]: FPS:  3.96 | Jitter(sx): 119.25 ms | Skew(sx-dx): avg  4.95 / max  4.99 ms
+[detection_node-5] [INFO] [1792671951.413870820] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=169, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671951.444666771] [stereo.lx.enhancement_node]: FPS: 2.7 | Delay in-exit: 285.84 ms
+[enhancement_node-4] [INFO] [1792671952.172061764] [stereo.rx.enhancement_node]: FPS: 2.7 | Delay in-exit: 255.62 ms
+[metrics_node-2] [INFO] [1792671952.600324048] [metrics_node]: FPS:  4.05 | Jitter(sx): 107.49 ms | Skew(sx-dx): avg  4.94 / max  4.99 ms
+[enhancement_node-3] [INFO] [1792671952.748301685] [stereo.lx.enhancement_node]: FPS: 3.1 | Delay in-exit: 277.99 ms
+[detection_node-5] [INFO] [1792671952.838159744] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671953.197691473] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 128.89 ms
+[metrics_node-2] [INFO] [1792671953.635271452] [metrics_node]: FPS:  3.82 | Jitter(sx):  91.65 ms | Skew(sx-dx): avg  4.94 / max  4.99 ms
+[enhancement_node-3] [INFO] [1792671954.054289136] [stereo.lx.enhancement_node]: FPS: 2.3 | Delay in-exit: 511.07 ms
+[enhancement_node-4] [INFO] [1792671954.240547100] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 224.16 ms
+[detection_node-5] [INFO] [1792671954.315643778] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=168, h=489 | Conf: 0.91 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671954.654435462] [metrics_node]: FPS:  3.94 | Jitter(sx):  91.65 ms | Skew(sx-dx): avg  4.93 / max  4.99 ms
+[enhancement_node-3] [INFO] [1792671955.386863624] [stereo.lx.enhancement_node]: FPS: 3.0 | Delay in-exit: 292.92 ms
+[enhancement_node-4] [INFO] [1792671955.469589267] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 201.43 ms
+[metrics_node-2] [INFO] [1792671955.767951943] [metrics_node]: FPS:  5.42 | Jitter(sx):  91.66 ms | Skew(sx-dx): avg  4.92 / max  4.99 ms
+[enhancement_node-3] [INFO] [1792671956.479799754] [stereo.lx.enhancement_node]: FPS: 3.7 | Delay in-exit: 224.19 ms
+[enhancement_node-4] [INFO] [1792671956.598489867] [stereo.rx.enhancement_node]: FPS: 2.7 | Delay in-exit: 349.12 ms
+[detection_node-5] [INFO] [1792671956.651752097] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671956.857473107] [metrics_node]: FPS:  4.56 | Jitter(sx):  88.45 ms | Skew(sx-dx): avg  4.91 / max  4.99 ms
+[enhancement_node-3] [INFO] [1792671957.563030491] [stereo.lx.enhancement_node]: FPS: 2.8 | Delay in-exit: 304.38 ms
+[enhancement_node-4] [INFO] [1792671957.709556636] [stereo.rx.enhancement_node]: FPS: 3.6 | Delay in-exit: 213.56 ms
+[metrics_node-2] [INFO] [1792671957.869564764] [metrics_node]: FPS:  4.92 | Jitter(sx):  80.01 ms | Skew(sx-dx): avg  4.90 / max  4.99 ms
+[detection_node-5] [INFO] [1792671958.455918511] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=490 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671958.627072643] [stereo.lx.enhancement_node]: FPS: 2.8 | Delay in-exit: 316.99 ms
+[enhancement_node-4] [INFO] [1792671958.831055467] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 274.10 ms
+[metrics_node-2] [INFO] [1792671958.878656213] [metrics_node]: FPS:  3.98 | Jitter(sx):  80.01 ms | Skew(sx-dx): avg  4.89 / max  4.95 ms
+[enhancement_node-3] [INFO] [1792671959.680072426] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 259.21 ms
+[metrics_node-2] [INFO] [1792671959.949159483] [metrics_node]: FPS:  4.75 | Jitter(sx):  67.99 ms | Skew(sx-dx): avg  4.88 / max  4.94 ms
+[enhancement_node-4] [INFO] [1792671960.112723713] [stereo.rx.enhancement_node]: FPS: 3.1 | Delay in-exit: 399.69 ms
+[detection_node-5] [INFO] [1792671960.580724632] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671960.832956060] [stereo.lx.enhancement_node]: FPS: 3.5 | Delay in-exit: 208.88 ms
+[metrics_node-2] [INFO] [1792671961.031046107] [metrics_node]: FPS:  4.56 | Jitter(sx):  67.99 ms | Skew(sx-dx): avg  4.87 / max  4.93 ms
+[enhancement_node-4] [INFO] [1792671961.424863509] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 340.38 ms
+[enhancement_node-3] [INFO] [1792671961.979938882] [stereo.lx.enhancement_node]: FPS: 3.5 | Delay in-exit: 258.30 ms
+[metrics_node-2] [INFO] [1792671962.083828931] [metrics_node]: FPS:  4.81 | Jitter(sx):  49.89 ms | Skew(sx-dx): avg  4.87 / max  4.93 ms
+[detection_node-5] [INFO] [1792671962.461732453] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671962.668844801] [stereo.rx.enhancement_node]: FPS: 3.2 | Delay in-exit: 240.66 ms
+[metrics_node-2] [INFO] [1792671963.236958656] [metrics_node]: FPS:  4.29 | Jitter(sx):  49.89 ms | Skew(sx-dx): avg  4.86 / max  4.92 ms
+[enhancement_node-3] [INFO] [1792671963.308114388] [stereo.lx.enhancement_node]: FPS: 3.0 | Delay in-exit: 296.61 ms
+[enhancement_node-4] [INFO] [1792671963.969038840] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 256.30 ms
+[metrics_node-2] [INFO] [1792671964.324598447] [metrics_node]: FPS:  3.67 | Jitter(sx):  49.89 ms | Skew(sx-dx): avg  4.86 / max  4.92 ms
+[detection_node-5] [INFO] [1792671964.397059229] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671964.500788063] [stereo.lx.enhancement_node]: FPS: 3.3 | Delay in-exit: 377.40 ms
+[enhancement_node-4] [INFO] [1792671965.028926536] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 132.85 ms
+[metrics_node-2] [INFO] [1792671965.358940646] [metrics_node]: FPS:  4.84 | Jitter(sx):  49.89 ms | Skew(sx-dx): avg  4.85 / max  4.89 ms
+[enhancement_node-3] [INFO] [1792671965.615063682] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 185.41 ms
+[enhancement_node-4] [INFO] [1792671966.072812249] [stereo.rx.enhancement_node]: FPS: 2.9 | Delay in-exit: 314.34 ms
+[detection_node-5] [INFO] [1792671966.345963835] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671966.432001240] [metrics_node]: FPS:  3.71 | Jitter(sx):  60.00 ms | Skew(sx-dx): avg  4.85 / max  4.89 ms
+[enhancement_node-3] [INFO] [1792671966.649012583] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 214.35 ms
+[enhancement_node-4] [INFO] [1792671967.193701858] [stereo.rx.enhancement_node]: FPS: 3.6 | Delay in-exit: 181.51 ms
+[metrics_node-2] [INFO] [1792671967.693671999] [metrics_node]: FPS:  3.99 | Jitter(sx):  67.99 ms | Skew(sx-dx): avg  4.84 / max  4.89 ms
+[enhancement_node-3] [INFO] [1792671967.779925663] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 267.85 ms
+[detection_node-5] [INFO] [1792671968.162058173] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671968.441866411] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 187.34 ms
+[metrics_node-2] [INFO] [1792671968.748878147] [metrics_node]: FPS:  4.69 | Jitter(sx):  90.67 ms | Skew(sx-dx): avg  4.83 / max  4.89 ms
+[enhancement_node-3] [INFO] [1792671968.853707126] [stereo.lx.enhancement_node]: FPS: 2.8 | Delay in-exit: 329.99 ms
+[enhancement_node-4] [INFO] [1792671969.638336685] [stereo.rx.enhancement_node]: FPS: 3.4 | Delay in-exit: 265.22 ms
+[enhancement_node-3] [INFO] [1792671969.947403248] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 216.85 ms
+[detection_node-5] [INFO] [1792671970.059468772] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671970.084794245] [metrics_node]: FPS:  2.28 | Jitter(sx): 135.96 ms | Skew(sx-dx): avg  4.83 / max  4.89 ms
+[enhancement_node-4] [INFO] [1792671970.808044617] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 233.81 ms
+[enhancement_node-3] [INFO] [1792671970.973486728] [stereo.lx.enhancement_node]: FPS: 2.9 | Delay in-exit: 257.35 ms
+[metrics_node-2] [INFO] [1792671971.288686175] [metrics_node]: FPS:  3.27 | Jitter(sx): 135.96 ms | Skew(sx-dx): avg  4.82 / max  4.89 ms
+[detection_node-5] [INFO] [1792671971.773768631] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=170, w=168, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671971.899981559] [stereo.rx.enhancement_node]: FPS: 3.6 | Delay in-exit: 261.85 ms
+[enhancement_node-3] [INFO] [1792671971.981212075] [stereo.lx.enhancement_node]: FPS: 3.0 | Delay in-exit: 298.80 ms
+[metrics_node-2] [INFO] [1792671972.320677486] [metrics_node]: FPS:  2.93 | Jitter(sx): 149.05 ms | Skew(sx-dx): avg  4.82 / max  4.89 ms
+[enhancement_node-3] [INFO] [1792671973.031398520] [stereo.lx.enhancement_node]: FPS: 2.8 | Delay in-exit: 334.96 ms
+[enhancement_node-4] [INFO] [1792671973.031521447] [stereo.rx.enhancement_node]: FPS: 3.5 | Delay in-exit: 324.66 ms
+[detection_node-5] [INFO] [1792671973.085186386] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=490 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792671973.116843617] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=64, y=425, w=338, h=173 | Conf: 0.43 | Distance (Z): 1.037 m
+[metrics_node-2] [INFO] [1792671973.428162213] [metrics_node]: FPS:  4.46 | Jitter(sx): 151.42 ms | Skew(sx-dx): avg  4.81 / max  4.86 ms
+[enhancement_node-4] [INFO] [1792671974.085820971] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 186.75 ms
+[enhancement_node-3] [INFO] [1792671974.189832693] [stereo.lx.enhancement_node]: FPS: 3.5 | Delay in-exit: 249.91 ms
+[metrics_node-2] [INFO] [1792671974.588843324] [metrics_node]: FPS:  3.45 | Jitter(sx): 151.42 ms | Skew(sx-dx): avg  4.80 / max  4.86 ms
+[enhancement_node-4] [INFO] [1792671975.095438901] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 151.94 ms
+[detection_node-5] [INFO] [1792671975.113423930] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671975.386535455] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 186.82 ms
+[metrics_node-2] [INFO] [1792671975.766058265] [metrics_node]: FPS:  4.24 | Jitter(sx): 151.42 ms | Skew(sx-dx): avg  4.80 / max  4.86 ms
+[enhancement_node-4] [INFO] [1792671976.207430950] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 156.39 ms
+[enhancement_node-3] [INFO] [1792671976.554694380] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 376.55 ms
+[metrics_node-2] [INFO] [1792671976.878809833] [metrics_node]: FPS:  3.64 | Jitter(sx): 141.25 ms | Skew(sx-dx): avg  4.78 / max  4.86 ms
+[detection_node-5] [INFO] [1792671977.379524845] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=168, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671977.499416280] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 247.48 ms
+[enhancement_node-3] [INFO] [1792671977.770754540] [stereo.lx.enhancement_node]: FPS: 3.3 | Delay in-exit: 305.62 ms
+[metrics_node-2] [INFO] [1792671977.926065079] [metrics_node]: FPS:  3.77 | Jitter(sx): 105.18 ms | Skew(sx-dx): avg  4.78 / max  4.85 ms
+[enhancement_node-4] [INFO] [1792671978.679853382] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 193.28 ms
+[detection_node-5] [INFO] [1792671978.938359407] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671978.947172048] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 148.09 ms
+[metrics_node-2] [INFO] [1792671979.010738333] [metrics_node]: FPS:  3.69 | Jitter(sx): 107.48 ms | Skew(sx-dx): avg  4.77 / max  4.84 ms
+[enhancement_node-4] [INFO] [1792671979.836361707] [stereo.rx.enhancement_node]: FPS: 3.4 | Delay in-exit: 238.76 ms
+[enhancement_node-3] [INFO] [1792671980.069013879] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 281.30 ms
+[metrics_node-2] [INFO] [1792671980.275492664] [metrics_node]: FPS:  4.77 | Jitter(sx):  88.43 ms | Skew(sx-dx): avg  4.76 / max  4.84 ms
+[enhancement_node-4] [INFO] [1792671980.910011807] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 224.86 ms
+[enhancement_node-3] [INFO] [1792671981.181681774] [stereo.lx.enhancement_node]: FPS: 2.7 | Delay in-exit: 329.75 ms
+[detection_node-5] [INFO] [1792671981.179999755] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671981.410843186] [metrics_node]: FPS:  4.44 | Jitter(sx):  88.43 ms | Skew(sx-dx): avg  4.76 / max  4.80 ms
+[enhancement_node-4] [INFO] [1792671982.201742805] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 261.94 ms
+[enhancement_node-3] [INFO] [1792671982.216606385] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 225.11 ms
+[metrics_node-2] [INFO] [1792671982.588480447] [metrics_node]: FPS:  4.23 | Jitter(sx):  84.58 ms | Skew(sx-dx): avg  4.75 / max  4.80 ms
+[detection_node-5] [INFO] [1792671983.150050187] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671983.247907487] [stereo.rx.enhancement_node]: FPS: 2.9 | Delay in-exit: 192.51 ms
+[enhancement_node-3] [INFO] [1792671983.451352880] [stereo.lx.enhancement_node]: FPS: 4.1 | Delay in-exit: 347.20 ms
+[metrics_node-2] [INFO] [1792671983.682564687] [metrics_node]: FPS:  3.65 | Jitter(sx):  79.99 ms | Skew(sx-dx): avg  4.74 / max  4.80 ms
+[enhancement_node-4] [INFO] [1792671984.293873069] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 221.61 ms
+[enhancement_node-3] [INFO] [1792671984.642871949] [stereo.lx.enhancement_node]: FPS: 3.3 | Delay in-exit: 299.44 ms
+[metrics_node-2] [INFO] [1792671984.722787908] [metrics_node]: FPS:  6.73 | Jitter(sx):  84.58 ms | Skew(sx-dx): avg  4.73 / max  4.80 ms
+[detection_node-5] [INFO] [1792671985.144348490] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671985.349638944] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 123.76 ms
+[metrics_node-2] [INFO] [1792671985.852171039] [metrics_node]: FPS:  6.16 | Jitter(sx):  74.53 ms | Skew(sx-dx): avg  4.72 / max  4.76 ms
+[enhancement_node-3] [INFO] [1792671985.874693539] [stereo.lx.enhancement_node]: FPS: 3.2 | Delay in-exit: 279.71 ms
+[enhancement_node-4] [INFO] [1792671986.553393565] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 239.52 ms
+[detection_node-5] [INFO] [1792671986.738341981] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671986.942009316] [metrics_node]: FPS:  7.38 | Jitter(sx):  67.97 ms | Skew(sx-dx): avg  4.71 / max  4.76 ms
+[enhancement_node-3] [INFO] [1792671987.001413330] [stereo.lx.enhancement_node]: FPS: 4.4 | Delay in-exit: 161.39 ms
+[enhancement_node-4] [INFO] [1792671987.695047922] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 194.56 ms
+[metrics_node-2] [INFO] [1792671987.967218883] [metrics_node]: FPS:  4.85 | Jitter(sx):  67.97 ms | Skew(sx-dx): avg  4.71 / max  4.76 ms
+[enhancement_node-3] [INFO] [1792671988.235982371] [stereo.lx.enhancement_node]: FPS: 4.0 | Delay in-exit: 209.82 ms
+[detection_node-5] [INFO] [1792671988.305264160] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671988.919269041] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 135.39 ms
+[metrics_node-2] [INFO] [1792671989.032621552] [metrics_node]: FPS:  4.72 | Jitter(sx):  49.88 ms | Skew(sx-dx): avg  4.70 / max  4.76 ms
+[enhancement_node-3] [INFO] [1792671989.268985550] [stereo.lx.enhancement_node]: FPS: 4.8 | Delay in-exit: 186.30 ms
+[detection_node-5] [INFO] [1792671989.702745657] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=169, h=490 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671990.052058268] [stereo.rx.enhancement_node]: FPS: 3.5 | Delay in-exit: 204.53 ms
+[metrics_node-2] [INFO] [1792671990.262054976] [metrics_node]: FPS:  4.89 | Jitter(sx):  35.89 ms | Skew(sx-dx): avg  4.70 / max  4.76 ms
+[enhancement_node-3] [INFO] [1792671990.326837320] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 197.64 ms
+[detection_node-5] [INFO] [1792671991.024110687] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792671991.208440080] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 164.14 ms
+[metrics_node-2] [INFO] [1792671991.392234485] [metrics_node]: FPS:  5.27 | Jitter(sx):  35.89 ms | Skew(sx-dx): avg  4.69 / max  4.75 ms
+[enhancement_node-3] [INFO] [1792671991.398730984] [stereo.lx.enhancement_node]: FPS: 3.7 | Delay in-exit: 280.60 ms
+[enhancement_node-4] [INFO] [1792671992.401501217] [stereo.rx.enhancement_node]: FPS: 5.0 | Delay in-exit: 223.80 ms
+[metrics_node-2] [INFO] [1792671992.455726845] [metrics_node]: FPS:  4.76 | Jitter(sx):  35.89 ms | Skew(sx-dx): avg  4.68 / max  4.75 ms
+[enhancement_node-3] [INFO] [1792671992.462599070] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 200.56 ms
+[detection_node-5] [INFO] [1792671992.504551523] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671993.542473811] [stereo.lx.enhancement_node]: FPS: 5.6 | Delay in-exit: 115.97 ms
+[metrics_node-2] [INFO] [1792671993.619968068] [metrics_node]: FPS:  5.10 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.67 / max  4.72 ms
+[enhancement_node-4] [INFO] [1792671993.653061994] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 227.35 ms
+[detection_node-5] [INFO] [1792671994.247295305] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=168, h=490 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671994.579667754] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 194.92 ms
+[metrics_node-2] [INFO] [1792671994.770161065] [metrics_node]: FPS:  5.26 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.66 / max  4.70 ms
+[enhancement_node-4] [INFO] [1792671994.820891705] [stereo.rx.enhancement_node]: FPS: 5.1 | Delay in-exit: 216.41 ms
+[enhancement_node-3] [INFO] [1792671995.701353689] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 301.24 ms
+[detection_node-5] [INFO] [1792671995.774591225] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.83 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792671995.887173107] [metrics_node]: FPS:  4.49 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.65 / max  4.70 ms
+[enhancement_node-4] [INFO] [1792671995.914877786] [stereo.rx.enhancement_node]: FPS: 5.5 | Delay in-exit: 130.51 ms
+[enhancement_node-3] [INFO] [1792671996.748937829] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 165.22 ms
+[metrics_node-2] [INFO] [1792671997.012888087] [metrics_node]: FPS:  5.26 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.65 / max  4.69 ms
+[enhancement_node-4] [INFO] [1792671997.129887602] [stereo.rx.enhancement_node]: FPS: 3.3 | Delay in-exit: 284.76 ms
+[detection_node-5] [INFO] [1792671997.256324702] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671997.821293535] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 152.26 ms
+[metrics_node-2] [INFO] [1792671998.138172400] [metrics_node]: FPS:  4.46 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.64 / max  4.68 ms
+[enhancement_node-4] [INFO] [1792671998.240303321] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 210.64 ms
+[detection_node-5] [INFO] [1792671998.500693076] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792671999.009149654] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 284.68 ms
+[metrics_node-2] [INFO] [1792671999.182178238] [metrics_node]: FPS:  5.72 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.64 / max  4.68 ms
+[enhancement_node-4] [INFO] [1792671999.511465813] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 264.40 ms
+[detection_node-5] [INFO] [1792672000.011827265] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672000.023810785] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=64, y=426, w=336, h=174 | Conf: 0.46 | Distance (Z): 1.030 m
+[enhancement_node-3] [INFO] [1792672000.179472616] [stereo.lx.enhancement_node]: FPS: 5.1 | Delay in-exit: 200.08 ms
+[metrics_node-2] [INFO] [1792672000.374226357] [metrics_node]: FPS:  5.04 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.62 / max  4.68 ms
+[enhancement_node-4] [INFO] [1792672000.534501516] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 255.40 ms
+[enhancement_node-3] [INFO] [1792672001.262742913] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 186.33 ms
+[detection_node-5] [INFO] [1792672001.269506912] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672001.436493602] [metrics_node]: FPS:  4.74 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.61 / max  4.68 ms
+[enhancement_node-4] [INFO] [1792672001.533585178] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 101.66 ms
+[metrics_node-2] [INFO] [1792672002.441404590] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.61 / max  4.68 ms
+[enhancement_node-3] [INFO] [1792672002.442887329] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 221.55 ms
+[detection_node-5] [INFO] [1792672002.664308529] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672002.792428143] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 277.27 ms
+[metrics_node-2] [INFO] [1792672003.489493693] [metrics_node]: FPS:  4.80 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.60 / max  4.68 ms
+[enhancement_node-3] [INFO] [1792672003.657100322] [stereo.lx.enhancement_node]: FPS: 5.0 | Delay in-exit: 239.97 ms
+[enhancement_node-4] [INFO] [1792672003.904147995] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 182.10 ms
+[detection_node-5] [INFO] [1792672004.113618110] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672004.544774000] [metrics_node]: FPS:  5.66 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.58 / max  4.63 ms
+[enhancement_node-3] [INFO] [1792672004.815671606] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 225.22 ms
+[enhancement_node-4] [INFO] [1792672004.966720939] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 262.63 ms
+[detection_node-5] [INFO] [1792672005.564104934] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672005.645027693] [metrics_node]: FPS:  4.53 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.58 / max  4.62 ms
+[enhancement_node-4] [INFO] [1792672005.978854466] [stereo.rx.enhancement_node]: FPS: 5.0 | Delay in-exit: 143.10 ms
+[enhancement_node-3] [INFO] [1792672006.041561879] [stereo.lx.enhancement_node]: FPS: 4.1 | Delay in-exit: 233.91 ms
+[metrics_node-2] [INFO] [1792672006.795728697] [metrics_node]: FPS:  5.21 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.58 / max  4.63 ms
+[detection_node-5] [INFO] [1792672007.097346627] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672007.102378699] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 137.54 ms
+[enhancement_node-4] [INFO] [1792672007.193459560] [stereo.rx.enhancement_node]: FPS: 4.1 | Delay in-exit: 181.02 ms
+[metrics_node-2] [INFO] [1792672007.808633367] [metrics_node]: FPS:  4.94 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.58 / max  4.63 ms
+[enhancement_node-3] [INFO] [1792672008.245909932] [stereo.lx.enhancement_node]: FPS: 4.4 | Delay in-exit: 202.06 ms
+[enhancement_node-4] [INFO] [1792672008.380638291] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 249.65 ms
+[detection_node-5] [INFO] [1792672008.539405924] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672008.941399237] [metrics_node]: FPS:  4.45 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.58 / max  4.63 ms
+[enhancement_node-3] [INFO] [1792672009.423010047] [stereo.lx.enhancement_node]: FPS: 5.1 | Delay in-exit: 196.58 ms
+[enhancement_node-4] [INFO] [1792672009.521187051] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 194.50 ms
+[detection_node-5] [INFO] [1792672010.030215038] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=490 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672010.084956394] [metrics_node]: FPS:  5.20 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.57 / max  4.63 ms
+[enhancement_node-3] [INFO] [1792672010.589024181] [stereo.lx.enhancement_node]: FPS: 5.1 | Delay in-exit: 171.26 ms
+[enhancement_node-4] [INFO] [1792672010.748820128] [stereo.rx.enhancement_node]: FPS: 4.1 | Delay in-exit: 194.72 ms
+[metrics_node-2] [INFO] [1792672011.292691770] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.56 / max  4.63 ms
+[detection_node-5] [INFO] [1792672011.462801097] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672011.617023776] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 253.75 ms
+[enhancement_node-4] [INFO] [1792672011.886018367] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 168.22 ms
+[metrics_node-2] [INFO] [1792672012.484725281] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.55 / max  4.61 ms
+[enhancement_node-3] [INFO] [1792672012.745779926] [stereo.lx.enhancement_node]: FPS: 5.3 | Delay in-exit: 162.59 ms
+[enhancement_node-4] [INFO] [1792672013.081919134] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 238.76 ms
+[detection_node-5] [INFO] [1792672013.090885858] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672013.588055740] [metrics_node]: FPS:  5.46 | Jitter(sx):   0.04 ms | Skew(sx-dx): avg  4.54 / max  4.60 ms
+[enhancement_node-3] [INFO] [1792672013.879556083] [stereo.lx.enhancement_node]: FPS: 4.4 | Delay in-exit: 177.21 ms
+[enhancement_node-4] [INFO] [1792672014.179572379] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 419.04 ms
+[detection_node-5] [INFO] [1792672014.216600765] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672014.598446613] [metrics_node]: FPS:  4.92 | Jitter(sx):   0.04 ms | Skew(sx-dx): avg  4.54 / max  4.60 ms
+[enhancement_node-3] [INFO] [1792672015.050718841] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 232.68 ms
+[enhancement_node-4] [INFO] [1792672015.281146492] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 167.77 ms
+[metrics_node-2] [INFO] [1792672015.753604544] [metrics_node]: FPS:  4.33 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.53 / max  4.60 ms
+[detection_node-5] [INFO] [1792672015.764925347] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=490 | Conf: 0.81 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672015.770438867] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=66, y=425, w=336, h=175 | Conf: 0.49 | Distance (Z): 1.142 m
+[enhancement_node-3] [INFO] [1792672016.157739437] [stereo.lx.enhancement_node]: FPS: 5.4 | Delay in-exit: 161.70 ms
+[enhancement_node-4] [INFO] [1792672016.360037882] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 180.33 ms
+[metrics_node-2] [INFO] [1792672016.763427869] [metrics_node]: FPS:  5.95 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.52 / max  4.60 ms
+[detection_node-5] [INFO] [1792672017.243175230] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=168, h=491 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672017.255840805] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=63, y=426, w=338, h=174 | Conf: 0.45 | Distance (Z): 1.033 m
+[enhancement_node-3] [INFO] [1792672017.288053137] [stereo.lx.enhancement_node]: FPS: 4.4 | Delay in-exit: 169.15 ms
+[enhancement_node-4] [INFO] [1792672017.402601003] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 182.11 ms
+[metrics_node-2] [INFO] [1792672017.786218087] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.51 / max  4.60 ms
+[enhancement_node-3] [INFO] [1792672018.438238051] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 215.92 ms
+[enhancement_node-4] [INFO] [1792672018.559197256] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 217.34 ms
+[detection_node-5] [INFO] [1792672018.587498010] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672018.603349617] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=63, y=426, w=338, h=172 | Conf: 0.42 | Distance (Z): 1.036 m
+[detection_node-5] [INFO] [1792672018.611437071] [detection_node]: [TARGET DETECTED] Obj [2] -> Box: x=59, y=424, w=343, h=294 | Conf: 0.40 | Distance (Z): 0.975 m
+[metrics_node-2] [INFO] [1792672018.960887512] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.51 / max  4.57 ms
+[enhancement_node-4] [INFO] [1792672019.572620978] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 129.71 ms
+[enhancement_node-3] [INFO] [1792672019.645133572] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 303.78 ms
+[detection_node-5] [INFO] [1792672020.025573706] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672020.051668065] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=66, y=426, w=336, h=176 | Conf: 0.47 | Distance (Z): 1.039 m
+[metrics_node-2] [INFO] [1792672020.089600341] [metrics_node]: FPS:  4.43 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.50 / max  4.61 ms
+[enhancement_node-4] [INFO] [1792672020.617903785] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 206.62 ms
+[enhancement_node-3] [INFO] [1792672020.827658091] [stereo.lx.enhancement_node]: FPS: 5.0 | Delay in-exit: 181.74 ms
+[metrics_node-2] [INFO] [1792672021.303201412] [metrics_node]: FPS:  4.14 | Jitter(sx):  35.90 ms | Skew(sx-dx): avg  4.50 / max  4.61 ms
+[enhancement_node-4] [INFO] [1792672021.675465510] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 191.34 ms
+[detection_node-5] [INFO] [1792672021.731418468] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672021.917569730] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 172.98 ms
+[metrics_node-2] [INFO] [1792672022.363226820] [metrics_node]: FPS:  3.77 | Jitter(sx):  79.16 ms | Skew(sx-dx): avg  4.50 / max  4.61 ms
+[enhancement_node-4] [INFO] [1792672022.812357925] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 167.27 ms
+[enhancement_node-3] [INFO] [1792672023.105583557] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 223.84 ms
+[detection_node-5] [INFO] [1792672023.161989312] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672023.420902128] [metrics_node]: FPS:  4.70 | Jitter(sx):  79.16 ms | Skew(sx-dx): avg  4.49 / max  4.61 ms
+[enhancement_node-4] [INFO] [1792672023.980504720] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 185.24 ms
+[enhancement_node-3] [INFO] [1792672024.150052370] [stereo.lx.enhancement_node]: FPS: 5.8 | Delay in-exit: 114.08 ms
+[metrics_node-2] [INFO] [1792672024.480067541] [metrics_node]: FPS:  4.73 | Jitter(sx):  79.16 ms | Skew(sx-dx): avg  4.49 / max  4.61 ms
+[detection_node-5] [INFO] [1792672024.825988260] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=168, h=489 | Conf: 0.90 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672025.103060617] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 187.66 ms
+[enhancement_node-3] [INFO] [1792672025.211006717] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 223.76 ms
+[metrics_node-2] [INFO] [1792672025.685646343] [metrics_node]: FPS:  4.95 | Jitter(sx):  79.16 ms | Skew(sx-dx): avg  4.47 / max  4.61 ms
+[enhancement_node-4] [INFO] [1792672026.195464056] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 144.19 ms
+[detection_node-5] [INFO] [1792672026.202062307] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672026.372574788] [stereo.lx.enhancement_node]: FPS: 5.1 | Delay in-exit: 150.33 ms
+[metrics_node-2] [INFO] [1792672026.810424011] [metrics_node]: FPS:  5.38 | Jitter(sx):  79.16 ms | Skew(sx-dx): avg  4.46 / max  4.53 ms
+[enhancement_node-4] [INFO] [1792672027.222316838] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 251.20 ms
+[enhancement_node-3] [INFO] [1792672027.490387191] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 277.23 ms
+[detection_node-5] [INFO] [1792672027.642325776] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672027.824525293] [metrics_node]: FPS:  4.91 | Jitter(sx):  71.79 ms | Skew(sx-dx): avg  4.46 / max  4.52 ms
+[enhancement_node-4] [INFO] [1792672028.455052513] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 188.65 ms
+[enhancement_node-3] [INFO] [1792672028.679535516] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 206.75 ms
+[metrics_node-2] [INFO] [1792672028.937262257] [metrics_node]: FPS:  4.52 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.45 / max  4.50 ms
+[detection_node-5] [INFO] [1792672029.064478682] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672029.639868422] [stereo.rx.enhancement_node]: FPS: 5.0 | Delay in-exit: 186.60 ms
+[enhancement_node-3] [INFO] [1792672029.802554603] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 307.24 ms
+[metrics_node-2] [INFO] [1792672029.970238019] [metrics_node]: FPS:  5.75 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.45 / max  4.50 ms
+[detection_node-5] [INFO] [1792672030.714032082] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672030.803723298] [stereo.lx.enhancement_node]: FPS: 4.0 | Delay in-exit: 274.93 ms
+[enhancement_node-4] [INFO] [1792672030.804409546] [stereo.rx.enhancement_node]: FPS: 5.2 | Delay in-exit: 154.51 ms
+[metrics_node-2] [INFO] [1792672031.198415973] [metrics_node]: FPS:  4.91 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.44 / max  4.50 ms
+[enhancement_node-4] [INFO] [1792672031.820457888] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 153.87 ms
+[enhancement_node-3] [INFO] [1792672031.928516985] [stereo.lx.enhancement_node]: FPS: 4.4 | Delay in-exit: 190.42 ms
+[metrics_node-2] [INFO] [1792672032.328331525] [metrics_node]: FPS:  4.41 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.43 / max  4.48 ms
+[detection_node-5] [INFO] [1792672032.339481319] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672032.871852651] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 169.64 ms
+[enhancement_node-3] [INFO] [1792672033.068507571] [stereo.lx.enhancement_node]: FPS: 4.4 | Delay in-exit: 256.03 ms
+[metrics_node-2] [INFO] [1792672033.467689976] [metrics_node]: FPS:  5.26 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.42 / max  4.48 ms
+[enhancement_node-4] [INFO] [1792672033.903216995] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 180.07 ms
+[detection_node-5] [INFO] [1792672033.939673184] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672034.180844230] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 159.48 ms
+[metrics_node-2] [INFO] [1792672034.593511326] [metrics_node]: FPS:  5.33 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.41 / max  4.47 ms
+[enhancement_node-4] [INFO] [1792672035.031151627] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 218.72 ms
+[enhancement_node-3] [INFO] [1792672035.347597760] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 159.20 ms
+[detection_node-5] [INFO] [1792672035.363800473] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.83 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672035.669299130] [metrics_node]: FPS:  4.68 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.41 / max  4.47 ms
+[enhancement_node-4] [INFO] [1792672036.141310484] [stereo.rx.enhancement_node]: FPS: 5.4 | Delay in-exit: 134.40 ms
+[enhancement_node-3] [INFO] [1792672036.367566979] [stereo.lx.enhancement_node]: FPS: 4.0 | Delay in-exit: 245.59 ms
+[metrics_node-2] [INFO] [1792672036.801130544] [metrics_node]: FPS:  4.39 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.40 / max  4.45 ms
+[detection_node-5] [INFO] [1792672036.911701720] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672037.183489610] [stereo.rx.enhancement_node]: FPS: 2.9 | Delay in-exit: 301.51 ms
+[enhancement_node-3] [INFO] [1792672037.538489795] [stereo.lx.enhancement_node]: FPS: 5.9 | Delay in-exit: 159.72 ms
+[metrics_node-2] [INFO] [1792672037.908671755] [metrics_node]: FPS:  5.42 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.40 / max  4.45 ms
+[enhancement_node-4] [INFO] [1792672038.341529917] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 288.49 ms
+[detection_node-5] [INFO] [1792672038.528375407] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672038.544565432] [stereo.lx.enhancement_node]: FPS: 4.0 | Delay in-exit: 238.74 ms
+[metrics_node-2] [INFO] [1792672038.997680969] [metrics_node]: FPS:  5.55 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.40 / max  4.46 ms
+[enhancement_node-4] [INFO] [1792672039.407892600] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 167.72 ms
+[enhancement_node-3] [INFO] [1792672039.653030844] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 190.42 ms
+[metrics_node-2] [INFO] [1792672040.073962389] [metrics_node]: FPS:  4.62 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.39 / max  4.46 ms
+[detection_node-5] [INFO] [1792672040.080567341] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672040.628791953] [stereo.rx.enhancement_node]: FPS: 4.1 | Delay in-exit: 263.97 ms
+[enhancement_node-3] [INFO] [1792672040.678249163] [stereo.lx.enhancement_node]: FPS: 4.9 | Delay in-exit: 158.03 ms
+[metrics_node-2] [INFO] [1792672041.108789580] [metrics_node]: FPS:  4.85 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.38 / max  4.46 ms
+[detection_node-5] [INFO] [1792672041.483879851] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672041.690723011] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 108.95 ms
+[enhancement_node-3] [INFO] [1792672041.701259426] [stereo.lx.enhancement_node]: FPS: 4.9 | Delay in-exit: 185.60 ms
+[metrics_node-2] [INFO] [1792672042.165885130] [metrics_node]: FPS:  5.66 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.37 / max  4.46 ms
+[enhancement_node-3] [INFO] [1792672042.797502397] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 179.89 ms
+[enhancement_node-4] [INFO] [1792672042.880200473] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 179.53 ms
+[detection_node-5] [INFO] [1792672042.986638939] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672043.292113679] [metrics_node]: FPS:  4.45 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.37 / max  4.46 ms
+[enhancement_node-3] [INFO] [1792672043.969445539] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 233.63 ms
+[enhancement_node-4] [INFO] [1792672044.108961883] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 290.35 ms
+[metrics_node-2] [INFO] [1792672044.356100677] [metrics_node]: FPS:  5.62 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.36 / max  4.46 ms
+[detection_node-5] [INFO] [1792672044.664419950] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672044.991567567] [stereo.lx.enhancement_node]: FPS: 4.9 | Delay in-exit: 219.59 ms
+[enhancement_node-4] [INFO] [1792672045.267001134] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 172.13 ms
+[metrics_node-2] [INFO] [1792672045.423011589] [metrics_node]: FPS:  4.68 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.36 / max  4.40 ms
+[enhancement_node-3] [INFO] [1792672046.033242035] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 220.23 ms
+[detection_node-5] [INFO] [1792672046.117680783] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672046.271577027] [stereo.rx.enhancement_node]: FPS: 5.0 | Delay in-exit: 108.44 ms
+[metrics_node-2] [INFO] [1792672046.582848362] [metrics_node]: FPS:  5.17 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.36 / max  4.39 ms
+[enhancement_node-3] [INFO] [1792672047.059332378] [stereo.lx.enhancement_node]: FPS: 4.9 | Delay in-exit: 170.99 ms
+[detection_node-5] [INFO] [1792672047.569515710] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672047.584521145] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 283.48 ms
+[metrics_node-2] [INFO] [1792672047.709723100] [metrics_node]: FPS:  4.42 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.35 / max  4.39 ms
+[enhancement_node-3] [INFO] [1792672048.103294739] [stereo.lx.enhancement_node]: FPS: 4.8 | Delay in-exit: 151.26 ms
+[enhancement_node-4] [INFO] [1792672048.757277268] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 278.74 ms
+[metrics_node-2] [INFO] [1792672048.840044198] [metrics_node]: FPS:  5.35 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.34 / max  4.39 ms
+[detection_node-5] [INFO] [1792672049.215582227] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=490 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672049.233636374] [stereo.lx.enhancement_node]: FPS: 5.3 | Delay in-exit: 123.24 ms
+[enhancement_node-4] [INFO] [1792672049.857367103] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 211.45 ms
+[metrics_node-2] [INFO] [1792672049.893707956] [metrics_node]: FPS:  4.74 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.33 / max  4.38 ms
+[enhancement_node-3] [INFO] [1792672050.398599006] [stereo.lx.enhancement_node]: FPS: 5.1 | Delay in-exit: 203.79 ms
+[detection_node-5] [INFO] [1792672050.859949672] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.83 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672050.956785688] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 242.88 ms
+[metrics_node-2] [INFO] [1792672050.993730878] [metrics_node]: FPS:  5.42 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.32 / max  4.38 ms
+[enhancement_node-3] [INFO] [1792672051.429730594] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 161.81 ms
+[enhancement_node-4] [INFO] [1792672051.990202649] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 301.11 ms
+[metrics_node-2] [INFO] [1792672052.092332207] [metrics_node]: FPS:  4.55 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.31 / max  4.38 ms
+[detection_node-5] [INFO] [1792672052.114894634] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672052.540614445] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 170.69 ms
+[enhancement_node-4] [INFO] [1792672053.186884921] [stereo.rx.enhancement_node]: FPS: 5.0 | Delay in-exit: 235.81 ms
+[metrics_node-2] [INFO] [1792672053.223788551] [metrics_node]: FPS:  5.35 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.30 / max  4.38 ms
+[detection_node-5] [INFO] [1792672053.610820869] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672053.740182354] [stereo.lx.enhancement_node]: FPS: 4.1 | Delay in-exit: 166.40 ms
+[metrics_node-2] [INFO] [1792672054.257531231] [metrics_node]: FPS:  4.84 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.30 / max  4.38 ms
+[enhancement_node-4] [INFO] [1792672054.338706130] [stereo.rx.enhancement_node]: FPS: 3.5 | Delay in-exit: 227.21 ms
+[enhancement_node-3] [INFO] [1792672054.802442015] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 188.91 ms
+[detection_node-5] [INFO] [1792672055.098372828] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672055.384014394] [metrics_node]: FPS:  5.27 | Jitter(sx):   0.04 ms | Skew(sx-dx): avg  4.30 / max  4.38 ms
+[enhancement_node-4] [INFO] [1792672055.428407385] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 165.97 ms
+[enhancement_node-3] [INFO] [1792672055.911999747] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 226.56 ms
+[metrics_node-2] [INFO] [1792672056.482273780] [metrics_node]: FPS:  4.56 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.29 / max  4.38 ms
+[enhancement_node-4] [INFO] [1792672056.499590398] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 198.63 ms
+[detection_node-5] [INFO] [1792672056.554297591] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672056.975805900] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 189.73 ms
+[metrics_node-2] [INFO] [1792672057.525522802] [metrics_node]: FPS:  4.78 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.29 / max  4.35 ms
+[enhancement_node-4] [INFO] [1792672057.625651325] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 178.78 ms
+[detection_node-5] [INFO] [1792672058.011943120] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=490 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672058.016421641] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=64, y=427, w=337, h=174 | Conf: 0.41 | Distance (Z): 1.041 m
+[enhancement_node-3] [INFO] [1792672058.133795832] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 236.48 ms
+[metrics_node-2] [INFO] [1792672058.573404274] [metrics_node]: FPS:  5.77 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.28 / max  4.34 ms
+[enhancement_node-4] [INFO] [1792672058.864667787] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 229.19 ms
+[enhancement_node-3] [INFO] [1792672059.207412528] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 190.45 ms
+[detection_node-5] [INFO] [1792672059.514277688] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672059.652418781] [metrics_node]: FPS:  4.63 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.27 / max  4.33 ms
+[enhancement_node-4] [INFO] [1792672060.101642938] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 202.48 ms
+[enhancement_node-3] [INFO] [1792672060.313460972] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 130.58 ms
+[metrics_node-2] [INFO] [1792672060.719004306] [metrics_node]: FPS:  4.67 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.26 / max  4.33 ms
+[detection_node-5] [INFO] [1792672060.905757304] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.80 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672061.198198339] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 165.30 ms
+[enhancement_node-3] [INFO] [1792672061.517695422] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 272.39 ms
+[metrics_node-2] [INFO] [1792672061.766030992] [metrics_node]: FPS:  5.75 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.25 / max  4.32 ms
+[enhancement_node-4] [INFO] [1792672062.205734180] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 278.84 ms
+[detection_node-5] [INFO] [1792672062.269514461] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=169, h=490 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672062.590408546] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 186.84 ms
+[metrics_node-2] [INFO] [1792672062.815061715] [metrics_node]: FPS:  4.76 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.24 / max  4.32 ms
+[enhancement_node-4] [INFO] [1792672063.408322411] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 245.59 ms
+[detection_node-5] [INFO] [1792672063.747674017] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=486 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672063.763742305] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 236.43 ms
+[metrics_node-2] [INFO] [1792672063.988934527] [metrics_node]: FPS:  5.11 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.24 / max  4.32 ms
+[enhancement_node-4] [INFO] [1792672064.511292693] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 283.21 ms
+[enhancement_node-3] [INFO] [1792672064.829318047] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 257.20 ms
+[metrics_node-2] [INFO] [1792672065.046444079] [metrics_node]: FPS:  4.71 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.23 / max  4.28 ms
+[detection_node-5] [INFO] [1792672065.155324354] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.90 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672065.615123979] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 198.47 ms
+[enhancement_node-3] [INFO] [1792672066.095501094] [stereo.lx.enhancement_node]: FPS: 4.0 | Delay in-exit: 291.80 ms
+[metrics_node-2] [INFO] [1792672066.207682209] [metrics_node]: FPS:  5.22 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.22 / max  4.28 ms
+[detection_node-5] [INFO] [1792672066.650911158] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672066.656073629] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 248.31 ms
+[detection_node-5] [INFO] [1792672066.660930208] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=66, y=427, w=335, h=173 | Conf: 0.48 | Distance (Z): 1.032 m
+[enhancement_node-3] [INFO] [1792672067.191742201] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 206.66 ms
+[metrics_node-2] [INFO] [1792672067.481502652] [metrics_node]: FPS:  4.70 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.22 / max  4.28 ms
+[enhancement_node-4] [INFO] [1792672067.826189314] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 251.61 ms
+[detection_node-5] [INFO] [1792672068.032627030] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672068.275454032] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 199.97 ms
+[metrics_node-2] [INFO] [1792672068.512594320] [metrics_node]: FPS:  4.81 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.21 / max  4.28 ms
+[enhancement_node-4] [INFO] [1792672069.026321953] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 253.69 ms
+[enhancement_node-3] [INFO] [1792672069.333879258] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 137.93 ms
+[detection_node-5] [INFO] [1792672069.384370707] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672069.552329230] [metrics_node]: FPS:  5.81 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.21 / max  4.28 ms
+[enhancement_node-4] [INFO] [1792672070.203722347] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 166.73 ms
+[metrics_node-2] [INFO] [1792672070.595725506] [metrics_node]: FPS:  4.78 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.20 / max  4.25 ms
+[enhancement_node-3] [INFO] [1792672070.627689389] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 302.75 ms
+[detection_node-5] [INFO] [1792672070.753912830] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672071.374665142] [stereo.rx.enhancement_node]: FPS: 5.1 | Delay in-exit: 158.44 ms
+[metrics_node-2] [INFO] [1792672071.638987135] [metrics_node]: FPS:  4.81 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.19 / max  4.23 ms
+[enhancement_node-3] [INFO] [1792672071.733447823] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 250.82 ms
+[detection_node-5] [INFO] [1792672072.333785146] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672072.406725075] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 144.20 ms
+[enhancement_node-3] [INFO] [1792672072.761299895] [stereo.lx.enhancement_node]: FPS: 4.9 | Delay in-exit: 153.39 ms
+[metrics_node-2] [INFO] [1792672072.804058847] [metrics_node]: FPS:  5.11 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.19 / max  4.23 ms
+[enhancement_node-4] [INFO] [1792672073.498835145] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 200.27 ms
+[enhancement_node-3] [INFO] [1792672073.799874670] [stereo.lx.enhancement_node]: FPS: 4.8 | Delay in-exit: 133.34 ms
+[metrics_node-2] [INFO] [1792672073.907342757] [metrics_node]: FPS:  4.59 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.17 / max  4.23 ms
+[detection_node-5] [INFO] [1792672074.066577979] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672074.541687042] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 189.66 ms
+[enhancement_node-3] [INFO] [1792672074.934871087] [stereo.lx.enhancement_node]: FPS: 5.3 | Delay in-exit: 181.26 ms
+[metrics_node-2] [INFO] [1792672074.983687532] [metrics_node]: FPS:  5.50 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.17 / max  4.23 ms
+[detection_node-5] [INFO] [1792672075.654775433] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672075.668890792] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 142.36 ms
+[metrics_node-2] [INFO] [1792672076.007553314] [metrics_node]: FPS:  4.89 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.16 / max  4.21 ms
+[enhancement_node-3] [INFO] [1792672076.249784804] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 277.52 ms
+[enhancement_node-4] [INFO] [1792672076.686983077] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 140.82 ms
+[metrics_node-2] [INFO] [1792672077.068387090] [metrics_node]: FPS:  4.70 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.16 / max  4.21 ms
+[detection_node-5] [INFO] [1792672077.117887461] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672077.414775673] [stereo.lx.enhancement_node]: FPS: 5.2 | Delay in-exit: 185.16 ms
+[enhancement_node-4] [INFO] [1792672077.759290018] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 153.55 ms
+[metrics_node-2] [INFO] [1792672078.212056029] [metrics_node]: FPS:  5.27 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.15 / max  4.21 ms
+[enhancement_node-3] [INFO] [1792672078.470904325] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 266.24 ms
+[detection_node-5] [INFO] [1792672078.806663495] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=490 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672078.861681781] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 195.91 ms
+[metrics_node-2] [INFO] [1792672079.260868798] [metrics_node]: FPS:  4.75 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.15 / max  4.21 ms
+[enhancement_node-3] [INFO] [1792672079.699269372] [stereo.lx.enhancement_node]: FPS: 4.9 | Delay in-exit: 207.89 ms
+[enhancement_node-4] [INFO] [1792672079.966513896] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 182.91 ms
+[detection_node-5] [INFO] [1792672080.324442559] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672080.400641348] [metrics_node]: FPS:  5.29 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.14 / max  4.21 ms
+[enhancement_node-4] [INFO] [1792672080.956232328] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 174.34 ms
+[enhancement_node-3] [INFO] [1792672080.973118225] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 245.26 ms
+[metrics_node-2] [INFO] [1792672081.647379783] [metrics_node]: FPS:  4.81 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.13 / max  4.17 ms
+[detection_node-5] [INFO] [1792672081.664974148] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672082.090272733] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 173.98 ms
+[enhancement_node-4] [INFO] [1792672082.173563481] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 181.73 ms
+[metrics_node-2] [INFO] [1792672082.805535989] [metrics_node]: FPS:  5.16 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.12 / max  4.16 ms
+[enhancement_node-3] [INFO] [1792672083.257653772] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 198.40 ms
+[detection_node-5] [INFO] [1792672083.266384084] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672083.334300909] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 183.78 ms
+[metrics_node-2] [INFO] [1792672083.981827133] [metrics_node]: FPS:  5.09 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.11 / max  4.16 ms
+[enhancement_node-3] [INFO] [1792672084.305256899] [stereo.lx.enhancement_node]: FPS: 4.8 | Delay in-exit: 208.58 ms
+[enhancement_node-4] [INFO] [1792672084.337272990] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 241.65 ms
+[detection_node-5] [INFO] [1792672084.734149976] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672085.091347917] [metrics_node]: FPS:  4.55 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.11 / max  4.16 ms
+[enhancement_node-3] [INFO] [1792672085.410015172] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 161.04 ms
+[enhancement_node-4] [INFO] [1792672085.464179198] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 200.76 ms
+[metrics_node-2] [INFO] [1792672086.305861573] [metrics_node]: FPS:  4.91 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.11 / max  4.16 ms
+[detection_node-5] [INFO] [1792672086.314690051] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.83 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672086.577110458] [stereo.rx.enhancement_node]: FPS: 5.4 | Delay in-exit: 120.28 ms
+[enhancement_node-3] [INFO] [1792672086.583257655] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 167.54 ms
+[metrics_node-2] [INFO] [1792672087.383597505] [metrics_node]: FPS:  5.58 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.10 / max  4.15 ms
+[enhancement_node-3] [INFO] [1792672087.621063446] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 168.15 ms
+[enhancement_node-4] [INFO] [1792672087.899292415] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 268.67 ms
+[detection_node-5] [INFO] [1792672087.914756630] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672088.624744526] [metrics_node]: FPS:  4.85 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.09 / max  4.15 ms
+[enhancement_node-3] [INFO] [1792672088.707432569] [stereo.lx.enhancement_node]: FPS: 5.5 | Delay in-exit: 123.79 ms
+[enhancement_node-4] [INFO] [1792672089.106736854] [stereo.rx.enhancement_node]: FPS: 4.1 | Delay in-exit: 183.66 ms
+[detection_node-5] [INFO] [1792672089.458609885] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672089.731165014] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 184.15 ms
+[metrics_node-2] [INFO] [1792672089.811780982] [metrics_node]: FPS:  5.06 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.08 / max  4.15 ms
+[enhancement_node-4] [INFO] [1792672090.135798568] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 196.40 ms
+[enhancement_node-3] [INFO] [1792672090.799725944] [stereo.lx.enhancement_node]: FPS: 3.7 | Delay in-exit: 320.69 ms
+[detection_node-5] [INFO] [1792672090.808883719] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=169, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672090.809461854] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.07 / max  4.13 ms
+[enhancement_node-4] [INFO] [1792672091.170532959] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 154.10 ms
+[enhancement_node-3] [INFO] [1792672091.986177463] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 187.65 ms
+[metrics_node-2] [INFO] [1792672092.106989311] [metrics_node]: FPS:  4.64 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.07 / max  4.11 ms
+[enhancement_node-4] [INFO] [1792672092.388589985] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 211.91 ms
+[detection_node-5] [INFO] [1792672092.573422164] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672093.162420466] [stereo.lx.enhancement_node]: FPS: 5.1 | Delay in-exit: 183.92 ms
+[metrics_node-2] [INFO] [1792672093.169832783] [metrics_node]: FPS:  5.62 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.06 / max  4.11 ms
+[enhancement_node-4] [INFO] [1792672093.509724566] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 191.61 ms
+[detection_node-5] [INFO] [1792672094.260759825] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.88 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672094.288307742] [metrics_node]: FPS:  4.47 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.06 / max  4.11 ms
+[enhancement_node-3] [INFO] [1792672094.375980733] [stereo.lx.enhancement_node]: FPS: 4.1 | Delay in-exit: 218.59 ms
+[enhancement_node-4] [INFO] [1792672094.632854050] [stereo.rx.enhancement_node]: FPS: 5.3 | Delay in-exit: 186.21 ms
+[enhancement_node-3] [INFO] [1792672095.410701581] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 199.33 ms
+[metrics_node-2] [INFO] [1792672095.453011776] [metrics_node]: FPS:  5.19 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.05 / max  4.10 ms
+[detection_node-5] [INFO] [1792672095.623651996] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=168, h=490 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672095.775037345] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 148.42 ms
+[metrics_node-2] [INFO] [1792672096.485269922] [metrics_node]: FPS:  4.81 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  4.04 / max  4.10 ms
+[enhancement_node-3] [INFO] [1792672096.648980528] [stereo.lx.enhancement_node]: FPS: 4.0 | Delay in-exit: 251.21 ms
+[enhancement_node-4] [INFO] [1792672096.830891440] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 168.54 ms
+[detection_node-5] [INFO] [1792672097.107345647] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=169, h=488 | Conf: 0.86 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672097.148464831] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=65, y=427, w=336, h=173 | Conf: 0.44 | Distance (Z): 1.033 m
+[metrics_node-2] [INFO] [1792672097.561667390] [metrics_node]: FPS:  4.70 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.04 / max  4.11 ms
+[enhancement_node-3] [INFO] [1792672097.674991329] [stereo.lx.enhancement_node]: FPS: 4.9 | Delay in-exit: 169.72 ms
+[enhancement_node-4] [INFO] [1792672097.942516425] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 264.87 ms
+[metrics_node-2] [INFO] [1792672098.652943991] [metrics_node]: FPS:  5.40 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.03 / max  4.11 ms
+[detection_node-5] [INFO] [1792672098.678275572] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672098.684238229] [stereo.lx.enhancement_node]: FPS: 5.0 | Delay in-exit: 215.78 ms
+[detection_node-5] [INFO] [1792672098.687005879] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=61, y=426, w=340, h=172 | Conf: 0.41 | Distance (Z): 0.944 m
+[enhancement_node-4] [INFO] [1792672098.958052068] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 141.30 ms
+[metrics_node-2] [INFO] [1792672099.763743925] [metrics_node]: FPS:  4.50 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.02 / max  4.11 ms
+[enhancement_node-3] [INFO] [1792672099.842984358] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 193.56 ms
+[detection_node-5] [INFO] [1792672100.071575234] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.90 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672100.106487793] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 168.36 ms
+[enhancement_node-3] [INFO] [1792672100.915227795] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 154.53 ms
+[metrics_node-2] [INFO] [1792672100.960731064] [metrics_node]: FPS:  5.89 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.02 / max  4.11 ms
+[enhancement_node-4] [INFO] [1792672101.169016277] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 183.15 ms
+[detection_node-5] [INFO] [1792672101.750172231] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672102.061176915] [stereo.lx.enhancement_node]: FPS: 4.4 | Delay in-exit: 195.57 ms
+[metrics_node-2] [INFO] [1792672102.132319651] [metrics_node]: FPS:  5.10 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.01 / max  4.11 ms
+[enhancement_node-4] [INFO] [1792672102.358675287] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 218.82 ms
+[enhancement_node-3] [INFO] [1792672103.079872138] [stereo.lx.enhancement_node]: FPS: 5.9 | Delay in-exit: 150.26 ms
+[metrics_node-2] [INFO] [1792672103.247008401] [metrics_node]: FPS:  4.48 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.00 / max  4.04 ms
+[detection_node-5] [INFO] [1792672103.298046373] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.82 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672103.439542797] [stereo.rx.enhancement_node]: FPS: 3.7 | Delay in-exit: 176.06 ms
+[enhancement_node-3] [INFO] [1792672104.136537463] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 200.32 ms
+[metrics_node-2] [INFO] [1792672104.498125014] [metrics_node]: FPS:  4.00 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  4.00 / max  4.04 ms
+[detection_node-5] [INFO] [1792672104.549181151] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=169, h=491 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672104.658455054] [stereo.rx.enhancement_node]: FPS: 4.1 | Delay in-exit: 204.61 ms
+[enhancement_node-3] [INFO] [1792672105.321676813] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 249.83 ms
+[metrics_node-2] [INFO] [1792672105.585921912] [metrics_node]: FPS:  6.42 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.99 / max  4.04 ms
+[enhancement_node-4] [INFO] [1792672105.778548797] [stereo.rx.enhancement_node]: FPS: 5.3 | Delay in-exit: 136.31 ms
+[detection_node-5] [INFO] [1792672106.067962376] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672106.469966591] [stereo.lx.enhancement_node]: FPS: 4.4 | Delay in-exit: 156.97 ms
+[metrics_node-2] [INFO] [1792672106.638758314] [metrics_node]: FPS:  4.75 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.99 / max  4.04 ms
+[enhancement_node-4] [INFO] [1792672106.882866849] [stereo.rx.enhancement_node]: FPS: 3.6 | Delay in-exit: 210.17 ms
+[enhancement_node-3] [INFO] [1792672107.573214759] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 259.75 ms
+[detection_node-5] [INFO] [1792672107.594815177] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672107.774438844] [metrics_node]: FPS:  5.26 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  3.97 / max  4.03 ms
+[enhancement_node-4] [INFO] [1792672107.932562983] [stereo.rx.enhancement_node]: FPS: 5.7 | Delay in-exit: 123.39 ms
+[enhancement_node-3] [INFO] [1792672108.845364252] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 258.60 ms
+[metrics_node-2] [INFO] [1792672109.010199695] [metrics_node]: FPS:  4.88 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  3.96 / max  4.02 ms
+[detection_node-5] [INFO] [1792672109.039259980] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=490 | Conf: 0.83 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672109.049388442] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=66, y=426, w=336, h=174 | Conf: 0.56 | Distance (Z): 1.038 m
+[enhancement_node-4] [INFO] [1792672109.198067596] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 256.96 ms
+[enhancement_node-3] [INFO] [1792672109.911904742] [stereo.lx.enhancement_node]: FPS: 5.6 | Delay in-exit: 138.16 ms
+[metrics_node-2] [INFO] [1792672110.041224347] [metrics_node]: FPS:  4.83 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  3.95 / max  4.00 ms
+[enhancement_node-4] [INFO] [1792672110.245900475] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 232.03 ms
+[detection_node-5] [INFO] [1792672110.656901595] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672111.197301331] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 192.71 ms
+[metrics_node-2] [INFO] [1792672111.212891295] [metrics_node]: FPS:  5.16 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  3.95 / max  3.99 ms
+[enhancement_node-4] [INFO] [1792672111.371458788] [stereo.rx.enhancement_node]: FPS: 5.3 | Delay in-exit: 129.43 ms
+[enhancement_node-3] [INFO] [1792672112.230872396] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 122.90 ms
+[detection_node-5] [INFO] [1792672112.241287638] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672112.306940997] [metrics_node]: FPS:  4.55 | Jitter(sx):   0.01 ms | Skew(sx-dx): avg  3.94 / max  3.99 ms
+[enhancement_node-4] [INFO] [1792672112.634709255] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 322.24 ms
+[enhancement_node-3] [INFO] [1792672113.276266533] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 193.77 ms
+[metrics_node-2] [INFO] [1792672113.515052460] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  3.94 / max  3.99 ms
+[detection_node-5] [INFO] [1792672113.535053677] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672113.635968657] [stereo.rx.enhancement_node]: FPS: 5.0 | Delay in-exit: 163.92 ms
+[enhancement_node-3] [INFO] [1792672114.377744406] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 171.50 ms
+[metrics_node-2] [INFO] [1792672114.690429963] [metrics_node]: FPS:  5.09 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.93 / max  3.96 ms
+[enhancement_node-4] [INFO] [1792672114.753814969] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 205.31 ms
+[detection_node-5] [INFO] [1792672115.075747404] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672115.538441088] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 165.21 ms
+[metrics_node-2] [INFO] [1792672115.820474844] [metrics_node]: FPS:  5.30 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.93 / max  3.98 ms
+[enhancement_node-4] [INFO] [1792672115.941584572] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 220.69 ms
+[detection_node-5] [INFO] [1792672116.431828216] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672116.730612286] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 237.35 ms
+[metrics_node-2] [INFO] [1792672116.873789870] [metrics_node]: FPS:  4.78 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.92 / max  3.98 ms
+[enhancement_node-4] [INFO] [1792672116.966129058] [stereo.rx.enhancement_node]: FPS: 5.9 | Delay in-exit: 131.64 ms
+[enhancement_node-3] [INFO] [1792672117.769619182] [stereo.lx.enhancement_node]: FPS: 3.8 | Delay in-exit: 190.56 ms
+[metrics_node-2] [INFO] [1792672118.015035331] [metrics_node]: FPS:  5.21 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.92 / max  3.98 ms
+[enhancement_node-4] [INFO] [1792672118.093920253] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 191.10 ms
+[detection_node-5] [INFO] [1792672118.137520076] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=490 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672118.901554363] [stereo.lx.enhancement_node]: FPS: 4.4 | Delay in-exit: 165.20 ms
+[metrics_node-2] [INFO] [1792672119.027467557] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.92 / max  3.98 ms
+[enhancement_node-4] [INFO] [1792672119.117457110] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 194.58 ms
+[detection_node-5] [INFO] [1792672119.677280915] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672119.696794810] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=63, y=426, w=337, h=172 | Conf: 0.54 | Distance (Z): 0.943 m
+[detection_node-5] [INFO] [1792672119.711199429] [detection_node]: [TARGET DETECTED] Obj [2] -> Box: x=62, y=424, w=340, h=290 | Conf: 0.53 | Distance (Z): 1.070 m
+[enhancement_node-3] [INFO] [1792672120.052028893] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 159.64 ms
+[metrics_node-2] [INFO] [1792672120.190779077] [metrics_node]: FPS:  5.14 | Jitter(sx):   0.07 ms | Skew(sx-dx): avg  3.92 / max  4.17 ms
+[enhancement_node-4] [INFO] [1792672120.252425282] [stereo.rx.enhancement_node]: FPS: 4.4 | Delay in-exit: 190.06 ms
+[enhancement_node-3] [INFO] [1792672121.132322860] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 121.66 ms
+[detection_node-5] [INFO] [1792672121.170482327] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=492 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672121.315910701] [metrics_node]: FPS:  4.44 | Jitter(sx):   0.07 ms | Skew(sx-dx): avg  3.91 / max  4.17 ms
+[enhancement_node-4] [INFO] [1792672121.460808312] [stereo.rx.enhancement_node]: FPS: 4.1 | Delay in-exit: 315.42 ms
+[enhancement_node-3] [INFO] [1792672122.244849458] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 188.47 ms
+[metrics_node-2] [INFO] [1792672122.471165606] [metrics_node]: FPS:  5.20 | Jitter(sx):   0.07 ms | Skew(sx-dx): avg  3.90 / max  4.17 ms
+[detection_node-5] [INFO] [1792672122.515722894] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.82 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672122.649440850] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 181.70 ms
+[enhancement_node-3] [INFO] [1792672123.333815730] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 145.44 ms
+[metrics_node-2] [INFO] [1792672123.620192968] [metrics_node]: FPS:  5.24 | Jitter(sx):   0.07 ms | Skew(sx-dx): avg  3.89 / max  4.17 ms
+[enhancement_node-4] [INFO] [1792672123.670406663] [stereo.rx.enhancement_node]: FPS: 3.9 | Delay in-exit: 267.00 ms
+[detection_node-5] [INFO] [1792672124.030316107] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672124.550388596] [stereo.lx.enhancement_node]: FPS: 4.1 | Delay in-exit: 273.49 ms
+[metrics_node-2] [INFO] [1792672124.738850102] [metrics_node]: FPS:  5.37 | Jitter(sx):   0.07 ms | Skew(sx-dx): avg  3.88 / max  4.17 ms
+[enhancement_node-4] [INFO] [1792672124.857167205] [stereo.rx.enhancement_node]: FPS: 4.2 | Delay in-exit: 188.97 ms
+[detection_node-5] [INFO] [1792672125.311393921] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=170, w=168, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672125.574746356] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 170.67 ms
+[metrics_node-2] [INFO] [1792672125.808561905] [metrics_node]: FPS:  4.69 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.86 / max  3.92 ms
+[enhancement_node-4] [INFO] [1792672125.979921105] [stereo.rx.enhancement_node]: FPS: 5.3 | Delay in-exit: 118.90 ms
+[enhancement_node-3] [INFO] [1792672126.597683798] [stereo.lx.enhancement_node]: FPS: 4.9 | Delay in-exit: 172.56 ms
+[detection_node-5] [INFO] [1792672126.660483926] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672126.690569648] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=65, y=427, w=336, h=173 | Conf: 0.48 | Distance (Z): 1.039 m
+[metrics_node-2] [INFO] [1792672126.870060138] [metrics_node]: FPS:  4.71 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.86 / max  3.92 ms
+[enhancement_node-4] [INFO] [1792672127.057183679] [stereo.rx.enhancement_node]: FPS: 2.8 | Delay in-exit: 211.33 ms
+[enhancement_node-3] [INFO] [1792672127.734095788] [stereo.lx.enhancement_node]: FPS: 5.3 | Delay in-exit: 178.93 ms
+[metrics_node-2] [INFO] [1792672128.043338663] [metrics_node]: FPS:  5.10 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.86 / max  3.92 ms
+[enhancement_node-4] [INFO] [1792672128.223970206] [stereo.rx.enhancement_node]: FPS: 4.3 | Delay in-exit: 227.53 ms
+[detection_node-5] [INFO] [1792672128.353641815] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=490 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672128.754145554] [stereo.lx.enhancement_node]: FPS: 4.9 | Delay in-exit: 171.96 ms
+[enhancement_node-4] [INFO] [1792672129.242734189] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 177.38 ms
+[metrics_node-2] [INFO] [1792672129.254717954] [metrics_node]: FPS:  4.97 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.85 / max  3.92 ms
+[enhancement_node-3] [INFO] [1792672129.935095677] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 204.04 ms
+[detection_node-5] [INFO] [1792672130.076570952] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=170, h=489 | Conf: 0.87 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672130.375954180] [metrics_node]: FPS:  5.30 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.84 / max  3.92 ms
+[enhancement_node-4] [INFO] [1792672130.381353938] [stereo.rx.enhancement_node]: FPS: 5.3 | Delay in-exit: 136.48 ms
+[enhancement_node-3] [INFO] [1792672131.185485791] [stereo.lx.enhancement_node]: FPS: 4.8 | Delay in-exit: 184.16 ms
+[metrics_node-2] [INFO] [1792672131.580370771] [metrics_node]: FPS:  4.98 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.83 / max  3.88 ms
+[enhancement_node-4] [INFO] [1792672131.637151739] [stereo.rx.enhancement_node]: FPS: 4.0 | Delay in-exit: 235.31 ms
+[detection_node-5] [INFO] [1792672131.641049321] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672131.650859941] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=65, y=426, w=336, h=174 | Conf: 0.47 | Distance (Z): 1.035 m
+[enhancement_node-3] [INFO] [1792672132.197207973] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 238.77 ms
+[enhancement_node-4] [INFO] [1792672132.691373985] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 199.60 ms
+[metrics_node-2] [INFO] [1792672132.782657641] [metrics_node]: FPS:  4.18 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.82 / max  3.88 ms
+[detection_node-5] [INFO] [1792672132.969671131] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=170, w=168, h=490 | Conf: 0.83 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672132.990783122] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=66, y=427, w=336, h=174 | Conf: 0.41 | Distance (Z): 1.038 m
+[enhancement_node-3] [INFO] [1792672133.295557286] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 168.26 ms
+[enhancement_node-4] [INFO] [1792672133.801421935] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 213.25 ms
+[metrics_node-2] [INFO] [1792672133.933037686] [metrics_node]: FPS:  5.21 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  3.81 / max  3.87 ms
+[enhancement_node-3] [INFO] [1792672134.401844765] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 249.25 ms
+[detection_node-5] [INFO] [1792672134.670918243] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=488 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672134.844787840] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 197.91 ms
+[metrics_node-2] [INFO] [1792672134.948682870] [metrics_node]: FPS:  5.90 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  3.81 / max  3.86 ms
+[enhancement_node-3] [INFO] [1792672135.577345714] [stereo.lx.enhancement_node]: FPS: 3.4 | Delay in-exit: 301.33 ms
+[enhancement_node-4] [INFO] [1792672135.978599598] [stereo.rx.enhancement_node]: FPS: 5.3 | Delay in-exit: 173.74 ms
+[metrics_node-2] [INFO] [1792672136.026638131] [metrics_node]: FPS:  4.68 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  3.81 / max  3.86 ms
+[detection_node-5] [INFO] [1792672136.123619129] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=490 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672136.837223373] [stereo.lx.enhancement_node]: FPS: 4.0 | Delay in-exit: 229.29 ms
+[metrics_node-2] [INFO] [1792672137.038526507] [metrics_node]: FPS:  4.96 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  3.81 / max  3.86 ms
+[enhancement_node-4] [INFO] [1792672137.068406218] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 156.25 ms
+[detection_node-5] [INFO] [1792672137.415643509] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672137.929047407] [stereo.lx.enhancement_node]: FPS: 5.5 | Delay in-exit: 142.29 ms
+[metrics_node-2] [INFO] [1792672138.031662863] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.80 / max  3.86 ms
+[enhancement_node-4] [INFO] [1792672138.085046835] [stereo.rx.enhancement_node]: FPS: 3.0 | Delay in-exit: 187.77 ms
+[detection_node-5] [INFO] [1792672139.021996562] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=169, w=169, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672139.127172233] [metrics_node]: FPS:  5.44 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.79 / max  3.85 ms
+[enhancement_node-3] [INFO] [1792672139.178846637] [stereo.lx.enhancement_node]: FPS: 4.0 | Delay in-exit: 216.79 ms
+[enhancement_node-4] [INFO] [1792672139.194883573] [stereo.rx.enhancement_node]: FPS: 5.4 | Delay in-exit: 127.32 ms
+[metrics_node-2] [INFO] [1792672140.190956905] [metrics_node]: FPS:  4.75 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.79 / max  3.85 ms
+[enhancement_node-3] [INFO] [1792672140.289241196] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 198.45 ms
+[enhancement_node-4] [INFO] [1792672140.290059312] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 206.70 ms
+[detection_node-5] [INFO] [1792672140.411145526] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=489 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672141.337494789] [stereo.lx.enhancement_node]: FPS: 4.8 | Delay in-exit: 204.93 ms
+[metrics_node-2] [INFO] [1792672141.371766599] [metrics_node]: FPS:  4.29 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.78 / max  3.83 ms
+[enhancement_node-4] [INFO] [1792672141.558415113] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 227.28 ms
+[detection_node-5] [INFO] [1792672142.033532339] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=490 | Conf: 0.74 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672142.392219504] [metrics_node]: FPS:  5.75 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.77 / max  3.83 ms
+[enhancement_node-3] [INFO] [1792672142.528821420] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 205.74 ms
+[enhancement_node-4] [INFO] [1792672142.767897869] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 215.91 ms
+[metrics_node-2] [INFO] [1792672143.503032261] [metrics_node]: FPS:  4.56 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.77 / max  3.80 ms
+[enhancement_node-3] [INFO] [1792672143.633034779] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 171.87 ms
+[detection_node-5] [INFO] [1792672143.794936331] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=487 | Conf: 0.89 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672143.884903617] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 203.27 ms
+[metrics_node-2] [INFO] [1792672144.614515210] [metrics_node]: FPS:  5.31 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.75 / max  3.80 ms
+[enhancement_node-3] [INFO] [1792672144.880095015] [stereo.lx.enhancement_node]: FPS: 4.8 | Delay in-exit: 250.53 ms
+[enhancement_node-4] [INFO] [1792672144.939267977] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 117.15 ms
+[detection_node-5] [INFO] [1792672145.286659006] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=487 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672145.742524579] [metrics_node]: FPS:  5.35 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.74 / max  3.80 ms
+[enhancement_node-3] [INFO] [1792672146.023020302] [stereo.lx.enhancement_node]: FPS: 4.4 | Delay in-exit: 123.62 ms
+[enhancement_node-4] [INFO] [1792672146.165117236] [stereo.rx.enhancement_node]: FPS: 4.1 | Delay in-exit: 184.56 ms
+[detection_node-5] [INFO] [1792672146.731003216] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=488 | Conf: 0.84 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672146.781881160] [metrics_node]: FPS:  4.80 | Jitter(sx):   0.02 ms | Skew(sx-dx): avg  3.74 / max  3.80 ms
+[enhancement_node-3] [INFO] [1792672147.198655139] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 159.52 ms
+[enhancement_node-4] [INFO] [1792672147.420443337] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 250.25 ms
+[metrics_node-2] [INFO] [1792672148.114056233] [metrics_node]: FPS:  4.55 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.73 / max  3.79 ms
+[enhancement_node-3] [INFO] [1792672148.205420904] [stereo.lx.enhancement_node]: FPS: 3.9 | Delay in-exit: 206.80 ms
+[detection_node-5] [INFO] [1792672148.227242296] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672148.478685133] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 215.80 ms
+[metrics_node-2] [INFO] [1792672149.152325867] [metrics_node]: FPS:  4.73 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.72 / max  3.79 ms
+[enhancement_node-3] [INFO] [1792672149.236091656] [stereo.lx.enhancement_node]: FPS: 4.8 | Delay in-exit: 175.12 ms
+[enhancement_node-4] [INFO] [1792672149.565621610] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 189.29 ms
+[detection_node-5] [INFO] [1792672149.750844018] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=169, h=486 | Conf: 0.88 | Distance (Z): 0.599 m
+[detection_node-5] [INFO] [1792672149.758950548] [detection_node]: [TARGET DETECTED] Obj [1] -> Box: x=66, y=426, w=336, h=175 | Conf: 0.48 | Distance (Z): 1.134 m
+[metrics_node-2] [INFO] [1792672150.181451639] [metrics_node]: FPS:  5.90 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.72 / max  3.78 ms
+[enhancement_node-3] [INFO] [1792672150.394949842] [stereo.lx.enhancement_node]: FPS: 4.3 | Delay in-exit: 217.52 ms
+[enhancement_node-4] [INFO] [1792672150.648149287] [stereo.rx.enhancement_node]: FPS: 4.6 | Delay in-exit: 205.64 ms
+[metrics_node-2] [INFO] [1792672151.260607646] [metrics_node]: FPS:  4.58 | Jitter(sx):   0.03 ms | Skew(sx-dx): avg  3.72 / max  3.78 ms
+[detection_node-5] [INFO] [1792672151.291167349] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=495 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672151.493671813] [stereo.lx.enhancement_node]: FPS: 4.5 | Delay in-exit: 172.04 ms
+[enhancement_node-4] [INFO] [1792672151.911578635] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 189.58 ms
+[metrics_node-2] [INFO] [1792672152.426653273] [metrics_node]: FPS:  4.31 | Jitter(sx):  35.89 ms | Skew(sx-dx): avg  3.71 / max  3.78 ms
+[enhancement_node-3] [INFO] [1792672152.666881903] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 187.59 ms
+[detection_node-5] [INFO] [1792672152.872529696] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=489 | Conf: 0.85 | Distance (Z): 0.599 m
+[enhancement_node-4] [INFO] [1792672152.961848788] [stereo.rx.enhancement_node]: FPS: 3.8 | Delay in-exit: 261.39 ms
+[metrics_node-2] [INFO] [1792672153.583753124] [metrics_node]: FPS:  5.17 | Jitter(sx):  35.89 ms | Skew(sx-dx): avg  3.71 / max  3.80 ms
+[enhancement_node-3] [INFO] [1792672153.852054656] [stereo.lx.enhancement_node]: FPS: 5.1 | Delay in-exit: 146.31 ms
+[enhancement_node-4] [INFO] [1792672154.081636973] [stereo.rx.enhancement_node]: FPS: 4.5 | Delay in-exit: 210.50 ms
+[detection_node-5] [INFO] [1792672154.471164147] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=169, w=168, h=490 | Conf: 0.82 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672154.595383887] [metrics_node]: FPS:  4.98 | Jitter(sx):  35.89 ms | Skew(sx-dx): avg  3.71 / max  3.80 ms
+[enhancement_node-3] [INFO] [1792672154.860276651] [stereo.lx.enhancement_node]: FPS: 4.0 | Delay in-exit: 245.93 ms
+[enhancement_node-4] [INFO] [1792672155.149287888] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 164.54 ms
+[metrics_node-2] [INFO] [1792672155.634656322] [metrics_node]: FPS:  4.80 | Jitter(sx):  35.90 ms | Skew(sx-dx): avg  3.70 / max  3.80 ms
+[detection_node-5] [INFO] [1792672155.863304234] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=170, w=169, h=490 | Conf: 0.88 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672156.049922618] [stereo.lx.enhancement_node]: FPS: 4.2 | Delay in-exit: 180.06 ms
+[enhancement_node-4] [INFO] [1792672156.198519402] [stereo.rx.enhancement_node]: FPS: 4.8 | Delay in-exit: 164.43 ms
+[metrics_node-2] [INFO] [1792672156.668749420] [metrics_node]: FPS:  4.85 | Jitter(sx):  35.89 ms | Skew(sx-dx): avg  3.69 / max  3.80 ms
+[enhancement_node-3] [INFO] [1792672157.144628522] [stereo.lx.enhancement_node]: FPS: 4.6 | Delay in-exit: 172.98 ms
+[enhancement_node-4] [INFO] [1792672157.269107438] [stereo.rx.enhancement_node]: FPS: 4.7 | Delay in-exit: 161.10 ms
+[detection_node-5] [INFO] [1792672157.464133270] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=931, y=170, w=169, h=489 | Conf: 0.86 | Distance (Z): 0.599 m
+[metrics_node-2] [INFO] [1792672157.705217298] [metrics_node]: FPS:  4.81 | Jitter(sx):  35.89 ms | Skew(sx-dx): avg  3.68 / max  3.80 ms
+[enhancement_node-3] [INFO] [1792672158.202936569] [stereo.lx.enhancement_node]: FPS: 4.7 | Delay in-exit: 188.87 ms
+[enhancement_node-4] [INFO] [1792672158.293070448] [stereo.rx.enhancement_node]: FPS: 4.9 | Delay in-exit: 137.91 ms
+[metrics_node-2] [INFO] [1792672158.889104249] [metrics_node]: FPS:  5.07 | Jitter(sx):   0.04 ms | Skew(sx-dx): avg  3.67 / max  3.80 ms
+[detection_node-5] [INFO] [1792672159.293932887] [detection_node]: [TARGET DETECTED] Obj [0] -> Box: x=930, y=170, w=170, h=488 | Conf: 0.87 | Distance (Z): 0.599 m
+[enhancement_node-3] [INFO] [1792672159.317806841] [stereo.lx.enhancement_node]: FPS: 3.6 | Delay in-exit: 249.31 ms
+[enhancement_node-4] [INFO] [1792672159.417090493] [stereo.rx.enhancement_node]: FPS: 5.3 | Delay in-exit: 183.55 ms

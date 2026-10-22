@@ -1,0 +1,17 @@
+field,value
+commit_hash,1d03372c75cedea5f247b83cfee551b5105b0d5f
+config,A_baseline
+run,2
+enable_enhancement,false
+enable_detection,false
+enable_metrics,true
+model_filename,
+half_res,true
+imgsz,640
+soc_temp_initial_c,46.1
+soc_temp_final_c,47.7
+throttled_initial,0x0
+throttled_final,0x0
+cpu_clock_initial_mhz,2400
+cpu_clock_final_mhz,2400
+notes,baseline

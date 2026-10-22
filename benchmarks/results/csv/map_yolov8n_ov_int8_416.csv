@@ -1,0 +1,2 @@
+tag,weights,data,split,imgsz,map50,map50_95,mp,mr,timestamp
+yolov8n_ov_int8_416,/home/nautilus/nautilus-vision-pipeline/ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n_416_int8_openvino_model,benchmarks/datasets/coco128.yaml,val,416,0.56455,0.41283,0.66443,0.50031,2026-10-22T15:21:53

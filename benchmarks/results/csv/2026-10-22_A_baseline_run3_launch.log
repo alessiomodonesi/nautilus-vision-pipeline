@@ -1,0 +1,564 @@
+[INFO] [launch]: All log files can be found below /home/nautilus/.ros/log/2026-10-22-16-14-05-164410-nautilus-pi-99536
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [camera_node-1]: process started with pid [99540]
+[INFO] [metrics_node-2]: process started with pid [99541]
+[camera_node-1] [3:09:18.630557165] [99540]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817
+[camera_node-1] [3:09:18.665641121] [99556]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-1] [3:09:18.769612039] [99556]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-1] [3:09:18.809391287] [99556]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-1] [3:09:18.809458250] [99556]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@88000/imx708@1a to CFE device /dev/media0 and ISP device /dev/media1 using PiSP variant BCM2712_D0
+[camera_node-1] [3:09:18.809771917] [99556]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-1] [3:09:18.903453620] [99556]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-1] [3:09:18.936457440] [99556]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@80000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-1] [3:09:18.936521829] [99556]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@80000/imx708@1a to CFE device /dev/media2 and ISP device /dev/media3 using PiSP variant BCM2712_D0
+[camera_node-1] [3:09:18.938329538] [99556]  WARN V4L2 v4l2_pixelformat.cpp:346 Unsupported V4L2 pixel format RPBP
+[camera_node-1] [INFO] [1792678445.735218125] [stereo.lx.camera]: 
+[camera_node-1] >> stream formats:
+[camera_node-1]    - R8 (32x32 - 4608x2592)
+[camera_node-1]    - R16 (32x32 - 4608x2592)
+[camera_node-1]    - MONO_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - NV21 (32x32 - 4608x2592)
+[camera_node-1]    - SBGGR8 (32x32 - 4608x2592)
+[camera_node-1]    - SBGGR16 (32x32 - 4608x2592)
+[camera_node-1]    - BGGR_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - XBGR8888 (32x32 - 4608x2592)
+[camera_node-1]    - BGR888 (32x32 - 4608x2592)
+[camera_node-1]    - RGB888 (32x32 - 4608x2592)
+[camera_node-1]    - XRGB8888 (32x32 - 4608x2592)
+[camera_node-1]    - SGBRG16 (32x32 - 4608x2592)
+[camera_node-1]    - GBRG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - SGRBG16 (32x32 - 4608x2592)
+[camera_node-1]    - GRBG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - SRGGB16 (32x32 - 4608x2592)
+[camera_node-1]    - RGGB_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-1]    - BGR161616 (32x32 - 4608x2592)
+[camera_node-1]    - RGB161616 (32x32 - 4608x2592)
+[camera_node-1]    - SRGGB8 (32x32 - 4608x2592)
+[camera_node-1]    - SGRBG8 (32x32 - 4608x2592)
+[camera_node-1]    - SGBRG8 (32x32 - 4608x2592)
+[camera_node-1]    - YUYV (32x32 - 4608x2592)
+[camera_node-1]    - UYVY (32x32 - 4608x2592)
+[camera_node-1] [WARN] [1792678445.735351366] [stereo.lx.camera]: no pixel format selected, auto-selecting: "XRGB8888"
+[camera_node-1] [WARN] [1792678445.735368051] [stereo.lx.camera]: set parameter 'format' to silence this warning
+[camera_node-1] [INFO] [1792678445.735484959] [stereo.lx.camera]: 
+[camera_node-1] >> XRGB8888 format sizes:
+[camera_node-1]    - 160x120
+[camera_node-1]    - 240x160
+[camera_node-1]    - 320x240
+[camera_node-1]    - 400x240
+[camera_node-1]    - 480x320
+[camera_node-1]    - 640x360
+[camera_node-1]    - 640x480
+[camera_node-1]    - 720x480
+[camera_node-1]    - 768x480
+[camera_node-1]    - 854x480
+[camera_node-1]    - 720x576
+[camera_node-1]    - 800x600
+[camera_node-1]    - 960x540
+[camera_node-1]    - 1024x576
+[camera_node-1]    - 960x640
+[camera_node-1]    - 1024x600
+[camera_node-1]    - 1024x768
+[camera_node-1]    - 1280x720
+[camera_node-1]    - 1152x864
+[camera_node-1]    - 1280x800
+[camera_node-1]    - 1360x768
+[camera_node-1]    - 1366x768
+[camera_node-1]    - 1440x900
+[camera_node-1]    - 1280x1024
+[camera_node-1]    - 1536x864
+[camera_node-1]    - 1280x1080
+[camera_node-1]    - 1600x900
+[camera_node-1]    - 1400x1050
+[camera_node-1]    - 1680x1050
+[camera_node-1]    - 1600x1200
+[camera_node-1]    - 1920x1080
+[camera_node-1]    - 2048x1080
+[camera_node-1]    - 1920x1200
+[camera_node-1]    - 2160x1080
+[camera_node-1]    - 2048x1152
+[camera_node-1]    - 2560x1080
+[camera_node-1]    - 2048x1536
+[camera_node-1]    - 2560x1440
+[camera_node-1]    - 2560x1600
+[camera_node-1]    - 3840x1080
+[camera_node-1]    - 2960x1440
+[camera_node-1]    - 3440x1440
+[camera_node-1]    - 2560x2048
+[camera_node-1]    - 3200x1800
+[camera_node-1]    - 3840x1600
+[camera_node-1]    - 3200x2048
+[camera_node-1]    - 3200x2400
+[camera_node-1]    - 3840x2160
+[camera_node-1]    - 4096x2160
+[camera_node-1]    - 3840x2400
+[camera_node-1] [3:09:18.939912524] [99540]  INFO Camera camera.cpp:1216 configuring streams: (0) 1280x720-XRGB8888/sRGB
+[camera_node-1] [3:09:18.940698268] [99556]  INFO RPI pisp.cpp:1502 Sensor: /base/axi/pcie@120000/rp1/i2c@88000/imx708@1a - Selected sensor format: 1536x864-SBGGR10_1X10/RAW - Selected CFE format: 1536x864-PC1B/RAW
+[camera_node-1] [INFO] [1792678445.738666950] [stereo.lx.camera]: camera "/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a" configured with 1280x720-XRGB8888/sRGB stream
+[camera_node-1] [INFO] [1792678445.738947377] [stereo.lx.camera]: using default calibration URL
+[camera_node-1] [INFO] [1792678445.738978155] [stereo.lx.camera]: camera calibration URL: file:///home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_88000_imx708_1a_1280x720.yaml
+[camera_node-1] [ERROR] [1792678445.739056414] [camera_calibration_parsers]: Unable to open camera calibration file [/home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_88000_imx708_1a_1280x720.yaml]
+[camera_node-1] [WARN] [1792678445.739232377] [stereo.lx.camera]: Camera calibration file /home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_88000_imx708_1a_1280x720.yaml not found
+[camera_node-1] [WARN] [1792678445.740103195] [stereo.lx.camera]: unsupported control: AfWindows (37)
+[camera_node-1] [WARN] [1792678445.740995012] [stereo.lx.camera]: resolve overrides: ExposureTimeMode and ExposureTime must not be enabled at the same time. 'ExposureTimeMode' will be set to off.
+[camera_node-1] [3:09:18.953718473] [99567]  WARN IPARPI ipa_base.cpp:1385 Could not set AF_PAUSE - no AF algorithm or not Continuous
+[camera_node-1] [3:09:18.953922788] [99567]  WARN IPARPI ipa_base.cpp:1402 Could not set AF_TRIGGER - no AF algorithm or not Auto
+[metrics_node-2] [INFO] [1792678446.029887885] [metrics_node]: MetricsNode avviato | left=/stereo/lx/camera/image_raw right=/stereo/rx/camera/image_raw | slop=50.0 ms | window=30
+[camera_node-1] [3:09:20.724771009] [99567]  WARN IPARPI ipa_base.cpp:1385 Could not set AF_PAUSE - no AF algorithm or not Continuous
+[camera_node-1] [3:09:20.724908805] [99567]  WARN IPARPI ipa_base.cpp:1402 Could not set AF_TRIGGER - no AF algorithm or not Auto
+[camera_node-1] [WARN] [1792678450.208131566] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   AeEnable: false
+[camera_node-1] 
+[camera_node-1] [WARN] [1792678450.208469196] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   AwbEnable: false
+[camera_node-1] 
+[camera_node-1] [WARN] [1792678450.208761438] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   ExposureTime: 20000
+[camera_node-1] 
+[camera_node-1] [WARN] [1792678450.209025235] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   ColourGains: [ 1.500000, 1.500000 ]
+[camera_node-1] 
+[camera_node-1] [WARN] [1792678450.209283291] [stereo.lx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-1]   AfMode: 0
+[camera_node-1] 
+[INFO] [camera_node-3]: process started with pid [99595]
+[camera_node-3] [3:09:24.617687635] [99595]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817
+[camera_node-3] [3:09:24.651082619] [99607]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-3] [3:09:24.657414248] [99607] ERROR V4L2 v4l2_device.cpp:410 'imx708': Unable to set controls: Device or resource busy
+[camera_node-3] [3:09:24.675466929] [99607]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-3] [3:09:24.716743251] [99607]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@88000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-3] [3:09:24.716802177] [99607]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@88000/imx708@1a to CFE device /dev/media0 and ISP device /dev/media1 using PiSP variant BCM2712_D0
+[camera_node-3] [3:09:24.717094696] [99607]  INFO RPI pisp.cpp:725 libpisp version v1.5.0 86d71c805c3f 04-10-2026 (16:53:21)
+[camera_node-3] [3:09:24.734159856] [99607]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/local/share/libcamera/ipa/rpi/pisp/imx708.json
+[camera_node-3] [3:09:24.769674679] [99607]  INFO Camera camera_manager.cpp:223 Adding camera '/base/axi/pcie@120000/rp1/i2c@80000/imx708@1a' for pipeline handler rpi/pisp
+[camera_node-3] [3:09:24.769725309] [99607]  INFO RPI pisp.cpp:1186 Registered camera /base/axi/pcie@120000/rp1/i2c@80000/imx708@1a to CFE device /dev/media2 and ISP device /dev/media3 using PiSP variant BCM2712_D0
+[camera_node-3] [3:09:24.771314591] [99607]  WARN V4L2 v4l2_pixelformat.cpp:346 Unsupported V4L2 pixel format RPBP
+[camera_node-3] [INFO] [1792678451.568122104] [stereo.rx.camera]: 
+[camera_node-3] >> stream formats:
+[camera_node-3]    - R8 (32x32 - 4608x2592)
+[camera_node-3]    - R16 (32x32 - 4608x2592)
+[camera_node-3]    - MONO_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-3]    - NV21 (32x32 - 4608x2592)
+[camera_node-3]    - SBGGR8 (32x32 - 4608x2592)
+[camera_node-3]    - SBGGR16 (32x32 - 4608x2592)
+[camera_node-3]    - BGGR_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-3]    - XBGR8888 (32x32 - 4608x2592)
+[camera_node-3]    - BGR888 (32x32 - 4608x2592)
+[camera_node-3]    - RGB888 (32x32 - 4608x2592)
+[camera_node-3]    - XRGB8888 (32x32 - 4608x2592)
+[camera_node-3]    - SGBRG16 (32x32 - 4608x2592)
+[camera_node-3]    - GBRG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-3]    - SGRBG16 (32x32 - 4608x2592)
+[camera_node-3]    - GRBG_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-3]    - SRGGB16 (32x32 - 4608x2592)
+[camera_node-3]    - RGGB_PISP_COMP1 (32x32 - 4608x2592)
+[camera_node-3]    - BGR161616 (32x32 - 4608x2592)
+[camera_node-3]    - RGB161616 (32x32 - 4608x2592)
+[camera_node-3]    - SRGGB8 (32x32 - 4608x2592)
+[camera_node-3]    - SGRBG8 (32x32 - 4608x2592)
+[camera_node-3]    - SGBRG8 (32x32 - 4608x2592)
+[camera_node-3]    - YUYV (32x32 - 4608x2592)
+[camera_node-3]    - UYVY (32x32 - 4608x2592)
+[camera_node-3] [WARN] [1792678451.568239048] [stereo.rx.camera]: no pixel format selected, auto-selecting: "XRGB8888"
+[camera_node-3] [WARN] [1792678451.568256623] [stereo.rx.camera]: set parameter 'format' to silence this warning
+[camera_node-3] [INFO] [1792678451.568361419] [stereo.rx.camera]: 
+[camera_node-3] >> XRGB8888 format sizes:
+[camera_node-3]    - 160x120
+[camera_node-3]    - 240x160
+[camera_node-3]    - 320x240
+[camera_node-3]    - 400x240
+[camera_node-3]    - 480x320
+[camera_node-3]    - 640x360
+[camera_node-3]    - 640x480
+[camera_node-3]    - 720x480
+[camera_node-3]    - 768x480
+[camera_node-3]    - 854x480
+[camera_node-3]    - 720x576
+[camera_node-3]    - 800x600
+[camera_node-3]    - 960x540
+[camera_node-3]    - 1024x576
+[camera_node-3]    - 960x640
+[camera_node-3]    - 1024x600
+[camera_node-3]    - 1024x768
+[camera_node-3]    - 1280x720
+[camera_node-3]    - 1152x864
+[camera_node-3]    - 1280x800
+[camera_node-3]    - 1360x768
+[camera_node-3]    - 1366x768
+[camera_node-3]    - 1440x900
+[camera_node-3]    - 1280x1024
+[camera_node-3]    - 1536x864
+[camera_node-3]    - 1280x1080
+[camera_node-3]    - 1600x900
+[camera_node-3]    - 1400x1050
+[camera_node-3]    - 1680x1050
+[camera_node-3]    - 1600x1200
+[camera_node-3]    - 1920x1080
+[camera_node-3]    - 2048x1080
+[camera_node-3]    - 1920x1200
+[camera_node-3]    - 2160x1080
+[camera_node-3]    - 2048x1152
+[camera_node-3]    - 2560x1080
+[camera_node-3]    - 2048x1536
+[camera_node-3]    - 2560x1440
+[camera_node-3]    - 2560x1600
+[camera_node-3]    - 3840x1080
+[camera_node-3]    - 2960x1440
+[camera_node-3]    - 3440x1440
+[camera_node-3]    - 2560x2048
+[camera_node-3]    - 3200x1800
+[camera_node-3]    - 3840x1600
+[camera_node-3]    - 3200x2048
+[camera_node-3]    - 3200x2400
+[camera_node-3]    - 3840x2160
+[camera_node-3]    - 4096x2160
+[camera_node-3]    - 3840x2400
+[camera_node-3] [3:09:24.772711614] [99595]  INFO Camera camera.cpp:1216 configuring streams: (0) 1280x720-XRGB8888/sRGB
+[camera_node-3] [3:09:24.773303653] [99607]  INFO RPI pisp.cpp:1502 Sensor: /base/axi/pcie@120000/rp1/i2c@80000/imx708@1a - Selected sensor format: 1536x864-SBGGR10_1X10/RAW - Selected CFE format: 1536x864-PC1B/RAW
+[camera_node-3] [INFO] [1792678451.570967964] [stereo.rx.camera]: camera "/base/axi/pcie@120000/rp1/i2c@80000/imx708@1a" configured with 1280x720-XRGB8888/sRGB stream
+[camera_node-3] [INFO] [1792678451.571245668] [stereo.rx.camera]: using default calibration URL
+[camera_node-3] [INFO] [1792678451.571284724] [stereo.rx.camera]: camera calibration URL: file:///home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_80000_imx708_1a_1280x720.yaml
+[camera_node-3] [ERROR] [1792678451.571365761] [camera_calibration_parsers]: Unable to open camera calibration file [/home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_80000_imx708_1a_1280x720.yaml]
+[camera_node-3] [WARN] [1792678451.571431261] [stereo.rx.camera]: Camera calibration file /home/nautilus/.ros/camera_info/imx708__base_axi_pcie_120000_rp1_i2c_80000_imx708_1a_1280x720.yaml not found
+[camera_node-3] [WARN] [1792678451.572907099] [stereo.rx.camera]: unsupported control: AfWindows (37)
+[camera_node-3] [WARN] [1792678451.574613030] [stereo.rx.camera]: resolve overrides: ExposureTimeMode and ExposureTime must not be enabled at the same time. 'ExposureTimeMode' will be set to off.
+[camera_node-3] [3:09:24.786744413] [99616]  WARN IPARPI ipa_base.cpp:1385 Could not set AF_PAUSE - no AF algorithm or not Continuous
+[camera_node-3] [3:09:24.786927043] [99616]  WARN IPARPI ipa_base.cpp:1402 Could not set AF_TRIGGER - no AF algorithm or not Auto
+[camera_node-3] [WARN] [1792678451.725005421] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-3]   Brightness: 0.000000
+[camera_node-3]   AfRange: 0
+[camera_node-3]   AeMeteringMode: 0
+[camera_node-3]   ColourGains: [ 1.500000, 1.500000 ]
+[camera_node-3]   StatsOutputEnable: false
+[camera_node-3]   AnalogueGainMode: 0
+[camera_node-3]   AfPause: 0
+[camera_node-3]   Sharpness: 1.000000
+[camera_node-3]   AwbMode: 0
+[camera_node-3]   AeExposureMode: 0
+[camera_node-3]   HdrMode: 0
+[camera_node-3]   SyncMode: 0
+[camera_node-3]   AeConstraintMode: 0
+[camera_node-3]   AfMode: 0
+[camera_node-3]   AnalogueGain: 1.122807
+[camera_node-3]   AfTrigger: 0
+[camera_node-3]   ExposureValue: 0.000000
+[camera_node-3]   AfSpeed: 0
+[camera_node-3]   ExposureTimeMode: 1
+[camera_node-3]   ScalerCrop: (768, 432)/3072x1728
+[camera_node-3]   SyncFrames: 1000
+[camera_node-3]   ExposureTime: 20000
+[camera_node-3]   AfMetering: 0
+[camera_node-3]   Saturation: 1.000000
+[camera_node-3]   AeEnable: false
+[camera_node-3]   FrameDurationLimits: [ 200000, 200000 ]
+[camera_node-3]   NoiseReductionMode: 0
+[camera_node-3]   Contrast: 1.000000
+[camera_node-3]   AwbEnable: false
+[camera_node-3]   CnnEnableInputTensor: false
+[camera_node-3]   AeFlickerMode: 0
+[camera_node-3]   LensPosition: 1.500000
+[camera_node-3] 
+[camera_node-3] [WARN] [1792678451.725527145] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-3]   AeEnable: false
+[camera_node-3] 
+[camera_node-3] [WARN] [1792678451.725889183] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-3]   AwbEnable: false
+[camera_node-3] 
+[camera_node-3] [WARN] [1792678451.726244295] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-3]   ExposureTime: 20000
+[camera_node-3] 
+[camera_node-3] [WARN] [1792678451.726525981] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-3]   ColourGains: [ 1.500000, 1.500000 ]
+[camera_node-3] 
+[camera_node-3] [WARN] [1792678451.726803074] [stereo.rx.camera]: previous parameters have note been apllied yet and will be ignored:
+[camera_node-3]   AfMode: 0
+[camera_node-3] 
+[metrics_node-2] [INFO] [1792678451.787992397] [metrics_node]: FPS:  0.17 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.80 / max 33.80 ms
+[metrics_node-2] [INFO] [1792678452.982677117] [metrics_node]: FPS:  5.02 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.79 / max 33.80 ms
+[metrics_node-2] [INFO] [1792678454.180699561] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.79 / max 33.80 ms
+[metrics_node-2] [INFO] [1792678455.180719171] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.80 / max 33.81 ms
+[metrics_node-2] [INFO] [1792678456.380253831] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.80 / max 33.81 ms
+[metrics_node-2] [INFO] [1792678457.380328605] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.80 / max 33.82 ms
+[metrics_node-2] [INFO] [1792678458.580236555] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.81 / max 33.82 ms
+[metrics_node-2] [INFO] [1792678459.780145147] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.81 / max 33.84 ms
+[metrics_node-2] [INFO] [1792678460.980115807] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.82 / max 33.84 ms
+[metrics_node-2] [INFO] [1792678462.180013144] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.83 / max 33.85 ms
+[metrics_node-2] [INFO] [1792678463.380005604] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.83 / max 33.85 ms
+[metrics_node-2] [INFO] [1792678464.580182132] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.84 / max 33.87 ms
+[metrics_node-2] [INFO] [1792678465.780065357] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.85 / max 33.87 ms
+[metrics_node-2] [INFO] [1792678466.979828835] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.86 / max 33.88 ms
+[metrics_node-2] [INFO] [1792678468.179695915] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.86 / max 33.88 ms
+[metrics_node-2] [INFO] [1792678469.379614712] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.87 / max 33.89 ms
+[metrics_node-2] [INFO] [1792678470.579558633] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.88 / max 33.90 ms
+[metrics_node-2] [INFO] [1792678471.779465567] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.89 / max 33.91 ms
+[metrics_node-2] [INFO] [1792678472.979351606] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.89 / max 33.91 ms
+[metrics_node-2] [INFO] [1792678474.179250749] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.90 / max 33.92 ms
+[metrics_node-2] [INFO] [1792678475.379223237] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.91 / max 33.92 ms
+[metrics_node-2] [INFO] [1792678476.579145479] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.91 / max 33.93 ms
+[metrics_node-2] [INFO] [1792678477.779116400] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.92 / max 33.94 ms
+[metrics_node-2] [INFO] [1792678478.979058225] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.93 / max 33.95 ms
+[metrics_node-2] [INFO] [1792678480.178939262] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.94 / max 33.95 ms
+[metrics_node-2] [INFO] [1792678481.378925369] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.94 / max 33.96 ms
+[metrics_node-2] [INFO] [1792678482.381463069] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.95 / max 33.98 ms
+[metrics_node-2] [INFO] [1792678483.391837290] [metrics_node]: FPS:  4.95 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.96 / max 33.98 ms
+[metrics_node-2] [INFO] [1792678484.591659850] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.97 / max 33.99 ms
+[metrics_node-2] [INFO] [1792678485.792002906] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.98 / max 34.00 ms
+[metrics_node-2] [INFO] [1792678486.792116711] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.98 / max 34.00 ms
+[metrics_node-2] [INFO] [1792678487.990406681] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 33.99 / max 34.01 ms
+[metrics_node-2] [INFO] [1792678488.991263081] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.00 / max 34.01 ms
+[metrics_node-2] [INFO] [1792678490.190830305] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.00 / max 34.02 ms
+[metrics_node-2] [INFO] [1792678491.391165433] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.01 / max 34.04 ms
+[metrics_node-2] [INFO] [1792678492.391467331] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.02 / max 34.04 ms
+[metrics_node-2] [INFO] [1792678493.590602710] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.03 / max 34.04 ms
+[metrics_node-2] [INFO] [1792678494.791082329] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.03 / max 34.06 ms
+[metrics_node-2] [INFO] [1792678495.990559051] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.04 / max 34.06 ms
+[metrics_node-2] [INFO] [1792678496.990948170] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.05 / max 34.06 ms
+[metrics_node-2] [INFO] [1792678498.191415978] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.05 / max 34.08 ms
+[metrics_node-2] [INFO] [1792678499.391285226] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.06 / max 34.08 ms
+[metrics_node-2] [INFO] [1792678500.391289011] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.07 / max 34.09 ms
+[metrics_node-2] [INFO] [1792678501.393092303] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.07 / max 34.10 ms
+[metrics_node-2] [INFO] [1792678502.590755708] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.08 / max 34.10 ms
+[metrics_node-2] [INFO] [1792678503.790522722] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.09 / max 34.11 ms
+[metrics_node-2] [INFO] [1792678504.790858660] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.09 / max 34.11 ms
+[metrics_node-2] [INFO] [1792678505.990303447] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.10 / max 34.12 ms
+[metrics_node-2] [INFO] [1792678507.189200246] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.11 / max 34.13 ms
+[metrics_node-2] [INFO] [1792678508.190104388] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.12 / max 34.14 ms
+[metrics_node-2] [INFO] [1792678509.390370664] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.12 / max 34.14 ms
+[metrics_node-2] [INFO] [1792678510.589744620] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.13 / max 34.15 ms
+[metrics_node-2] [INFO] [1792678511.789703111] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.14 / max 34.16 ms
+[metrics_node-2] [INFO] [1792678512.990181672] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.14 / max 34.16 ms
+[metrics_node-2] [INFO] [1792678514.189762022] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.15 / max 34.17 ms
+[metrics_node-2] [INFO] [1792678515.389012460] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.16 / max 34.18 ms
+[metrics_node-2] [INFO] [1792678516.390393176] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.17 / max 34.18 ms
+[metrics_node-2] [INFO] [1792678517.589263813] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.17 / max 34.19 ms
+[metrics_node-2] [INFO] [1792678518.589498437] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.18 / max 34.20 ms
+[metrics_node-2] [INFO] [1792678519.788863756] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.19 / max 34.20 ms
+[metrics_node-2] [INFO] [1792678520.788868178] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.19 / max 34.21 ms
+[metrics_node-2] [INFO] [1792678521.789219623] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.20 / max 34.22 ms
+[metrics_node-2] [INFO] [1792678522.989858515] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.21 / max 34.23 ms
+[metrics_node-2] [INFO] [1792678524.188552157] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.21 / max 34.23 ms
+[metrics_node-2] [INFO] [1792678525.188697660] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.22 / max 34.24 ms
+[metrics_node-2] [INFO] [1792678526.189971741] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.23 / max 34.24 ms
+[metrics_node-2] [INFO] [1792678527.389356400] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.23 / max 34.25 ms
+[metrics_node-2] [INFO] [1792678528.587234849] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.24 / max 34.26 ms
+[metrics_node-2] [INFO] [1792678529.588399063] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.25 / max 34.27 ms
+[metrics_node-2] [INFO] [1792678530.589018187] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.25 / max 34.27 ms
+[metrics_node-2] [INFO] [1792678531.788903118] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.26 / max 34.28 ms
+[metrics_node-2] [INFO] [1792678532.988410397] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.27 / max 34.29 ms
+[metrics_node-2] [INFO] [1792678533.988572635] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.27 / max 34.29 ms
+[metrics_node-2] [INFO] [1792678535.188109096] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.28 / max 34.30 ms
+[metrics_node-2] [INFO] [1792678536.387801441] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.29 / max 34.31 ms
+[metrics_node-2] [INFO] [1792678537.388463055] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.29 / max 34.31 ms
+[metrics_node-2] [INFO] [1792678538.587578824] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.30 / max 34.32 ms
+[metrics_node-2] [INFO] [1792678539.788387092] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.31 / max 34.33 ms
+[metrics_node-2] [INFO] [1792678540.988318376] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.32 / max 34.33 ms
+[metrics_node-2] [INFO] [1792678542.188341895] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.32 / max 34.34 ms
+[metrics_node-2] [INFO] [1792678543.387132521] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.33 / max 34.35 ms
+[metrics_node-2] [INFO] [1792678544.387428159] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.34 / max 34.36 ms
+[metrics_node-2] [INFO] [1792678545.587946729] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.34 / max 34.37 ms
+[metrics_node-2] [INFO] [1792678546.787702149] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.35 / max 34.37 ms
+[metrics_node-2] [INFO] [1792678547.987388584] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.36 / max 34.38 ms
+[metrics_node-2] [INFO] [1792678549.187389423] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.37 / max 34.39 ms
+[metrics_node-2] [INFO] [1792678550.387013536] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.37 / max 34.40 ms
+[metrics_node-2] [INFO] [1792678551.586816665] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.38 / max 34.40 ms
+[metrics_node-2] [INFO] [1792678552.587030699] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.39 / max 34.41 ms
+[metrics_node-2] [INFO] [1792678553.787574070] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.40 / max 34.42 ms
+[metrics_node-2] [INFO] [1792678554.987138678] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.40 / max 34.42 ms
+[metrics_node-2] [INFO] [1792678556.187241579] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.41 / max 34.43 ms
+[metrics_node-2] [INFO] [1792678557.386858681] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.42 / max 34.43 ms
+[metrics_node-2] [INFO] [1792678558.586371299] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.42 / max 34.45 ms
+[metrics_node-2] [INFO] [1792678559.587301492] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.43 / max 34.45 ms
+[metrics_node-2] [INFO] [1792678560.786451443] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.44 / max 34.46 ms
+[metrics_node-2] [INFO] [1792678561.786571713] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.44 / max 34.46 ms
+[metrics_node-2] [INFO] [1792678562.786640691] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.45 / max 34.47 ms
+[metrics_node-2] [INFO] [1792678563.786769599] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.46 / max 34.48 ms
+[metrics_node-2] [INFO] [1792678564.986713959] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.46 / max 34.50 ms
+[metrics_node-2] [INFO] [1792678566.186628521] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.47 / max 34.50 ms
+[metrics_node-2] [INFO] [1792678567.386557839] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.48 / max 34.50 ms
+[metrics_node-2] [INFO] [1792678568.586060749] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.49 / max 34.51 ms
+[metrics_node-2] [INFO] [1792678569.586173483] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.49 / max 34.51 ms
+[metrics_node-2] [INFO] [1792678570.586546573] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.50 / max 34.52 ms
+[metrics_node-2] [INFO] [1792678571.786285447] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.50 / max 34.52 ms
+[metrics_node-2] [INFO] [1792678572.985178856] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.51 / max 34.53 ms
+[metrics_node-2] [INFO] [1792678573.986179398] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.52 / max 34.54 ms
+[metrics_node-2] [INFO] [1792678574.986459110] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.52 / max 34.54 ms
+[metrics_node-2] [INFO] [1792678576.185253186] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.53 / max 34.55 ms
+[metrics_node-2] [INFO] [1792678577.385905503] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.54 / max 34.56 ms
+[metrics_node-2] [INFO] [1792678578.585284410] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.55 / max 34.56 ms
+[metrics_node-2] [INFO] [1792678579.585343466] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.55 / max 34.57 ms
+[metrics_node-2] [INFO] [1792678580.585613231] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.56 / max 34.59 ms
+[metrics_node-2] [INFO] [1792678581.784770973] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.57 / max 34.59 ms
+[metrics_node-2] [INFO] [1792678582.785511078] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.57 / max 34.59 ms
+[metrics_node-2] [INFO] [1792678583.785818206] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.58 / max 34.60 ms
+[metrics_node-2] [INFO] [1792678584.984918119] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.59 / max 34.61 ms
+[metrics_node-2] [INFO] [1792678586.184966104] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.59 / max 34.61 ms
+[metrics_node-2] [INFO] [1792678587.185011926] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.60 / max 34.62 ms
+[metrics_node-2] [INFO] [1792678588.384735948] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.61 / max 34.63 ms
+[metrics_node-2] [INFO] [1792678589.385276963] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.61 / max 34.65 ms
+[metrics_node-2] [INFO] [1792678590.583899430] [metrics_node]: FPS:  5.01 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.62 / max 34.65 ms
+[metrics_node-2] [INFO] [1792678591.584647079] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.63 / max 34.65 ms
+[metrics_node-2] [INFO] [1792678592.784480030] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.63 / max 34.66 ms
+[metrics_node-2] [INFO] [1792678593.984275518] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.64 / max 34.66 ms
+[metrics_node-2] [INFO] [1792678595.183217671] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.65 / max 34.66 ms
+[metrics_node-2] [INFO] [1792678596.184397647] [metrics_node]: FPS:  4.99 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.65 / max 34.67 ms
+[metrics_node-2] [INFO] [1792678597.384397283] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.66 / max 34.68 ms
+[metrics_node-2] [INFO] [1792678598.584156936] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.67 / max 34.69 ms
+[metrics_node-2] [INFO] [1792678599.584427551] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.68 / max 34.69 ms
+[metrics_node-2] [INFO] [1792678600.784064076] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.68 / max 34.70 ms
+[metrics_node-2] [INFO] [1792678601.984448731] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.69 / max 34.71 ms
+[metrics_node-2] [INFO] [1792678603.171447210] [metrics_node]: FPS:  5.05 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.70 / max 34.73 ms
+[metrics_node-2] [INFO] [1792678604.371567751] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.70 / max 34.73 ms
+[metrics_node-2] [INFO] [1792678605.571333032] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.71 / max 34.73 ms
+[metrics_node-2] [INFO] [1792678606.771066036] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.72 / max 34.73 ms
+[metrics_node-2] [INFO] [1792678607.771161802] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.72 / max 34.74 ms
+[metrics_node-2] [INFO] [1792678608.771269832] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.73 / max 34.74 ms
+[metrics_node-2] [INFO] [1792678609.970974693] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.73 / max 34.75 ms
+[metrics_node-2] [INFO] [1792678610.970980825] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.74 / max 34.76 ms
+[metrics_node-2] [INFO] [1792678612.170902169] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.75 / max 34.76 ms
+[metrics_node-2] [INFO] [1792678613.171008253] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.75 / max 34.77 ms
+[metrics_node-2] [INFO] [1792678614.370530303] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.76 / max 34.78 ms
+[metrics_node-2] [INFO] [1792678615.570764890] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.77 / max 34.79 ms
+[metrics_node-2] [INFO] [1792678616.570790726] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.77 / max 34.79 ms
+[metrics_node-2] [INFO] [1792678617.770339909] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.78 / max 34.80 ms
+[metrics_node-2] [INFO] [1792678618.770559532] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.79 / max 34.81 ms
+[metrics_node-2] [INFO] [1792678619.970621756] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.80 / max 34.81 ms
+[metrics_node-2] [INFO] [1792678621.169988090] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.80 / max 34.82 ms
+[metrics_node-2] [INFO] [1792678622.170214503] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.81 / max 34.82 ms
+[metrics_node-2] [INFO] [1792678623.370279766] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.82 / max 34.83 ms
+[metrics_node-2] [INFO] [1792678624.570128308] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.82 / max 34.84 ms
+[metrics_node-2] [INFO] [1792678625.769977498] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.83 / max 34.85 ms
+[metrics_node-2] [INFO] [1792678626.969874801] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.84 / max 34.86 ms
+[metrics_node-2] [INFO] [1792678628.169753398] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.85 / max 34.86 ms
+[metrics_node-2] [INFO] [1792678629.369822422] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.85 / max 34.87 ms
+[metrics_node-2] [INFO] [1792678630.570036094] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.86 / max 34.88 ms
+[metrics_node-2] [INFO] [1792678631.769625600] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.87 / max 34.89 ms
+[metrics_node-2] [INFO] [1792678632.769651490] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.87 / max 34.89 ms
+[metrics_node-2] [INFO] [1792678633.769686923] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.88 / max 34.90 ms
+[metrics_node-2] [INFO] [1792678634.969469771] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.89 / max 34.90 ms
+[metrics_node-2] [INFO] [1792678635.969474047] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.89 / max 34.91 ms
+[metrics_node-2] [INFO] [1792678637.169310341] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.90 / max 34.92 ms
+[metrics_node-2] [INFO] [1792678638.169332755] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.91 / max 34.92 ms
+[metrics_node-2] [INFO] [1792678639.369169534] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.91 / max 34.93 ms
+[metrics_node-2] [INFO] [1792678640.569273390] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.92 / max 34.94 ms
+[metrics_node-2] [INFO] [1792678641.768874153] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.93 / max 34.95 ms
+[metrics_node-2] [INFO] [1792678642.969128659] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.94 / max 34.96 ms
+[metrics_node-2] [INFO] [1792678644.168752349] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.94 / max 34.96 ms
+[metrics_node-2] [INFO] [1792678645.369201892] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.95 / max 34.97 ms
+[metrics_node-2] [INFO] [1792678646.568636881] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.96 / max 34.98 ms
+[metrics_node-2] [INFO] [1792678647.768948242] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.97 / max 34.98 ms
+[metrics_node-2] [INFO] [1792678648.968631196] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.97 / max 34.99 ms
+[metrics_node-2] [INFO] [1792678650.168828558] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.98 / max 35.00 ms
+[metrics_node-2] [INFO] [1792678651.368576198] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 34.99 / max 35.01 ms
+[metrics_node-2] [INFO] [1792678652.568685267] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.00 / max 35.01 ms
+[metrics_node-2] [INFO] [1792678653.768242059] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.00 / max 35.02 ms
+[metrics_node-2] [INFO] [1792678654.968637722] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.01 / max 35.03 ms
+[metrics_node-2] [INFO] [1792678656.168155072] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.02 / max 35.04 ms
+[metrics_node-2] [INFO] [1792678657.368394848] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.03 / max 35.04 ms
+[metrics_node-2] [INFO] [1792678658.567975348] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.03 / max 35.05 ms
+[metrics_node-2] [INFO] [1792678659.768341368] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.04 / max 35.06 ms
+[metrics_node-2] [INFO] [1792678660.967886613] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.05 / max 35.07 ms
+[metrics_node-2] [INFO] [1792678662.168059932] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.06 / max 35.07 ms
+[metrics_node-2] [INFO] [1792678663.367877345] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.06 / max 35.08 ms
+[metrics_node-2] [INFO] [1792678664.368567331] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.07 / max 35.09 ms
+[metrics_node-2] [INFO] [1792678665.567562176] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.08 / max 35.09 ms
+[metrics_node-2] [INFO] [1792678666.567664099] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.08 / max 35.10 ms
+[metrics_node-2] [INFO] [1792678667.767362340] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.09 / max 35.11 ms
+[metrics_node-2] [INFO] [1792678668.767394478] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.10 / max 35.11 ms
+[metrics_node-2] [INFO] [1792678669.967153818] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.10 / max 35.12 ms
+[metrics_node-2] [INFO] [1792678670.967222412] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.11 / max 35.13 ms
+[metrics_node-2] [INFO] [1792678671.967362568] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.11 / max 35.13 ms
+[metrics_node-2] [INFO] [1792678673.166848825] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.12 / max 35.14 ms
+[metrics_node-2] [INFO] [1792678674.167148623] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.13 / max 35.15 ms
+[metrics_node-2] [INFO] [1792678675.366913664] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.14 / max 35.16 ms
+[metrics_node-2] [INFO] [1792678676.567015096] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.14 / max 35.16 ms
+[metrics_node-2] [INFO] [1792678677.766717382] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.15 / max 35.17 ms
+[metrics_node-2] [INFO] [1792678678.966852968] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.16 / max 35.18 ms
+[metrics_node-2] [INFO] [1792678680.166760369] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.17 / max 35.18 ms
+[metrics_node-2] [INFO] [1792678681.366646420] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.17 / max 35.19 ms
+[metrics_node-2] [INFO] [1792678682.566565567] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.18 / max 35.20 ms
+[metrics_node-2] [INFO] [1792678683.767117604] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.19 / max 35.21 ms
+[metrics_node-2] [INFO] [1792678684.966186960] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.20 / max 35.21 ms
+[metrics_node-2] [INFO] [1792678686.166396798] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.20 / max 35.22 ms
+[metrics_node-2] [INFO] [1792678687.366169749] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.21 / max 35.23 ms
+[metrics_node-2] [INFO] [1792678688.566393832] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.22 / max 35.24 ms
+[metrics_node-2] [INFO] [1792678689.766106770] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.23 / max 35.24 ms
+[metrics_node-2] [INFO] [1792678690.966312729] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.23 / max 35.25 ms
+[metrics_node-2] [INFO] [1792678691.966327880] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.24 / max 35.26 ms
+[metrics_node-2] [INFO] [1792678692.966509038] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.25 / max 35.26 ms
+[metrics_node-2] [INFO] [1792678694.165628898] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.25 / max 35.27 ms
+[metrics_node-2] [INFO] [1792678695.365610297] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.26 / max 35.28 ms
+[metrics_node-2] [INFO] [1792678696.565593570] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.27 / max 35.29 ms
+[metrics_node-2] [INFO] [1792678697.765422364] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.27 / max 35.29 ms
+[metrics_node-2] [INFO] [1792678698.965404550] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.28 / max 35.30 ms
+[metrics_node-2] [INFO] [1792678700.165346534] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.29 / max 35.31 ms
+[metrics_node-2] [INFO] [1792678701.165740823] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.30 / max 35.32 ms
+[metrics_node-2] [INFO] [1792678702.165954583] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.30 / max 35.32 ms
+[metrics_node-2] [INFO] [1792678703.365179452] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.31 / max 35.33 ms
+[metrics_node-2] [INFO] [1792678704.565216100] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.32 / max 35.33 ms
+[metrics_node-2] [INFO] [1792678705.764944271] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.32 / max 35.34 ms
+[metrics_node-2] [INFO] [1792678706.965019130] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.33 / max 35.35 ms
+[metrics_node-2] [INFO] [1792678708.164702399] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.34 / max 35.36 ms
+[metrics_node-2] [INFO] [1792678709.365057558] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.35 / max 35.37 ms
+[metrics_node-2] [INFO] [1792678710.365277673] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.35 / max 35.37 ms
+[metrics_node-2] [INFO] [1792678711.365321871] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.36 / max 35.38 ms
+[metrics_node-2] [INFO] [1792678712.564831490] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.37 / max 35.38 ms
+[metrics_node-2] [INFO] [1792678713.764527484] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.37 / max 35.39 ms
+[metrics_node-2] [INFO] [1792678714.964724813] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.38 / max 35.40 ms
+[metrics_node-2] [INFO] [1792678716.164236683] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.39 / max 35.41 ms
+[metrics_node-2] [INFO] [1792678717.364329870] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.40 / max 35.41 ms
+[metrics_node-2] [INFO] [1792678718.564110505] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.40 / max 35.42 ms
+[metrics_node-2] [INFO] [1792678719.564487151] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.41 / max 35.43 ms
+[metrics_node-2] [INFO] [1792678720.564892436] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.42 / max 35.43 ms
+[metrics_node-2] [INFO] [1792678721.764213772] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.42 / max 35.44 ms
+[metrics_node-2] [INFO] [1792678722.964051241] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.43 / max 35.45 ms
+[metrics_node-2] [INFO] [1792678724.164039582] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.44 / max 35.46 ms
+[metrics_node-2] [INFO] [1792678725.363851186] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.44 / max 35.46 ms
+[metrics_node-2] [INFO] [1792678726.563721090] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.45 / max 35.47 ms
+[metrics_node-2] [INFO] [1792678727.763920905] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.46 / max 35.48 ms
+[metrics_node-2] [INFO] [1792678728.963623614] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.47 / max 35.49 ms
+[metrics_node-2] [INFO] [1792678730.163494678] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.47 / max 35.49 ms
+[metrics_node-2] [INFO] [1792678731.363369336] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.48 / max 35.50 ms
+[metrics_node-2] [INFO] [1792678732.563343796] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.49 / max 35.51 ms
+[metrics_node-2] [INFO] [1792678733.763312999] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.50 / max 35.52 ms
+[metrics_node-2] [INFO] [1792678734.963601818] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.50 / max 35.52 ms
+[metrics_node-2] [INFO] [1792678736.163022067] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.51 / max 35.53 ms
+[metrics_node-2] [INFO] [1792678737.163157530] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.52 / max 35.54 ms
+[metrics_node-2] [INFO] [1792678738.362890787] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.53 / max 35.54 ms
+[metrics_node-2] [INFO] [1792678739.362966321] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.53 / max 35.55 ms
+[metrics_node-2] [INFO] [1792678740.563176681] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.54 / max 35.56 ms
+[metrics_node-2] [INFO] [1792678741.762806119] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.55 / max 35.57 ms
+[metrics_node-2] [INFO] [1792678742.962956543] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.55 / max 35.57 ms
+[metrics_node-2] [INFO] [1792678744.163024952] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.56 / max 35.58 ms
+[metrics_node-2] [INFO] [1792678745.362744958] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.57 / max 35.59 ms
+[metrics_node-2] [INFO] [1792678746.562827931] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.58 / max 35.60 ms
+[metrics_node-2] [INFO] [1792678747.762336779] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.58 / max 35.60 ms
+[metrics_node-2] [INFO] [1792678748.962384371] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.59 / max 35.61 ms
+[metrics_node-2] [INFO] [1792678750.162196745] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.60 / max 35.62 ms
+[metrics_node-2] [INFO] [1792678751.362028105] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.61 / max 35.62 ms
+[metrics_node-2] [INFO] [1792678752.562278265] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.61 / max 35.63 ms
+[metrics_node-2] [INFO] [1792678753.761932931] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.62 / max 35.64 ms
+[metrics_node-2] [INFO] [1792678754.961652638] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.63 / max 35.64 ms
+[metrics_node-2] [INFO] [1792678755.961847247] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.63 / max 35.65 ms
+[metrics_node-2] [INFO] [1792678757.161751113] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.64 / max 35.66 ms
+[metrics_node-2] [INFO] [1792678758.162018792] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.65 / max 35.66 ms
+[metrics_node-2] [INFO] [1792678759.361510502] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.65 / max 35.67 ms
+[metrics_node-2] [INFO] [1792678760.561807660] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.66 / max 35.68 ms
+[metrics_node-2] [INFO] [1792678761.761332009] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.67 / max 35.69 ms
+[metrics_node-2] [INFO] [1792678762.761582810] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.68 / max 35.69 ms
+[metrics_node-2] [INFO] [1792678763.961390559] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.68 / max 35.70 ms
+[metrics_node-2] [INFO] [1792678764.961442524] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.69 / max 35.71 ms
+[metrics_node-2] [INFO] [1792678766.161167841] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.70 / max 35.71 ms
+[metrics_node-2] [INFO] [1792678767.361272919] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.70 / max 35.72 ms
+[metrics_node-2] [INFO] [1792678768.561143059] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.71 / max 35.73 ms
+[metrics_node-2] [INFO] [1792678769.761310758] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.72 / max 35.74 ms
+[metrics_node-2] [INFO] [1792678770.961030426] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.73 / max 35.74 ms
+[metrics_node-2] [INFO] [1792678772.160610876] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.73 / max 35.75 ms
+[metrics_node-2] [INFO] [1792678773.160774779] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.74 / max 35.76 ms
+[metrics_node-2] [INFO] [1792678774.160930433] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.75 / max 35.76 ms
+[metrics_node-2] [INFO] [1792678775.360901808] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.75 / max 35.77 ms
+[metrics_node-2] [INFO] [1792678776.560593597] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.76 / max 35.78 ms
+[metrics_node-2] [INFO] [1792678777.760281631] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.77 / max 35.79 ms
+[metrics_node-2] [INFO] [1792678778.960275096] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.78 / max 35.80 ms
+[metrics_node-2] [INFO] [1792678780.160266287] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.78 / max 35.80 ms
+[metrics_node-2] [INFO] [1792678781.360213872] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.79 / max 35.81 ms
+[metrics_node-2] [INFO] [1792678782.559926408] [metrics_node]: FPS:  5.00 | Jitter(sx):   0.00 ms | Skew(sx-dx): avg 35.80 / max 35.82 ms

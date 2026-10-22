@@ -232,24 +232,43 @@ cd ~/nautilus-vision-pipeline
 
 Lo script gestisce automaticamente:
 
-- check temperatura < 55 °C, governor CPU, clock atteso (2400/2800 MHz)
-- stop di `nautilus-bag.service`, `nautilus-vision.service`, `lock-cameras.service`
-- `pkill` di `camera_node`, `detection_node`, `enhancement_node`, `metrics_node`, `ros2 bag record`
-- **check pre-launch**: nessun nodo `/stereo/*`, `/detection_node`, `/metrics_node` già attivo; nessun publisher sui topic raw; nessun `ros2 bag record` in esecuzione
-- lancio pipeline con `include_stereo_camera:=true`, `input_type_override` esplicito e gli override del modello
-- attesa 5 s + `lock_cameras.py`
-- **check post-launch**: nessun errore fatale nel log, `/stereo/lx/camera` attivo, rate raw entro ±30% del valore atteso da `FrameDurationLimits`, `/detection_node` attivo entro 5 s (se `DET=true`)
-- warmup 30 s
-- `system_monitor.py --duration 300` in background
-- `benchmark_pipeline.py --duration 120` in foreground
-- scrittura metadata CSV
-- cooldown 30 s
+- **check temperatura** `< 55 °C` (unico controllo bloccante: se fallisce,
+  `exit 1` e nessun CSV viene prodotto)
+- **governor CPU** → `performance` (con `sudo tee` su `scaling_governor`)
+- **stop** di `nautilus-bag.service`, `nautilus-vision.service`,
+  `lock-cameras.service` (via `systemctl stop`)
+- **`pkill`** di `camera_node`, `detection_node`, `enhancement_node`,
+  `metrics_node` e di eventuali `ros2 bag record`
+- **`ros2 daemon stop && ros2 daemon start`**
+- **hardware unlock**: `sudo fuser -k -9 /dev/video0 /dev/video1`
+- **lancio pipeline** con `include_stereo_camera:=true`,
+  `input_type_override` esplicito e gli override del modello
+- attesa 5 s + esecuzione di `deploy/lock_cameras.py`
+- **grep sul launch log** per errori fatali noti
+  (`is not a supported model format`, `stereo_callback failed`,
+  `failed to acquire camera`): se trovati, emette un **WARNING** ma
+  **prosegue** (nessun `exit 1`)
+- **warmup 30 s**
+- **`system_monitor.py --duration 300`** in background
+- **`benchmark_pipeline.py --duration 120`** in foreground. Se `DET=true`
+  (tutte le config tranne `A_baseline`), passa `--stages-topic
+  /stereo_down/timings` e produce anche il `<...>_stages.csv`.
+- **attesa della fine di `system_monitor.py`**, poi `kill -9` del
+  processo di launch e `cleanup_camera_nodes` (pkill `-9`)
+- **scrittura metadata CSV**
+- **cooldown 10 s**
 
-Se uno dei check fallisce, la run viene abortita con `exit 1` e i CSV
-non vengono prodotti: nessun run "verde" senza validazione.
+⚠️ **Cosa NON fa il wrapper**: non controlla nodi residui prima del
+launch, non controlla publisher sui topic raw, non verifica il rate raw
+contro `FrameDurationLimits`, non verifica che `/detection_node` sia
+attivo dopo 5 s, non esegue `systemctl disable`. La sessione va quindi
+preparata manualmente come da "Prerequisiti comuni" e i dati vanno
+validati a posteriori sui CSV (rate anomali, `throttled`, `cpu_clock_mhz`).
 
 I CSV finiscono in `benchmarks/results/csv/` con naming:
-`<data>_<config>_run<N>_{latency,system,metadata}.csv`
+`<data>_<config>_run<N>_{latency,system,metadata}.csv`, più
+`<data>_<config>_run<N>_launch.log` e, solo per le config con detection
+attiva (`DET=true`), `<data>_<config>_run<N>_stages.csv`.
 
 ### Lancio manuale di A_baseline (solo camera)
 
@@ -329,17 +348,14 @@ ros2 topic hz /stereo_down/targets
 `ros2 topic hz` → 5.003 Hz con `camera_ros` lanciato da solo).
 ⚠️ Se durante un run il rate raw è ~30 Hz, **non** è un bug del driver: i
 frame vengono da un processo esterno (servizio systemd ripartito durante lo
-stop, launch manuale dimenticato) che pubblica sullo stesso topic. Il
-wrapper `run_benchmark.sh` ora abortisce se trova:
+stop, launch manuale dimenticato) che pubblica sullo stesso topic.
 
-- nodi `/stereo/*`, `/detection_node`, `/metrics_node` già attivi
-- publisher sui topic raw
-- rate raw fuori da ±30% del valore atteso (letto da `FrameDurationLimits`)
-- processi `ros2 bag record` attivi
-- errori fatali nel launch log (`is not a supported model format`,
-  `stereo_callback failed`, `failed to acquire camera`)
-- `/detection_node` non attivo dopo 5 s (quando `DET=true`)
-Se vedi un'uscita prematura, controlla `<run>_launch.log`.
+⚠️ Il wrapper `run_benchmark.sh` **non** implementa controlli automatici
+su nodi residui, publisher sui topic, rate raw, `ros2 bag record` o errori
+fatali nel launch log: fa solo un `grep` sui messaggi d'errore noti e
+stampa un **WARNING** senza abortire. La validazione va quindi fatta a
+posteriori sui CSV, scartando le run con rate anomali o throttling. Se
+sospetti una run sporca, controlla `<run>_launch.log`.
 
 Per la Fase B (OC), i valori attesi sono **superiori** se il throttling
 non morde: tipicamente +10–20% sugli FPS di detection. Se il throttling
@@ -399,10 +415,10 @@ tmux new -s bench
 
 Prima di ogni run il wrapper:
 
-- aspetta il cooldown del run precedente (30 s)
+- aspetta il cooldown del run precedente (10 s)
 - verifica temperatura con `vcgencmd measure_temp` (deve essere < 55 °C)
 - scrive un metadata CSV con commit hash, config, run, modello, flag
-  `enable_*`, risoluzione (`imgsz`) e temperature
+  `enable_*`, risoluzione (`imgsz`), temperature, throttled e clock CPU
 
 ---
 
@@ -417,6 +433,10 @@ Il wrapper `run_benchmark.sh` genera automaticamente
 - flag `half_res` e risoluzione `imgsz`
 - tutti i flag `enable_*` usati
 - temperatura SoC iniziale e finale
+- `throttled_initial` / `throttled_final` (valore di `vcgencmd get_throttled`
+  a inizio e fine run)
+- `cpu_clock_initial_mhz` / `cpu_clock_final_mhz` (clock ARM a inizio e fine
+  run, in MHz)
 
 ```csv
 field,value
@@ -431,10 +451,14 @@ half_res,false
 imgsz,640
 soc_temp_initial_c,47.5
 soc_temp_final_c,49.9
-notes,OpenVINO FP32 640 (no OC)
+throttled_initial,0x0
+throttled_final,0x0
+cpu_clock_initial_mhz,2400
+cpu_clock_final_mhz,2400
+notes,OV FP32
 ```
 
-Il clock CPU effettivo è registrato colonna per colonna nel CSV
+Il clock CPU effettivo è registrato colonna per colonna anche nel CSV
 `_system.csv` (`cpu_clock_mhz`), perché è l'unico modo per accorgersi di
 eventuale throttling durante la run.
 
@@ -450,7 +474,7 @@ python3 benchmarks/scripts/plot_results.py \
   --out benchmarks/results/plots/
 ```
 
-Grafici generati:
+Grafici generati (8 PNG):
 
 1. `01_latency_mean_by_config.png` — latenza media per stage e config
 2. `02_latency_p50_p95.png` — p50 e p95 per stage
@@ -459,6 +483,8 @@ Grafici generati:
 5. `05_cpu.png` — CPU% nel tempo
 6. `06_ram.png` — RAM usata nel tempo
 7. `07_map_comparison.png` — mAP (se presenti CSV `map_*.csv`)
+8. `08_detection_stages.png` — scomposizione pre/inferenza/post per config
+   (richiede i CSV `_stages.csv` prodotti da `benchmark_pipeline.py`)
 
 Con i suffissi `_oc`, ogni config OC compare separatamente nel grafico:
 utile per confrontare visivamente la coppia `B*` vs `B*_oc` e vedere se
@@ -515,3 +541,8 @@ Serve un validation set subacqueo con lo stesso schema di classi del training.
   `nautilus-vision.service` (`PartOf`) e dal wrapper con `systemctl stop
   nautilus-bag.service` + `pkill -f "ros2 bag record"`. Nessun I/O
   continuativo su MicroSD durante le misure.
+- **Hardware unlock**: il wrapper esegue `sudo fuser -k -9 /dev/video0
+  /dev/video1` per liberare i device video prima del launch. Se lanci la
+  pipeline a mano (senza wrapper), verifica tu che nessun processo stia
+  tenendo occupati `/dev/video0` e `/dev/video1`.
+  

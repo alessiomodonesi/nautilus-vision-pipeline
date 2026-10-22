@@ -1,0 +1,5 @@
+host: nautilus-pi
+user: nautilus
+passwd: Nautilus_2026!
+
+vnc: https://<IP>:8444/vnc.html

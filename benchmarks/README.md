@@ -15,7 +15,7 @@ benchmarks/
 │   ├── benchmark_pipeline.py    # Profilazione latenze p50/p95 e delay inter-nodo
 │   ├── system_monitor.py        # Logging CPU%, RAM, temperatura, vcgencmd throttled
 │   ├── evaluate_map.py          # Calcolo mAP sul validation set per ogni variante
-│   ├── plot_results.py          # Grafici comparativi a partire dai CSV
+│   ├── plot_results.py          # Grafici comparativi a partire dai CSV (8 PNG)
 │   ├── model_benchmark.py       # Confronto .pt vs OpenVINO standalone (no ROS)
 │   └── check_imgsz.py           # Ispeziona shape input di .pt e .ov
 ├── datasets/
@@ -28,7 +28,7 @@ benchmarks/
 │   └── tools/
 │       └── clean_dataset.py     # Filtro varianza Laplaciano per selezione frame
 ├── results/
-│   ├── csv/                     # Dati grezzi temporizzati + metadata
+│   ├── csv/                     # Dati grezzi + metadata + log di launch
 │   └── plots/                   # PNG dei grafici generati
 ├── CONFIGS.md                   # Dettaglio delle configurazioni di test
 └── README.md
@@ -93,9 +93,17 @@ cd ~/nautilus-vision-pipeline
 #     ./benchmarks/run_benchmark.sh B2_ov_fp32_oc 1
 ```
 
-Il wrapper gestisce: stop servizi, check temperatura, lancio pipeline con
-`include_stereo_camera:=true`, lock fotometrico, warmup 30s, monitor
-sistema 300s, benchmark latenze 120s, scrittura metadata, cooldown 30s.
+Il wrapper gestisce: stop servizi, check temperatura (< 55 °C, unico
+controllo bloccante), `ros2 daemon stop/start`, hardware unlock dei
+`/dev/video*`, lancio pipeline con `include_stereo_camera:=true`, lock
+fotometrico, warmup 30 s, monitor sistema 300 s, benchmark latenze 120 s,
+scrittura metadata, cooldown **10 s**.
+
+⚠️ Il wrapper **non** implementa i controlli pre/post-launch su nodi
+residui, publisher sui topic, rate raw, o `ros2 bag record`: eventuali
+errori noti nel launch log producono solo un **WARNING** e la run prosegue.
+La pulizia della sessione va preparata manualmente (vedi `CONFIGS.md`) e i
+dati vanno validati a posteriori sui CSV.
 
 ### Batch completo
 
@@ -116,7 +124,9 @@ done
 ```
 
 Da lanciare in `tmux` o `screen`. Al termine, in `results/csv/` ci sono
-33 × 3 file (latency, system, metadata) più i log di launch.
+30 × 5 file (latency, system, metadata, stages, launch.log) per le config
+con detection attiva, più 3 × 4 file (senza stages) per `A_baseline`:
+162 file in totale, più gli eventuali `map_*.csv` prodotti a parte.
 
 ---
 
@@ -131,6 +141,8 @@ Da lanciare in `tmux` o `screen`. Al termine, in `results/csv/` ci sono
 - **RAM** residente.
 - **Frequenza CPU** (`vcgencmd measure_clock arm`).
 - **Flag di throttling** (`vcgencmd get_throttled`).
+- **Stage breakdown** (`pre`, `infer`, `post`, `total`) — dal nodo
+  `detection_node`, scritto in `<run>_stages.csv` da `benchmark_pipeline.py`.
 
 ### Termica (Fase 7)
 
@@ -166,7 +178,9 @@ Stampa il boost % OpenVINO per ogni coppia `.pt`/`.ov`.
 python3 check_imgsz.py
 ```
 
-Mostra input/output shape di `.pt` e directory OpenVINO.
+Scansiona **tutti** i modelli `*openvino*` presenti in `WEIGHTS` e, per
+confronto, i `.pt` noti (`yolov8n.pt`, `best.pt` se presente). Mostra
+input/output shape e metadata (`imgsz`, `names`, `task`).
 
 ### Monitor di sistema (in parallelo alla pipeline)
 
@@ -176,6 +190,9 @@ python3 benchmarks/scripts/system_monitor.py \
     --out benchmarks/results/csv/<run>_system.csv
 ```
 
+Default: `--duration 600`, `--interval 1.0`. Al termine stampa un summary
+(temp min/max/mean, CPU, RAM, clock, flag di throttling osservati).
+
 ### Benchmark latenze (in parallelo alla pipeline)
 
 ```bash
@@ -184,11 +201,16 @@ python3 benchmarks/scripts/benchmark_pipeline.py \
     --out benchmarks/results/csv/<run>_latency.csv \
     --raw-topic /stereo/lx/camera/image_raw \
     --enhanced-topic "" \
-    --targets-topic /stereo_down/targets
+    --targets-topic /stereo_down/targets \
+    --stages-topic /stereo_down/timings
 ```
 
-Per `A_baseline`: `--enhanced-topic "" --targets-topic ""`.
+Per `A_baseline`: `--enhanced-topic "" --targets-topic "" --stages-topic ""`.
 Per `C_full`: `--enhanced-topic /stereo/lx/image_enhanced`.
+
+Se passi `--stages-topic`, il nodo produce anche
+`<out_stem_senza_latency>_stages.csv` con la scomposizione
+`pre/infer/post/total` per ogni frame del detection node.
 
 ### mAP sul validation set (non-regressione export OpenVINO)
 
@@ -218,7 +240,7 @@ python3 benchmarks/scripts/plot_results.py \
     --out benchmarks/results/plots/
 ```
 
-Genera 7 PNG:
+Genera 8 PNG:
 
 1. `01_latency_mean_by_config.png` — latenza media per stage e config
 2. `02_latency_p50_p95.png` — p50 e p95 per stage
@@ -227,6 +249,8 @@ Genera 7 PNG:
 5. `05_cpu.png` — CPU% nel tempo
 6. `06_ram.png` — RAM usata nel tempo
 7. `07_map_comparison.png` — mAP (se presenti CSV `map_*.csv`)
+8. `08_detection_stages.png` — scomposizione pre/inferenza/post per config
+   (richiede i CSV `_stages.csv`)
 
 ---
 
@@ -253,8 +277,10 @@ Il wrapper `run_benchmark.sh` genera automaticamente per ogni run un
 - Commit hash del repo (`git rev-parse HEAD`)
 - Config ID e numero di run
 - Flag `enable_*` usati
-- `params_file` (quale YAML detection)
+- `model_filename`, `half_res`, `imgsz`
 - Temperatura SoC iniziale e finale
+- `throttled_initial` / `throttled_final`
+- `cpu_clock_initial_mhz` / `cpu_clock_final_mhz`
 
 Senza questi metadati i dati non sono confrontabili tra sessioni.
 
@@ -277,12 +303,14 @@ il wrapper controlla solo all'inizio e alla fine, non durante.
   da un `camera_node` esterno, non da quello lanciato dal wrapper). I
   servizi da fermare sono: `nautilus-bag.service`, `nautilus-vision.service`,
   `lock-cameras.service`.
-- ⚠️ **Il wrapper verifica la pipeline dopo il launch**: se `/stereo/lx/camera`
-  non è attivo, il topic raw non pubblica, il rate è fuori da ±30% del
-  valore atteso da `FrameDurationLimits`, o compare un errore fatale nel
-  launch log, la run viene abortita con exit 1 e i CSV non vengono
-  prodotti. Se vedi un'uscita prematura, controlla `<run>_launch.log` per
-  `failed to acquire camera` o `is not a supported model format`.
+- ⚠️ **Il wrapper NON valida la pipeline dopo il launch**: eventuali
+  messaggi d'errore noti nel launch log producono solo un `WARNING` e la
+  run prosegue (nessun `exit 1`). I controlli automatici si limitano a
+  temperatura < 55 °C e governor CPU → `performance`. Rate anomali,
+  publisher inattesi e nodi residui vanno verificati a mano prima/dopo la
+  sessione (vedi `CONFIGS.md`). Se vedi CSV sospetti, controlla
+  `<run>_launch.log` per `failed to acquire camera` o `is not a supported
+  model format`.
 - Tutti gli script sono **headless** (nessuna GUI). Il wrapper lancia sempre
   con `enable_debug:=false` per non falsare le latenze con l'overhead di
   `cv2.imshow`.
