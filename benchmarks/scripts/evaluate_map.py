@@ -30,7 +30,6 @@ def resolve_weights(path_str: str) -> str:
     xmls = sorted(p.glob("*.xml"))
     pts = sorted(p.glob("*.pt"))
     if xmls:
-        # per OpenVINO Ultralytics richiede il percorso della cartella del modello
         return str(p)
     if pts:
         return str(pts[0])
@@ -51,9 +50,12 @@ def evaluate(weights, data_yaml, imgsz, split, conf, iou, device, batch):
         verbose=True,
     )
     box = metrics.box
+    names = metrics.names
     per_class = {}
     for i, c in enumerate(box.ap_class_index):
-        per_class[model.names[int(c)]] = {
+        c_idx = int(c)
+        c_name = names[c_idx] if names and c_idx in names else str(c_idx)
+        per_class[c_name] = {
             "map50": float(box.ap50[i]),
             "map50_95": float(box.ap[i]),
         }
