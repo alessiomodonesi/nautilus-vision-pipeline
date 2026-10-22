@@ -1,0 +1,17 @@
+field,value
+commit_hash,119e2e7b3cd402ba76b62dcb547436f7ab3f5a63
+config,B2_ov_fp32_oc
+run,3
+enable_enhancement,false
+enable_detection,true
+enable_metrics,true
+model_filename,yolov8n_640_fp32_openvino_model
+half_res,false
+imgsz,640
+soc_temp_initial_c,51.0
+soc_temp_final_c,58.7
+throttled_initial,0x0
+throttled_final,0x0
+cpu_clock_initial_mhz,2800
+cpu_clock_final_mhz,2800
+notes,OV FP32 OC

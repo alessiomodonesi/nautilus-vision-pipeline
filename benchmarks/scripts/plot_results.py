@@ -97,27 +97,42 @@ def load_system(path):
     return out
 
 
-def scan(csv_dir):
-    csv_dir = Path(csv_dir)
+def load_stages(path):
+    out = {}
+    with open(path) as f:
+        for r in csv.DictReader(f):
+            out[r["stage"]] = {
+                "mean": float(r["mean_ms"]),
+                "p50":  float(r["p50_ms"]),
+                "p95":  float(r["p95_ms"]),
+                "n":    int(r["n"]),
+            }
+    return out
+
+
+def scan(csv_dirs):
     lat = defaultdict(list)
     sys_ = defaultdict(list)
     stages = defaultdict(list)
     maps = []
-    for p in sorted(csv_dir.glob("*.csv")):
-        m = LATENCY_RE.match(p.name)
-        if m:
-            lat[m["config"]].append((int(m["run"]), load_latency(p)))
-            continue
-        m = SYSTEM_RE.match(p.name)
-        if m:
-            sys_[m["config"]].append((int(m["run"]), load_system(p)))
-            continue
-        m = STAGES_RE.match(p.name)
-        if m:
-            stages[m["config"]].append((int(m["run"]), load_stages(p)))
-            continue
-        if MAP_RE.match(p.name):
-            maps.append(p)
+    
+    for csv_dir in csv_dirs:
+        csv_dir = Path(csv_dir)
+        for p in sorted(csv_dir.glob("*.csv")):
+            m = LATENCY_RE.match(p.name)
+            if m:
+                lat[m["config"]].append((int(m["run"]), load_latency(p)))
+                continue
+            m = SYSTEM_RE.match(p.name)
+            if m:
+                sys_[m["config"]].append((int(m["run"]), load_system(p)))
+                continue
+            m = STAGES_RE.match(p.name)
+            if m:
+                stages[m["config"]].append((int(m["run"]), load_stages(p)))
+                continue
+            if MAP_RE.match(p.name):
+                maps.append(p)
     return lat, sys_, stages, maps
 
 
@@ -280,19 +295,6 @@ def plot_map(maps, out_dir):
     print(f"  {out}")
 
 
-def load_stages(path):
-    out = {}
-    with open(path) as f:
-        for r in csv.DictReader(f):
-            out[r["stage"]] = {
-                "mean": float(r["mean_ms"]),
-                "p50":  float(r["p50_ms"]),
-                "p95":  float(r["p95_ms"]),
-                "n":    int(r["n"]),
-            }
-    return out
-
-
 def plot_stages(stages, out_dir):
     configs = [c for c in CONFIG_ORDER if c in stages]
     if not configs:
@@ -305,7 +307,6 @@ def plot_stages(stages, out_dir):
     for k in keys:
         vals = []
         for cfg in configs:
-            # stages[cfg] = [(run, {stage: {...}}), ...]
             per_run = [rows[k]["mean"]
                        for _, rows in stages[cfg] if k in rows]
             vals.append(np.mean(per_run) if per_run else 0)
@@ -328,7 +329,7 @@ def plot_stages(stages, out_dir):
     
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", required=True)
+    ap.add_argument("--csv", nargs='+', required=True, help="Uno o più percorsi alle cartelle CSV")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
