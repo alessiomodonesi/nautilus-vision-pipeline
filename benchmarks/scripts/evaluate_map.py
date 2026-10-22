@@ -30,14 +30,15 @@ def resolve_weights(path_str: str) -> str:
     xmls = sorted(p.glob("*.xml"))
     pts = sorted(p.glob("*.pt"))
     if xmls:
-        return str(xmls[0])
+        # per OpenVINO Ultralytics richiede il percorso della cartella del modello
+        return str(p)
     if pts:
         return str(pts[0])
     raise FileNotFoundError(f"Nessun .xml/.pt trovato in {p}")
 
 
 def evaluate(weights, data_yaml, imgsz, split, conf, iou, device, batch):
-    model = YOLO(weights)
+    model = YOLO(weights, task="detect")
     metrics = model.val(
         data=str(Path(data_yaml).expanduser().resolve()),
         split=split,
