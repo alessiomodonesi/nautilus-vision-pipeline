@@ -61,7 +61,6 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 * **[Sensing Rigs Daemon](https://github.com/nautilus-unipd/sensing-rigs-daemon/tree/benchmark/high-fps/README.md)** — Codice sorgente del vecchio demone di acquisizione in C a basso livello.
   * **[Benchmark MicroSD](https://github.com/nautilus-unipd/sensing-rigs-daemon/tree/benchmark/high-fps/microsd_benchmark.md)** — Analisi di throughput su schede MicroSD Kingston Canvas Select Plus.
   * **[Ottimizzazione FPS](https://github.com/nautilus-unipd/sensing-rigs-daemon/tree/benchmark/high-fps/fps_optimization_summary.md)** — Studio sui colli di bottiglia e latenze del demone legacy.
-  * **[TODO Legacy Daemon](https://github.com/nautilus-unipd/sensing-rigs-daemon/tree/benchmark/high-fps/TODO.md)** — Obiettivi di sviluppo del vecchio demone.
 
 ---
 
@@ -213,7 +212,7 @@ ros2 launch nautilus_perception pipeline.launch.py \
   * `libcamera` (fork Raspberry Pi) e `camera_ros`.
 * **Python:** PyYAML (per `lock_cameras.py`).
 
-Per il setup completo dell'ambiente Pi Camera su Ubuntu Server vedi [`docs/setup-picam3.md`](docs/SETUP-PICAM3md).
+Per il setup completo dell'ambiente Pi Camera su Ubuntu Server vedi [`docs/SETUP-PICAM3.md`](docs/SETUP-PICAM3.md).
 
 ---
 
@@ -230,7 +229,7 @@ colcon build --symlink-install
 source install/setup.bash
 ```
 
-Per i comandi più usati durante lo sviluppo vedi [`docs/ros2-cmds.md`](docs/ROS2-CMDS.md).
+Per i comandi più usati durante lo sviluppo vedi [`docs/ROS2-CMDS.md`](docs/ROS2-CMDS.md).
 
 ---
 
@@ -243,8 +242,8 @@ Per i comandi più usati durante lo sviluppo vedi [`docs/ros2-cmds.md`](docs/ROS
 | **Fase 3** | Nodo di Salvataggio su MicroSD (Anti-RTC, Service) | ✅ Completata | `nautilus_camera/saving_node` |
 | **Fase 4** | Nodo di Detection (YOLO/OpenVINO + Stereovisione) | ✅ Completata | `nautilus_perception/detection_node`, `detection_params.yaml` |
 | **Fase 5** | Calibrazione stereo 720p (RMS 0.125 px, Z validata, errore < 1 cm su 0.6–0.9 m) | ✅ Completata | `nautilus_perception/detection/calibration/`, `stereo_calib_720p.npz`, `config.py` |
-| **Fase 6** | Benchmark comparativo (latenza p50/p95, CPU, FPS, mAP) | 🔄 Prossima | `benchmarks/`, `pipeline.launch.py`, `run_benchmark.sh` |
-| **Fase 7** | Stress test termico (1 h a box chiusa, throttling) | ⏳ Pianificata | `benchmarks/scripts/system_monitor.py`, `vcgencmd` |
+| **Fase 6** | Benchmark comparativo (latenza p50/p95, CPU, FPS, mAP) | ✅ Completata | `benchmarks/`, `pipeline.launch.py`, `run_benchmark.sh` |
+| **Fase 7** | Stress test termico (1 h a box chiusa, throttling) | 🔄 Prossima | `benchmarks/scripts/system_monitor.py`, `vcgencmd` |
 | **Fase 8** | Integrazione con Stack Nautilus & Jetson (Chrony) | ⏳ Pianificata | CycloneDDS, sincronizzazione `chrony` |
 | **Fase 9** | Tesi, Slide e Documentazione Finale | 🔄 In corso | Cartella `docs/`, report e grafici |
 
