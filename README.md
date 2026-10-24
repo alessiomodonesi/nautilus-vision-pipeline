@@ -58,10 +58,10 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 
 ### 🏛️ Archivio Storico e Componenti Legacy
 
-* **[Sensing Rigs Daemon](sensing-rigs-daemon/README.md)** — Codice sorgente del vecchio demone di acquisizione in C a basso livello.
-  * **[Benchmark MicroSD](sensing-rigs-daemon/microsd_benchmark.md)** — Analisi di throughput su schede MicroSD Kingston Canvas Select Plus.
-  * **[Ottimizzazione FPS](sensing-rigs-daemon/fps_optimization_summary.md)** — Studio sui colli di bottiglia e latenze del demone legacy.
-  * **[TODO Legacy Daemon](sensing-rigs-daemon/TODO.md)** — Obiettivi di sviluppo del vecchio demone.
+* **[Sensing Rigs Daemon](https://github.com/nautilus-unipd/sensing-rigs-daemon/tree/benchmark/high-fps/README.md)** — Codice sorgente del vecchio demone di acquisizione in C a basso livello.
+  * **[Benchmark MicroSD](https://github.com/nautilus-unipd/sensing-rigs-daemon/tree/benchmark/high-fps/microsd_benchmark.md)** — Analisi di throughput su schede MicroSD Kingston Canvas Select Plus.
+  * **[Ottimizzazione FPS](https://github.com/nautilus-unipd/sensing-rigs-daemon/tree/benchmark/high-fps/fps_optimization_summary.md)** — Studio sui colli di bottiglia e latenze del demone legacy.
+  * **[TODO Legacy Daemon](https://github.com/nautilus-unipd/sensing-rigs-daemon/tree/benchmark/high-fps/TODO.md)** — Obiettivi di sviluppo del vecchio demone.
 
 ---
 
@@ -213,7 +213,7 @@ ros2 launch nautilus_perception pipeline.launch.py \
   * `libcamera` (fork Raspberry Pi) e `camera_ros`.
 * **Python:** PyYAML (per `lock_cameras.py`).
 
-Per il setup completo dell'ambiente Pi Camera su Ubuntu Server vedi [`docs/setup-picam3.md`](docs/setup-picam3.md).
+Per il setup completo dell'ambiente Pi Camera su Ubuntu Server vedi [`docs/setup-picam3.md`](docs/SETUP-PICAM3md).
 
 ---
 
@@ -230,7 +230,7 @@ colcon build --symlink-install
 source install/setup.bash
 ```
 
-Per i comandi più usati durante lo sviluppo vedi [`docs/ros2-cmds.md`](docs/ros2-cmds.md).
+Per i comandi più usati durante lo sviluppo vedi [`docs/ros2-cmds.md`](docs/ROS2-CMDS.md).
 
 ---
 
