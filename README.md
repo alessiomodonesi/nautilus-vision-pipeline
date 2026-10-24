@@ -12,13 +12,13 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 
 ### 📄 Documentazione Generale (`docs/`)
 
-* **[Guida al Lancio Globale](docs/global_launch.md)** — Architettura del sistema di lancio, routing automatico dei topic, gestione delle variabili d'ambiente, service systemd (`nautilus-vision.service`, `lock-cameras.service`) e comandi di test.
+* **[Guida al Lancio Globale](docs/LAUNCH.md)** — Architettura del sistema di lancio, routing automatico dei topic, gestione delle variabili d'ambiente, service systemd (`nautilus-vision.service`, `lock-cameras.service`) e comandi di test.
 * **[Roadmap Operativa](docs/TODO.md)** — Tabella di marcia suddivisa in 9 fasi (Acquisizione, Enhancement, Salvataggio, Detection, Calibrazione 720p, Benchmark, Stress test termico, Integrazione, Documentazione).
-* **[Setup Hardware Pi Camera v3](docs/setup-picam3.md)** — Configurazione del Raspberry Pi 5 con Ubuntu Server 24.04, build di `libcamera` da sorgente per il pipeline handler `pisp`, installazione di `rpicam-apps` e `picamera2`, fix noti (`libcap-dev`, `pykms`, symlink `site-packages`).
-* **[Export OpenVINO](docs/ov_export.md)** — Procedura di export YOLOv8n e `best.pt` in FP32/INT8, gestione dataset di calibrazione, verifica shape e test `imgsz`.
-* **[Cheat-Sheet Comandi ROS 2](docs/ros2-cmds.md)** — Raccolta di comandi essenziali per build (`colcon`), launch, ispezione nodi/topic e registrazione bag.
-* **[Dipendenze Raspberry Pi](docs/requirements_pi.txt)** — Elenco dei pacchetti Python e di sistema per l'ambiente Pi.
-* **[Dipendenze Virtual Environment](docs/requirements_venv.txt)** — Pacchetti Python per il venv di sviluppo (export OpenVINO, calibrazione, benchmark).
+* **[Setup Hardware Pi Camera v3](docs/SETUP-PICAM3.md)** — Configurazione del Raspberry Pi 5 con Ubuntu Server 24.04, build di `libcamera` da sorgente per il pipeline handler `pisp`, installazione di `rpicam-apps` e `picamera2`, fix noti (`libcap-dev`, `pykms`, symlink `site-packages`).
+* **[Export OpenVINO](docs/OV-EXPORT.md)** — Procedura di export YOLOv8n e `best.pt` in FP32/INT8, gestione dataset di calibrazione, verifica shape e test `imgsz`.
+* **[Cheat-Sheet Comandi ROS 2](docs/ROS2-CMDS.md)** — Raccolta di comandi essenziali per build (`colcon`), launch, ispezione nodi/topic e registrazione bag.
+* **[Dipendenze Raspberry Pi](docs/requirements-pi.txt)** — Elenco dei pacchetti Python e di sistema per l'ambiente Pi.
+* **[Dipendenze Virtual Environment](docs/requirements-venv.txt)** — Pacchetti Python per il venv di sviluppo (export OpenVINO, calibrazione, benchmark).
 
 ### 📦 Workspace e Pacchetti ROS 2 (`ros2_ws/`)
 
@@ -45,7 +45,8 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 
 * **[Benchmark Overview](benchmarks/README.md)** — Metodologia dei test prestazionali e termici (Fase 6 e 7), configurazioni di pipeline, metriche raccolte (latenza p50/p95, CPU, RAM, temperatura, mAP) e linee guida di riproducibilità.
 * **[Configurazioni di Test](benchmarks/CONFIGS.md)** — 11 config di test (Fase A: 6 config senza OC; Fase B: 5 config con OC), con modello/half_res/imgsz, prerequisiti, valori attesi e comandi batch per i run.
-* **[Script di Lancio](benchmarks/)** — `run_benchmark.sh`.
+* **[Configurazioni di Test](benchmarks/RESULTS.md)** — Risultati, considerazioni e grafici dei benchmark effettuati, divisi per differenti pipeline, modelli di object detection e overclock (non) attivo.
+* **[Script di Lancio](benchmarks/run_benchmark.sh)** — `run_benchmark.sh`.
 * **[Script di Benchmark](benchmarks/scripts/)** — `benchmark_pipeline.py`, `system_monitor.py`, `evaluate_map.py`, `plot_results.py`, `model_benchmark.py`, `check_imgsz.py`.
 * **[Dataset di Test](benchmarks/datasets/)** — Immagini e video stereo di test, dataset grezzi annotati, dataset COCO128 per mAP e tool di pulizia (`clean_dataset.py`).
 * **[Risultati](benchmarks/results/)** — CSV temporizzati (`csv/`) e grafici PNG (`plots/`) prodotti durante le sessioni.
