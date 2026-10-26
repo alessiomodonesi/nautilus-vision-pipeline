@@ -1,0 +1,19 @@
+field,value
+commit_hash,3bb4b040aab4f2c5b1b965df3fa103bcc331983e
+config,T_baseline
+run,1
+thermal_duration_s,3600
+enable_enhancement,false
+enable_detection,false
+enable_metrics,true
+model_filename,
+half_res,true
+imgsz,640
+soc_temp_initial_c,38.4
+soc_temp_final_c,56.5
+throttled_initial,0x0
+throttled_final,0x0
+cpu_clock_initial_mhz,2400
+cpu_clock_final_mhz,2400
+notes,thermal baseline
+timings_topic,none
