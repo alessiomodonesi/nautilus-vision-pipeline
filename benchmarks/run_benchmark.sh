@@ -1,5 +1,7 @@
 #!/bin/bash
 # usage: ./run_benchmark.sh <config> <run_n>
+#
+# fase 6 — benchmark delle varie configurazioni
 
 set -e
 
