@@ -231,62 +231,13 @@ Inoltre, passare `imgsz=416` a un modello esportato a 416 riduce i FLOPs
 del forward pass di ~58% rispetto a 640 (`(416/640)² ≈ 0.42`), a fronte
 di una perdita di accuratezza tipicamente contenuta su oggetti grandi.
 
-### 5.2 Patch `core_detection.py`
+### 5.2 Implementazione di `imgsz` nel codice della pipeline
 
-Aggiungere `imgsz` al costruttore di `YoloDetector` e passarlo a `predict()`:
+Il parametro `imgsz` è pienamente integrato sia in `core_detection.py` sia in `detection_node.py`:
 
-```python
-class YoloDetector(BaseDetector):
-    def __init__(
-        self,
-        model_path: str,
-        conf: float = 0.3,
-        half_res: bool = True,
-        imgsz: int = 640,
-    ) -> None:
-        from ultralytics import YOLO
-        self.model = YOLO(model_path)
-        self.conf = conf
-        self.half_res = half_res
-        self.imgsz = imgsz
-        self.device = self._pick_device()
-        log.info("YOLO inference engine mapped to device: %s (imgsz=%d)",
-                 self.device, self.imgsz)
-
-    def detect(self, frame: np.ndarray) -> List[BBox]:
-        if self.half_res:
-            h, w = frame.shape[:2]
-            infer_frame = cv2.resize(frame, (w // 2, h // 2))
-            scale = 2.0
-        else:
-            infer_frame = frame
-            scale = 1.0
-
-        results = self.model.predict(
-            infer_frame, conf=self.conf,
-            imgsz=self.imgsz,
-            verbose=False,
-        )
-        # ... resto invariato
-```
-
-### 5.3 Patch `detection_node.py`
-
-Dichiarare il parametro e passarlo al detector:
-
-```python
-self.declare_parameter('imgsz', 640)
-self.imgsz = int(self.get_parameter('imgsz').value)
-
-# ...
-
-self.detector = YoloDetector(
-    model_path=model_path,
-    conf=conf,
-    half_res=half_res,
-    imgsz=self.imgsz,
-)
-```
+- `YoloDetector` accetta `imgsz` e lo passa direttamente al metodo `predict(..., imgsz=self.imgsz)` di Ultralytics.
+- `detection_node.py` dichiara il parametro `imgsz` (letto da `detection_params.yaml` o sovrascrivibile da launch con `imgsz_override:=...`) e lo inoltra al detector.
+- I modelli OpenVINO a 416px (come `yolov8n_416_int8_openvino_model` o `best_416_fp32_openvino_model`) vengono quindi eseguiti alla loro risoluzione nativa senza resize spuri.
 
 ### 5.4 YAML di configurazione
 
@@ -379,28 +330,20 @@ Questo dà una stima del **solo forward pass OpenVINO**, senza remap,
 senza enhancement, senza ROS. È il tetto massimo raggiungibile nella
 pipeline reale.
 
-### 5.6 Test end-to-end con il wrapper
+### 5.6 Test end-to-end con il wrapper di benchmark
 
-Aggiungere i nuovi casi a `benchmarks/scripts/run_benchmark.sh`:
-
-```bash
-B_ov_int8_416)  ENH="false"; DET="true"; PARAMS="detection_params_ov_int8_416.yaml"; NOTE="OpenVINO INT8 416" ;;
-B_ov_int8_640)  ENH="false"; DET="true"; PARAMS="detection_params_ov_int8_640.yaml"; NOTE="OpenVINO INT8 640" ;;
-B_best_416)     ENH="false"; DET="true"; PARAMS="detection_params_best_int8_416.yaml"; NOTE="best INT8 416" ;;
-C_ov_int8_416)  ENH="true";  DET="true"; PARAMS="detection_params_ov_int8_416.yaml"; NOTE="full + OpenVINO INT8 416" ;;
-```
-
-Lancio esplorativo singolo (per non sprecare 3h):
+L'esecuzione dei benchmark completi sulla pipeline è gestita da `benchmarks/run_benchmark.sh`:
 
 ```bash
-./benchmarks/scripts/run_benchmark.sh B_ov_int8_416 1
-./benchmarks/scripts/run_benchmark.sh B_ov_int8_640 1
-./benchmarks/scripts/run_benchmark.sh B_best_416 1
+# Esempio esecuzione benchmark su modello esportato
+./benchmarks/run_benchmark.sh B2_ov_fp32 1
+./benchmarks/run_benchmark.sh B3_ov_int8_640 1
+./benchmarks/run_benchmark.sh B4_ov_int8_416 1
 ```
 
-Confrontare gli FPS su `/stereo_down/targets` con i valori di `CONFIGS.md`
-(2.7 FPS `.pt`, 3.2 FPS OpenVINO FP32). Se il guadagno è < 20%, non vale
-la pena rifare i 15 run completi.
+> [!WARNING]
+> **Esito Empirico dei Benchmark di Fase 6**:
+> Le misure sul Raspberry Pi 5 (Cortex-A76) hanno evidenziato che i modelli quantizzati INT8 (`B3` a 640px e `B4` a 416px) impiegano rispettivamente **8.32 s** e **3.55 s** di inferenza per frame a causa del fallback software del runtime CPU ARM di OpenVINO. Al contrario, **`yolov8n_640_fp32_openvino_model`** raggiunge **~2.29 FPS** con soli **347 ms** di inferenza pura e mAP identica a PyTorch (0.612@0.5). Il modello **FP32** è pertanto la scelta di produzione raccomandata. Vedi [`benchmarks/benchmark_results/RESULTS.md`](../benchmarks/benchmark_results/RESULTS.md).
 
 ---
 
@@ -423,14 +366,15 @@ la pena rifare i 15 run completi.
 - La calibrazione INT8 di `best.pt` su COCO128 è **domain-mismatched**:
   il modello risultante va trattato come esperimento di benchmark, non
   come artefatto di produzione.
-- L'export INT8 di `best.pt` con dataset subacqueo reale (post-Fase 6)
-  è il passo successivo per un modello di produzione.
+- L'export INT8 su architetture ARM Cortex-A76 è sconsigliato in produzione
+  fino a quando il backend OpenVINO non integrerà ottimizzazioni SIMD dedicate.
 
 ---
 
 ## 8. Riferimenti
 
-- `benchmarks/CONFIGS.md` — configurazioni di benchmark
-- `benchmarks/README.md` — struttura e script della cartella
-- `ros2_ws/src/nautilus_perception/README.md` — guida ai nodi
-- `docs/TODO.md` — roadmap (Fase 6 = benchmark)
+- [`benchmarks/benchmark_results/CONFIGS.md`](../benchmarks/benchmark_results/CONFIGS.md) — Configurazioni e setup di benchmark
+- [`benchmarks/benchmark_results/RESULTS.md`](../benchmarks/benchmark_results/RESULTS.md) — Report completo dei benchmark prestazionali
+- [`benchmarks/README.md`](../benchmarks/README.md) — Panoramica della suite di test
+- [`ros2_ws/src/nautilus_perception/README.md`](../ros2_ws/src/nautilus_perception/README.md) — Guida ai nodi di percezione
+- [`docs/TODO.md`](TODO.md) — Roadmap di sviluppo (Fase 6 = benchmark)

@@ -1,118 +1,110 @@
 # Guida al Lancio Globale della Pipeline Nautilus Vision
 
-Questo documento descrive il funzionamento del sistema di lancio della pipeline ROS 2 per il progetto Nautilus, spiegando come configurare l'esecuzione dei nodi, gestire i parametri e avviare il sistema.
+Questo documento descrive il funzionamento del sistema di avvio e gestione della pipeline ROS 2 per il progetto Nautilus, spiegando come configurare l'esecuzione dei nodi, gestire i parametri e monitorare il sistema in produzione e in fase di test.
 
-## 1. Architettura del Lancio Globale
+---
 
-Il sistema di lancio è **modulare**: il pacchetto `nautilus_camera` gestisce l'acquisizione, il benchmark e il salvataggio (Fasi 1 e 3), mentre `nautilus_perception` gestisce enhancement e detection (Fasi 2 e 4). Ogni pacchetto ha il proprio launch file e può essere avviato in modo indipendente.
+## 1. Architettura di Lancio della Pipeline
 
-La pipeline completa è composta da quattro blocchi principali:
+Il sistema è progettato in modo **modulare** e disaccoppiato:
 
-1. **Acquisizione (`nautilus_camera/stereo_camera.launch.py`):** sempre attiva. Avvia i due driver `camera_ros` (camera sinistra e destra) a 720p @ 5 FPS tramite `config/camera_params.yaml`. È l'unico blocco che parte in automatico al boot del Raspberry Pi.
-2. **Salvataggio (`saving_node`):** opzionale. Salva i frame stereo su disco locale (JPEG/PNG) con naming incrementale (nessun RTC richiesto). Si attiva al boot solo se `ENABLE_SAVING=true` in `pipeline_config.env`. Espone anche un ROS 2 Service per attivarlo/disattivarlo a runtime.
-3. **Benchmark (`metrics_node`):** mai automatico. Misura FPS reali, jitter e skew stereo. Si lancia a mano durante i test.
-4. **Enhancement + Detection (`nautilus_perception/pipeline.launch.py`):** mai automatici. Migliorano le immagini e calcolano la stereovisione. Si lanciano a mano quando servono.
+- **`nautilus_camera`**: gestisce l'acquisizione hardware con i due sensori IMX708 via `camera_ros` e la telemetria di base con `metrics_node`.
+- **`nautilus_perception`**: gestisce l'enhancement visivo (`enhancement_node`) e l'object detection 3D (`detection_node`).
+- **`nautilus-bag.service`**: registra i flussi compressi in formato MCAP per la persistenza su disco, senza appesantire la CPU durante la navigazione.
 
-### Regola di fondo
-
-All'avvio del Raspberry Pi partono **solo** acquisizione e (opzionalmente) salvataggio. Enhancement, detection e metriche non devono mai partire in automatico: consumano CPU/batteria e servono solo durante test o sessioni dedicate. Questo vincolo è implementato in `start_pipeline.sh`.
-
-### Diagramma dei flussi
+### Flusso di Dati
 
 ```text
-                   ┌──────────────────────────────────────────────┐
-                   │            nautilus_camera                   │
-                   │                                              │
-    ┌────────┐     │  ┌──────────┐                                │
-    │ Cam LX │────▶│  │ camera   │────┬──────────────────────────▶│ /stereo/lx/camera/image_raw
-    └────────┘     │  │ _ros     │    │                           │
-    ┌────────┐     │  │ (lx)     │    └──▶ ┌──────────────┐       │
-    │ Cam RX │────▶│  └──────────┘         │ saving_node  │(opt.) │
-    └────────┘     │  ┌──────────┐         └──────────────┘       │
-                   │  │ camera   │────┬──────────────────────────▶│ /stereo/rx/camera/image_raw
-                   │  │ _ros(rx) │    └──▶ (saving_node, same)    │
-                   │  └──────────┘                                │
-                   └──────────────┬───────────────────────────────┘
-                                  │ /stereo/{lx,rx}/camera/image_raw
-                                  ▼
-                   ┌──────────────────────────────────────────────┐
-                   │          nautilus_perception                 │
-                   │  ┌──────────────┐   ┌─────────────────┐      │
-                   │  │ enhancement  │──▶│   detection     │      │
-                   │  │   _node      │   │     _node       │      │
-                   │  └──────────────┘   └─────────────────┘      │
-                   │      (opzionale)         (opzionale)         │
-                   │      solo a mano         solo a mano         │
-                   └──────────────────────────────────────────────┘
+               ┌──────────────────────────────────────────────────┐
+               │                nautilus_camera                   │
+               │                                                  │
+┌────────┐     │  ┌──────────┐                                    │
+│ Cam LX │────▶│  │ camera   │───────────────────────────────────▶│ /stereo/lx/camera/image_raw
+└────────┘     │  │ _ros(lx) │                                    │
+┌────────┐     │  └──────────┘                                    │
+│ Cam RX │────▶│  ┌──────────┐                                    │
+└────────┘     │  │ camera   │───────────────────────────────────▶│ /stereo/rx/camera/image_raw
+               │  │ _ros(rx) │                                    │
+               │  └──────────┘                                    │
+               └──────────────┬───────────────────────────────────┘
+                              │
+                              ▼ /stereo/{lx,rx}/camera/image_raw
+               ┌──────────────────────────────────────────────────┐
+               │               nautilus_perception                │
+               │  ┌──────────────────┐    ┌────────────────────┐  │
+               │  │ enhancement_node │───▶│   detection_node   │  │
+               │  │ (CLAHE+Sharp)    │    │ (YOLOv8 + Stereo)  │  │
+               │  └──────────────────┘    └────────────────────┘  │
+               │       (opzionale)              (opzionale)       │
+               │       input: raw               input: enhanced   │
+               └────────────────────────────────────────┬─────────┘
+                                                        │
+                                                        ▼ /stereo_down/targets
+                                               (3D Targets X, Y, Z)
 ```
 
-## 2. Configurazione Globale (`pipeline_config.env`)
+### Regola Operativa di Bordo
 
-Il comportamento della pipeline all'avvio è governato da un file di ambiente posizionato nella radice del progetto:
+All'accensione del Raspberry Pi 5 (trigger da interruttore magnetico a reed):
+
+1. **Partono automaticamente solo le telecamere**: `nautilus-vision.service` avvia `stereo_camera.launch.py`.
+2. **Lock fotometrico a runtime**: `lock-cameras.service` riapplica l'esposizione fissa (`ExposureTime: 20000`, `ColourGains: [1.5, 1.5]`) e le posizioni di fuoco (`LensPosition: 2.6 / 1.5`).
+3. **Registrazione dati opzionale**: se `ENABLE_BAG=true` in `pipeline_config.env`, `nautilus-bag.service` registra i flussi video.
+4. **I nodi pesanti di calcolo non partono da soli**: enhancement, detection e benchmark telemetrici consumano CPU e budget termico e vanno attivati su richiesta tramite i launch dedicati o da parte del mission manager.
+
+---
+
+## 2. Configurazione d'Ambiente (`pipeline_config.env`)
+
+Il comportamento dell'intero sistema è controllato dal file d'ambiente situato nella root del progetto:
 
 **Percorso:** `~/nautilus-vision-pipeline/pipeline_config.env`
 
 ```bash
 # pipeline_config.env
-# file di configurazione letto da start_pipeline.sh all'avvio del raspberry
-
+export ROS_DOMAIN_ID=42
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 export NAUTILUS_ROOT=/home/nautilus/nautilus-vision-pipeline
+export CYCLONEDDS_URI="file://${NAUTILUS_ROOT}/deploy/cyclonedds.xml"
 
-# salvataggio su disco: true = parte anche saving_node insieme all'acquisizione
-# false = solo acquisizione (nessun I/O su microSD)
-ENABLE_SAVING=false
+# Le telecamere partono SEMPRE al boot via nautilus-vision.service.
+# La registrazione rosbag MCAP dei flussi è OPZIONALE (default spenta per i benchmark):
+export ENABLE_BAG=false
+export NAUTILUS_BAG_DIR=/home/nautilus/nautilus_bags
 ```
 
-| Variabile         | Default | Descrizione                                                       |
-|-------------------|---------|-------------------------------------------------------------------|
-| `ENABLE_SAVING`   | `false` | Avvia il nodo di salvataggio insieme all'acquisizione             |
+| Variabile | Default | Descrizione |
+| :--- | :---: | :--- |
+| `ROS_DOMAIN_ID` | `42` | ID del dominio CycloneDDS (deve coincidere su Pi e Jetson) |
+| `RMW_IMPLEMENTATION` | `rmw_cyclonedds_cpp` | Middleware di comunicazione ROS 2 standard |
+| `CYCLONEDDS_URI` | `.../deploy/cyclonedds.xml` | Configurazione di rete (interfacce, MTU, frammentazione) |
+| `ENABLE_BAG` | `false` | Se `true`, attiva la registrazione automatica MCAP via systemd |
+| `NAUTILUS_BAG_DIR` | `/home/nautilus/nautilus_bags` | Cartella di salvataggio delle registrazioni bag |
 
-**Unica variabile gestita da `start_pipeline.sh`.** Enhancement, detection e metrics non hanno un flag nel `.env` perché non partono mai automaticamente: si lanciano a mano con `ros2 launch` quando servono.
+---
 
-### Cosa fa `start_pipeline.sh`
+## 3. Parametri di Acquisizione Telecamere (`camera_params.yaml`)
 
-```bash
-ros2 launch nautilus_camera stereo_camera.launch.py \
-    enable_saving:=${ENABLE_SAVING} \
-    enable_metrics:=false
-```
-
-- `enable_metrics:=false` è forzato: le metriche si lanciano solo a mano durante i benchmark.
-- `camera_ros` legge i parametri fotometrici (lens position, autofocus, exposure, colour gains) dal YAML e li applica al boot.
-- Subito dopo, `lock-cameras.service` lancia `lock_cameras.py` che riapplica gli stessi parametri via `set_parameters` per sicurezza (vedi sezione 6).
-
-### Routing automatico dei topic
-
-Nel launch file `nautilus_perception/pipeline.launch.py` il tipo di input per la detection viene valutato automaticamente:
-
-- se `enable_enhancement:=true`, la detection riceve `input_type_override='enhanced'` e si collega a `/stereo/{lx,rx}/image_enhanced`
-
-- se `enable_enhancement:=false`, riceve `input_type_override='raw'` e si collega a `/stereo/{lx,rx}/camera/image_raw`
-
-Questo previene deadlock in cui il nodo di detection attenderebbe topic inesistenti.
-
-## 3. Configurazione del Pacchetto `nautilus_camera`
-
-Tutti i parametri di acquisizione, benchmark e salvataggio vivono in un unico file YAML. Lo stesso file è letto anche da `lock_cameras.py` (sezione 6) per riapplicare i parametri fotometrici a runtime.
+Configura i due driver `camera_ros` e il nodo di telemetria.
 
 **Percorso:** `ros2_ws/src/nautilus_camera/config/camera_params.yaml`
 
 ```yaml
-# parametri hardware per camera_ros - camera sinistra (lx)
+# Camera sinistra (lx)
 /stereo/lx/camera:
   ros__parameters:
     camera: 0
     width: 1280
     height: 720
-    FrameDurationLimits: [200000, 200000]   # 200 ms => 5 FPS
-    AeEnable: false
-    AwbEnable: false
-    ExposureTime: 20000
+    FrameDurationLimits: [200000, 200000]   # 200 ms => 5.0 FPS nominali
+    AeEnable: false                         # No auto-exposure
+    AwbEnable: false                        # No auto-white-balance
+    ExposureTime: 20000                     # 20 ms
     ColourGains: [1.5, 1.5]
-    AfMode: 0
-    LensPosition: 2.6                       # offset meccanico +1.05 vs rx
+    AfMode: 0                               # Messa a fuoco manuale
+    LensPosition: 2.6                       # Fuoco a ~0.65 m (offset +1.05 diottrie)
 
-# parametri hardware per camera_ros - camera destra (rx)
+# Camera destra (rx)
 /stereo/rx/camera:
   ros__parameters:
     camera: 1
@@ -124,284 +116,178 @@ Tutti i parametri di acquisizione, benchmark e salvataggio vivono in un unico fi
     ExposureTime: 20000
     ColourGains: [1.5, 1.5]
     AfMode: 0
-    LensPosition: 1.5
+    LensPosition: 1.5                       # Fuoco a ~0.65 m
 
-# parametri del nodo di benchmark
+# Nodo diagnostico
 /**/metrics_node:
   ros__parameters:
-    left_topic:  '/stereo/lx/camera/image_raw'
+    left_topic: '/stereo/lx/camera/image_raw'
     right_topic: '/stereo/rx/camera/image_raw'
-    sync_slop_sec: 0.05
+    sync_slop_sec: 0.05                     # 50 ms tolleranza sincronizzazione
     window_size: 30
     log_interval_sec: 1.0
     display: false
-
-# parametri del nodo di salvataggio
-/**/saving_node:
-  ros__parameters:
-    enable_saving: true
-    left_topic:  '/stereo/lx/camera/image_raw'
-    right_topic: '/stereo/rx/camera/image_raw'
-    save_directory: '/home/nautilus/nautilus_data'
-    save_left: true
-    save_right: true
-    image_format: 'jpg'
-    jpeg_quality: 95
-    filename_prefix: 'nautilus'
-    queue_size: 10
-    flush_every_n: 1
-    max_files_per_session: 0
-    sync_slop_sec: 0.05
 ```
 
-> **Nota QoS**: le entry `qos_overrides` **non** sono più in questo file.
-> Sono centralizzate in `nautilus_common/config/qos_overrides.yaml` (SSOT)
-> e passate a `camera_ros` dal launch `stereo_camera.launch.py` come
-> `--params-file` aggiuntivo. Vedi `nautilus_common/README.md` per
-> l'architettura completa.
+> [!NOTE]
+> I parametri Quality of Service (QoS) non risiedono in questo file: sono centralizzati in [`ros2_ws/src/nautilus_common/config/qos_overrides.yaml`](../ros2_ws/src/nautilus_common/config/qos_overrides.yaml) come Single Source of Truth (SSOT).
 
-### Note importanti sui parametri
+---
 
-- **`FrameDurationLimits`**: valori in microsecondi; `[200000, 200000]` forza 5 FPS stabili. Non modificare senza aggiornare i benchmark attesi.
-- **`AeEnable`, `AwbEnable`, `ExposureTime`, `ColourGains`**: lock fotometrico. Servono per garantire coerenza radiometrica tra i due sensori: la stereo correlation (NCC, SGBM) fallisce se left e right hanno esposizione o white balance diversi.
-- **`AfMode`, `LensPosition`**: messa a fuoco manuale. L'offset meccanico tra i due obiettivi è di +1.05 diottrie sulla sinistra (documentato in `DEBUG.md` §3.2). `camera_ros` può rifiutare questi parametri al boot su IMX708: `lock_cameras.py` li riapplica subito dopo.
-- **`sync_slop_sec`**: tolleranza di disallineamento temporale (in secondi) tra i frame sinistro e destro nel `message_filters.ApproximateTimeSynchronizer`. Con skew misurato ~1.5 ms, 50 ms è ideale a 5 FPS (il periodo tra frame è 200 ms: uno slop ≤ 50 ms impedisce di accoppiare frame di epoche diverse).
-- **`flush_every_n`**: forza il commit su disco (`os.sync()`) ogni N coppie stereo salvate. Cruciale sul veicolo per prevenire corruzioni di filesystem della MicroSD a seguito dello spegnimento brusco con reed switch magnetico.
-- **`save_directory`**: deve essere una directory scrivibile dall'utente `nautilus`. Ad ogni avvio il nodo crea una sottocartella `YYYYmmdd-HHMMSS_session/` (con suffisso progressivo `_1`, `_2` in caso di orologio di sistema non sincronizzato) per evitare qualsiasi sovrascrittura accidentale.
-- **`image_format`**: `'jpg'` o `'png'`. Il formato JPEG occupa molto meno spazio, ma introduce artefatti di compressione; per uso scientifico dei biologi potrebbe servire PNG.
-- **`max_files_per_session`**: `0` significa nessun limite. Utile per test a tempo determinato.
-- **`display`** (metrics_node): apre una finestra OpenCV; richiede sessione grafica attiva. Disattivato per default perché introduce overhead e falsa i benchmark.
+## 4. Parametri di Detection (`detection_params.yaml`)
 
-## 4. Parametri del Nodo di Detection (`nautilus_perception/config/detection_params.yaml`)
+Configura il modello neurale YOLOv8, le soglie e i parametri di calcolo della distanza 3D.
 
-I parametri specifici dell'algoritmo di visione risiedono in questo file separato:
+**Percorso:** `ros2_ws/src/nautilus_perception/config/detection_params.yaml`
 
 ```yaml
 detection_node:
   ros__parameters:
-    model_filename: 'yolov8n.pt' # o directory 'yolov8n_640_fp32_openvino_model'
-    conf_threshold: 0.4
-    input_type: 'raw'            # fallback (sovrascritto dinamicamente dal launch)
-    enable_debug: False
-    half_res: True               # False obbligatorio per OpenVINO
-    imgsz: 640
-    num_threads: 2               # Core logici dedicati all'inferenza CPU/OpenVINO
-    sync_slop_sec: 0.05          # Tolleranza sincronizzazione stereo (50 ms)
+    # Modello di inferenza (cartella OpenVINO in data/weights/)
+    model_filename: 'yolov8n_640_fp32_openvino_model'
+    half_res: false             # False per modelli OpenVINO a 640px
+    imgsz: 640                  # Dimensione tensore input
+    conf_threshold: 0.4         # Soglia di confidenza rilevamento
+    input_type: 'raw'           # 'raw' oppure 'enhanced'
+    enable_debug: false         # True apre la finestra OpenCV
+    num_threads: 2              # Thread CPU dedicati a OpenVINO
+    sync_slop_sec: 0.05         # Tolleranza stereo sincronizzazione (secondi)
 ```
 
-### Come vengono risolti i parametri
+### Routing Automatico dei Topic
 
-Il nodo di detection ha **due livelli di override**:
+All'interno di `nautilus_perception/launch/pipeline.launch.py`:
 
-1. il file YAML fornisce i valori di default
-2. il launch file `detection.launch.py` sovrascrive **sempre** `input_type`, `enable_debug`, `model_filename`, `half_res`, `imgsz` con i propri default di `DeclareLaunchArgument`, anche quando l'utente non passa nulla a riga di comando
+- Se `enable_enhancement:=true`, il parametro `input_type` per la detection diventa automaticamente `'enhanced'` e sottoscrive `/stereo/{lx,rx}/image_enhanced`.
+- Se `enable_enhancement:=false`, diventa `'raw'` e sottoscrive direttamente `/stereo/{lx,rx}/camera/image_raw`.
+- È possibile forzare manualmente il tipo tramite `input_type_override:=raw` o `input_type_override:=enhanced`.
 
-Quindi, per modificare uno di questi cinque valori, o si aggiornano i default in `detection.launch.py`, oppure si passano esplicitamente come argomenti di lancio. Gli altri parametri (`conf_threshold`, `num_threads`, `sync_slop_sec`) non hanno override di lancio e restano quelli del YAML.
+---
 
-### Note importanti sui parametri
+## 5. Modalità di Avvio della Pipeline
 
-- **`num_threads`**: è cruciale per i benchmark termici e prestazionali sul Raspberry Pi 5. Il nodo legge questo parametro e imposta le variabili di sistema `OMP_NUM_THREADS` e `MKL_NUM_THREADS` *prima* di caricare il modello, garantendo che le risorse CPU non vengano saturate in modo incontrollato.
-- **`sync_slop_sec`**: allineato a 50 ms per evitare che in caso di frame drop su un canale vengano associati fotogrammi a intervalli temporali diversi (t con t+200 ms), falsando disparità e stima di profondità.
+### 5.1 Avvio Automatico tramite Systemd (Produzione al Boot)
 
-#### Override manuale dell'input
-
-`pipeline.launch.py` espone anche `input_type_override` (default vuoto).
-Se passato, forza `input_type` e vince sulla logica automatica
-`enable_enhancement → enhanced/raw`. Utile quando si vuole lanciare
-l'enhancement esternamente e fare detection su enhanced **senza**
-duplicare l'enhancement:
+Sul Raspberry Pi, i servizi systemd gestiscono l'avvio della pipeline:
 
 ```bash
-# terminale 1: enhancement esterno
-ros2 launch nautilus_perception enhancement.launch.py
-
-# terminale 2: solo detection, ma su enhanced
-ros2 launch nautilus_perception pipeline.launch.py \
-    enable_enhancement:=false \
-    enable_detection:=true \
-    input_type_override:=enhanced
-```
-
-Senza `input_type_override`, l'unico modo per avere detection su
-`image_enhanced` è `enable_enhancement:=true`, che però rilancerebbe
-una seconda coppia di `enhancement_node` → nodo duplicato sul topic.
-
-## 5. Come Compilare e Avviare
-
-Ogni volta che modifichi i file Python o i `.launch.py`, devi ricompilare il workspace:
-
-```bash
-cd ~/nautilus-vision-pipeline/ros2_ws
-colcon build --symlink-install
-source install/setup.bash
-```
-
-*(Nota: `--symlink-install` permette di modificare file Python non compilati e launch file senza rifare la build; è comunque buona pratica ricompilare dopo modifiche strutturali).*
-
-### Avvio automatico al boot (già configurato)
-
-`nautilus-vision.service` lancia `start_pipeline.sh`, che avvia acquisizione + salvataggio opzionale. Non serve fare nulla a mano.
-
-### Avvio manuale del solo blocco acquisizione + salvataggio
-
-```bash
-cd ~/nautilus-vision-pipeline
-./deploy/start_pipeline.sh
-```
-
-### Avvio manuale con controllo granulare
-
-```bash
-# solo acquisizione (benchmark pulito, zero I/O)
-ros2 launch nautilus_camera stereo_camera.launch.py \
-    enable_saving:=false enable_metrics:=true
-
-# acquisizione + salvataggio (produzione)
-ros2 launch nautilus_camera stereo_camera.launch.py \
-    enable_saving:=true enable_metrics:=false
-```
-
-### Aggiungere enhancement e/o detection sopra l'acquisizione già attiva
-
-Quando le camere sono già in esecuzione (dal boot o da un `stereo_camera.launch.py` lanciato a mano), per aggiungere detection/enhancement si usa `pipeline.launch.py` senza toccare le camere:
-
-```bash
-# aggiungi solo la detection (input raw)
-ros2 launch nautilus_perception pipeline.launch.py \
-    enable_detection:=true \
-    enable_enhancement:=false
-
-# aggiungi enhancement + detection (input enhanced)
-ros2 launch nautilus_perception pipeline.launch.py \
-    enable_detection:=true \
-    enable_enhancement:=true
-```
-
-`pipeline.launch.py` di default **non** riavvia `camera_ros` (`include_stereo_camera:=false`): assume che le camere siano già attive. Se invece vuoi lanciare tutto da zero (es. su workstation con i service systemd fermi), passa `include_stereo_camera:=true`.
-
-### Attivare/disattivare il salvataggio a runtime
-
-Il nodo `saving_node` espone un ROS 2 Service per controllare il salvataggio senza spegnere il nodo:
-
-```bash
-# ferma il salvataggio (continua l'acquisizione)
-ros2 service call /saving_node/set_saving std_srvs/srv/SetBool "{data: false}"
-
-# riprendi il salvataggio
-ros2 service call /saving_node/set_saving std_srvs/srv/SetBool "{data: true}"
-```
-
-Utile durante i test per alternare rapidamente modalità "benchmark" e "produzione" senza restart.
-
-## 6. Avvio tramite Servizio Systemd
-
-Il Raspberry Pi è configurato per lanciare la pipeline in automatico all'avvio (trigger: reed sensor + magnetismo → alimentazione → boot). I service systemd coinvolti sono due:
-
-- **`nautilus-vision.service`**: lancia `start_pipeline.sh`, che avvia acquisizione + salvataggio opzionale.
-- **`lock-cameras.service`**: parte dopo `nautilus-vision.service` e lancia `lock_cameras.py`, che riapplica i parametri fotometrici (lens position, autofocus, exposure, colour gains) via `set_parameters`. È necessario perché `camera_ros` può rifiutare `AfMode` e `LensPosition` al boot su IMX708.
-
-### Installazione (una tantum)
-
-```bash
-# copia gli unit file
-sudo cp ~/nautilus-vision-pipeline/deploy/nautilus-vision.service \
-        /etc/systemd/system/
-sudo cp ~/nautilus-vision-pipeline/deploy/lock-cameras.service \
-        /etc/systemd/system/
-# copia lo script di avvio
-sudo cp ~/nautilus-vision-pipeline/deploy/start_pipeline.sh \
-        /usr/local/bin/
-sudo chmod +x /usr/local/bin/start_pipeline.sh
-# ricarica e abilita
-sudo systemctl daemon-reload
-sudo systemctl enable nautilus-vision.service
-```
-
-Grazie a `WantedBy=nautilus-vision.service` nel `[Install]` di `lock-cameras.service`, anche quest'ultimo viene avviato automaticamente ogni volta che parte `nautilus-vision`.
-
-### Comandi utili
-
-```bash
-# applica subito le modifiche al .env senza riavviare la scheda
-sudo systemctl restart nautilus-vision.service
-# ferma la pipeline
-sudo systemctl stop nautilus-vision.service
-# stato dei servizi
+# Stato dei servizi
 sudo systemctl status nautilus-vision.service
 sudo systemctl status lock-cameras.service
-# log in tempo reale (FPS, metriche, errori)
+sudo systemctl status nautilus-bag.service
+
+# Visualizzazione log in tempo reale
 journalctl -u nautilus-vision.service -f
 journalctl -u lock-cameras.service -f
 ```
 
-### Come funziona `lock_cameras.py`
-
-1. legge `camera_params.yaml` dal package share di `nautilus_camera`
-2. estrae i parametri della whitelist (`AeEnable`, `AwbEnable`, `ExposureTime`, `ColourGains`, `AfMode`, `LensPosition`) per i due namespace
-3. attende che il service `/stereo/{lx,rx}/camera/set_parameters` sia disponibile (fino a 30 s)
-4. chiama `set_parameters` con i valori del YAML
-
-Così la fonte di verità dei parametri fotometrici resta unica (il YAML) e non ci sono valori duplicati tra startup e lock.
-
-## 7. Esempi di Configurazione per i Test (Fase 6 e 7)
-
-Tutti i test si fanno con le camere **già attive** (dal boot o da un `stereo_camera.launch.py` manuale). I flag `enable_*` di `pipeline.launch.py` non vanno confusi con le variabili di `pipeline_config.env`: servono a controllare cosa parte a mano, non cosa parte al boot.
-
-1. **Test: Solo Acquisizione (Baseline hardware)**
-   - Le camere sono attive dal boot (`ENABLE_SAVING=false` nel `.env`)
-   - Avvia a mano solo le metriche: `ros2 launch nautilus_camera stereo_camera.launch.py enable_metrics:=true enable_saving:=false`
-   - Nota: se le camere sono già attive, questo comando darà errore per nodo duplicato. In alternativa avvia `metrics_node` direttamente con `ros2 run nautilus_camera metrics_node`.
-
-2. **Test: Acquisizione + Detection (Nessun pre-processing)**
-   - Le camere sono attive dal boot
-   - `ros2 launch nautilus_perception pipeline.launch.py enable_detection:=true enable_enhancement:=false`
-   - Nel `.yaml` di detection: imposta `num_threads` desiderato.
-
-3. **Test: Full Pipeline con enhancement (WaterNet mai attiva di default)**
-   - Le camere sono attive dal boot
-   - `ros2 launch nautilus_perception pipeline.launch.py enable_detection:=true enable_enhancement:=true waternet_mode:=force_off`
-   - WaterNet resta off: la pipeline usa solo CLAHE + sharpening.
-
-4. **Test: Stress test termico (1 h a box chiusa)**
-   - Avvia `metrics_node` per loggare FPS, jitter e skew ogni secondo.
-   - Logga in parallelo temperatura e throttling: `vcgencmd measure_temp` e `vcgencmd get_throttled`.
-
-5. **Test: Benchmark Fase 6 (5 configurazioni × 3 run)**
-   - Usa `benchmarks/CONFIGS.md` come riferimento
-   - `enable_debug:=false` sempre
-
-## 8. Dove trovare i dati salvati
-
-Di default i frame vengono salvati in:
-
-```text
-/home/nautilus/nautilus_data/<YYYYmmdd-HHMMSS_session>/
-├── nautilus_lx_00000001.jpg
-├── nautilus_rx_00000001.jpg
-├── nautilus_lx_00000002.jpg
-├── nautilus_rx_00000002.jpg
-└── ...
-```
-
-Il contatore è monotonicamente crescente e viene azzerato ad ogni avvio di sessione. Poiché il Raspberry Pi non ha RTC, **non fidarti dell'orario del filesystem**: usa il contatore per ordinare i frame, e l'ID sessione solo per raggrupparli. Inoltre, se l'orario di sistema coincide tra reboot successivi, `saving_node` rileva la collisione e crea automaticamente una sottocartella con suffisso incrementale (es. `YYYYmmdd-HHMMSS_session_1`), proteggendo i dati precedenti dalla sovrascrittura.
-
-Per contare i file salvati:
+### 5.2 Avvio Manuale del Solo Blocco Telecamere
 
 ```bash
-find /home/nautilus/nautilus_data -name "*.jpg" | wc -l
+# Avvio standard solo telecamere (5 FPS)
+ros2 launch nautilus_camera stereo_camera.launch.py
+
+# Con diagnostica FPS / Jitter / Skew attiva a log
+ros2 launch nautilus_camera stereo_camera.launch.py enable_metrics:=true
 ```
 
-## 9. Troubleshooting
+### 5.3 Aggiungere Detection ed Enhancement sopra le Camere Attive
 
-| Sintomo | Causa probabile | Soluzione |
-| --- | --- | --- |
-| `camera_ros` non trova la camera | device ID errato nel YAML | verifica con `rpicam-hello --list-cameras` |
-| Skew > 50 ms persistente | i due sensori sono sincronizzati male | controlla cavi CSI, riduci risoluzione |
-| Warning `camera_info` mancante | calibrazione non presente | non blocca l'acquisizione, ignora per ora |
-| Lens position non applicata al boot | `camera_ros` rifiuta `AfMode`/`LensPosition` su IMX708 | `lock-cameras.service` li riapplica subito dopo: verifica `journalctl -u lock-cameras.service` |
-| `saving_node` non scrive nulla | `save_directory` non scrivibile | `mkdir -p /home/nautilus/nautilus_data && chmod 755` |
-| File JPEG con colori invertiti (rosso/blu) | conversione spazio colore non conforme | `saving_node` converte forzatamente in `bgr8` prima di `cv2.imwrite` |
-| File parzialmente scritti o corrotti al distacco del magnete | cache I/O non svuotata prima del cut off | imposta `flush_every_n: 1` nel YAML per forzare `os.sync()` su MicroSD |
-| Servizio systemd non parte | path in `ExecStart` sbagliato | controlla `journalctl -u nautilus-vision.service` |
-| `pipeline.launch.py` va in errore "node already exists" | le camere sono già attive e `include_stereo_camera` non è `false` | non passare `include_stereo_camera:=true` se le camere sono già su |
-| `ros2 launch` trova `pipeline.launch.py` ma non `stereo_camera.launch.py` | workspace non ricompilato | `colcon build --symlink-install && source install/setup.bash` |
+Quando le telecamere sono già in esecuzione al boot, `pipeline.launch.py` aggiunge l'elaborazione senza interferire con i nodi camera esistenti (`include_stereo_camera:=false` di default):
+
+```bash
+# Aggiungi solo la detection (input raw)
+ros2 launch nautilus_perception pipeline.launch.py \
+    enable_detection:=true \
+    enable_enhancement:=false
+
+# Aggiungi enhancement + detection (input enhanced)
+ros2 launch nautilus_perception pipeline.launch.py \
+    enable_detection:=true \
+    enable_enhancement:=true
+
+# Avvio con finestra grafica OpenCV di debug (richiede display X11)
+ros2 launch nautilus_perception detection.launch.py enable_debug:=true
+```
+
+### 5.4 Avvio Standalone Completo da Zero
+
+Se i servizi systemd sono stati fermati (ad esempio su banco di laboratorio o workstation):
+
+```bash
+ros2 launch nautilus_perception pipeline.launch.py \
+    include_stereo_camera:=true \
+    enable_detection:=true \
+    enable_enhancement:=false
+```
+
+---
+
+## 6. Registrazione Dati ed Estrazione Frame
+
+La memorizzazione delle immagini a bordo non grava sulla CPU grazie all'impiego del formato standard **MCAP**:
+
+### Registrazione Automatica via Systemd
+
+Configurare in `pipeline_config.env`:
+
+```bash
+export ENABLE_BAG=true
+```
+
+Riavviare il servizio:
+
+```bash
+sudo systemctl restart nautilus-bag.service
+```
+
+### Registrazione Manuale Rapida
+
+```bash
+ros2 bag record -s mcap \
+    -o /home/nautilus/nautilus_bags/sessione_test \
+    /stereo/lx/camera/image_raw/compressed \
+    /stereo/rx/camera/image_raw/compressed \
+    /stereo_down/targets
+```
+
+### Estrazione Frame JPEG per i Biologi (`tools/extract_bag_frames.py`)
+
+Al termine della missione, lo script dedicato estrae i frame JPEG numerati direttamente dal file MCAP senza ricompressione:
+
+```bash
+python3 tools/extract_bag_frames.py \
+    --bag /home/nautilus/nautilus_bags/sessione_test \
+    --out-dir /home/nautilus/immagini_missione \
+    --copy-calibration
+```
+
+Lo script genera le cartelle `left/` e `right/` con numerazione sequenziale e il file `metadata.csv` di corrispondenza temporale.
+
+---
+
+## 7. Protocolli di Test e Benchmark (Fasi 6 e 7)
+
+Per l'esecuzione dei benchmark prestazionali e termici, utilizzare i wrapper dedicati descritti nelle rispettive cartelle:
+
+- **Fase 6 — Benchmark Prestazionali**:
+  - Script di automazione: [`benchmarks/run_benchmark.sh`](../benchmarks/run_benchmark.sh)
+  - Documentazione: [`benchmarks/benchmark_results/CONFIGS.md`](../benchmarks/benchmark_results/CONFIGS.md)
+  - Report dei risultati: [`benchmarks/benchmark_results/RESULTS.md`](../benchmarks/benchmark_results/RESULTS.md)
+- **Fase 7 — Stress Test Termico (1h a box chiusa)**:
+  - Script di automazione: [`benchmarks/run_thermal_test.sh`](../benchmarks/run_thermal_test.sh)
+  - Documentazione: [`benchmarks/thermal_results/CONFIGS.md`](../benchmarks/thermal_results/CONFIGS.md)
+  - Report dei risultati: [`benchmarks/thermal_results/RESULTS.md`](../benchmarks/thermal_results/RESULTS.md)
+
+---
+
+## 8. Guida al Troubleshooting
+
+| Sintomo | Causa Probabile | Azione Correttiva |
+| :--- | :--- | :--- |
+| `camera_ros` non trova i device `/dev/video*` | Device occupati o cavo CSI non inserito correttamente | Esegui `sudo fuser -k -9 /dev/video*`; controlla con `rpicam-hello --list-cameras`. |
+| Errore "node already exists" su `camera_node` | Telecamere già avviate da `nautilus-vision.service` | Non passare `include_stereo_camera:=true` in `pipeline.launch.py`. |
+| Distanza Z instabile o nulla (`0.00 m`) | Parametri AE/AWB non bloccati sulle telecamere | Verifica l'esecuzione di `lock_cameras.py` con `systemctl status lock-cameras.service`. |
+| Skew temporale elevato (> 10 ms) | Desincronizzazione dei sensori o clock non stazionario | Verifica i cavi CSI; controlla che `camera_params.yaml` usi `FrameDurationLimits: [200000, 200000]`. |
+| Detection lenta (< 0.5 FPS) | Utilizzo di modello INT8 su CPU ARM o WaterNet attivo | Usa il modello raccomandato `yolov8n_640_fp32_openvino_model` e `waternet_mode:=force_off`. |
+| I nodi ROS 2 su Pi e Jetson non comunicano | Mismatch di configurazione DDS o `ROS_DOMAIN_ID` | Assicurati che entrambe le macchine abbiano `ROS_DOMAIN_ID=42` ed esportino lo stesso file `cyclonedds.xml`. |

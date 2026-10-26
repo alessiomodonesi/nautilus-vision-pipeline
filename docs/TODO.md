@@ -47,20 +47,22 @@ Obiettivo: un nodo in `nautilus_perception` che legge le immagini e pubblica i t
 ## Fase 6 — Benchmark
 
 Obiettivo: un confronto equo e riproducibile eseguito sul Pi.
+*Report completo in [`benchmarks/benchmark_results/RESULTS.md`](../benchmarks/benchmark_results/RESULTS.md).*
 
 - [x] Tre configurazioni di pipeline: solo acquisizione, acquisizione + detection, acquisizione + enhancement + detection.
-- [x] Vedi te i modelli che vuoi testare, secondo me ha senso OpenVino e il modello di Manuel ma non so se sono comparabili.
+- [x] Modelli testati: PyTorch baseline, OpenVINO FP32 640, OpenVINO INT8 640 e 416, modello subacqueo a 416.
 - [x] Latenza media, p50 e p95 con `perf_counter`, separata in pre-processing, inferenza e post-processing.
 - [x] FPS, CPU%, RAM, temperatura e `vcgencmd get_throttled`.
 - [x] mAP sul validation set per ogni variante, per quantificare quanta accuratezza costano.
-- [x] Output CSV e grafici generati da qualche script.
+- [x] Output CSV e grafici generati da `plot_results.py`.
 
 ## Fase 7 — Stress test termico
 
 Obiettivo: testare se la detection può restare sul Pi a box chiusa.
+*Report completo in [`benchmarks/thermal_results/RESULTS.md`](../benchmarks/thermal_results/RESULTS.md).*
 
 - [x] 1h a box chiusa in tre configurazioni: solo acquisizione, acquisizione + detection, acquisizione + enhancement + detection.
-- [x] Log ogni secondo di temperatura, frequenza CPU, FPS e flag di throttling.
+- [x] Log ogni secondo di temperatura, frequenza CPU, FPS e flag di throttling tramite `thermal_stress_test.py`.
 
 ## Fase 8 — Integrazione
 

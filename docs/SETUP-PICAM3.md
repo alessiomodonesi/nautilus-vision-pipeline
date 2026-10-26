@@ -335,3 +335,11 @@ locally anyway.
   which ships official binaries for Ubuntu but not Raspberry Pi OS/Debian).
 - Committing the `.venv/` directory to your project repo — recreate it
   locally instead (step 12).
+
+---
+
+## References & Next Steps
+
+- [`docs/LAUNCH.md`](LAUNCH.md) — Operational guide for launching camera acquisition and pipeline
+- [`ros2_ws/src/nautilus_camera/README.md`](../ros2_ws/src/nautilus_camera/README.md) — ROS 2 `camera_ros` stereo integration
+- [`deploy/lock_cameras.py`](../deploy/lock_cameras.py) — Runtime photometric lock for IMX708 autofocus/exposure
