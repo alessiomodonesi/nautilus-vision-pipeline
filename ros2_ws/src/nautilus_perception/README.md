@@ -47,21 +47,10 @@ sudo apt install ros-jazzy-image-tools
 
 Durante i test di profilazione eseguiti sul target hardware (CPU ARM, no GPU), sono stati rilevati i seguenti carichi computazionali medi:
 
-* **Modalità `force_on` (Pipeline Completa con WaterNet su CPU):**
-* Latenza media: **~70,658.15 ms (~70.6 secondi per frame)**
-* Framerate effettivo: **0.0 FPS**
-
-* *Conclusione:* inutilizzabile per applicazioni in tempo reale su dispositivi embedded. Da qui la scelta di `force_off` come default.
-
-* *Output di esempio disponibili in `benchmarks/datasets/images/waternet_output.jpg`.*
-
-* **Modalità `force_off` (Pipeline Leggera solo OpenCV * Sharpening + CLAHE):**
-* Latenza media: **~65.3 - 67.1 ms per frame**
-* Framerate effettivo: **~1.0 - 1.1 FPS** (con pubblicazione da file di test a 1Hz, salirebbe al limite della camera in streaming live)
-
-* *Conclusione:* prestazioni compatibili con i vincoli di bordo per l'object detection.
-
-* *Output di esempio disponibili in `benchmarks/datasets/images/enhancement_output.jpg`.*
+| **Modalità `force_on` (Pipeline Completa con WaterNet su CPU)** | **Modalità `force_off` (Solo OpenCV, Sharpening + CLAHE)** |
+| :--- | :--- |
+| **Latenza media:** **~70,658.15 ms (~70.6 secondi per frame)**<br>**Framerate effettivo:** **0.0 FPS**<br><br>*Conclusione:* inutilizzabile per applicazioni in tempo reale su dispositivi embedded. Da qui la scelta di `force_off` come default. | **Latenza media:** **~65.3 - 67.1 ms per frame**<br>**Framerate effettivo:** **~1.0 - 1.1 FPS** (con pubblicazione a 1Hz)<br><br>*Conclusione:* prestazioni compatibili con i vincoli di bordo per l'object detection. |
+| ![Confronto mAP validation set](./nautilus_perception/enhancement/images/waternet_output.jpg) | ![Confronto mAP validation set](./nautilus_perception/enhancement/images/enhancement_output.jpg) |
 
 ---
 

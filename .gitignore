@@ -1,9 +1,3 @@
-# Ignora l'immagine della SD card
-docker/clone_sd.img
-
-# Ignora i video di test per l'object detection
-benchmarks/datasets/videos/
-
 # Ignora le credenziali del Raspberry
 docs/pi_access.txt
 
@@ -19,12 +13,6 @@ ros2_ws/log/
 # Ignora file di sistema macOS
 .DS_Store
 Icon?
-
-# Ignora il virtualenv Python (ricreato localmente seguendo docs/setup-picam3.md)
-.venv/
-venv/
-env/
-ENV/
 
 # Ignora le coppie di calibrazione grezze e i backup (artefatti locali)
 calib_pairs/
