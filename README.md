@@ -24,7 +24,7 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 
 * **[Workspace Overview](ros2_ws/README.md)** — Struttura generale del workspace, istruzioni di build e configurazione CycloneDDS.
 * **[Package `nautilus_common`](ros2_ws/src/nautilus_common/README.md)** — Utility condivise, costanti e profili QoS centralizzati per garantire l'allineamento della comunicazione DDS tra tutti i nodi (sia Python che C++).
-* **[Package `nautilus_camera`](ros2_ws/src/nautilus_camera/README.md)** — Acquisizione hardware 720p @ 5 FPS, nodo di benchmark (`metrics_node`), nodo di salvataggio immagini su MicroSD (`saving_node`) con gestione crash e assenza RTC. Configurazione centralizzata in `camera_params.yaml`.
+* **[Package `nautilus_camera`](ros2_ws/src/nautilus_camera/README.md)** — Acquisizione hardware 720p @ 5 FPS e nodo di benchmark (`metrics_node`). Configurazione centralizzata in `camera_params.yaml`.
 * **[Package `nautilus_perception`](ros2_ws/src/nautilus_perception/README.md)** — Modulo core di elaborazione visiva: nodo di enhancement (WaterNet/CLAHE, default `force_off`) e nodo di detection IA + stereovisione.
   * **[Sottomodulo Detection](ros2_ws/src/nautilus_perception/nautilus_perception/detection/README.md)** — Dettagli su architettura *Detect-Then-Range*, calibrazione stereo ChArUco e matching epipolare.
   * **[Debug & Status](ros2_ws/src/nautilus_perception/nautilus_perception/detection/DEBUG.md)** — Problemi noti/risolti, lock fotometrico (`lock_cameras.py`), workflow operativo e checklist di stato del modulo.
@@ -33,13 +33,22 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 
 ### ⚙️ Script di Gestione e Deployment (`deploy/`) & Configurazione
 
-* **[Script Avvio Pipeline](deploy/start_pipeline.sh)** — Entry point di boot invocato da systemd: avvia **solo** acquisizione + salvataggio opzionale. Enhancement, detection e metriche non partono mai automaticamente.
+* **[Script Avvio Pipeline](deploy/start_pipeline.sh)** — Entry point di boot invocato da systemd (`nautilus-vision.service`): avvia **solo** l'acquisizione delle telecamere (`stereo_camera.launch.py`). Enhancement, detection e metriche non partono mai automaticamente.
 * **[Servizio Systemd Pipeline](deploy/nautilus-vision.service)** — Unit file per l'avvio automatico al boot (trigger reed switch).
 * **[Servizio Systemd Lock Cameras](deploy/lock-cameras.service)** — Unit file che lancia `lock_cameras.py` subito dopo l'avvio delle camere per riapplicare i parametri fotometrici.
 * **[Script Lock Fotometrico](deploy/lock_cameras.py)** — Rilegge `camera_params.yaml` e riapplica lens position, autofocus, exposure e colour gains via `set_parameters`. Necessario perché `camera_ros` rifiuta `AfMode`/`LensPosition` su IMX708 al boot.
-* **[Configurazione Ambiente](pipeline_config.env)** — Unico flag: `ENABLE_SAVING` (true/false). Enhancement, detection e metriche si lanciano sempre a mano.
+* **[Registrazione Rosbag MCAP](deploy/bag/)** — Suite per la registrazione opzionale a basso consumo dei flussi stereo compressi:
+  * **[`nautilus-bag.service`](deploy/bag/nautilus-bag.service)**: servizio systemd legato a `nautilus-vision.service`, attivo solo se `ENABLE_BAG=true`.
+  * **[`record_stereo_bag.sh`](deploy/bag/record_stereo_bag.sh)**: script wrapper per `ros2 bag record` con storage MCAP e rotazione file (300 s / 2 GB).
+  * **[`bag_qos.yaml`](deploy/bag/bag_qos.yaml)**: profili QoS compatibili con i topic compressi e di metadata.
+* **[Configurazione Ambiente](pipeline_config.env)** — Definizione di `ROS_DOMAIN_ID`, `RMW_IMPLEMENTATION`, `CYCLONEDDS_URI` e controllo bag con `ENABLE_BAG` (true/false) e `NAUTILUS_BAG_DIR`.
 * **[Configurazione CycloneDDS](deploy/cyclonedds.xml)** — Profilo DDS usato da tutti i nodi per la comunicazione su rete.
 * **[Disabilitazione WiFi Power Save](deploy/wifi-powersave-off.service)** — Unit systemd opzionale per ridurre jitter di rete.
+
+### 🛠️ Strumenti Operativi e Post-Missione (`tools/`)
+
+* **[Strumenti Operativi e Offline](tools/README.md)** — Panoramica e istruzioni per le operazioni post-missione fuori dalla pipeline real-time (senza dipendenza da ROS 2).
+* **[Estrazione Frame da Rosbag](tools/extract_bag_frames.py)** — Script standalone per l'estrazione ad alta velocità e bit-lossless dei frame stereo JPEG da file MCAP, sincronizzazione temporale e generazione di metadati per il dataset.
 
 ### 📊 Benchmark & Validation (`benchmarks/`)
 
@@ -69,7 +78,7 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 
 ## 🏗️ Architettura dei Nodi della Pipeline
 
-L'architettura della visione stereoscopica è organizzata in 4 nodi distribuiti su 2 pacchetti principali.
+L'architettura della visione stereoscopica è organizzata in 3 nodi principali distribuiti su 2 pacchetti (più i servizi diagnostici e la registrazione bag opzionale via MCAP).
 
 ```mermaid
 flowchart TD
@@ -77,7 +86,6 @@ flowchart TD
         DriverLX["camera_ros (lx)\n1280x720 @ 5 FPS"]
         DriverRX["camera_ros (rx)\n1280x720 @ 5 FPS"]
         Metrics["metrics_node\n(FPS, Jitter, Skew)"]
-        Saving["saving_node\n(JPEG/PNG su SD)"]
     end
 
     subgraph PkgPerc ["nautilus_perception"]
@@ -88,9 +96,6 @@ flowchart TD
 
     DriverLX -->|/stereo/lx/camera/image_raw| Metrics
     DriverRX -->|/stereo/rx/camera/image_raw| Metrics
-
-    DriverLX -->|/stereo/lx/camera/image_raw| Saving
-    DriverRX -->|/stereo/rx/camera/image_raw| Saving
 
     DriverLX -->|/stereo/lx/camera/image_raw| EnhLX
     DriverRX -->|/stereo/rx/camera/image_raw| EnhRX
@@ -110,14 +115,7 @@ flowchart TD
    * **È l'unico nodo che parte automaticamente al boot**, tramite `nautilus-vision.service`.
    * Include il nodo diagnostico [`metrics_node`](ros2_ws/src/nautilus_camera/nautilus_camera/metrics_node.py) per monitorare FPS effettivi, jitter e skew stereo (~1.5 ms). **Non parte mai automaticamente**: si lancia a mano durante i test.
 
-2. **Nodo 2 — Salvataggio (`saving_node`, package `nautilus_camera`):**
-   * Salva le coppie di frame stereo su MicroSD con naming incrementale ordinabile (`nautilus_lx_00000001.jpg`).
-   * Supporta isolamento delle sessioni con protezione automatica da sovrascrittura in caso di orologio di sistema non sincronizzato (assenza RTC).
-   * Esegue `os.sync()` regolabile tramite parametro `flush_every_n` per evitare la perdita di file in caso di spegnimento immediato da reed switch.
-   * Controllabile dinamicamente a runtime tramite servizio ROS 2 `~/set_saving` (`std_srvs/srv/SetBool`).
-   * **Parte al boot solo se `ENABLE_SAVING=true`** in `pipeline_config.env`.
-
-3. **Nodo 3 — Enhancement (`enhancement_node`, package `nautilus_perception`):**
+2. **Nodo 2 — Enhancement (`enhancement_node`, package `nautilus_perception`):**
    * Applica algoritmi di miglioramento del contrasto e bilanciamento cromatico subacqueo su entrambi i flussi stereo.
    * Modalità configurabile tramite parametro `waternet_mode`:
      * **`force_off` (default)**: disabilita WaterNet, esegue solo CLAHE + sharpening. È il default perché WaterNet è una rete neurale pensata per la post-produzione delle immagini destinate ai biologi, **non per la navigazione né la detection**. Su Raspberry Pi la latenza misurata è di ~70 s per frame, incompatibile con l'uso operativo.
@@ -126,7 +124,7 @@ flowchart TD
    * Mantiene invariati i timestamp originali dell'header per non degradare la sincronizzazione stereo a valle.
    * **Non parte mai automaticamente**: si lancia a mano quando serve.
 
-4. **Nodo 4 — Detection & Stereovisione (`detection_node`, package `nautilus_perception`):**
+3. **Nodo 3 — Detection & Stereovisione (`detection_node`, package `nautilus_perception`):**
    * Architettura **Detect-Then-Range**: esegue l'inferenza IA (YOLOv8n / OpenVINO) sul frame sinistro rettificato e campiona la disparità stereo epipolare per calcolare la distanza tridimensionale $Z$.
    * Supporta input commutabile sia da immagini grezze (`/stereo/{lx,rx}/camera/image_raw`) sia migliorate (`/stereo/{lx,rx}/image_enhanced`). Il routing è automatico in `pipeline.launch.py` in base a `enable_enhancement`.
    * Pubblica i target su `/stereo_down/targets` con coordinate 2D/3D in formato `vision_msgs/Detection2DArray`.
@@ -141,11 +139,12 @@ La pipeline adotta una distinzione netta tra **cosa parte al boot** e **cosa si 
 ### 1. Avvio automatico al boot (produzione)
 
 * **Trigger hardware:** quando il robot viene acceso tramite magnete (interruttore reed switch), il sistema operativo avvia il servizio systemd [`nautilus-vision.service`](deploy/nautilus-vision.service).
-* **Comportamento:** il servizio invoca [`start_pipeline.sh`](deploy/start_pipeline.sh), il quale legge `ENABLE_SAVING` da [`pipeline_config.env`](pipeline_config.env) e lancia [`stereo_camera.launch.py`](ros2_ws/src/nautilus_camera/launch/stereo_camera.launch.py):
+* **Comportamento:** il servizio invoca [`start_pipeline.sh`](deploy/start_pipeline.sh), il quale lancia [`stereo_camera.launch.py`](ros2_ws/src/nautilus_camera/launch/stereo_camera.launch.py):
   * **Acquisizione:** obbligatoria (`camera_ros` sempre attivi).
-  * **Salvataggio:** opzionale, governato da `ENABLE_SAVING=true/false`.
   * **Metriche:** **mai** (forzato `enable_metrics:=false`).
+* **Registrazione rosbag (opzionale):** il servizio [`nautilus-bag.service`](deploy/bag/nautilus-bag.service) (legato a `nautilus-vision.service`) legge `ENABLE_BAG` da [`pipeline_config.env`](pipeline_config.env). Se impostato su `true`, avvia [`record_stereo_bag.sh`](deploy/bag/record_stereo_bag.sh) per registrare i flussi video compressi (`/stereo/{lx,rx}/camera/image_raw/compressed`) e i metadati (`camera_info`) in formato MCAP su `NAUTILUS_BAG_DIR` (`/home/nautilus/nautilus_bags`).
 * **Post-avvio:** [`lock-cameras.service`](deploy/lock-cameras.service) parte dopo `nautilus-vision.service` e invoca [`lock_cameras.py`](deploy/lock_cameras.py), che rilegge `camera_params.yaml` e riapplica i parametri fotometrici via `set_parameters`.
+* **Post-missione:** estrazione ed elaborazione offline tramite gli strumenti in [`tools/`](tools/README.md) ([`extract_bag_frames.py`](tools/extract_bag_frames.py)).
 * **Obiettivo:** zero consumo di risorse per modelli di deep learning pesanti all'avvio; batteria, RAM e termica sono riservate all'acquisizione scientifica.
 
 ### 2. Avvio manuale di enhancement e detection
@@ -187,12 +186,13 @@ ros2 launch nautilus_perception pipeline.launch.py \
 
 | Topic | Tipo Messaggio | Publisher | Subscriber Principale | Note |
 | --- | --- | --- | --- | --- |
-| `/stereo/lx/camera/image_raw` | `sensor_msgs/Image` | `camera_ros (lx)` | `metrics_node`, `saving_node`, `enhancement_node`, `detection_node` (se raw) | Frame grezzo 720p @ 5 FPS camera sinistra |
-| `/stereo/rx/camera/image_raw` | `sensor_msgs/Image` | `camera_ros (rx)` | `metrics_node`, `saving_node`, `enhancement_node`, `detection_node` (se raw) | Frame grezzo 720p @ 5 FPS camera destra |
+| `/stereo/lx/camera/image_raw` | `sensor_msgs/Image` | `camera_ros (lx)` | `metrics_node`, `enhancement_node`, `detection_node` (se raw) | Frame grezzo 720p @ 5 FPS camera sinistra |
+| `/stereo/rx/camera/image_raw` | `sensor_msgs/Image` | `camera_ros (rx)` | `metrics_node`, `enhancement_node`, `detection_node` (se raw) | Frame grezzo 720p @ 5 FPS camera destra |
+| `/stereo/{lx,rx}/camera/image_raw/compressed` | `sensor_msgs/CompressedImage` | `camera_ros` | `nautilus-bag.service` (`record_stereo_bag.sh`) | Flussi JPEG compressi per registrazione MCAP a basso overhead |
+| `/stereo/{lx,rx}/camera/camera_info` | `sensor_msgs/CameraInfo` | `camera_ros` | `nautilus-bag.service` (`record_stereo_bag.sh`) | Metadati ottici e calibrazione emessi dal driver |
 | `/stereo/lx/image_enhanced` | `sensor_msgs/Image` | `enhancement_node (lx)` | `detection_node` (se enhanced) | Immagine migliorata (CLAHE/WaterNet) sx |
 | `/stereo/rx/image_enhanced` | `sensor_msgs/Image` | `enhancement_node (rx)` | `detection_node` (se enhanced) | Immagine migliorata (CLAHE/WaterNet) dx |
 | `/stereo_down/targets` | `vision_msgs/Detection2DArray` | `detection_node` | Stack di controllo veicolo / Jetson | Bounding box 2D + stima distanza metrica Z |
-| `/saving_node/set_saving` | `std_srvs/SetBool` *(Service)* | `saving_node` | Client esterno / operatore | Abilita/disabilita salvataggio a runtime |
 | `/stereo/{lx,rx}/camera/set_parameters` | `rcl_interfaces/SetParameters` *(Service)* | `camera_ros` | `lock_cameras.py` | Riapplica parametri fotometrici via `lock_cameras.py` |
 
 > **QoS dei topic**: i profili QoS effettivi di ogni topic (reliability,
@@ -242,13 +242,13 @@ Per i comandi più usati durante lo sviluppo vedi [`docs/ROS2-CMDS.md`](docs/ROS
 | --- | --- | --- | --- |
 | **Fase 1** | Acquisizione ROS 2 (720p @ 5 FPS, metrics) | ✅ Completata | `camera_ros`, `nautilus_camera/metrics_node`, `camera_params.yaml` |
 | **Fase 2** | Nodo di Enhancement (WaterNet / CLAHE) | ✅ Completata | `nautilus_perception/enhancement_node` |
-| **Fase 3** | Nodo di Salvataggio su MicroSD (Anti-RTC, Service) | ✅ Completata | `nautilus_camera/saving_node` |
+| **Fase 3** | Registrazione Rosbag MCAP su MicroSD (Anti-RTC, Service) | ✅ Completata | `deploy/bag/record_stereo_bag.sh`, `deploy/bag/nautilus-bag.service`, `tools/extract_bag_frames.py` |
 | **Fase 4** | Nodo di Detection (YOLO/OpenVINO + Stereovisione) | ✅ Completata | `nautilus_perception/detection_node`, `detection_params.yaml` |
 | **Fase 5** | Calibrazione stereo 720p (RMS 0.125 px, Z validata, errore < 1 cm su 0.6–0.9 m) | ✅ Completata | `nautilus_perception/detection/calibration/`, `stereo_calib_720p.npz`, `config.py` |
 | **Fase 6** | Benchmark comparativo (latenza p50/p95, CPU, FPS, mAP) | ✅ Completata | `benchmarks/`, `pipeline.launch.py`, `run_benchmark.sh` |
-| **Fase 7** | Stress test termico (1 h a box chiusa, throttling) | 🔄 Prossima | `benchmarks/scripts/system_monitor.py`, `vcgencmd` |
+| **Fase 7** | Stress test termico (1 h a box chiusa, throttling) | ✅ Completata | `benchmarks/scripts/system_monitor.py`, `vcgencmd` |
 | **Fase 8** | Integrazione con Stack Nautilus & Jetson (Chrony) | ⏳ Pianificata | CycloneDDS, sincronizzazione `chrony` |
-| **Fase 9** | Tesi, Slide e Documentazione Finale | 🔄 In corso | Cartella `docs/`, report e grafici |
+| **Fase 9** | Tesi, Slide e Documentazione Finale | ✅ Completata | Cartella `docs/`, report e grafici |
 
 ---
 
@@ -258,28 +258,38 @@ Per i test prestazionali e termici della **Fase 6**, i file sono organizzati all
 
 ```text
 benchmarks/
-├── run_benchmark.sh             # Wrapper: lancia un run completo di una config
+├── README.md                          # Questo file (panoramica generale Fase 6 & 7)
+├── run_benchmark.sh                   # Wrapper Fase 6: lancia un run prestazionale completo
+├── run_thermal_test.sh                # Wrapper Fase 7: lancia uno stress test termico da 1h
 ├── scripts/
-│   ├── benchmark_pipeline.py    # Profilazione latenze p50/p95 e delay inter-nodo
-│   ├── system_monitor.py        # Logging CPU%, RAM, temperatura, vcgencmd throttled
-│   ├── evaluate_map.py          # Calcolo mAP sul validation set per ogni variante
-│   ├── plot_results.py          # Grafici comparativi a partire dai CSV
-│   ├── model_benchmark.py       # Confronto .pt vs OpenVINO standalone (no ROS)
-│   └── check_imgsz.py           # Ispeziona shape input di .pt e .ov 
+│   ├── benchmark_pipeline.py          # Subscriber ROS 2: latenze p50/p95 e delay inter-nodo
+│   ├── check_imgsz.py                 # Ispezione shape e metadata di input .pt e OpenVINO
+│   ├── evaluate_map.py                # Calcolo mAP@0.5 e mAP@0.5:0.95 su dataset COCO128
+│   ├── model_benchmark.py             # Confronto inferenza .pt vs OpenVINO (standalone, no ROS)
+│   ├── plot_results.py                # Generazione grafici Fase 6 (8 PNG comparativi)
+│   ├── plot_results_thermal.py        # Generazione grafici Fase 7 (5 PNG per test termici)
+│   ├── system_monitor.py              # Monitoraggio telemetria Fase 6 (CPU%, RAM, Temp, Clock)
+│   └── thermal_stress_test.py         # Nodo telemetrico unificato a 1 Hz per Fase 7
 ├── datasets/
-│   ├── coco128/                 # 128 immagini COCO + labels (per mAP)
-│   ├── coco128.yaml             # config Ultralytics con path assoluto
-│   ├── images/                  # Immagini di test (enhancement, waternet)
-│   ├── videos/                  # Video stereo di test
-│   ├── raw/                     # Dataset grezzi annotati
-│   ├── processed/               # Output di clean_dataset.py
+│   ├── coco128/                       # 128 immagini COCO con relative etichette
+│   ├── coco128.yaml                   # Configurazione Ultralytics con percorsi locali
+│   ├── images/                        # Immagini di test (enhancement, waternet)
+│   ├── videos/                        # Video stereo di test per la pipeline
 │   └── tools/
-│       └── clean_dataset.py     # Filtro varianza Laplaciano per selezione frame
-├── results/
-│   ├── csv/                     # Dati grezzi temporizzati + metadata
-│   └── plots/                   # PNG dei grafici generati
-├── CONFIGS.md                   # Dettaglio delle 9 configurazioni di test
-└── README.md                    # Metodologia di test e riproducibilità
+│       └── clean_dataset.py           # Filtro nitidezza con varianza del Laplaciano
+├── benchmark_results/                 # RISULTATI E CONFIGURAZIONI FASE 6
+│   ├── CONFIGS.md                     # Dettaglio setup, configurazioni e procedure Fase 6
+│   ├── RESULTS.md                     # Report integrato con analisi e grafici Fase A e B
+│   ├── csv_no_oc/                     # Dati grezzi Fase A (2400 MHz stock, 18 run)
+│   ├── csv_oc/                        # Dati grezzi Fase B (2800 MHz OC, 9 run)
+│   ├── plots_no_oc/                   # 8 PNG generati per la sola Fase A
+│   ├── plots_oc/                      # 7 PNG generati per la sola Fase B
+│   └── plots_comparative/             # 8 PNG di confronto diretto Fase A vs Fase B
+└── thermal_results/                   # RISULTATI E CONFIGURAZIONI FASE 7
+    ├── CONFIGS.md                     # Dettaglio setup, procedura 1h e configurazioni Fase 7
+    ├── RESULTS.md                     # Report integrato dello stress test termico (1 ora)
+    ├── csv/                           # Log telemetrici 1 Hz (*_thermal.csv) e metadati
+    └── plots/                         # 5 PNG generati per lo stress test termico
 ```
 
 Per il dettaglio delle configurazioni vedi [`benchmarks/CONFIGS.md`](benchmarks/CONFIGS.md).
