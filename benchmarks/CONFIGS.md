@@ -265,7 +265,7 @@ attivo dopo 5 s, non esegue `systemctl disable`. La sessione va quindi
 preparata manualmente come da "Prerequisiti comuni" e i dati vanno
 validati a posteriori sui CSV (rate anomali, `throttled`, `cpu_clock_mhz`).
 
-I CSV finiscono in `benchmarks/results/csv/` con naming:
+I CSV finiscono in `benchmarks/benchmark_results/csv/` con naming:
 `<data>_<config>_run<N>_{latency,system,metadata}.csv`, più
 `<data>_<config>_run<N>_launch.log` e, solo per le config con detection
 attiva (`DET=true`), `<data>_<config>_run<N>_stages.csv`.
@@ -470,8 +470,8 @@ Dopo aver raccolto tutti i CSV:
 
 ```bash
 python3 benchmarks/scripts/plot_results.py \
-  --csv benchmarks/results/csv/ \
-  --out benchmarks/results/plots/
+  --csv benchmarks/benchmark_results/csv/ \
+  --out benchmarks/benchmark_results/plots/
 ```
 
 Grafici generati (8 PNG):
@@ -499,19 +499,19 @@ python3 benchmarks/scripts/evaluate_map.py \
   --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n.pt \
   --data benchmarks/datasets/coco128.yaml \
   --imgsz 640 --tag yolov8n_pt \
-  --out benchmarks/results/csv/map_yolov8n_pt.csv
+  --out benchmarks/benchmark_results/csv/map_yolov8n_pt.csv
 
 python3 benchmarks/scripts/evaluate_map.py \
   --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n_640_fp32_openvino_model \
   --data benchmarks/datasets/coco128.yaml \
   --imgsz 640 --tag yolov8n_ov_fp32 \
-  --out benchmarks/results/csv/map_yolov8n_ov_fp32.csv
+  --out benchmarks/benchmark_results/csv/map_yolov8n_ov_fp32.csv
 
 python3 benchmarks/scripts/evaluate_map.py \
   --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n_640_int8_openvino_model \
   --data benchmarks/datasets/coco128.yaml \
   --imgsz 640 --tag yolov8n_ov_int8_640 \
-  --out benchmarks/results/csv/map_yolov8n_ov_int8_640.csv
+  --out benchmarks/benchmark_results/csv/map_yolov8n_ov_int8_640.csv
 ```
 
 Atteso: `map50` di `.pt` e `.ov` **quasi identiche** (< 0.5 punti di scarto).

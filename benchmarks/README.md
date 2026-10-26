@@ -11,13 +11,15 @@ Questa cartella implementa la **Fase 6 (Benchmark)** e la **Fase 7 (Stress test 
 ```text
 benchmarks/
 ├── run_benchmark.sh             # Wrapper: lancia un run completo di una config
+├── run_thermal_test.sh          # Wrapper: lancia un run completo dello stress test
 ├── scripts/
 │   ├── benchmark_pipeline.py    # Profilazione latenze p50/p95 e delay inter-nodo
-│   ├── system_monitor.py        # Logging CPU%, RAM, temperatura, vcgencmd throttled
+│   ├── check_imgsz.py           # Ispeziona shape input di .pt e .ov
 │   ├── evaluate_map.py          # Calcolo mAP sul validation set per ogni variante
-│   ├── plot_results.py          # Grafici comparativi a partire dai CSV (8 PNG)
 │   ├── model_benchmark.py       # Confronto .pt vs OpenVINO standalone (no ROS)
-│   └── check_imgsz.py           # Ispeziona shape input di .pt e .ov
+│   ├── plot_results.py          # Grafici comparativi a partire dai CSV (8 PNG)
+│   ├── system_monitor.py        # Logging CPU%, RAM, temperatura, vcgencmd throttled
+│   └── thermal_stress_test.py   # Fase 7 — stress test termico
 ├── datasets/
 │   ├── coco128/                 # 128 immagini COCO + labels (scaricate)
 │   ├── coco128.yaml             # config Ultralytics con path assoluto
@@ -27,10 +29,18 @@ benchmarks/
 │   ├── processed/               # Output di clean_dataset.py
 │   └── tools/
 │       └── clean_dataset.py     # Filtro varianza Laplaciano per selezione frame
-├── results/
+├── benchmark_results/
+│   ├── csv_no_oc/               # Dati grezzi + metadata + log di launch
+│   ├── csv_oc/                  # Dati grezzi + metadata + log di launch
+│   ├── plots_comparative/       # PNG dei grafici comparativi
+│   ├── plots_no_oc/             # PNG dei grafici generati senza overclock
+│   └── plots_oc/                # PNG dei grafici generati con overclock
+├── thermal_results/
 │   ├── csv/                     # Dati grezzi + metadata + log di launch
 │   └── plots/                   # PNG dei grafici generati
 ├── CONFIGS.md                   # Dettaglio delle configurazioni di test
+├── BENCHMARK-RESULTS.md         # Risultati dei benchmarks (fase 6)
+├── THERMAL-RESULTS.md           # Risultati dei test termici (fase 7)
 └── README.md
 ```
 
@@ -123,7 +133,7 @@ for cfg in B1_pt_oc B2_ov_fp32_oc B3_ov_int8_640_oc B4_ov_int8_416_oc C_full_oc;
 done
 ```
 
-Da lanciare in `tmux` o `screen`. Al termine, in `results/csv/` ci sono
+Da lanciare in `tmux` o `screen`. Al termine, in `benchmark_results/csv/` ci sono
 30 × 5 file (latency, system, metadata, stages, launch.log) per le config
 con detection attiva, più 3 × 4 file (senza stages) per `A_baseline`:
 162 file in totale, più gli eventuali `map_*.csv` prodotti a parte.
@@ -166,7 +176,7 @@ con detection attiva, più 3 × 4 file (senza stages) per `A_baseline`:
 ```bash
 cd benchmarks/scripts
 python3 model_benchmark.py --frames 100 \
-    --out ../results/csv/model_benchmark.csv
+    --out ../benchmark_results/csv/model_benchmark.csv
 ```
 
 Misura latenza media, p50, p95 e FPS per le varianti `.pt` e OpenVINO.
@@ -187,7 +197,7 @@ input/output shape e metadata (`imgsz`, `names`, `task`).
 ```bash
 python3 benchmarks/scripts/system_monitor.py \
     --duration 300 \
-    --out benchmarks/results/csv/<run>_system.csv
+    --out benchmarks/benchmark_results/csv/<run>_system.csv
 ```
 
 Default: `--duration 600`, `--interval 1.0`. Al termine stampa un summary
@@ -198,7 +208,7 @@ Default: `--duration 600`, `--interval 1.0`. Al termine stampa un summary
 ```bash
 python3 benchmarks/scripts/benchmark_pipeline.py \
     --duration 120 \
-    --out benchmarks/results/csv/<run>_latency.csv \
+    --out benchmarks/benchmark_results/csv/<run>_latency.csv \
     --raw-topic /stereo/lx/camera/image_raw \
     --enhanced-topic "" \
     --targets-topic /stereo_down/targets \
@@ -220,14 +230,14 @@ python3 benchmarks/scripts/evaluate_map.py \
     --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n.pt \
     --data benchmarks/datasets/coco128.yaml \
     --imgsz 640 --tag yolov8n_pt \
-    --out benchmarks/results/csv/map_yolov8n_pt.csv
+    --out benchmarks/benchmark_results/csv/map_yolov8n_pt.csv
 
 # yolov8n_640_fp32_openvino_model
 python3 benchmarks/scripts/evaluate_map.py \
     --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n_640_fp32_openvino_model \
     --data benchmarks/datasets/coco128.yaml \
     --imgsz 640 --tag yolov8n_ov_fp32 \
-    --out benchmarks/results/csv/map_yolov8n_ov_fp32.csv
+    --out benchmarks/benchmark_results/csv/map_yolov8n_ov_fp32.csv
 ```
 
 Atteso: le due `map50` differiscono di meno di 0.5 punti (test di non-regressione).
@@ -236,8 +246,8 @@ Atteso: le due `map50` differiscono di meno di 0.5 punti (test di non-regression
 
 ```bash
 python3 benchmarks/scripts/plot_results.py \
-    --csv benchmarks/results/csv/ \
-    --out benchmarks/results/plots/
+    --csv benchmarks/benchmark_results/csv/ \
+    --out benchmarks/benchmark_results/plots/
 ```
 
 Genera 8 PNG:

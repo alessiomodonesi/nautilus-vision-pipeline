@@ -14,7 +14,7 @@ fi
 ROOT="$HOME/nautilus-vision-pipeline"
 WS="$ROOT/ros2_ws"
 DATE=$(date +%Y-%m-%d)
-CSV_DIR="$ROOT/benchmarks/results/csv"
+CSV_DIR="$ROOT/benchmarks/benchmark_results/csv"
 mkdir -p "$CSV_DIR"
 
 case "$CONFIG" in
@@ -40,6 +40,7 @@ cleanup_camera_nodes() {
     sleep 1
 }
 
+# check temperatura iniziale
 TEMP=$(vcgencmd measure_temp | sed "s/temp=//;s/'C//")
 TEMP_INT=${TEMP%.*}
 if [ "$TEMP_INT" -gt 55 ]; then
@@ -49,6 +50,7 @@ fi
 echo "== ${CONFIG} run ${RUN_N} =="
 echo "Initial SoC temperature: ${TEMP}°C"
 
+# governor CPU → performance
 CUR_GOV=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
 if [ "$CUR_GOV" != "performance" ]; then
     echo "Setting CPU governor: ${CUR_GOV} -> performance"
@@ -67,6 +69,7 @@ if [ -f "$HOME/nautilus-vision-pipeline/pipeline_config.env" ]; then
     source "$HOME/nautilus-vision-pipeline/pipeline_config.env"
 fi
 
+# stop servizi e kill residui
 sudo systemctl stop nautilus-bag.service 2>/dev/null || true
 sudo systemctl stop nautilus-vision.service 2>/dev/null || true
 sudo systemctl stop lock-cameras.service 2>/dev/null || true
@@ -78,23 +81,25 @@ ros2 daemon stop 2>/dev/null || true
 ros2 daemon start 2>/dev/null || true
 sleep 3
 
+# path output
 LAT_CSV="$CSV_DIR/${DATE}_${CONFIG}_run${RUN_N}_latency.csv"
 SYS_CSV="$CSV_DIR/${DATE}_${CONFIG}_run${RUN_N}_system.csv"
 LAUNCH_LOG="$CSV_DIR/${DATE}_${CONFIG}_run${RUN_N}_launch.log"
 META="$CSV_DIR/${DATE}_${CONFIG}_run${RUN_N}_metadata.csv"
 
+# override launch
 OVERRIDES=()
 if [ -n "$MODEL" ]; then OVERRIDES+=("model_filename_override:=$MODEL"); fi
 if [ -n "$HALF_RES" ]; then OVERRIDES+=("half_res_override:=$HALF_RES"); fi
 if [ -n "$IMGSZ" ]; then OVERRIDES+=("imgsz_override:=$IMGSZ"); fi
 if [ "$ENH" = "true" ]; then OVERRIDES+=("input_type_override:=enhanced"); else OVERRIDES+=("input_type_override:=raw"); fi
 
-# ── Hardware unlock ───────────────────────────────────────────
+# hardware unlock
 echo "Unlocking camera hardware..."
 sudo fuser -k -9 /dev/video0 /dev/video1 2>/dev/null || true
 sleep 1
-# ───────────────────────────────────────────────────────────────────────
 
+# launch pipeline
 ros2 launch nautilus_perception pipeline.launch.py \
     include_stereo_camera:=true \
     enable_enhancement:=$ENH \
@@ -115,6 +120,7 @@ fi
 echo "Warmup 30s..."
 sleep 30
 
+# lancio system monitor
 python3 "$ROOT/benchmarks/scripts/system_monitor.py" --duration 300 --out "$SYS_CSV" > /dev/null 2>&1 &
 MON_PID=$!
 
@@ -124,6 +130,7 @@ STG_TOPIC=""
 if [ "$DET" = "true" ]; then TGT_TOPIC="/stereo_down/targets"; STG_TOPIC="/stereo_down/timings"; fi
 if [ "$ENH" = "true" ]; then ENH_TOPIC="/stereo/lx/image_enhanced"; fi
 
+# lancio benchmark
 echo "Latency benchmark 120s..."
 python3 "$ROOT/benchmarks/scripts/benchmark_pipeline.py" \
     --duration 120 \
@@ -135,6 +142,7 @@ python3 "$ROOT/benchmarks/scripts/benchmark_pipeline.py" \
 
 wait $MON_PID 2>/dev/null || true
 
+# cleanup
 kill -9 $LAUNCH_PID 2>/dev/null || true
 cleanup_camera_nodes
 
@@ -144,6 +152,7 @@ echo "Final SoC temperature: ${TEMP_END}°C"
 THR_END=$(vcgencmd get_throttled | cut -d= -f2)
 CLK_END=$(vcgencmd measure_clock arm | cut -d= -f2)
 
+# metadata
 COMMIT=$(cd "$ROOT" && git rev-parse HEAD 2>/dev/null || echo "unknown")
 cat > "$META" <<EOF
 field,value
