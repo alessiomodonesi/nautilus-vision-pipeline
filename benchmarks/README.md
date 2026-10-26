@@ -1,348 +1,228 @@
-# Nautilus — Benchmark & Validation
+# Nautilus Vision — Benchmark Prestazionali & Stress Test Termico
 
-Cartella dedicata ai test prestazionali, termici e di accuratezza della pipeline Nautilus Vision sul target hardware (Raspberry Pi 5, 8 GB RAM, no dissipazione attiva, box stagna).
+Cartella dedicata ai test prestazionali, termici e di accuratezza della pipeline Nautilus Vision sul target hardware: **Raspberry Pi 5 (8 GB RAM, box stagna in alluminio, dissipazione passiva senza ventola attiva)**.
 
-Questa cartella implementa la **Fase 6 (Benchmark)** e la **Fase 7 (Stress test termico)** della roadmap in `docs/TODO.md`.
+Questa cartella documenta e implementa:
+
+- **Fase 6 (Benchmark Prestazionali & Accuratezza)** di `docs/TODO.md`
+- **Fase 7 (Stress Test Termico a Box Chiusa)** di `docs/TODO.md`
 
 ---
 
-## Struttura
+## Indice della Documentazione
+
+| Ambito | Documento di Configurazione | Report dei Risultati | Wrapper Principale |
+| :--- | :--- | :--- | :--- |
+| **Generale** | Questo file (`README.md`) | — | — |
+| **Fase 6 — Benchmark** | [`benchmark_results/CONFIGS.md`](benchmark_results/CONFIGS.md) | [`benchmark_results/RESULTS.md`](benchmark_results/RESULTS.md) | [`run_benchmark.sh`](run_benchmark.sh) |
+| **Fase 7 — Stress Test** | [`thermal_results/CONFIGS.md`](thermal_results/CONFIGS.md) | [`thermal_results/RESULTS.md`](thermal_results/RESULTS.md) | [`run_thermal_test.sh`](run_thermal_test.sh) |
+
+---
+
+## Struttura della Cartella
 
 ```text
 benchmarks/
-├── run_benchmark.sh             # Wrapper: lancia un run completo di una config
-├── run_thermal_test.sh          # Wrapper: lancia un run completo dello stress test
+├── README.md                          # Questo file (panoramica generale Fase 6 & 7)
+├── run_benchmark.sh                   # Wrapper Fase 6: lancia un run prestazionale completo
+├── run_thermal_test.sh                # Wrapper Fase 7: lancia uno stress test termico da 1h
 ├── scripts/
-│   ├── benchmark_pipeline.py    # Profilazione latenze p50/p95 e delay inter-nodo
-│   ├── check_imgsz.py           # Ispeziona shape input di .pt e .ov
-│   ├── evaluate_map.py          # Calcolo mAP sul validation set per ogni variante
-│   ├── model_benchmark.py       # Confronto .pt vs OpenVINO standalone (no ROS)
-│   ├── plot_results.py          # Grafici comparativi a partire dai CSV (8 PNG)
-│   ├── system_monitor.py        # Logging CPU%, RAM, temperatura, vcgencmd throttled
-│   └── thermal_stress_test.py   # Fase 7 — stress test termico
+│   ├── benchmark_pipeline.py          # Subscriber ROS 2: latenze p50/p95 e delay inter-nodo
+│   ├── check_imgsz.py                 # Ispezione shape e metadata di input .pt e OpenVINO
+│   ├── evaluate_map.py                # Calcolo mAP@0.5 e mAP@0.5:0.95 su dataset COCO128
+│   ├── model_benchmark.py             # Confronto inferenza .pt vs OpenVINO (standalone, no ROS)
+│   ├── plot_results.py                # Generazione grafici Fase 6 (8 PNG comparativi)
+│   ├── plot_results_thermal.py        # Generazione grafici Fase 7 (5 PNG per test termici)
+│   ├── system_monitor.py              # Monitoraggio telemetria Fase 6 (CPU%, RAM, Temp, Clock)
+│   └── thermal_stress_test.py         # Nodo telemetrico unificato a 1 Hz per Fase 7
 ├── datasets/
-│   ├── coco128/                 # 128 immagini COCO + labels (scaricate)
-│   ├── coco128.yaml             # config Ultralytics con path assoluto
-│   ├── images/                  # Immagini di test (enhancement, waternet)
-│   ├── videos/                  # Video stereo di test per pipeline
-│   ├── raw/                     # Dataset grezzi annotati
-│   ├── processed/               # Output di clean_dataset.py
+│   ├── coco128/                       # 128 immagini COCO con relative etichette
+│   ├── coco128.yaml                   # Configurazione Ultralytics con percorsi locali
+│   ├── images/                        # Immagini di test (enhancement, waternet)
+│   ├── videos/                        # Video stereo di test per la pipeline
 │   └── tools/
-│       └── clean_dataset.py     # Filtro varianza Laplaciano per selezione frame
-├── benchmark_results/
-│   ├── csv_no_oc/               # Dati grezzi + metadata + log di launch
-│   ├── csv_oc/                  # Dati grezzi + metadata + log di launch
-│   ├── plots_comparative/       # PNG dei grafici comparativi
-│   ├── plots_no_oc/             # PNG dei grafici generati senza overclock
-│   └── plots_oc/                # PNG dei grafici generati con overclock
-├── thermal_results/
-│   ├── csv/                     # Dati grezzi + metadata + log di launch
-│   └── plots/                   # PNG dei grafici generati
-├── CONFIGS.md                   # Dettaglio delle configurazioni di test
-├── BENCHMARK-RESULTS.md         # Risultati dei benchmarks (fase 6)
-├── THERMAL-RESULTS.md           # Risultati dei test termici (fase 7)
-└── README.md
+│       └── clean_dataset.py           # Filtro nitidezza con varianza del Laplaciano
+├── benchmark_results/                 # RISULTATI E CONFIGURAZIONI FASE 6
+│   ├── CONFIGS.md                     # Dettaglio setup, configurazioni e procedure Fase 6
+│   ├── RESULTS.md                     # Report integrato con analisi e grafici Fase A e B
+│   ├── csv_no_oc/                     # Dati grezzi Fase A (2400 MHz stock, 18 run)
+│   ├── csv_oc/                        # Dati grezzi Fase B (2800 MHz OC, 9 run)
+│   ├── plots_no_oc/                   # 8 PNG generati per la sola Fase A
+│   ├── plots_oc/                      # 7 PNG generati per la sola Fase B
+│   └── plots_comparative/             # 8 PNG di confronto diretto Fase A vs Fase B
+└── thermal_results/                   # RISULTATI E CONFIGURAZIONI FASE 7
+    ├── CONFIGS.md                     # Dettaglio setup, procedura 1h e configurazioni Fase 7
+    ├── RESULTS.md                     # Report integrato dello stress test termico (1 ora)
+    ├── csv/                           # Log telemetrici 1 Hz (*_thermal.csv) e metadati
+    └── plots/                         # 5 PNG generati per lo stress test termico
 ```
 
 ---
 
-## Piano di test (Fase 6 e 7)
+## 1. Fase 6 — Benchmark Prestazionali & Accuratezza
 
-Il piano si articola in **due fasi sequenziali** che separano il contributo
-del clock CPU da quello delle scelte software (modello, quantizzazione,
-risoluzione).
+### Obiettivo
 
-### Fase A — senza overclock (riferimento)
+Confrontare in modo rigoroso, equo e riproducibile sul target hardware le configurazioni architetturali della pipeline (acquisizione, enhancement, detection) e i diversi formati di quantizzazione del modello di Object Detection (PyTorch `.pt`, OpenVINO FP32, OpenVINO INT8 a 640px e 416px), quantificando:
 
-6 configurazioni con la CPU a **2400 MHz** (nominale Pi 5), da eseguire
-**3 volte ciascuna**:
+- Latenza end-to-end e scomposizione interna per stage (`pre`, `infer`, `post`)
+- Throughput effettivo (FPS)
+- Impronta di risorse (CPU%, RAM, temperatura SoC, frequenza ARM)
+- Accuratezza residua (mAP@0.5 e mAP@0.5:0.95 su COCO128)
+- Accuratezza metrica della profondità Z (stereo matching a 720p validato)
 
-| # | ID | Config | Modello | half_res | imgsz |
-| --- | --- | --- | --- | --- | --- |
-| 1 | `A_baseline` | solo camera | — | — | — |
-| 2 | `B1_pt` | camera + detection | `yolov8n.pt` | True | 640 |
-| 3 | `B2_ov_fp32` | camera + detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
-| 4 | `B3_ov_int8_640` | camera + detection | `yolov8n_640_int8_openvino_model` | False | 640 |
-| 5 | `B4_ov_int8_416` | camera + detection | `yolov8n_416_int8_openvino_model` | False | 416 |
-| 6 | `C_full` | camera + enh + detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
+### Matrice di Test
 
-### Fase B — con overclock (2800 MHz)
+Il piano si articola in **due fasi sequenziali**:
 
-5 configurazioni, tutte con detection attiva, da eseguire **3 volte
-ciascuna**. `A_baseline` è esclusa: il collo di bottiglia dell'acquisizione
-non è la CPU e l'overclock sprecherebbe solo budget termico.
+#### Fase A — Frequenza nominale (2400 MHz, 3 run per config = 18 run)
 
-| # | ID | Config | Modello | half_res | imgsz |
-| --- | --- | --- | --- | --- | --- |
-| 1 | `B1_pt_oc` | camera + detection | `yolov8n.pt` | True | 640 |
-| 2 | `B2_ov_fp32_oc` | camera + detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
-| 3 | `B3_ov_int8_640_oc` | camera + detection | `yolov8n_640_int8_openvino_model` | False | 640 |
-| 4 | `B4_ov_int8_416_oc` | camera + detection | `yolov8n_416_int8_openvino_model` | False | 416 |
-| 5 | `C_full_oc` | camera + enh + detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
+| ID | Descrizione | Modello | `half_res` | `imgsz` |
+| :--- | :--- | :--- | :---: | :---: |
+| `A_baseline` | Solo acquisizione stereo camera | — | True | — |
+| `B1_pt` | Camera + Detection PyTorch | `yolov8n.pt` | True | 640 |
+| `B2_ov_fp32` | Camera + Detection OpenVINO FP32 | `yolov8n_640_fp32_openvino_model` | False | 640 |
+| `B3_ov_int8_640` | Camera + Detection OpenVINO INT8 | `yolov8n_640_int8_openvino_model` | False | 640 |
+| `B4_ov_int8_416` | Camera + Detection OpenVINO INT8 (416) | `yolov8n_416_int8_openvino_model` | False | 416 |
+| `C_full` | Camera + Enhancement (Laplacian/CLAHE) + Detection | `yolov8n_640_fp32_openvino_model` | False | 640 |
 
-### Totale
+#### Fase B — Con Overclock (2800 MHz, 3 run per config = 9 run)
 
-- **Fase A**: 18 run (6 config × 3)
-- **Fase B**: 15 run (5 config × 3)
-- **Totale**: 33 run, ~4.5 h stimate
+Eseguita sulle 3 configurazioni con detection praticabili (`B1_pt_oc`, `B2_ov_fp32_oc`, `C_full_oc`). Le configurazioni INT8 (`B3`, `B4`) sono state escluse a fronte dell'anomalia rilevata nel plugin ARM di OpenVINO (inferenza oltre gli 8 secondi per frame).
 
-L'obiettivo della Fase B è quantificare se l'overclock porta un guadagno
-in FPS/latenza sufficiente a giustificare l'aumento di temperatura e il
-rischio di throttling a box chiusa. Il confronto chiave è `B*` vs `B*_oc`
-e `C_full` vs `C_full_oc`.
+### Risultati Principali di Fase 6
 
-Per i dettagli su come attivare/disattivare l'overclock, sulla verifica
-dei flag di throttling e sui valori attesi, vedi [`CONFIGS.md`](CONFIGS.md).
+- **Configurazione Consigliata**: `B2_ov_fp32` (OpenVINO FP32 a 640px) è la migliore scelta per la detection: **~2.29 FPS**, latenza interna **435 ms** (vs 497 ms di PyTorch), consumo CPU ~86% e temperatura contenuta (~59 °C).
+- **Anomalia INT8**: I modelli OpenVINO INT8 hanno manifestato tempi di inferenza anomali (8.3 secondi per `B3` e 3.5 secondi per `B4`) a causa della mancanza di istruzioni hardware dedicate e fallback lento nel runtime CPU ARM di OpenVINO.
+- **Valutazione Overclock (2800 MHz)**: Il clock maggiorato non ha prodotto benefici sostanziali per la detection pura (+0% FPS, latenza stages 451 ms vs 435 ms), mentre ha aumentato la temperatura operativa di ~6 °C (da 59 °C a 65 °C). Solo in `C_full_oc` si è osservato un lieve incremento del throughput (da 0.64 a 0.74 FPS), a fronte di un costo termico elevato.
+- **Validazione Metrica Z**: L'accuratezza sulla profondità stimata con la calibrazione stereo 720p (RMS reproiezione 0.125 px, focale rettificata 1500.89 px) è stata validata su 4 distanze campione (0.60 m, 0.70 m, 0.80 m, 0.90 m) con un errore osservato inferiore a **1 cm** (entro ±1.5%).
 
-### Uso rapido del wrapper
+Per tutti i dettagli, tabelle estese e grafici, consulta [`benchmark_results/RESULTS.md`](benchmark_results/RESULTS.md) e [`benchmark_results/CONFIGS.md`](benchmark_results/CONFIGS.md).
+
+---
+
+## 2. Fase 7 — Stress Test Termico a Box Chiusa
+
+### Obiettivo
+
+Validare la fattibilità dell'esecuzione a bordo del Raspberry Pi 5 all'interno dello scafo stagno in alluminio a dissipazione puramente passiva (senza ventola attiva). Verificare se la temperatura del SoC raggiunge o meno la soglia di throttling (80 °C soft limit / 85 °C hard limit) durante una sessione operativa continua di **1 ora (3600 secondi)**.
+
+### Matrice di Test
+
+3 configurazioni continue da 3600 secondi ciascuna a clock nominale (2400 MHz), campionate a 1 Hz da `thermal_stress_test.py`:
+
+1. `T_baseline`: Solo acquisizione stereo camera a 5 FPS nominali.
+2. `T_detection`: Acquisizione stereo camera + detection YOLOv8n OpenVINO FP32 640px.
+3. `T_full`: Pipeline completa (Acquisizione + Enhancement Laplacian/CLAHE + Detection).
+
+### Risultati Principali di Fase 7
+
+- **Stabilità Termica Garantita**: **Nessun evento di throttling termico (`get_throttled = 0x0`)** rilevato su nessuna delle 3 configurazioni.
+- **Temperatura Massima SoC**:
+  - `T_baseline`: media **56.80 °C**, max **60.90 °C** (CPU 29.6%).
+  - `T_detection`: media **65.40 °C**, max **69.70 °C** (CPU 93.6%, throughput **1.40 FPS**, latenza **698 ms**).
+  - `T_full`: media **61.07 °C**, max **65.30 °C** (CPU 50.1% a regime per saturazione code).
+- **Margine di Sicurezza**: Sotto carico continuo massimo di detection (`T_detection`), la temperatura a regime si assesta sui ~68-69 °C, garantendo un margine di sicurezza di **oltre 10 °C** rispetto alla soglia di throttling (80 °C).
+- **Verifica Memoria**: Nessun memory leak osservato (RAM piatta su tutta l'ora: max 2.58 GB / 8 GB).
+
+Per tutti i grafici di temperatura, CPU, RAM e scomposizione della latenza, consulta [`thermal_results/RESULTS.md`](thermal_results/RESULTS.md) e [`thermal_results/CONFIGS.md`](thermal_results/CONFIGS.md).
+
+---
+
+## 3. Guida all'Uso degli Script
+
+### A. Esecuzione Benchmark Fase 6
 
 ```bash
-cd ~/nautilus-vision-pipeline
-./benchmarks/run_benchmark.sh <config> <run_n>
-# es: ./benchmarks/run_benchmark.sh B2_ov_fp32 1
-#     ./benchmarks/run_benchmark.sh B2_ov_fp32_oc 1
-```
+# Esecuzione singola configurazione (es. B2 OpenVINO FP32, run 1)
+./benchmarks/run_benchmark.sh B2_ov_fp32 1
 
-Il wrapper gestisce: stop servizi, check temperatura (< 55 °C, unico
-controllo bloccante), `ros2 daemon stop/start`, hardware unlock dei
-`/dev/video*`, lancio pipeline con `include_stereo_camera:=true`, lock
-fotometrico, warmup 30 s, monitor sistema 300 s, benchmark latenze 120 s,
-scrittura metadata, cooldown **10 s**.
-
-⚠️ Il wrapper **non** implementa i controlli pre/post-launch su nodi
-residui, publisher sui topic, rate raw, o `ros2 bag record`: eventuali
-errori noti nel launch log producono solo un **WARNING** e la run prosegue.
-La pulizia della sessione va preparata manualmente (vedi `CONFIGS.md`) e i
-dati vanno validati a posteriori sui CSV.
-
-### Batch completo
-
-```bash
-# Fase A — senza OC (assicurati che config.txt sia a 2400 MHz e riavvia)
+# Esecuzione batch Fase A (senza OC, nominale 2400 MHz)
 for cfg in A_baseline B1_pt B2_ov_fp32 B3_ov_int8_640 B4_ov_int8_416 C_full; do
     for n in 1 2 3; do
         ./benchmarks/run_benchmark.sh "$cfg" "$n"
     done
 done
 
-# Fase B — con OC (modifica config.txt a 2800 MHz, riavvia, verifica clock)
-for cfg in B1_pt_oc B2_ov_fp32_oc B3_ov_int8_640_oc B4_ov_int8_416_oc C_full_oc; do
+# Esecuzione batch Fase B (con OC 2800 MHz impostato in config.txt)
+for cfg in B1_pt_oc B2_ov_fp32_oc C_full_oc; do
     for n in 1 2 3; do
         ./benchmarks/run_benchmark.sh "$cfg" "$n"
     done
 done
 ```
 
-Da lanciare in `tmux` o `screen`. Al termine, in `benchmark_results/csv/` ci sono
-30 × 5 file (latency, system, metadata, stages, launch.log) per le config
-con detection attiva, più 3 × 4 file (senza stages) per `A_baseline`:
-162 file in totale, più gli eventuali `map_*.csv` prodotti a parte.
-
----
-
-## Metriche raccolte
-
-### Prestazioni (Fase 6)
-
-- **Latenza** media, p50, p95 — con `perf_counter` a bordo del subscriber
-  (`benchmark_pipeline.py`), calcolata come `now - header.stamp`.
-- **FPS** effettivi per stage (`raw`, `enhanced`, `targets`).
-- **CPU%** per processo (`psutil` + `/proc/stat` da `system_monitor.py`).
-- **RAM** residente.
-- **Frequenza CPU** (`vcgencmd measure_clock arm`).
-- **Flag di throttling** (`vcgencmd get_throttled`).
-- **Stage breakdown** (`pre`, `infer`, `post`, `total`) — dal nodo
-  `detection_node`, scritto in `<run>_stages.csv` da `benchmark_pipeline.py`.
-
-### Termica (Fase 7)
-
-- Temperatura SoC (`vcgencmd measure_temp`).
-- Log ogni secondo per 1 h a box chiusa, nelle stesse configurazioni di
-  Fase A e B (l'obiettivo è verificare se l'OC è sostenibile).
-
-### Accuratezza (Fase 6)
-
-- **mAP@0.5** e **mAP@0.5:0.95** su COCO128 per `yolov8n.pt` e
-  `yolov8n_640_fp32_openvino_model` — test di non-regressione dell'export OpenVINO.
-- **Errore su Z**: oggetto a 0.6 / 0.7 / 0.8 / 0.9 m → verifica entro ±5%.
-  ✅ Validato il 13/10/2026 su calibrazione 720p (RMS 0.125 px), errore osservato < 1 cm.
-
----
-
-## Uso rapido degli script
-
-### Benchmark modello standalone (no ROS)
+### B. Esecuzione Stress Test Termico Fase 7
 
 ```bash
-cd benchmarks/scripts
-python3 model_benchmark.py --frames 100 \
-    --out ../benchmark_results/csv/model_benchmark.csv
+# Esecuzione stress test 1h (3600 secondi) per T_detection
+./benchmarks/run_thermal_test.sh T_detection 1 3600
+
+# Esecuzione per tutte le 3 configurazioni termiche
+for cfg in T_baseline T_detection T_full; do
+    ./benchmarks/run_thermal_test.sh "$cfg" 1 3600
+done
 ```
 
-Misura latenza media, p50, p95 e FPS per le varianti `.pt` e OpenVINO.
-Stampa il boost % OpenVINO per ogni coppia `.pt`/`.ov`.
+### C. Generazione Grafici
 
-### Ispezione shape modelli
+#### Grafici Fase 6 (`plot_results.py`)
 
 ```bash
-python3 check_imgsz.py
+# Grafici Fase A (senza OC)
+python3 benchmarks/scripts/plot_results.py \
+    --csv benchmarks/benchmark_results/csv_no_oc/ \
+    --out benchmarks/benchmark_results/plots_no_oc/
+
+# Grafici Fase B (con OC)
+python3 benchmarks/scripts/plot_results.py \
+    --csv benchmarks/benchmark_results/csv_oc/ \
+    --out benchmarks/benchmark_results/plots_oc/
+
+# Grafici Comparativi (A vs B)
+# Nota: posizionando entrambi i set di CSV o usando directory combinata
+python3 benchmarks/scripts/plot_results.py \
+    --csv benchmarks/benchmark_results/csv_no_oc/ \
+    --out benchmarks/benchmark_results/plots_comparative/
 ```
 
-Scansiona **tutti** i modelli `*openvino*` presenti in `WEIGHTS` e, per
-confronto, i `.pt` noti (`yolov8n.pt`, `best.pt` se presente). Mostra
-input/output shape e metadata (`imgsz`, `names`, `task`).
-
-### Monitor di sistema (in parallelo alla pipeline)
+#### Grafici Fase 7 (`plot_results_thermal.py`)
 
 ```bash
-python3 benchmarks/scripts/system_monitor.py \
-    --duration 300 \
-    --out benchmarks/benchmark_results/csv/<run>_system.csv
+python3 benchmarks/scripts/plot_results_thermal.py \
+    --csv benchmarks/thermal_results/csv/ \
+    --out benchmarks/thermal_results/plots/
 ```
 
-Default: `--duration 600`, `--interval 1.0`. Al termine stampa un summary
-(temp min/max/mean, CPU, RAM, clock, flag di throttling osservati).
-
-### Benchmark latenze (in parallelo alla pipeline)
+### D. Benchmark Standalone e Validazione Modelli
 
 ```bash
-python3 benchmarks/scripts/benchmark_pipeline.py \
-    --duration 120 \
-    --out benchmarks/benchmark_results/csv/<run>_latency.csv \
-    --raw-topic /stereo/lx/camera/image_raw \
-    --enhanced-topic "" \
-    --targets-topic /stereo_down/targets \
-    --stages-topic /stereo_down/timings
-```
+# Benchmark inferenza puro (senza ROS 2) tra .pt e OpenVINO
+python3 benchmarks/scripts/model_benchmark.py --frames 100 \
+    --out benchmarks/benchmark_results/csv_no_oc/model_benchmark.csv
 
-Per `A_baseline`: `--enhanced-topic "" --targets-topic "" --stages-topic ""`.
-Per `C_full`: `--enhanced-topic /stereo/lx/image_enhanced`.
+# Ispezione shape e formati modelli
+python3 benchmarks/scripts/check_imgsz.py
 
-Se passi `--stages-topic`, il nodo produce anche
-`<out_stem_senza_latency>_stages.csv` con la scomposizione
-`pre/infer/post/total` per ogni frame del detection node.
-
-### mAP sul validation set (non-regressione export OpenVINO)
-
-```bash
-# yolov8n.pt
-python3 benchmarks/scripts/evaluate_map.py \
-    --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n.pt \
-    --data benchmarks/datasets/coco128.yaml \
-    --imgsz 640 --tag yolov8n_pt \
-    --out benchmarks/benchmark_results/csv/map_yolov8n_pt.csv
-
-# yolov8n_640_fp32_openvino_model
+# Valutazione mAP su dataset COCO128 (test di non-regressione OpenVINO)
 python3 benchmarks/scripts/evaluate_map.py \
     --weights ros2_ws/src/nautilus_perception/nautilus_perception/data/weights/yolov8n_640_fp32_openvino_model \
     --data benchmarks/datasets/coco128.yaml \
     --imgsz 640 --tag yolov8n_ov_fp32 \
-    --out benchmarks/benchmark_results/csv/map_yolov8n_ov_fp32.csv
+    --out benchmarks/benchmark_results/csv_no_oc/map_yolov8n_ov_fp32.csv
 ```
-
-Atteso: le due `map50` differiscono di meno di 0.5 punti (test di non-regressione).
-
-### Grafici comparativi
-
-```bash
-python3 benchmarks/scripts/plot_results.py \
-    --csv benchmarks/benchmark_results/csv/ \
-    --out benchmarks/benchmark_results/plots/
-```
-
-Genera 8 PNG:
-
-1. `01_latency_mean_by_config.png` — latenza media per stage e config
-2. `02_latency_p50_p95.png` — p50 e p95 per stage
-3. `03_fps_by_config.png` — FPS effettivi per config
-4. `04_soc_temp.png` — temperatura SoC nel tempo
-5. `05_cpu.png` — CPU% nel tempo
-6. `06_ram.png` — RAM usata nel tempo
-7. `07_map_comparison.png` — mAP (se presenti CSV `map_*.csv`)
-8. `08_detection_stages.png` — scomposizione pre/inferenza/post per config
-   (richiede i CSV `_stages.csv`)
 
 ---
 
-## Preparazione dataset
+## 4. Note Operative e Buone Pratiche
 
-`clean_dataset.py` filtra le coppie stereo per nitidezza (varianza del
-Laplaciano) e le copia in cartelle `keep_*` / `discard_*`. Non modifica mai
-i file originali.
-
-```bash
-cd benchmarks/datasets/tools
-python3 clean_dataset.py --serie 2/serie-1 --threshold 1.99
-```
-
-Output in `benchmarks/datasets/processed/clean_output/<serie>/`.
-
----
-
-## Riproducibilità
-
-Il wrapper `run_benchmark.sh` genera automaticamente per ogni run un
-`<data>_<config>_run<N>_metadata.csv` con:
-
-- Commit hash del repo (`git rev-parse HEAD`)
-- Config ID e numero di run
-- Flag `enable_*` usati
-- `model_filename`, `half_res`, `imgsz`
-- Temperatura SoC iniziale e finale
-- `throttled_initial` / `throttled_final`
-- `cpu_clock_initial_mhz` / `cpu_clock_final_mhz`
-
-Senza questi metadati i dati non sono confrontabili tra sessioni.
-
-**Nota sul clock CPU**: il wrapper registra `cpu_clock_initial_mhz` e
-`cpu_clock_final_mhz` nel metadata, e la colonna `cpu_clock_mhz` nel CSV
-`_system.csv` ha il valore per ogni campione. Se una di queste scende
-sotto il valore nominale della fase (2400 per A, 2800 per B) o se uno dei
-bit `16`-`19` di `throttled` è settato, la run è da scartare. Verifica
-comunque a mano con `vcgencmd measure_clock arm` prima di ogni sessione:
-il wrapper controlla solo all'inizio e alla fine, non durante.
-
----
-
-## Note operative
-
-- ⚠️ **Sessione pulita obbligatoria**: prima di ogni sessione fermare i
-  servizi con `systemctl stop`, poi `systemctl disable`, poi `pkill`
-  (in quest'ordine). `pkill` senza `stop` fa ripartire il servizio via
-  `Restart=on-failure` (RestartSec=5), che produce misure ibride (frame
-  da un `camera_node` esterno, non da quello lanciato dal wrapper). I
-  servizi da fermare sono: `nautilus-bag.service`, `nautilus-vision.service`,
-  `lock-cameras.service`.
-- ⚠️ **Il wrapper NON valida la pipeline dopo il launch**: eventuali
-  messaggi d'errore noti nel launch log producono solo un `WARNING` e la
-  run prosegue (nessun `exit 1`). I controlli automatici si limitano a
-  temperatura < 55 °C e governor CPU → `performance`. Rate anomali,
-  publisher inattesi e nodi residui vanno verificati a mano prima/dopo la
-  sessione (vedi `CONFIGS.md`). Se vedi CSV sospetti, controlla
-  `<run>_launch.log` per `failed to acquire camera` o `is not a supported
-  model format`.
-- Tutti gli script sono **headless** (nessuna GUI). Il wrapper lancia sempre
-  con `enable_debug:=false` per non falsare le latenze con l'overhead di
-  `cv2.imshow`.
-- ⚠️ La detection YOLOv8n su Pi 5 **non tiene i 5 FPS** a 720p. Il rate
-  effettivo di `/stereo_down/targets` è **~0.7–1.0 Hz con `.pt`**
-  (misurato 18/10/2026, half_res=true, imgsz=640: YOLOv8n CPU ARM
-  ~1000 ms/frame). I valori OpenVINO FP32/INT8 sono da misurare in
-  Fase A. La stima precedente (~2.7 / ~3.2 Hz) era ottimistica.
-- ⚠️ Skew stereo misurato il 15/10/2026: **~6.6–7.9 ms** (storico: ~1.5 ms
-  in `DEBUG.md`). Da indagare post-Fase 6, non blocca i run.
-- ⚠️ Con OC attivo (2800 MHz), verifica `vcgencmd get_throttled` sui CSV
-  system: se uno dei bit `16`-`19` è settato, la run è compromessa e va
-  scartata.
-- ⚠️ **Scena di test e oggetti**: per validare il post-processing (matcher
-  stereo), la telecamera deve inquadrare oggetti riconoscibili da YOLO
-  (es. bottiglie, lattine, sveglie). Inquadrare un soffitto bianco o una
-  parete vuota impedisce a YOLO di generare box e al matcher stereo di
-  calcolare la profondità (Z). Il benchmark della latenza resta valido,
-  ma il tempo di `post` risulterebbe falsato a zero.
-- **Algoritmo di Enhancement**: il nodo `enhancement_node` in questa fase
-  non utilizza la rete neurale WaterNet (troppo pesante per il Pi), ma
-  applica tecniche di Computer Vision classiche (Laplacian + CLAHE).
-  Queste operazioni sono deterministiche e il loro tempo di esecuzione
-  non risente della staticità della scena, rendendo la configurazione
-  `C_full` perfettamente misurabile.
+- **Isolamento della Sessione**: Prima di ogni sessione, assicurarsi che i servizi systemd di produzione siano terminati nell'ordine corretto (`systemctl stop`, poi `systemctl disable`, poi `pkill`). I servizi critici da fermare sono:
+  - `nautilus-vision.service`
+  - `nautilus-bag.service`
+  - `lock-cameras.service`
+- **Soglie Termiche di Sicurezza**:
+  - `run_benchmark.sh` richiede SoC < 55 °C prima di autorizzare la partenza.
+  - `run_thermal_test.sh` implementa un plateau di stabilità termica iniziale e attende il cooldown stazionario al termine della run.
+- **Validazione Throttling**: Verificare sempre che la colonna `throttled` dei CSV sia rigorosamente `0x0`. Se uno dei bit 16-19 è attivo (`0x10000`, `0x20000`, `0x40000`, `0x80000`), la run ha subito throttling ed è da scartare.
+- **Requisiti Visivi della Scena**: Per garantire la validità del post-processing stereo (calcolo disparità e coordinate 3D X, Y, Z), la telecamera deve inquadrare oggetti con texture e caratteristiche riconoscibili da YOLO (es. boe, conchiglie, bottiglie). Un frame uniforme o privo di target ridurrebbe artificialmente a zero il tempo dello stage `post`.
+- **Risoluzione e Matching Stereo**: La calibrazione di riferimento è impostata a **1280x720** con lock di esposizione (`LensPosition`: 2.6 per sinistra, 1.5 per destra).
