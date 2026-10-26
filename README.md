@@ -45,11 +45,14 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 
 * **[Benchmark Overview](benchmarks/README.md)** — Metodologia dei test prestazionali e termici (Fase 6 e 7), configurazioni di pipeline, metriche raccolte (latenza p50/p95, CPU, RAM, temperatura, mAP) e linee guida di riproducibilità.
 * **[Configurazioni di Test](benchmarks/CONFIGS.md)** — 11 config di test (Fase A: 6 config senza OC; Fase B: 5 config con OC), con modello/half_res/imgsz, prerequisiti, valori attesi e comandi batch per i run.
-* **[Report dei Risultati](benchmarks/RESULTS.md)** — Risultati, considerazioni e grafici dei benchmark effettuati, divisi per differenti pipeline, modelli di object detection e overclock (non) attivo.
-* **[Script di Lancio](benchmarks/run_benchmark.sh)** — `run_benchmark.sh`.
-* **[Script di Benchmark](benchmarks/scripts/)** — `benchmark_pipeline.py`, `system_monitor.py`, `evaluate_map.py`, `plot_results.py`, `model_benchmark.py`, `check_imgsz.py`.
+* **[Report dei Risultati (6)](benchmarks/BENCHMARK-RESULTS.md)** — Risultati, considerazioni e grafici dei benchmark effettuati, divisi per differenti pipeline, modelli di object detection e overclock (non) attivo.
+* **[Report dei Risultati (7)](benchmarks/THERMAL-RESULTS.md)** — Risultati, considerazioni e grafici del benchmark termico effettuato per la fase 7.
+* **[Script di Lancio (6)](benchmarks/run_benchmark.sh)** — `run_benchmark.sh`.
+* **[Script di Lancio (7)](benchmarks/run_thermal_test.sh)** — `run_thermal_test.sh`.
+* **[Script di Benchmark](benchmarks/scripts/)** — `benchmark_pipeline.py`, `check_imgsz.py`, `evaluate_map.py`, `model_benchmark.py`, `plot_results.py`, `system_monitor.py`, `thermal_stress_test.py`.
 * **[Dataset di Test](benchmarks/datasets/)** — Immagini e video stereo di test, dataset grezzi annotati, dataset COCO128 per mAP e tool di pulizia (`clean_dataset.py`).
-* **[Risultati](benchmarks/results/)** — CSV temporizzati (`csv/`) e grafici PNG (`plots/`) prodotti durante le sessioni.
+* **[Risultati (6)](benchmarks/benchmark_results/)** — CSV temporizzati (`csv/`) e grafici PNG (`plots/`) prodotti durante le sessioni.
+* **[Risultati (7)](benchmarks/thermal_results/)** — CSV temporizzati (`csv/`) e grafici PNG (`plots/`) prodotti durante le sessioni.
 
 ### 🐳 Containerizzazione (`docker/`)
 
