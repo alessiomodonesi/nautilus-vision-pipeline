@@ -53,14 +53,14 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 ### 📊 Benchmark & Validation (`benchmarks/`)
 
 * **[Benchmark Overview](benchmarks/README.md)** — Metodologia dei test prestazionali e termici (Fase 6 e 7), configurazioni di pipeline, metriche raccolte (latenza p50/p95, CPU, RAM, temperatura, mAP) e linee guida di riproducibilità.
-* **[Configurazioni di Test](benchmarks/CONFIGS.md)** — 11 config di test (Fase A: 6 config senza OC; Fase B: 5 config con OC), con modello/half_res/imgsz, prerequisiti, valori attesi e comandi batch per i run.
-* **[Report dei Risultati (6)](benchmarks/BENCHMARK-RESULTS.md)** — Risultati, considerazioni e grafici dei benchmark effettuati, divisi per differenti pipeline, modelli di object detection e overclock (non) attivo.
-* **[Report dei Risultati (7)](benchmarks/THERMAL-RESULTS.md)** — Risultati, considerazioni e grafici del benchmark termico effettuato per la fase 7.
+* **[Configurazioni di Test](benchmarks/benchmark_results/CONFIGS.md)** — 11 config di test (Fase A: 6 config senza OC; Fase B: 5 config con OC), con modello/half_res/imgsz, prerequisiti, valori attesi e comandi batch per i run.
+* **[Report dei Risultati (6)](benchmarks/benchmark_results/RESULTS.md)** — Risultati, considerazioni e grafici dei benchmark effettuati, divisi per differenti pipeline, modelli di object detection e overclock (non) attivo.
+* **[Report dei Risultati (7)](benchmarks/thermal_results/RESULTS.md)** — Risultati, considerazioni e grafici del benchmark termico effettuato per la fase 7.
 * **[Script di Lancio (6)](benchmarks/run_benchmark.sh)** — `run_benchmark.sh`.
 * **[Script di Lancio (7)](benchmarks/run_thermal_test.sh)** — `run_thermal_test.sh`.
 * **[Script di Benchmark](benchmarks/scripts/)** — `benchmark_pipeline.py`, `check_imgsz.py`, `evaluate_map.py`, `model_benchmark.py`, `plot_results.py`, `system_monitor.py`, `thermal_stress_test.py`.
 * **[Dataset di Test](benchmarks/datasets/)** — Immagini e video stereo di test, dataset grezzi annotati, dataset COCO128 per mAP e tool di pulizia (`clean_dataset.py`).
-* **[Risultati (6)](benchmarks/benchmark_results/)** — CSV temporizzati (`csv/`) e grafici PNG (`plots/`) prodotti durante le sessioni.
+* **[Risultati (6)](benchmarks/benchmark_results/)** — CSV temporizzati (`csv_no_oc/`, `csv_oc/`) e grafici PNG (`plots_no_oc/`, `plots_oc/`, `plots_comparative/`) prodotti durante le sessioni.
 * **[Risultati (7)](benchmarks/thermal_results/)** — CSV temporizzati (`csv/`) e grafici PNG (`plots/`) prodotti durante le sessioni.
 
 ### 🐳 Containerizzazione (`docker/`)
@@ -273,8 +273,6 @@ benchmarks/
 ├── datasets/
 │   ├── coco128/                       # 128 immagini COCO con relative etichette
 │   ├── coco128.yaml                   # Configurazione Ultralytics con percorsi locali
-│   ├── images/                        # Immagini di test (enhancement, waternet)
-│   ├── videos/                        # Video stereo di test per la pipeline
 │   └── tools/
 │       └── clean_dataset.py           # Filtro nitidezza con varianza del Laplaciano
 ├── benchmark_results/                 # RISULTATI E CONFIGURAZIONI FASE 6
@@ -292,7 +290,7 @@ benchmarks/
     └── plots/                         # 5 PNG generati per lo stress test termico
 ```
 
-Per il dettaglio delle configurazioni vedi [`benchmarks/CONFIGS.md`](benchmarks/CONFIGS.md).
+Per il dettaglio delle configurazioni vedi [`benchmarks/benchmark_results/CONFIGS.md`](benchmarks/benchmark_results/CONFIGS.md).
 
 ---
 
