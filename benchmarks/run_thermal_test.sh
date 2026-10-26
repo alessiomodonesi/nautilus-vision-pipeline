@@ -33,6 +33,13 @@ DATE=$(date +%Y-%m-%d)
 CSV_DIR="$ROOT/benchmarks/thermal_results/csv"
 mkdir -p "$CSV_DIR"
 
+source /opt/ros/jazzy/setup.bash
+source "$WS/install/setup.bash"
+
+if [ -f "$HOME/nautilus-vision-pipeline/pipeline_config.env" ]; then
+    source "$HOME/nautilus-vision-pipeline/pipeline_config.env"
+fi
+
 case "$CONFIG" in
     T_baseline)   ENH="false"; DET="false"; MODEL="";                                HALF_RES="true";  IMGSZ="640"; NOTE="thermal baseline" ;;
     T_detection)  ENH="false"; DET="true";  MODEL="yolov8n_640_fp32_openvino_model"; HALF_RES="false"; IMGSZ="640"; NOTE="thermal detection" ;;
@@ -48,35 +55,6 @@ cleanup_camera_nodes() {
     sleep 1
 }
 
-# check temperatura iniziale
-TEMP=$(vcgencmd measure_temp | sed "s/temp=//;s/'C//")
-TEMP_INT=${TEMP%.*}
-if [ "$TEMP_INT" -gt 45 ]; then
-    echo "ERROR: SoC temperature ${TEMP}°C > 45°C. Please wait before starting."
-    exit 1
-fi
-echo "== ${CONFIG} run ${RUN_N} =="
-echo "Initial SoC temperature: ${TEMP}°C"
-
-# governor CPU → performance
-CUR_GOV=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
-if [ "$CUR_GOV" != "performance" ]; then
-    echo "Setting CPU governor: ${CUR_GOV} -> performance"
-    echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor > /dev/null 2>&1 || true
-    sleep 1
-fi
-echo "CPU governor: $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)"
-
-THR_START=$(vcgencmd get_throttled | cut -d= -f2)
-CLK_START=$(vcgencmd measure_clock arm | cut -d= -f2)
-
-source /opt/ros/jazzy/setup.bash
-source "$WS/install/setup.bash"
-
-if [ -f "$HOME/nautilus-vision-pipeline/pipeline_config.env" ]; then
-    source "$HOME/nautilus-vision-pipeline/pipeline_config.env"
-fi
-
 # stop servizi e kill residui
 sudo systemctl stop nautilus-bag.service      2>/dev/null || true
 sudo systemctl stop nautilus-vision.service   2>/dev/null || true
@@ -88,6 +66,41 @@ cleanup_camera_nodes
 ros2 daemon stop  2>/dev/null || true
 ros2 daemon start 2>/dev/null || true
 sleep 3
+
+# governor CPU → performance
+CUR_GOV=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
+if [ "$CUR_GOV" != "performance" ]; then
+    echo "Setting CPU governor: ${CUR_GOV} -> performance"
+    echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor > /dev/null 2>&1 || true
+    sleep 1
+fi
+echo "CPU governor: $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)"
+
+# attesa stabilità termica prima di iniziare (idle plateau)
+echo "Waiting for thermal stability before start..."
+PREV=-999
+STABLE_COUNT=0
+for i in $(seq 1 60); do
+    T=$(vcgencmd measure_temp | sed "s/temp=//;s/'C//")
+    T_INT=${T%.*}
+    DIFF=$((T_INT - PREV))
+    if [ "$PREV" -ne -999 ] && [ "$DIFF" -ge -1 ] && [ "$DIFF" -le 1 ]; then
+        STABLE_COUNT=$((STABLE_COUNT + 1))
+    else
+        STABLE_COUNT=0
+    fi
+    if [ "$STABLE_COUNT" -ge 3 ]; then
+        echo "SoC stable at ${T}°C"
+        break
+    fi
+    echo "  temp=${T}°C (delta ${DIFF}°C, stable=${STABLE_COUNT}/3)"
+    PREV=$T_INT
+    sleep 5
+done
+TEMP=$T
+
+THR_START=$(vcgencmd get_throttled | cut -d= -f2)
+CLK_START=$(vcgencmd measure_clock arm | cut -d= -f2)
 
 # path output
 THERMAL_CSV="$CSV_DIR/${DATE}_${CONFIG}_run${RUN_N}_thermal.csv"
@@ -186,16 +199,25 @@ notes,$NOTE
 timings_topic,$TIMINGS_META
 EOF
 
-# cooldown fino a SoC ≤ 45 °C
-echo "Cooldown: waiting for SoC ≤ 45°C..."
-for i in $(seq 1 60); do
+# cooldown fino a stabilità termica (max 15 min)
+echo "Cooldown: waiting for thermal stability..."
+PREV=-999
+STABLE_COUNT=0
+for i in $(seq 1 90); do
     T=$(vcgencmd measure_temp | sed "s/temp=//;s/'C//")
     T_INT=${T%.*}
-    if [ "$T_INT" -le 45 ]; then
-        echo "Cooldown complete: ${T}°C"
+    DIFF=$((T_INT - PREV))
+    if [ "$PREV" -ne -999 ] && [ "$DIFF" -ge -1 ] && [ "$DIFF" -le 1 ]; then
+        STABLE_COUNT=$((STABLE_COUNT + 1))
+    else
+        STABLE_COUNT=0
+    fi
+    if [ "$STABLE_COUNT" -ge 3 ]; then
+        echo "Cooldown complete: stable at ${T}°C"
         break
     fi
-    echo "  temp=${T}°C (${i}/60)"
+    echo "  temp=${T}°C (delta ${DIFF}°C, stable=${STABLE_COUNT}/3)"
+    PREV=$T_INT
     sleep 10
 done
 
