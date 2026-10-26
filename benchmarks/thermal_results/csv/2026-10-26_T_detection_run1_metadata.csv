@@ -1,0 +1,19 @@
+field,value
+commit_hash,7656eded3a26846a2e85dd0fe900949c8177f69c
+config,T_detection
+run,1
+thermal_duration_s,3600
+enable_enhancement,false
+enable_detection,true
+enable_metrics,true
+model_filename,yolov8n_640_fp32_openvino_model
+half_res,false
+imgsz,640
+soc_temp_initial_c,35.1
+soc_temp_final_c,65.3
+throttled_initial,0x0
+throttled_final,0x0
+cpu_clock_initial_mhz,2400
+cpu_clock_final_mhz,2400
+notes,thermal detection
+timings_topic,/stereo_down/timings

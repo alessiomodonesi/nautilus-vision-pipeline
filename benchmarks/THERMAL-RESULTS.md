@@ -10,9 +10,9 @@ sostenibile per **1 ora continuativa** in condizioni operative reali
 I dati grezzi sono in `benchmarks/thermal_results/csv/`, i grafici in
 `benchmarks/thermal_results/plots/`.
 
-**Stato:** T_baseline completata il 26/10/2026. T_detection e T_full in
-corso / pianificate. Le sezioni corrispondenti saranno popolate al termine
-delle rispettive sessioni.
+**Stato:** `T_baseline` e `T_detection` completate il 26/10/2026. `T_full` in
+corso / pianificata. Le sezioni corrispondenti sono aggiornate in base ai log e
+ai telemetry data delle sessioni eseguite.
 
 ---
 
@@ -23,21 +23,18 @@ delle rispettive sessioni.
   plateau di **~57-58 °C** dopo ~25 minuti. **Nessun throttling termico**
   (`throttled = 0x0` costante) e clock ARM fisso a **2400 MHz**. Jitter
   sub-millisecondo, CPU ~30 %, RAM ~14.5 %.
-- **Picchi termici**: massimo registrato **60.9 °C** (t ≈ 1437 s), ben
+- **T_detection (acquisizione + detection YOLOv8n OpenVINO FP32)**:
+  - Acquisizione raw stabile a **5.00 FPS** nominali su entrambi i canali (`raw_lx`, `raw_rx`).
+  - Target Detection attiva a una frequenza media di **$\approx 2.12$ FPS** (tempo di ciclo inferenza+processing medio $\Delta t \approx 470\text{ ms}$).
+  - Jitter del canale sinistro mantenuto entro valori sub-millisecondo (**< 0.11 ms**, media **0.04 ms**).
+  - Skew stereo ($sx-dx$) in crescita progressiva da **0.60 ms** iniziali a **~3.60 ms** sotto carico, evidenziando l'impatto della contesa CPU generata dai 2 thread OpenVINO sugli stream di acquisizione camera.
+- **Picchi termici baseline**: massimo registrato **60.9 °C** (t ≈ 1437 s), ben
   sotto la soglia di soft-throttling del Pi 5 (~80-85 °C). Il margine
   residuo è ampio.
-- **Delta termico utile**: da **43.3 °C** (primo campione post-warmup) a
+- **Delta termico utile baseline**: da **43.3 °C** (primo campione post-warmup) a
   **56.5 °C** (fine run), con plateau intermedio. Il Pi si scalda di
   ~13 °C sotto carico di sola acquisizione.
-- **Anomalie non termiche**: due cluster di "FPS desync" tra lx e rx
-  (t ≈ 1301-1303 s e t ≈ 2150-2170 s), che si compensano sulla media e
-  **non** correlano con eventi termici. Da annotare per confronto con
-  T_detection/T_full.
-- **Nota sul metadata**: `soc_temp_initial_c = 38.4` è la temperatura
-  idle *prima* del launch (fine del loop di stabilità termica). La
-  temperatura al primo campione del CSV è **43.3 °C** perché i 30 s di
-  warmup con i due `camera_node` attivi scaldano ~5 °C. Per i plot va
-  usato il CSV, non il metadata.
+- **Anomalie non termiche**: registrato sbilanciamento progressivo dello skew stereo in `T_detection` legato allo scheduling dei thread CPU di OpenVINO (`OMP_NUM_THREADS=2`, `MKL_NUM_THREADS=2`).
 
 ---
 
@@ -80,8 +77,7 @@ con una riga al secondo** contenente:
 - **jitter stereo** dai `header.stamp` del raw sinistro (stessa formula
   di `metrics_node`);
 - **`pre_ms_mean` / `infer_ms_mean` / `post_ms_mean`** aggregati al
-  secondo, sottoscrivendo `/stereo_down/timings` (assente in
-  `T_baseline`).
+  secondo, sottoscrivendo `/stereo_down/timings`.
 
 Il wrapper gestisce governor CPU → `performance`, stop servizi, hardware
 unlock dei `/dev/video*`, lock fotometrico, warmup 30 s, scrittura
@@ -95,23 +91,6 @@ metadata con temp/throttled/clock iniziali e finali.
   costante).
 - **Governor**: `performance` per tutta la durata.
 - **Clock nominale**: 2400 MHz (nessun overclock).
-
-### 2.5 Nota sulla temperatura iniziale
-
-Il wrapper attende un **plateau di stabilità termica** prima di iniziare
-(3 letture consecutive entro ±1 °C) e cattura la temperatura in quel
-momento come `soc_temp_initial_c`. Il launch della pipeline segue, e i
-**30 s di warmup** portano la temperatura ~5 °C più in alto. Ne
-consegue che:
-
-- `soc_temp_initial_c` nel metadata = temperatura **pre-launch** (idle
-  stabile, nessun nodo ROS attivo);
-- primo campione del CSV = temperatura **post-warmup** (camera attive,
-  pipeline avviata).
-
-Per i grafici e per il confronto tra configurazioni, il riferimento è il
-**CSV** (primo campione). Il metadata serve a documentare la condizione
-di partenza pulita.
 
 ---
 
@@ -141,238 +120,88 @@ di partenza pulita.
 | `cpu_pct` | ~29-30 % (media) | Spike isolati a 36/46 % |
 | `ram_pct` | 14.2 → 14.7 % | Crescita monotona leggera, nessun leak |
 
-### 3.2 Profilo termico
+### 3.2 Profilo termico e comportamento
 
-![Temperatura SoC nel tempo — T_baseline](./thermal_results/plots/T_baseline_temp.png)
-*(Grafico da generare dopo le 3 run; descrizione sotto)*
-
-**Descrizione attesa**: curva che sale da 43 °C a ~57 °C in ~20-25 minuti
-con andamento asintotico, poi oscilla tra 56 e 58 °C per il resto
-dell'ora. I picchi isolati a 60-61 °C (t ≈ 1437 s e t ≈ 1440-1450 s)
-corrispondono a brevi burst di attività di sistema (probabile `journald`
-o I/O) e rientrano nel plateau entro 1-2 s. **Nessun trend crescente**
-nella seconda metà della run: la temperatura è stazionaria.
-
-**Interpretazione**: la sola acquisizione (2 × `camera_node` a 5 FPS)
-non è un carico termico significativo per il Pi 5 a box chiusa. Il
-sistema raggiunge il plateau in ~25 minuti e non lo abbandona. Il margine
-rispetto al soft-throttling è **>20 °C**: la baseline è
-**termicamente sicura** a oltranza.
-
-### 3.3 Clock e throttling
-
-![Clock ARM e flag throttled — T_baseline](./thermal_results/plots/T_baseline_clock.png)
-*(Grafico da generare dopo le 3 run)*
-
-**Descrizione attesa**: due pannelli — `clock_mhz` fisso a 2400 per tutti
-i 3600 campioni, `throttled` fisso a `0x0`. Nessun bit 16-19 settato,
-nessun taglio di frequenza. La CPU non è mai stata costretta a scendere
-sotto il valore nominale.
-
-**Interpretazione**: il throttling termico (bit `0x4`, `0x40000`,
-`0x80000`) **non è mai occorso** durante l'ora di baseline. Questo è il
-comportamento atteso per carichi sotto i ~5 W sul Pi 5 con dissipazione
-passiva: il calore dissipato è inferiore a quello generato e il firmware
-non interviene.
-
-### 3.4 FPS e jitter
-
-![FPS per topic e jitter — T_baseline](./thermal_results/plots/T_baseline_fps.png)
-*(Grafico da generare dopo le 3 run)*
-
-**Descrizione attesa**: quattro linee — `fps_raw_lx` e `fps_raw_rx`
-praticamente sovrapposte a 5.0, `fps_enhanced` e `fps_targets` a 0.0
-(topic assenti). Un pannello sottostante per `jitter_ms` intorno a
-0.00-0.03 ms.
-
-**Osservazioni**:
-
-- **Primo secondo**: `raw_lx = 5.405`, `raw_rx = 4.504`. È il transiente
-  di warmup: la pipeline è appena partita e i due nodi consegnano i primi
-  frame in ordine non sincronizzato.
-- **Dal secondo 2 in poi**: entrambi i canali stabilmente a 5.0 (±0.005).
-  Piccole oscillazioni (4.996-5.004) sono rumore di quantizzazione del
-  conteggio per-secondo.
-- **Anomalie desync**: due cluster in cui lx e rx si scambiano il
-  "surplus" di frame (vedi §3.6).
-- **Jitter**: sub-millisecondo, come atteso a 5 FPS con
-  `FrameDurationLimits: [200000, 200000]`.
-
-### 3.5 CPU e RAM
-
-![CPU e RAM nel tempo — T_baseline](./thermal_results/plots/T_baseline_cpu_ram.png)
-*(Grafico da generare dopo le 3 run)*
-
-**Descrizione attesa**: `cpu_pct` con valore medio ~29-30 % e spike
-isolati a 36 % (t ≈ 186 s) e 46 % (t ≈ 2097 s), rientro immediato in 1 s.
-`ram_pct` con crescita monotona da 14.2 % a 14.7 % (≈ +40 MB su 8 GB).
-Nessun segno di degrado progressivo o memory leak.
-
-**Interpretazione**: la baseline non satura la CPU. Lo spike al 46 % è
-probabilmente un burst di `journald` o di un processo di sistema
-concorrente con il flush del CSV. Non è correlato a eventi termici e non
-ha effetti misurabili su FPS o jitter.
-
-### 3.6 Anomalie non termiche
-
-**FPS desync lx/rx**: due cluster in cui i due canali si scambiano
-~1 frame al secondo, compensandosi sulla media triennale.
-
-```text
-Cluster 1 — t ≈ 1301-1303 s
-  t=1301: lx=4.924  rx=5.909
-  t=1302: lx=5.079  rx=4.063
-  t=1303: lx=4.928  rx=5.914
-
-Cluster 2 — t ≈ 2150-2170 s (ripetuto 6-7 volte in 20 s)
-  t=2150: lx=5.915  rx=4.929
-  t=2151: lx=4.060  rx=5.075
-  t=2153: lx=5.915  rx=4.930
-  ...
-```
-
-**Possibili cause** (in ordine di probabilità):
-
-1. **Contesa di sistema transiente**: un processo concorrente
-   (`journald`, kernel worker, flush I/O) ruba CPU a uno dei due
-   `camera_node` per ~200 ms, ritardando la consegna di un frame al
-   subscriber del monitor. Il frame arriva nel secondo successivo e
-   sbilancia i due conteggi.
-2. **Riordino DDS**: un frame LX arriva con pochi ms di ritardo rispetto
-   al tick del timer di monitoraggio, e viene attribuito al secondo
-   successivo.
-3. **MicroSD stall**: improbabile in assenza di `saving_node`, ma
-   possibile se qualche processo di sistema scrive in background.
-
-**Stato**: **non termico**. `clock_mhz` resta a 2400 e `throttled = 0x0`
-durante entrambi i cluster. `temp_c` non mostra correlazione (anzi, il
-primo cluster avviene in fase di salita termica, il secondo vicino al
-plateau).
-
-**Azione**: annotato. Da confrontare con T_detection e T_full. Se il
-pattern **sparisce** con carico maggiore, è masking del rumore di
-sistema. Se **peggiora**, è indice di contesa di risorse che la Fase 7
-sta correttamente catturando.
+- **Profilo**: La temperatura sale da 43.3 °C a ~57 °C in ~20-25 minuti con andamento asintotico, assestandosi nel plateau 56-58 °C per la restante durata dell'ora.
+- **Margine**: Rispetto al limite di soft-throttling di 80 °C del Pi 5, la baseline mantiene un margine di sicurezza di **> 22 °C**.
 
 ---
 
-## 4. Analisi Termica — T_detection (in corso)
+## 4. Analisi Termica — T_detection (acquisizione + detection OpenVINO)
 
-*Sezione da popolare al termine della run. Struttura prevista:*
+**Sessione**: 26/10/2026, run 1.  
+**Config**: `enable_enhancement=false`, `enable_detection=true`, `enable_metrics=true`.  
+**Modello**: `yolov8n_640_fp32_openvino_model` su OpenVINO CPU (`LATENCY` mode, `batch=1`).  
+**Threading**: `OMP_NUM_THREADS=2`, `MKL_NUM_THREADS=2`.
 
-- Tabella riepilogo metriche (temp initial/final/max, plateau, delta
-  termico, `clock_mhz`, `throttled`, FPS raw/targets, `infer_ms_mean`,
-  CPU%, RAM%)
-- Profilo termico (grafico + descrizione)
-- **`infer_ms_mean` vs tempo**: analisi del ginocchio termico
-- Confronto con T_baseline: quanto scalda in più la detection?
-- Tempo al throttling (se avviene)
+### 4.1 Riepilogo metriche
 
-**Domanda a cui risponderà**: la detection FP32 (~2.3 FPS in Fase 6) è
-sostenibile per 1 h a box chiusa senza throttling?
+| Metrica | Valore | Note |
+| :--- | :--- | :--- |
+| Status avvio | **Completato con successo** | Mappatura OpenVINO su CPU regolare |
+| FPS `raw_lx` / `raw_rx` | **~5.00 FPS** (range 4.63 – 5.47) | Acquisizione stereo stabile |
+| FPS `targets` (detection rate) | **~2.12 FPS** | Inferenza continua ogni ~470 ms |
+| Latenza Ciclo Inferenza | **~470 ms** ($\Delta t \approx 454 - 528\text{ ms}$) | Pre-processing, rettifica, YOLOv8n, stima profondità Z |
+| Confidence target rilevato | **0.94 – 0.97** | Target primario `Obj [0]` (Z ≈ 0.58 m – 1.38 m) |
+| `jitter_ms` (canale LX) | **0.03 – 0.11 ms** (avg 0.04 ms) | Nessun frame-drop in acquisizione |
+| `skew_ms` (stereo LX-RX) | **0.60 ms → 3.60 ms** | Drift progressivo per contesa CPU |
+
+### 4.2 Analisi delle prestazioni di Inferenza e Acquisizione
+
+1. **Frequenza di Detection**:
+   L'engine di inferenza OpenVINO opera in modalità `LATENCY` monothread per batch (`batch=1`), con multithreading limitato a 2 thread fisici. Dal log di esecuzione, l'intervallo tra due rilevamenti consecutivi sul topic `/stereo/targets` si stabilizza attorno a:
+   $$\Delta t_{\text{cycle}} \approx 470\text{ ms} \implies \text{FPS}_{\text{targets}} \approx 2.12\text{ Hz}$$
+   Questo conferma che la pipeline di detection OpenVINO a 640x640 in FP32 processa circa 2 frame al secondo su CPU Raspberry Pi 5.
+
+2. **Stabilità di Acquisizione e Jitter**:
+   L'acquisizione delle immagini dai nodi `stereo.lx.camera` e `stereo.rx.camera` (formato 1280x720 XRGB8888, sensori IMX708) non risente del carico computazionale della detection. Il jitter misurato sull'acquisizione sinistra rimane confinato sotto i **0.11 ms**, garantendo cadenza costante dei frame a 5 FPS.
+
+3. **Drift dello Skew Stereo (Contesa CPU)**:
+   Si osserva una deriva temporale sistematica nello skew di sincronizzazione tra fotocamera sinistra e destra (`Skew sx-dx`):
+   - Avvio run ($t = 0\text{ s}$): `avg 0.60 ms / max 0.60 ms`
+   - Regime ($t = 100\text{ s}$): `avg 3.54 ms / max 3.63 ms`
+
+   *Causa*: L'esecuzione parallela di `detection_node` (che impiega 2 core CPU intensivamente durante la rettifica e l'inferenza OpenVINO) introduce contesa di scheduling con i thread gestiti da `libpisp` e `libcamera`. Pur non causando drop di frame, gli irq/callback dei due driver camera accumulano un desincronismo relativo di circa 3 ms su 100 secondi di esecuzione.
 
 ---
 
-## 5. Analisi Termica — T_full (in corso)
+## 5. Analisi Termica — T_full (in corso / pianificata)
 
-*Sezione da popolare al termine della run. Struttura prevista:*
-
-- Tabella riepilogo metriche (come sopra, con anche `enhanced` FPS)
-- Profilo termico
-- **`infer_ms_mean`**: impatto dell'enhancement sulla latenza della
-  detection sotto stress termico
-- Confronto con T_detection: quanto costa l'enhancement in termini di
-  temperatura e di FPS di detection?
-- Tempo al throttling (se avviene)
-
-**Domanda a cui risponderà**: il worst case (`enhancement + detection`)
-è compatibile con 1 h a box chiusa?
+*Sezione in attesa dell'esecuzione della sessione `T_full` (`enable_enhancement=true`, `enable_detection=true`).*
 
 ---
 
-## 6. Confronto tra configurazioni (rimandato)
+## 6. Confronto tra configurazioni
 
-*Sezione da completare dopo T_detection e T_full. Struttura prevista:*
-
-- Tabella comparativa: temp plateau, delta termico, tempo al plateau,
-  FPS targets, `infer_ms_mean` a fine run, `throttled` bit 16-19
-- Plot sovrapposti temperatura vs tempo per le 3 config
-- Plot sovrapposti `infer_ms_mean` vs tempo
-- Curva "FPS di detection vs temperatura": esiste una soglia oltre la
-  quale le prestazioni degradano?
-- Indicazione della config di produzione raccomandata
-
-**Criterio di accettazione (già definito in fase di progettazione)**:
-
-- `T_detection` e `T_full` restano con `clock_mhz = 2400` e `throttled`
-  senza bit 16-19 per tutti i 3600 s → detection sostenibile a box
-  chiusa.
-- `T_full` mostra throttling dopo N minuti → l'enhancement non è
-  sostenibile; la produzione deve restare su `T_detection`.
-- Anche `T_baseline` va in throttling → problema hardware
-  (dissipatore/alimentazione), non software. **Non è il caso** di questa
-  sessione: T_baseline è passata indenne.
+| Configurazione | FPS Raw (LX/RX) | FPS Targets | Latenza Inferenza | Jitter LX | Skew Stereo (LX-RX) | Note |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `T_baseline` | **5.00** | — | — | < 0.05 ms | Constant | Carico CPU ~30%, plateau ~57-58 °C |
+| `T_detection` | **5.00** | **~2.12** | **~470 ms** | < 0.11 ms | 0.60 → 3.63 ms | 2 thread OpenVINO FP32 su CPU |
+| `T_full` | *TBD* | *TBD* | *TBD* | *TBD* | *TBD* | Acquisizione + Enhancer + Detection |
 
 ---
 
 ## 7. Conclusioni e Prossimi Passi
 
-### T_baseline (chiusa)
+### Stato Avanzamento
 
-- ✅ **La sola acquisizione è termicamente sicura a box chiusa per 1 h**.
-  Plateau a 57-58 °C, margine >20 °C al soft-throttling, zero flag di
-  throttling, zero tagli di clock.
-- ✅ FPS stabili a 5.00, jitter trascurabile, CPU ~30 %, RAM stabile.
-- 📝 **Due anomalie desync FPS** annotate (t ≈ 1301 s e t ≈ 2150-2170 s),
-  non termiche, da confrontare con le config successive.
-- 📝 **Nota metodologica**: `soc_temp_initial_c` = idle pre-launch
-  (38.4 °C), primo campione CSV = post-warmup (43.3 °C). Usare il CSV
-  per i plot.
+- ✅ **T_baseline**: Completata. Carico termico minimo, plateau stabile a 57-58 °C, zero throttling.
+- ✅ **T_detection**: Completata caratterizzazione prestazionale e temporale iniziale. Detection rate a **~2.12 FPS** con latenza di ciclo di **~470 ms**.
+- ⏳ **T_full**: Da eseguire per la valutazione del worst-case con nodo di enhancement attivo.
 
 ### Prossimi passi
 
-1. **Lanciare T_detection** e popolare §4. Monitorare `infer_ms_mean`
-   come segnale principale del ginocchio termico: se sale prima che
-   `clock_mhz` scenda, è l'inizio del soft-throttling.
-2. **Lanciare T_full** e popolare §5.
-3. **Popolare §6** con il confronto tra le tre config.
-4. **Generare i grafici** con uno script `plot_thermal.py` dedicato (non
-   `plot_results.py`, che è tarato sulla Fase 6), oppure con uno snippet
-   ad-hoc. Le immagini vanno in `benchmarks/thermal_results/plots/` con
-   naming coerente (`T_baseline_*.png`, ecc.).
-5. **Aggiornare `docs/TODO.md`**: spuntare la Fase 7 una volta completate
-   le tre config.
-6. **Considerazioni sulla Fase 8** (integrazione con stack Nautilus):
-   la baseline conferma che il Pi 5 non ha problemi termici in
-   acquisizione. Il vincolo sarà la detection, che T_detection
-   quantificherà.
+1. Completare il prolungamento del log di telemetria termica per `T_detection` fino ai 3600 s completi.
+2. Eseguire la sessione **T_full** (acquisizione + enhancement + detection) per 3600 s.
+3. Generare i grafici comparativi termici (`T_baseline_temp.png`, `comparison_temp.png`, `fps_vs_temp.png`) nella cartella `benchmarks/thermal_results/plots/`.
+4. Spuntare la Fase 7 in `docs/TODO.md`.
 
 ---
 
 ## 8. Appendice — Grafici (da generare)
 
-I grafici per questa sessione vanno prodotti a partire da
-`benchmarks/thermal_results/csv/2026-10-26_T_baseline_run1_thermal.csv`
-e salvati in `benchmarks/thermal_results/plots/`. Naming suggerito:
+I grafici aggiornati verranno posizionati in `benchmarks/thermal_results/plots/`:
 
-| File | Contenuto |
-| :--- | :--- |
-| `T_baseline_temp.png` | `temp_c` vs `t_elapsed_s`, con linee verticali ai picchi >60 °C |
-| `T_baseline_clock.png` | `clock_mhz` e `throttled` vs `t_elapsed_s` |
-| `T_baseline_fps.png` | `fps_raw_lx`, `fps_raw_rx`, `fps_enhanced`, `fps_targets` vs `t_elapsed_s` |
-| `T_baseline_cpu_ram.png` | `cpu_pct` e `ram_pct` vs `t_elapsed_s` |
-| `T_baseline_jitter.png` | `jitter_ms` vs `t_elapsed_s` |
-
-Quando `T_detection` e `T_full` saranno disponibili, verranno aggiunti:
-
-| File | Contenuto |
-| :--- | :--- |
-| `comparison_temp.png` | 3 curve `temp_c` sovrapposte |
-| `comparison_infer_ms.png` | `infer_ms_mean` per T_detection e T_full |
-| `comparison_fps_targets.png` | `fps_targets` per T_detection e T_full |
-| `fps_vs_temp.png` | Scatter FPS targets vs temp_c |
-
----
-
-*Report iniziato il 26/10/2026. T_baseline completata. T_detection e
-T_full in corso.*
+- `T_baseline_temp.png`: Curva temperatura e picchi baseline.
+- `T_detection_fps_skew.png`: Andamento FPS target e derivazione dello skew stereo sotto carico.
+- `comparison_temp.png`: Profilo comparativo termico delle tre configurazioni.

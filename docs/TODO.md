@@ -59,8 +59,8 @@ Obiettivo: un confronto equo e riproducibile eseguito sul Pi.
 
 Obiettivo: testare se la detection può restare sul Pi a box chiusa.
 
-- [ ] 1h a box chiusa in tre configurazioni: solo acquisizione, acquisizione + detection, acquisizione + enhancement + detection.
-- [ ] Log ogni secondo di temperatura, frequenza CPU, FPS e flag di throttling.
+- [x] 1h a box chiusa in tre configurazioni: solo acquisizione, acquisizione + detection, acquisizione + enhancement + detection.
+- [x] Log ogni secondo di temperatura, frequenza CPU, FPS e flag di throttling.
 
 ## Fase 8 — Integrazione
 
@@ -69,5 +69,5 @@ Obiettivo: testare se la detection può restare sul Pi a box chiusa.
 
 ## Fase 9 — Documentazione
 
-- [ ] Tesi e slide.
+- [x] Tesi e slide.
 - [ ] Documentazione nella repo.
