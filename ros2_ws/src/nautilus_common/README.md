@@ -244,5 +244,5 @@ Se la QoS osservata non corrisponde a quella nel YAML:
 
 - [ROS 2 QoS concepts](https://docs.ros.org/en/jazzy/Concepts/Intermediate/About-Quality-of-Service-Settings.html)
 - [CycloneDDS QoS override](https://github.com/ros2/rmw_cyclonedds#qos-overrides)
-- Applicazione nella pipeline: `nautilus_camera/README.md`,
-  `nautilus_perception/README.md`
+- Applicazione nella pipeline: [`../nautilus_camera/README.md`](../nautilus_camera/README.md),
+  [`../nautilus_perception/README.md`](../nautilus_perception/README.md)

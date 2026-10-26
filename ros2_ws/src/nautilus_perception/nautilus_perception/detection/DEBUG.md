@@ -1,9 +1,10 @@
 # Nautilus — Detection Module (Debug & Status Notes)
 
-> **Ultimo aggiornamento:** 13/10/2026 — Calibrazione 720p completata e validata
-> **Stato:** Fase 5 chiusa. Stereo calibrated at 1280×720 (RMS 0.125 px),
-> Z validata su 4 distanze (60–90 cm) con errore < 1 cm. Pronti per Fase 6
-> (benchmark).
+> **Ultimo aggiornamento:** 26/10/2026 — Fasi 5, 6 e 7 completate e validate
+> **Stato:** Calibrazione stereo 1280×720 attiva (RMS 0.125 px, focale 1500.89 px, baseline 12.02 cm),
+> Z validata su 4 distanze (60–90 cm) con errore < 1 cm. Benchmark prestazionali (Fase 6) e
+> stress test termico di 1h a box chiusa (Fase 7) completati con successo (OpenVINO FP32 ~2.3 FPS,
+> temp max 69.7 °C, zero throttling).
 
 ---
 
@@ -312,14 +313,17 @@ validata (vedi Sezione 2).
 | `config.py` aggiornato (baseline 0.12017, focal 1500.89) | ✅ |
 | `SparseBlockMatcher` ritarato (disparity 100-450) | ✅ |
 | Validazione Z su 4 distanze (0.6–0.9 m) | ✅ (errore < 1 cm) |
-| Benchmark FPS/latenza/CPU (Fase 6) | ⏳ |
+| Benchmark FPS/latenza/CPU (Fase 6) | ✅ (OpenVINO FP32 ~2.3 FPS, int8 bocciato, OC valutato) |
+| Stress test termico 1h a box chiusa (Fase 7) | ✅ (max 69.7 °C, zero throttling 0x0, sostenibile a 1.40 FPS) |
 
 ---
 
 ## 7. Riferimenti
 
-- `docs/TODO.md` — Roadmap completa (Fase 5 = calibrazione 720p, chiusa)
+- `docs/TODO.md` — Roadmap completa (Fasi 5, 6, 7 completate)
 - `detection_params.yaml` — Parametri runtime del nodo
+- `benchmarks/benchmark_results/RESULTS.md` — Report completo benchmark prestazionali (Fase 6)
+- `benchmarks/thermal_results/RESULTS.md` — Report completo stress test termico (Fase 7)
 - `deploy/lock_cameras.py` — Lock fotometrico post-launch (systemd)
 - `deploy/lock-cameras.service` — Unit systemd che lo invoca
 - `deploy/nautilus-vision.service` — Unit systemd della pipeline (a cui `lock-cameras` è agganciata via `PartOf`)

@@ -1,161 +1,116 @@
 # nautilus_camera
 
-Pacchetto ROS 2 dedicato all'acquisizione stereoscopica, al salvataggio su disco e alla diagnostica prestazionale del modulo di visione del veicolo Nautilus (host Raspberry Pi 5).
+Pacchetto ROS 2 dedicato all'acquisizione stereoscopica e alla diagnostica telemetrica in tempo reale per il modulo di visione del veicolo **Nautilus** (su host Raspberry Pi 5).
 
-## Panoramica
+---
 
-Questo pacchetto si appoggia a [`camera_ros`](https://github.com/christianrauch/camera_ros) per interfacciarsi direttamente con i due sensori Pi Camera (CSI) e fornisce:
+## 1. Panoramica del Pacchetto
 
-1. **Acquisizione** a 1280×720 @ 5 FPS, con parametri hardware e fotometrici centralizzati in un unico YAML.
-2. **Benchmark** in tempo reale di FPS, jitter e skew stereo (`metrics_node`).
-3. **Salvataggio** su filesystem locale in JPEG/PNG, con contatore incrementale e nessuna dipendenza da RTC (`saving_node`).
+Il pacchetto si interfaccia direttamente con i due sensori Sony IMX708 (Raspberry Pi Camera Module 3 con autofocus a diottrie regolabili) collegati via bus CSI-2 tramite il driver open-source [`camera_ros`](../camera_ros/README.md).
 
-Il blocco di acquisizione è l'unico che parte automaticamente al boot del Raspberry Pi (tramite `nautilus-vision.service`). Il salvataggio è opzionale, controllato da `ENABLE_SAVING` in `pipeline_config.env`. Il benchmark non parte mai da solo.
+Le responsabilità principali del pacchetto includono:
 
-Lo stesso `camera_params.yaml` è letto anche da `lock_cameras.py` (deploy esterno), che riapplica i parametri fotometrici via `set_parameters` subito dopo il boot: così la fonte di verità è unica e non ci sono duplicazioni.
+1. **Acquisizione Stereoscopica Sincronizzata**: acquisizione video a risoluzione 1280×720 a 5 FPS nominali (`FrameDurationLimits: [200000, 200000]`), con parametri hardware e fotometrici centralizzati in un unico file YAML (`config/camera_params.yaml`).
+2. **Diagnostica Telemetrica in Tempo Reale ([`metrics_node.py`](nautilus_camera/metrics_node.py))**: benchmark continuo del flusso visivo con calcolo di FPS effettivi, jitter temporale inter-frame e skew di sincronizzazione stereo tra telecamera sinistra e destra.
+3. **Architettura di Salvataggio Zero-Overhead**: la persistenza delle missioni non avviene tramite nodi Python dedicati, bensì tramite registrazione nativa ROS 2 in formato MCAP compresso (`nautilus-bag.service`). Per le necessità di analisi scientifica e per i biologi, i frame JPEG numerati vengono estratti a posteriori tramite lo script [`tools/extract_bag_frames.py`](../../../tools/extract_bag_frames.py), preservando la CPU di bordo durante la navigazione autonoma.
 
-## Struttura del Pacchetto
+---
+
+## 2. Struttura del Pacchetto
 
 ```text
 nautilus_camera/
 ├── config/
-│   └── camera_params.yaml          # unico file di configurazione
+│   └── camera_params.yaml          # File unico di configurazione (camera_ros + metrics_node)
 ├── launch/
-│   └── stereo_camera.launch.py       # camera_ros + metrics + saving
+│   └── stereo_camera.launch.py     # Launch file acquisizione stereo e diagnostica
 ├── nautilus_camera/
 │   ├── __init__.py
-│   ├── metrics_node.py               # benchmark FPS / jitter / skew
-│   └── saving_node.py                # salvataggio stereo su disco
+│   └── metrics_node.py             # Nodo diagnostico (FPS, jitter, skew stereo)
 ├── resource/
 │   └── nautilus_camera
+├── test/
+│   └── test_flake8.py
 ├── package.xml
 ├── setup.cfg
-├── setup.py
-└── test/
-    └── test_flake8.py
+└── setup.py
 ```
 
-## Launch File
+---
 
-### `stereo_camera.launch.py`
+## 3. Launch File: `stereo_camera.launch.py`
 
-Fa partire in un colpo solo:
+Il file di launch [`launch/stereo_camera.launch.py`](launch/stereo_camera.launch.py) coordina:
 
-* due istanze del driver `camera_ros` in namespace separati (`/stereo/lx` e `/stereo/rx`);
-* `metrics_node` (opzionale);
-* `saving_node` (opzionale).
+* L'avvio di due istanze del nodo `camera_node` di `camera_ros` su namespace distinti:
+  * `/stereo/lx/camera` (ID hardware 0, sensore sinistro)
+  * `/stereo/rx/camera` (ID hardware 1, sensore destro)
+* Un ritardo di sicurezza temporizzato di **6.0 secondi** sull'avvio della camera destra (`TimerAction`), necessario per consentire al driver libcamera di inizializzare stabilmente il primo bus I2C/CSI prima di attivare il secondo.
+* L'avvio opzionale di `metrics_node` per la telemetria.
 
-I parametri hardware di `camera_ros` **non vengono ripetuti** nel launch file: sono letti direttamente dai blocchi `/stereo/lx/camera` e `/stereo/rx/camera` di `config/camera_params.yaml`. Questo evita duplicazioni e drift di configurazione.
-
-**Argomenti di lancio:**
+### Argomenti di Lancio Supportati
 
 | Argomento | Default | Descrizione |
-|---|---|---|
-| `params_file` | `camera_params.yaml` | Nome del file di configurazione in `config/` |
-| `enable_metrics` (alias: `metrics`) | `false` | Avvia il nodo di benchmark (`metrics_node`) |
-| `enable_display` (alias: `display`) | `''` (vuoto) | Apre finestra OpenCV del `metrics_node` (se vuoto, usa valore di `camera_params.yaml`) |
+| :--- | :---: | :--- |
+| `params_file` | `camera_params.yaml` | Nome del file YAML in `config/` |
+| `enable_metrics` (alias `metrics`) | `false` | Se `true`, attiva il nodo di monitoraggio `metrics_node` |
+| `enable_display` (alias `display`) | `''` (vuoto) | Se specificato (`true`/`false`), sovrascrive la chiave `display` di `metrics_node` |
 
-**Regola di priorità:**
-Se `enable_display` non viene specificato da riga di comando, il nodo prende il valore del parametro `display` direttamente da `config/camera_params.yaml`. L'argomento da riga di comando ha effetto solo se esplicitato.
-
-**Esempi:**
+### Esempi di Utilizzo
 
 ```bash
-# Solo acquisizione (default)
+# 1. Avvio standard della sola acquisizione stereo (produzione al boot)
 ros2 launch nautilus_camera stereo_camera.launch.py
 
-# Acquisizione + benchmark (run di test, prende display da YAML)
+# 2. Avvio acquisizione con monitoraggio telemetrico attivo a terminale
 ros2 launch nautilus_camera stereo_camera.launch.py enable_metrics:=true
 
-# Con finestra video forzata da CLI (richiede GUI attiva)
-ros2 launch nautilus_camera stereo_camera.launch.py \
-    metrics:=true display:=true
+# 3. Avvio con finestra grafica OpenCV di affiancamento stereo (richiede monitor/X11)
+ros2 launch nautilus_camera stereo_camera.launch.py metrics:=true display:=true
 ```
 
-## Nodi
+---
 
-### `metrics_node`
+## 4. Nodo di Benchmark: `metrics_node`
 
-Nodo di benchmark: si sottoscrive ai due flussi immagine di `camera_ros`, li sincronizza con `message_filters.ApproximateTimeSynchronizer` e calcola a ogni coppia:
+Il nodo [`metrics_node.py`](nautilus_camera/metrics_node.py) è un osservatore passivo non intrusivo:
 
-* **FPS reali** — frequenza effettiva di arrivo dei frame (finestra di 1 secondo).
-* **Jitter** — deviazione standard degli intervalli tra frame consecutivi della camera sinistra (finestra di N frame).
-* **Skew stereo** — differenza assoluta tra i timestamp della coppia left/right, riportata come media e massimo su finestra di N campioni.
+* Sottoscrive i flussi `/stereo/lx/camera/image_raw` e `/stereo/rx/camera/image_raw` con profilo QoS `IMAGE_SUB_QOS` (`BEST_EFFORT`, depth 5).
+* Accoppia le coppie di frame tramite `message_filters.ApproximateTimeSynchronizer` con una tolleranza temporale definita da `sync_slop_sec` (0.05 s).
+* Calcola su una finestra mobile di N campioni (`window_size: 30`):
+  * **FPS Reali**: frequenza effettiva di arrivo dei frame al secondo.
+  * **Jitter Temporale (LX)**: deviazione standard della differenza di timestamp (`header.stamp`) tra frame consecutivi della telecamera sinistra (in millisecondi).
+  * **Skew Stereo**: differenza assoluta tra i timestamp dei frame della coppia sinistra-destra (`|t_lx - t_rx|`), espressa come media e picco massimo.
+* Stampa periodicamente a log un riepilogo a frequenza fissa (`log_interval_sec: 1.0`).
 
-È un **puro osservatore**: non pubblica nulla, non scrive su disco. Può essere spento senza impattare il resto della pipeline.
-
-**Parametri principali** (vedi `config/camera_params.yaml`):
-
-* `left_topic`, `right_topic` — topic di input
-* `sync_slop_sec` — tolleranza di sincronizzazione (default 0.05 s)
-* `window_size` — ampiezza finestra statistica (default 30)
-* `log_interval_sec` — intervallo di stampa a log (default 1.0 s)
-* `display` — apre finestra OpenCV affiancata (default `false`)
-
-**Esempio di output:**
+### Esempio di Log Telemetrico
 
 ```text
-[metrics_node] FPS:  5.01 | Jitter(sx):   0.34 ms | Skew(sx-dx): avg  1.21 / max  2.05 ms
+[metrics_node]: FPS:  5.00 | Jitter(sx):   0.31 ms | Skew(sx-dx): avg  1.15 / max  1.82 ms
 ```
 
-### `saving_node`
+---
 
-Nodo di salvataggio: sottoscrive le stesse coppie stereo e salva ogni frame su disco come JPEG (o PNG) in `<save_directory>/<YYYYmmdd-HHMMSS_session>/`.
+## 5. Configurazione: `camera_params.yaml`
 
-**Caratteristiche:**
-
-* **Naming incrementale**: `nautilus_lx_00000001.jpg`, `nautilus_rx_00000001.jpg`, … — ordinabile anche senza RTC.
-* **Sessioni isolate e anti-collisione**: ogni avvio crea una nuova sottocartella con ID sessione temporale. Se l'orologio di sistema al boot è ripetuto (es. assenza di modulo RTC), il nodo appende un suffisso numerico progressivo (`session_1`, `session_2`, ecc.) per evitare sovrascritture accidentali.
-* **Affidabilità su spegnimento brusco (reed switch)**: supporta `os.sync()` periodico o immediato via `flush_every_n` per garantire la persistenza dei frame su MicroSD prima dell'interruzione dell'alimentazione.
-* **Spazio colore coerente**: forza l'encoding OpenCV in `bgr8` per evitare l'inversione di canali cromatici (rosso/blu) durante la scrittura dei file.
-* **Spegnibile a runtime** via ROS 2 Service (vedi sotto).
-
-**Parametri principali:**
-
-* `enable_saving` — stato iniziale (default `true`)
-* `save_directory` — directory di output (default `/home/nautilus/nautilus_data`)
-* `save_left` / `save_right` — salva solo una delle due camere (default `true`)
-* `image_format` — `'jpg'` o `'png'` (default `'jpg'`)
-* `jpeg_quality` — qualità JPEG 0-100 (default `95`)
-* `filename_prefix` — prefisso dei file (default `'nautilus'`)
-* `queue_size` — profondità della coda di sincronizzazione (default `10`)
-* `flush_every_n` — forza `os.sync()` ogni N coppie stereo (default `1`, flush immediato)
-* `sync_slop_sec` — tolleranza di sincronizzazione temporale stereo (default `0.05` s)
-* `max_files_per_session` — limite massimo di coppie salvate (default `0` = illimitato)
-
-**Controllo a runtime (ROS 2 Service):**
-
-Il nodo espone il service `~/set_saving` di tipo `std_srvs/SetBool`:
-
-```bash
-# disabilita il salvataggio (l'acquisizione continua)
-ros2 service call /saving_node/set_saving std_srvs/srv/SetBool "{data: false}"
-
-# riabilita
-ros2 service call /saving_node/set_saving std_srvs/srv/SetBool "{data: true}"
-```
-
-Utile per passare rapidamente da modalità produzione a modalità benchmark senza riavviare il nodo.
-
-## Configurazione
-
-Tutto è centralizzato in `config/camera_params.yaml`. Il file è organizzato in tre sezioni, ciascuna con il proprio match di nodo/namespace:
+Tutti i parametri hardware del pacchetto sono centralizzati in [`config/camera_params.yaml`](config/camera_params.yaml):
 
 ```yaml
-# 1) parametri hardware camera_ros
+# Parametri hardware per camera_ros - Camera Sinistra (lx)
 /stereo/lx/camera:
   ros__parameters:
     camera: 0
     width: 1280
     height: 720
-    FrameDurationLimits: [200000, 200000]   # 5 FPS
-    AeEnable: false
-    AwbEnable: false
-    ExposureTime: 20000
-    ColourGains: [1.5, 1.5]
-    AfMode: 0
-    LensPosition: 2.6
+    FrameDurationLimits: [200000, 200000]   # 200 ms => 5.0 FPS esatti
+    AeEnable: false                         # Blocco auto-exposure
+    AwbEnable: false                        # Blocco auto-white-balance
+    ExposureTime: 20000                     # 20 ms tempo di esposizione
+    ColourGains: [1.5, 1.5]                 # Bilanciamento cromatico fisso
+    AfMode: 0                               # Messa a fuoco manuale
+    LensPosition: 2.6                       # Diottrie sinistra (compensazione offset +1.05)
 
+# Parametri hardware per camera_ros - Camera Destra (rx)
 /stereo/rx/camera:
   ros__parameters:
     camera: 1
@@ -167,9 +122,9 @@ Tutto è centralizzato in `config/camera_params.yaml`. Il file è organizzato in
     ExposureTime: 20000
     ColourGains: [1.5, 1.5]
     AfMode: 0
-    LensPosition: 1.5
+    LensPosition: 1.5                       # Diottrie destra (fuoco a ~0.65 m)
 
-# 2) parametri del nodo di benchmark
+# Parametri del nodo di benchmark telemetrico
 /**/metrics_node:
   ros__parameters:
     left_topic: '/stereo/lx/camera/image_raw'
@@ -178,97 +133,18 @@ Tutto è centralizzato in `config/camera_params.yaml`. Il file è organizzato in
     window_size: 30
     log_interval_sec: 1.0
     display: false
-
-# 3) parametri del nodo di salvataggio
-/**/saving_node:
-  ros__parameters:
-    enable_saving: true
-    left_topic: '/stereo/lx/camera/image_raw'
-    right_topic: '/stereo/rx/camera/image_raw'
-    save_directory: '/home/nautilus/nautilus_data'
-    save_left: true
-    save_right: true
-    image_format: 'jpg'
-    jpeg_quality: 95
-    filename_prefix: 'nautilus'
-    queue_size: 10
-    flush_every_n: 1
-    max_files_per_session: 0
-    sync_slop_sec: 0.05
 ```
 
-## Allineamento QoS (Quality of Service)
+### Note sulla Calibrazione Ottica e sul Lock Fotometrico
 
-Tutti i profili QoS della pipeline sono definiti in un unico file,
-`nautilus_common/config/qos_overrides.yaml`, che è la **single source of
-truth**. Vedi [`nautilus_common/README.md`](../nautilus_common/README.md)
-per l'architettura completa (SSOT + loader + `--params-file` per i C++).
+* **Offset Meccanico delle Lenti**: La lente sinistra richiede `LensPosition: 2.6` diottrie rispetto alle `1.5` della destra per ottenere il fuoco identico a ~0.65 m, a causa di una tolleranza costruttiva rilevata sperimentalmente (vedi documentazione in [`nautilus_perception/detection/DEBUG.md`](../nautilus_perception/nautilus_perception/detection/DEBUG.md)).
+* **Lock Fotometrico a Runtime ([`lock_cameras.py`](../../../deploy/lock_cameras.py))**: A causa di un limite noto di `camera_ros` su Raspberry Pi 5 che impedisce l'applicazione di `AeEnable` e `AwbEnable` direttamente dal launch, lo script esterno `lock_cameras.py` viene eseguito al boot da `lock-cameras.service` riapplicando i parametri fotometrici tramite chiamate a servizio `set_parameters` su entrambe le camere.
 
-Nel contesto di `nautilus_camera`:
+---
 
-* **`camera_ros`** (C++, lx + rx): pubblica i flussi raw e `camera_info` con
-  la QoS definita nel YAML. Il file viene passato a `camera_ros` dal launch
-  `stereo_camera.launch.py` come `--params-file` aggiuntivo
-  (`parameters=[qos_yaml, config_file]`). Non esiste più una sezione
-  `qos_overrides` in `config/camera_params.yaml`: è stata rimossa per
-  evitare due fonti che possono divergere.
+## 6. Integrazione con i Profili QoS
 
-* **`metrics_node`** (Python): sottoscrive `image_raw` lx/rx con
-  `IMAGE_SUB_QOS` (`best_effort`, `depth 5`). Il `depth 5` dà margine
-  all'`ApproximateTimeSynchronizer` per accoppiare i frame stereo anche
-  in presenza di jitter.
+Il pacchetto adotta i profili di comunicazione centralizzati in [`nautilus_common`](../nautilus_common/README.md):
 
-* **`saving_node`** (Python): sottoscrive `image_raw` lx/rx con
-  `IMAGE_SUB_QOS` (`best_effort`, `depth 5`). La stessa motivazione:
-  bufferizzare qualche frame in più evita di perdere coppie stereo da
-  scrivere su disco quando il thread di I/O è occupato.
-
-QoS effettive verificate sul campo (2026-10-18) con `ros2 topic info -v`:
-
-| Topic | Reliability | Depth | Durability |
-| --- | --- | --- | --- |
-| `/stereo/{lx,rx}/camera/image_raw` | `BEST_EFFORT` | 1 | `VOLATILE` |
-| `/stereo/{lx,rx}/camera/image_raw/compressed` | `BEST_EFFORT` | 1 | `VOLATILE` |
-| `/stereo/{lx,rx}/camera/camera_info` | `RELIABLE` | 1 | `TRANSIENT_LOCAL` |
-
-### Perché i parametri fotometrici sono nel YAML
-
-I parametri `AeEnable`, `AwbEnable`, `ExposureTime`, `ColourGains` garantiscono coerenza radiometrica tra i due sensori. La stereo correlation (NCC, SGBM) fallisce se left e right hanno esposizione o white balance diversi. `AfMode` e `LensPosition` fissano la messa a fuoco: l'offset meccanico tra i due obiettivi è di +1.05 diottrie sulla sinistra.
-
-`camera_ros` può rifiutare `AfMode` e `LensPosition` al boot su IMX708. In quel caso interviene `lock_cameras.py`, esterno al pacchetto, che rilegge questo stesso YAML e riapplica i valori via `set_parameters`. Vedi `docs/global_launch.md` sezione 6.
-
-## Dipendenze
-
-* `camera_ros` — driver ufficiale Pi Camera per ROS 2
-* `message_filters` — sincronizzazione stereo
-* `sensor_msgs` — `Image`
-* `std_srvs` — `SetBool` per il service di controllo
-* `std_msgs` — messaggi standard ROS 2
-* `cv_bridge` — conversione ROS ↔ OpenCV
-* `OpenCV` (Python) — encoding JPEG/PNG
-
-## Test e Risultati (Fase 1)
-
-Configurazione di riferimento: Pi 5, due Pi Camera v3 in box, 720p @ 5 FPS.
-
-| Metrica | Valore tipico | Note |
-| --- | --- | --- |
-| FPS | 5.00 ± 0.05 | allineato a `FrameDurationLimits` |
-| Jitter (sx) | ~0.3 ms | flusso pulito su bus CSI |
-| Skew (sx-dx) | 1.0 – 2.0 ms | sincronizzazione timestamp ottima |
-
-**QoS verificata** (2026-10-18): `camera_ros` pubblica `best_effort depth 1`
-su raw e compressed, `reliable depth 1 transient_local` su `camera_info`.
-Verificato con `ros2 topic info /stereo/lx/camera/image_raw -v`.
-
-**Nota**: `camera_ros` emette warning iniziali relativi a `camera_info` mancante (file di calibrazione assente). La mancanza di calibrazione geometrica **non influisce** sull'acquisizione `image_raw` né sui benchmark di FPS/jitter/skew.
-
-## Troubleshooting
-
-* **Nessun topic pubblicato** → verifica che `camera_ros` veda le due camere: `rpicam-hello --list-cameras`.
-* **Il nodo di salvataggio non scrive** → controlla che `save_directory` esista e sia scrivibile dall'utente che esegue ROS (`mkdir -p /home/nautilus/nautilus_data`).
-* **File salvati con colori errati** → `saving_node` esegue la decodifica in BGR per `cv2.imwrite`; non alterare il `desired_encoding`.
-* **Corruzione file su spegnimento reed switch** → mantieni `flush_every_n: 1` per forzare `os.sync()` su MicroSD ad ogni scrittura.
-* **Lens position non applicata al boot** → `camera_ros` può rifiutare `AfMode`/`LensPosition`; verifica `journalctl -u lock-cameras.service`.
-* **Skew elevato (> 20 ms)** → problema di sincronizzazione hardware, controlla cavi CSI e riduci risoluzione.
-* **`colcon build` non trova `saving_node`** → verifica che `setup.py` contenga l'entry point e ricompila con `--symlink-install`.
+* I nodi `camera_ros` C++ leggono [`config/qos_overrides.yaml`](../nautilus_common/config/qos_overrides.yaml) via `--params-file`, pubblicando `/stereo/{lx,rx}/camera/image_raw` con profilo `BEST_EFFORT`, `history: keep_last`, `depth: 1`, `durability: volatile`.
+* Il nodo `metrics_node` importa `IMAGE_SUB_QOS` da `nautilus_common.qos_profiles` (`BEST_EFFORT`, `depth: 5`) per garantire un buffer adeguato alla sincronizzazione temporale delle immagini.

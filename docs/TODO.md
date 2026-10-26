@@ -70,4 +70,4 @@ Obiettivo: testare se la detection può restare sul Pi a box chiusa.
 ## Fase 9 — Documentazione
 
 - [x] Tesi e slide.
-- [ ] Documentazione nella repo.
+- [x] Documentazione nella repo.
