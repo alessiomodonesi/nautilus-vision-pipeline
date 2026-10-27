@@ -7,16 +7,15 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     # 'force_on' (con WaterNet) o 'force_off' (senza WaterNet, solo CLAHE)
-    WATERNET_MODE = 'force_on'
+    WATERNET_MODE = 'force_off'
 
-    # le immagini di test non sono più installate con il pacchetto:
-    # vivono in benchmark/datasets/images/ alla root della repo
+    # le immagini di test sono installate con il pacchetto
     repo_root = os.environ.get(
         'NAUTILUS_ROOT',
         os.path.expanduser('~/nautilus-vision-pipeline')
     )
     default_image = os.path.join(
-        repo_root, 'benchmark', 'datasets', 'images', 'test_image.jpg'
+        repo_root, 'ros2_ws', 'src', 'nautilus_perception', 'nautilus_perception', 'enhancement', 'images', 'test_image.jpg'
     )
 
     image_path_arg = DeclareLaunchArgument(
