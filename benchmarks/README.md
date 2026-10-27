@@ -1,6 +1,6 @@
 # Nautilus Vision — Benchmark Prestazionali & Stress Test Termico
 
-Cartella dedicata ai test prestazionali, termici e di accuratezza della pipeline Nautilus Vision sul target hardware: **Raspberry Pi 5 (8 GB RAM, box stagna in alluminio, dissipazione passiva senza ventola attiva)**.
+Cartella dedicata ai test prestazionali, termici e di accuratezza della pipeline Nautilus Vision sul target hardware: **Raspberry Pi 5 (8 GB RAM, box stagna in plastica, dissipazione con ventola attiva)**.
 
 Questa cartella documenta e implementa:
 
@@ -105,7 +105,7 @@ Per tutti i dettagli, tabelle estese e grafici, consulta [`benchmark_results/RES
 
 ### Obiettivo
 
-Validare la fattibilità dell'esecuzione a bordo del Raspberry Pi 5 all'interno dello scafo stagno in alluminio a dissipazione puramente passiva (senza ventola attiva). Verificare se la temperatura del SoC raggiunge o meno la soglia di throttling (80 °C soft limit / 85 °C hard limit) durante una sessione operativa continua di **1 ora (3600 secondi)**.
+Validare la fattibilità dell'esecuzione a bordo del Raspberry Pi 5 all'interno dello scafo stagno in plastica a dissipazione con ventola attiva. Verificare se la temperatura del SoC raggiunge o meno la soglia di throttling (80 °C soft limit / 85 °C hard limit) durante una sessione operativa continua di **1 ora (3600 secondi)**.
 
 ### Matrice di Test
 
