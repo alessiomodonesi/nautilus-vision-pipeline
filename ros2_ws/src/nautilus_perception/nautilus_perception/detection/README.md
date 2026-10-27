@@ -1,126 +1,175 @@
-# Detection & Stereo Vision Core Library
+# Stereo Vision Pipeline — Documentation & User Guide
 
-Libreria Python di visione artificiale e stereovisione 3D integrata nel pacchetto [`nautilus_perception`](../README.md). Fornisce gli algoritmi matematici e i componenti di calcolo utilizzati dal nodo ROS 2 [`detection_node.py`](../detection_node.py) per la localizzazione tridimensionale dei target sottomarini.
+A stereo-camera pipeline that detects objects (marine debris via YOLO, or AprilTags for testing/calibration), estimates their distance and bearing, and — optionally — publishes that information to ROS2 for the BlueBoat autonomous navigation stack.
 
 ---
 
-## 1. Struttura del Modulo
+## 1. How it works
+
+The pipeline is built from four stages that run in sequence, once per frame:
+
+1. **Camera input.** Two synchronized camera feeds (left/right) are read continuously in a background thread, so a slow frame never blocks the rest of the pipeline. On Raspberry Pi, `--picam2` uses `libcamera` directly for low-latency access to the Camera Module 3 pair; on any other machine, `--left`/`--right` can point at video files, USB webcam indices, or other sources instead. Auto-exposure and white-balance are locked on both cameras shortly after startup — stereo matching degrades badly if the two images don't agree on brightness/color.
+
+2. **Detection.** The left frame is run through whichever detector `--mode` selects — YOLO for real-world debris detection, or ArUco for AprilTags (used for testing and camera calibration work). Each detection is a bounding box; anything smaller than the configured minimum area is discarded as noise.
+   - For `--mode apriltag`, the marker dictionary is selectable via `--tag-family` (default `apriltag_36h11`). Real AprilTag families and standard ArUco dictionaries are **not interchangeable** — a physical tag printed from one family will not decode against another, even if the pattern looks visually similar. If unsure which family a physical tag actually is, count its total grid size (cells including the black border): `16h5`/`aruco_4x4` = 6×6, `25h9`/`aruco_5x5` = 7×7, `36h10`/`36h11`/`aruco_6x6` = 8×8, `aruco_7x7` = 9×9.
+
+3. **Distance & bearing.** For each detection, the pipeline estimates how far away it is using the two camera views (basic stereo triangulation — the same principle as human depth perception from two eyes) and computes the bearing angle relative to the camera's centerline.
+   - **Sparse mode (default)**: only searches for matches near each detected object, which is fast and works well on a Raspberry Pi.
+   - **Dense mode (`--dense-depth`)**: computes a full-frame depth map instead, which is much slower but useful for debugging camera alignment.
+
+4. **Output.** Results are drawn on-screen (unless `--no-display` is set), logged to the terminal, and — if `--ros2` is set — published to ROS2 for the BlueBoat's navigation system to consume. See [Section 4](#4-ros2-integration) below.
+
+---
+
+## 2. Before running: what needs to already exist
+
+| File | Required for | Notes |
+| --- | --- | --- |
+| `config.py` | Always | Default baseline, focal length, minimum detection area, model path. Any of these can be overridden with CLI flags. |
+| `stereo_calib.npz` | Always | Camera calibration data (rectification maps). **The script exits immediately if this is missing.** Produced by `stereo_calibrate.py` — see [Section 5](#5-calibration). |
+| YOLO weights (`.pt` file) | `--mode yolo` only | Path set in `config.py`, or overridden with `--model`. Not needed for `--mode apriltag`. |
+| `nautilus_apriltag_msgs` (built) | `--ros2` only | A ROS2 workspace with this message package built and sourced. See [Section 4](#4-ros2-integration). |
+
+`calib_pairs/` (the folder of raw calibration photos) is **not** needed at runtime — only `stereo_calibrate.py` reads it, to *produce* `stereo_calib.npz`. Once that file exists, the photos can be archived or deleted without affecting normal runs.
+
+If you are struggling to install "Module 3 cameras" on Raspberry Pi 5 with Ubuntu Server, you can follow [this guide](https://claude.ai/public/artifacts/421019b6-9752-4014-962c-ff84b6058954).
+
+---
+
+## 3. Command-line arguments
+
+| Flag | Values | Description |
+| --- | --- | --- |
+| `--mode` | `yolo`, `apriltag` | Detection engine to use. |
+| `--tag-family` | see note below | Fiducial marker dictionary for `--mode apriltag`. Default: `apriltag_36h11`. Choices: `apriltag_16h5`, `apriltag_25h9`, `apriltag_36h10`, `apriltag_36h11`, `aruco_4x4_50/100/250`, `aruco_5x5_50/100/250`, `aruco_6x6_50/100/250`, `aruco_7x7_50/100/250`. `apriltag_*` and `aruco_*` are separate encodings — not interchangeable, even at the same grid size. |
+| `--left` | path, integer, or `picamN` | Left camera source. Ignored if `--picam2` is set. |
+| `--right` | path, integer, or `picamN` | Right camera source. Ignored if `--picam2` is set. |
+| `--picam2` | flag | Use Raspberry Pi Camera Module 3 sensors directly via `libcamera`. |
+| `--resolution` | `WxH`, e.g. `640x480` | Capture resolution. Only applies with `--picam2`. |
+| `--fps` | integer | Capture frame rate ceiling. Only applies with `--picam2`. |
+| `--baseline` | float (metres) | Overrides the stereo baseline from `config.py`. Use the value `stereo_calibrate.py` prints out. |
+| `--focal-length` | float (pixels) | Overrides the calibrated focal length from `config.py`. Also from `stereo_calibrate.py`'s output. |
+| `--model` | file path | Overrides the YOLO `.pt` weights path. Only used with `--mode yolo`. |
+| `--dense-depth` | flag | Use full-frame depth matching instead of the default fast per-detection matching. Debugging only — noticeably slower. |
+| `--backend` | `auto`, `cuda`, `opencl`, `cpu` | Hardware backend for dense depth. Ignored unless `--dense-depth` is set. |
+| `--no-display` | flag | Disable the GUI preview window. Required for headless/SSH deployment. |
+| `--ros2` | flag | Publish detections to ROS2 as `nautilus_apriltag_msgs/msg/AprilTagDetection`. See [Section 4](#4-ros2-integration). |
+| `--ros2-topic` | string | Topic to publish on. Default: `/apriltag/detections`. |
+| `--camera-frame` | string | `frame_id` stamped on published message headers. Default: `camera_frame`. |
+
+---
+
+## 4. ROS2 integration
+
+When `--ros2` is set, this script becomes the first node in the BlueBoat vision-to-control pipeline, publishing directly to the topic the rest of the team's nodes already expect:
 
 ```text
-detection/
-├── __init__.py
-├── config.py                       # Dataclass StereoConfig con costanti geometriche calibrate
-├── core_detection.py               # Algoritmi di matching epipolare e inferenza YOLO
-├── DEBUG.md                        # Note dettagliate su calibrazione, offset lenti e troubleshooting
-├── README.md                       # Questa documentazione
-└── calibration/                    # Tooling completo di calibrazione e tuning ottico
-    ├── charuco_common.py           # Definizioni condivise board ChArUco (8x11, 15/11 mm)
-    ├── generate_charuco.py         # Generatore PDF/PNG del pattern di calibrazione
-    ├── capture_calibration_pairs.py# Acquisizione coppie stereo con interfaccia grafica (GUI)
-    ├── capture_calibration_pairs_web.py # Acquisizione headless via interfaccia web
-    ├── stereo_calibrate.py         # Calcolo matrici intrinseche/estrinseche e mappe di rettifica
-    └── find_focus.py               # Analisi nitidezza ottica (sweep LensPosition con Laplaciano)
+main.py  →  /apriltag/detections  →  maneuver_manager_vs  →  /tracking_reference  →  controller_mavros_vs  →  MAVROS  →  boat
+   (this script,                                      (both run on the boat's
+    Raspberry Pi)                                       onboard computer)
 ```
+
+It replaces the team's earlier `apriltag_bridge_vs.py` (a simulated stand-in) and `nautilus_apriltag_bridge/udp_bridge_node.py` (an ESP32-based bridge) — this script does the same job, publishing the same message type on the same topic, using the actual stereo cameras instead.
+
+**Behavior notes:**
+
+- Only the **single closest valid detection** is published per frame — `maneuver_manager_vs` tracks one target at a time, so if multiple tags are visible, the nearest one is treated as the target.
+- **Nothing is published when there's no valid detection.** This is intentional — the downstream node treats "no message for >2 seconds" as "target lost" and drives to a safe state on its own. Publishing a stale or zero-range reading instead would defeat that safety behavior.
+- `bearing` follows REP-103 convention: `0` = tag centered, **positive = tag to the right** of the camera's optical axis, radians.
+
+### Prerequisites (one-time setup)
+
+1. ROS2 installed on the Pi (this project uses **Jazzy Jalisco**, matched to Ubuntu 24.04).
+2. `nautilus_apriltag_msgs` — just the message-definition package, not the full team workspace — built in a local workspace:
+
+   ```bash
+   mkdir -p ~/ros2_ws/src
+   # copy the nautilus_apriltag_msgs folder into ~/ros2_ws/src/
+   cd ~/ros2_ws
+   source /opt/ros/jazzy/setup.bash
+   colcon build --packages-select nautilus_apriltag_msgs
+   ```
+
+3. `ROS_DOMAIN_ID` set to match the boat's onboard computer (both machines must use the same value to discover each other over the network). Set this once in `~/.bashrc`.
+
+### Running it
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/ros2_ws/install/setup.bash
+cd ~/marine_debris_CV
+source .venv/bin/activate
+python3 main.py --picam2 --baseline 0.1217 --focal-length 959.9 --mode apriltag --no-display --ros2
+```
+
+Each line matters and depends on the one before it: the first two load ROS2 itself and the custom message package into the shell; the venv activation brings in `picamera2`/OpenCV; the final command needs all of the above already active.
+
+### Verifying it's working
+
+```bash
+# in a second terminal, same machine
+source /opt/ros/jazzy/setup.bash
+source ~/ros2_ws/install/setup.bash
+ros2 topic echo /apriltag/detections
+```
+
+With a tag in view, messages should stream with a real `id`, a plausible `range`, and a `bearing` that flips sign correctly as the tag moves left vs. right of the camera's centerline. Hide the tag — the topic should go completely silent, not repeat a stale value.
+
+The final check is cross-machine: on the **boat's** computer (same `ROS_DOMAIN_ID`, on the same network), `ros2 topic list` should also show `/apriltag/detections`.
 
 ---
 
-## 2. Componenti Principali (`core_detection.py`)
+## 5. Calibration
 
-### 2.1 `SparseBlockMatcher` (Algoritmo di Default per Distanza 3D)
+`stereo_calib.npz` is produced by a separate one-time (or occasional) process, not part of this script:
 
-Su dispositivi edge come il Raspberry Pi 5, il calcolo della mappa di disparità densa su tutti i pixel (StereoSGBM) richiede centinaia di millisecondi per frame, saturando la CPU.
-La classe `SparseBlockMatcher` adotta invece un approccio **epipolare localizzato**:
+1. `capture_calibration_pairs_web.py` — capture synchronized left/right photos of a ChArUco calibration board.
+2. `stereo_calibrate.py` — processes those photos into `stereo_calib.npz`, and prints the measured baseline and focal length to use with `--baseline`/`--focal-length`.
 
-1. **Ricerca Epipolare Monodimensionale**:
-   Poiché le immagini stereo sono state preventivamente rettificate con le matrici di `stereo_calib_720p.npz`, i punti corrispondenti tra camera sinistra e destra giacciono sulla medesima riga orizzontale ($y_{sx} \approx y_{dx}$).
-   La ricerca del patch di correlazione si riduce quindi a una scansione 1D lungo la coordinata $x$, con una tolleranza verticale ridotta a pochi pixel (`row_tolerance: 5`).
-2. **Campionamento Multi-Punto Robusto (5 Punti)**:
-   Invece di affidarsi a un singolo pixel centrale (soggetto a riflessi d'acqua, bolle o trasparenze dell'oggetto), il matcher estrae 5 patch distinti:
-   - Centroide del bounding box $(u_c, v_c)$
-   - Quattro campioni disposti sui semiassi a metà distanza dai bordi
-3. **Calcolo della Disparità**:
-   Per ciascun punto, viene eseguita una Normalized Cross-Correlation (NCC) su una patch quadrata di $31\times 31\text{ px}$ (`cv2.matchTemplate`). La disparità finale del target è la **mediana** delle disparità associate a match validi (punteggio NCC $> 0.6$).
-4. **Triangolazione 3D**:
-   Dalla disparità mediana $d$ vengono derivate le coordinate metriche tridimensionali nel sistema ottico della telecamera sinistra:
-   $$Z = \frac{f_x \cdot B}{d}, \quad X = \frac{(u - c_x) \cdot Z}{f_x}, \quad Y = \frac{(v - c_y) \cdot Z}{f_y}$$
-   dove $f_x = 1500.89\text{ px}$ e $B = 0.12017\text{ m}$.
-
-### 2.2 `YoloDetector` (Motore di Rilevamento Oggetti)
-
-Incapsula l'inferenza Ultralytics YOLOv8 con supporto trasparente per:
-
-- Modelli standard PyTorch (`.pt`)
-- Modelli OpenVINO esportati (`<name>_openvino_model/`) con runtime Intel OpenVINO
-
-Il detector gestisce autonomamente il letterbox padding, la normalizzazione dei tensori, la soglia di confidenza (`conf_threshold`) e la Non-Maximum Suppression (NMS).
-
-### 2.3 `DenseStereoMatcher` (Opzionale / Debug)
-
-Implementa l'algoritmo di matching denso basato su `cv2.StereoSGBM` per la generazione di mappe di profondità full-frame, impiegato per la diagnostica visiva dell'allineamento geometrico delle telecamere.
+Recalibrate whenever the camera rig is physically adjusted, or if distance estimates start looking consistently off.
 
 ---
 
-## 3. Parametri Geometrici e Calibrazione (`config.py`)
+## 6. Deployment examples
 
-La dataclass `StereoConfig` centralizza le costanti ottiche derivanti dalla calibrazione a 1280×720 eseguita sul banco ottico:
-
-```python
-@dataclass
-class StereoConfig:
-    # Geometria stereo calibrata (720p)
-    baseline: float = 0.12017          # Distanza tra i centri ottici: 12.02 cm
-    focal_length: float = 1500.89      # P1[0,0] rettificata (pixel)
-
-    # Parametri Sparse Block Matching
-    match_patch_size: int = 32         # Dimensione del template di confronto (pixel)
-    match_search_range: int = 300      # Disparità massima cercata (pixel)
-    match_row_tolerance: int = 6       # Tolleranza verticale epipolare (righe)
-    match_min_confidence: float = 0.5  # Soglia minima punteggio NCC
-
-    # Range operativo di disparità (SparseBlockMatcher)
-    # Z_min ~0.40 m @ d=450 px, Z_max ~1.80 m @ d=100 px
-    min_disparity: int = 100
-    max_disparity: int = 450
-```
-
----
-
-## 4. Strumenti di Calibrazione (`calibration/`)
-
-La sottocartella `calibration/` contiene la suite completa per la calibrazione stereo dei due sensori Raspberry Pi Camera Module 3:
-
-### 1. Generazione Board ChArUco
+**Local testing with recorded video (no camera hardware needed):**
 
 ```bash
-python3 -m nautilus_perception.detection.calibration.generate_charuco
-# Produce charuco_board.pdf (8x11 quadrati da 15 mm, marker 11 mm, DICT_4X4_50)
+python3 main.py --mode apriltag --left video/left.mp4 --right video/right.mp4
 ```
 
-### 2. Cattura Coppie Stereo Sincronizzate
+**Raspberry Pi 5, headless, YOLO debris detection:**
 
 ```bash
-# Esecuzione server web headless su porta 8000
-python3 -m nautilus_perception.detection.calibration.capture_calibration_pairs_web \
-    --resolution 1280x720 \
-    --lens-left 2.6 \
-    --lens-right 1.5 \
-    --outdir calib_pairs_720p
+python3 main.py --mode yolo --picam2 --no-display
 ```
 
-### 3. Calcolo Calibrazione Stereo
+**Raspberry Pi 5, headless, AprilTag mode with ROS2 publishing (full deployment):**
 
 ```bash
-python3 -m nautilus_perception.detection.calibration.stereo_calibrate \
-    --dir calib_pairs_720p \
-    --out stereo_calib_720p.npz
+python3 main.py --picam2 --baseline 0.1217 --focal-length 959.9 --mode apriltag --no-display --ros2
 ```
 
-La calibrazione in uso ha registrato un **RMS di reproiezione di 0.125 px** e una stima metrica Z con errore residuo inferiore a **1 cm** su distanze comprese tra 0.60 m e 0.90 m.
+**Debugging camera alignment with a full dense depth map (any machine with a GPU):**
 
-### 4. Verifica Fuoco e Offset Lenti (`find_focus.py`)
+```bash
+python3 main.py --mode yolo --left 0 --right 1 --dense-depth --backend cuda
+```
 
-Esegue uno sweep automatico di `LensPosition` misurando la nitidezza ottica tramite varianza del Laplaciano:
+**AprilTag mode with a non-default marker family (e.g. a physical ArUco 7x7 board instead of a real AprilTag):**
 
-- Telecamera Sinistra: fuoco ottimale a **2.6 diottrie**
-- Telecamera Destra: fuoco ottimale a **1.5 diottrie**
-- L'offset meccanico di +1.05 diottrie della lente sinistra è documentato in dettaglio in [`DEBUG.md`](DEBUG.md).
+```bash
+python3 main.py --picam2 --baseline 0.1217 --focal-length 959.9 --mode apriltag --no-display --tag-family aruco_7x7_50
+```
+
+If detection still fails, standard ArUco dictionaries come in variant sizes (`_50`, `_100`, `_250`) with different marker codebooks — try the other variants of the same grid family next.
+
+**Setup run example:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/ros2_ws/install/setup.bash
+cd ~/marine_debris_CV
+source .venv/bin/activate
+python3 main.py --picam2 --baseline 0.1217 --focal-length 959.9 --mode apriltag --no-display --ros2
+```

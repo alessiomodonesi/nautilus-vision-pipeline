@@ -60,11 +60,10 @@ Il modulo supporta tre modalità di funzionamento tramite il parametro `waternet
 
 ### Benchmark di Confronto (Target Raspberry Pi 5)
 
-| Parametro | `force_off` (Sharpening + CLAHE) | `force_on` (WaterNet su CPU) |
-| :--- | :---: | :---: |
-| **Latenza di Calcolo** | **~65.3 – 67.1 ms** | **~70,658 ms (~70.6 s)** |
-| **Throughput Sostenibile** | Compatibile con streaming | Inutilizzabile in navigazione |
-| **Destinazione d'Uso** | **A bordo veicolo (crociera)** | **Post-missione su workstation** |
+| **Modalità `force_on` (Pipeline Completa con WaterNet su CPU)** | **Modalità `force_off` (Solo OpenCV, Sharpening + CLAHE)** |
+| :--- | :--- |
+| **Latenza media:** **~70,658.15 ms (~70.6 secondi per frame)**<br>**Framerate effettivo:** **0.0 FPS**<br><br>*Conclusione:* inutilizzabile per applicazioni in tempo reale su dispositivi embedded. Da qui la scelta di `force_off` come default. | **Latenza media:** **~65.3 - 67.1 ms per frame**<br>**Framerate effettivo:** **~1.0 - 1.1 FPS** (con pubblicazione a 1Hz)<br><br>*Conclusione:* prestazioni compatibili con i vincoli di bordo per l'object detection. |
+| ![Confronto mAP validation set](./nautilus_perception/enhancement/images/waternet_output.jpg) | ![Confronto mAP validation set](./nautilus_perception/enhancement/images/enhancement_output.jpg) |
 
 ### Avvio dell'Enhancement
 
