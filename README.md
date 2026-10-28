@@ -12,6 +12,7 @@ Indice unificato per navigare direttamente in tutta la documentazione, i pacchet
 
 ### 📄 Documentazione Generale (`docs/`)
 
+* **[Slides Discussione](docs/Modonesi_Alessio.pdf)** — Presentazione del progetto per la discussione di tesi.
 * **[Guida al Lancio Globale](docs/LAUNCH.md)** — Architettura del sistema di lancio, routing automatico dei topic, gestione delle variabili d'ambiente, service systemd (`nautilus-vision.service`, `lock-cameras.service`) e comandi di test.
 * **[Roadmap Operativa](docs/TODO.md)** — Tabella di marcia suddivisa in 9 fasi (Acquisizione, Enhancement, Salvataggio, Detection, Calibrazione 720p, Benchmark, Stress test termico, Integrazione, Documentazione).
 * **[Setup Hardware Pi Camera v3](docs/SETUP-PICAM3.md)** — Configurazione del Raspberry Pi 5 con Ubuntu Server 24.04, build di `libcamera` da sorgente per il pipeline handler `pisp`, installazione di `rpicam-apps` e `picamera2`, fix noti (`libcap-dev`, `pykms`, symlink `site-packages`).
